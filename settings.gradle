@@ -1,0 +1,5 @@
+/**
+ * CurrencyBG Build Script
+ */
+ 
+rootProject.name = 'currencybg.app'

@@ -1,0 +1,76 @@
+/**
+ * CurrencyBG Build Script
+ */
+ 
+buildscript {
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+	dependencies {
+    	classpath 'com.android.tools.build:gradle:1.5.+'
+	}
+}
+
+apply plugin: 'com.android.application'
+
+android {
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+	dependencies {
+		compile 'com.android.support:appcompat-v7:22.0.+',
+				'com.android.support:support-v13:22.+',
+				'com.google.guava:guava:18.+',
+				'org.jsoup:jsoup:1.8.+'
+	    
+		testCompile 'junit:junit:4.+'
+	}	
+	
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+
+    defaultConfig {
+    	applicationId 'net.vexelon.currencybg.app'
+		minSdkVersion 15
+        targetSdkVersion 23
+        //versionCode 1
+        //versionName "1.0"
+    }
+    compileOptions {
+		sourceCompatibility = JavaVersion.VERSION_1_6
+    	targetCompatibility = JavaVersion.VERSION_1_6
+    }
+	lintOptions {
+		abortOnError false
+	}
+    sourceSets {
+    	main {
+			manifest.srcFile 'AndroidManifest.xml'
+			res.srcDirs = ['res']
+			assets.srcDirs = ['assets']
+			java.srcDirs = ['src/main/java', 'src/main/test']
+            resources.srcDirs = ['src/main/java']
+            aidl.srcDirs = ['src/main/java']
+            renderscript.srcDirs = ['src/main/java']
+		}
+		//androidTest.setRoot('tests')
+    }
+    signingConfigs {
+    	release {
+    		storeFile file(KS)
+    		storePassword KSPWD
+    		keyAlias KALIAS
+    		keyPassword KPWD
+    	}
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+

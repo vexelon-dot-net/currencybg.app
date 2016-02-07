@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    >
+
+<ImageView android:id="@+id/IconRateInfo" android:scaleType="fitCenter" android:layout_width="26px" android:layout_height="26px" android:layout_gravity="center_horizontal" android:paddingBottom="8dp"></ImageView>
+<RelativeLayout 
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center_horizontal"
+	>
+<TextView android:id="@+id/TextRatioNew" android:textStyle="bold" style="@style/FontListRatioRate" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+<ImageView android:id="@+id/IconRateInfoTendency" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_centerVertical="true" android:layout_toRightOf="@+id/TextRatioNew"></ImageView>
+</RelativeLayout>
+<TextView android:id="@+id/TextRatioOld" style="@style/FontListRatioRate" android:layout_height="wrap_content" android:layout_width="wrap_content"></TextView>
+
+</LinearLayout>

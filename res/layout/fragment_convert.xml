@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    tools:context="net.vexelon.currencybg.MainActivity$PlaceholderFragment" >
+
+<LinearLayout
+  android:id="@+id/layout_source"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:gravity="top"
+  android:paddingLeft="@dimen/activity_horizontal_margin"
+  android:paddingRight="@dimen/activity_horizontal_margin">
+
+	<Spinner android:id="@+id/source_currency" 
+	    android:layout_width="0dp" 
+	    android:layout_height="wrap_content"
+	    android:layout_weight=".60"
+	    style="@android:style/Widget.Holo.Spinner" />
+	
+	<EditText android:id="@+id/text_source_value" 
+	    android:minWidth="140dp" 
+	    android:layout_width="0dp" 
+	    android:layout_height="wrap_content" 
+	    android:layout_weight=".40"
+	    android:layout_gravity="bottom"
+	    android:gravity="right"
+	    android:focusable="true"
+	    android:digits="0123456789." 
+	    android:inputType="numberDecimal" 
+	    android:maxLength="10" 
+	    android:text="0.00"
+	    android:lines="1" />
+
+</LinearLayout>
+
+<!-- View
+	android:layout_width="fill_parent"
+	android:layout_height="1dp"
+	android:background="@android:color/darker_gray"/ -->
+
+<RelativeLayout 
+    android:layout_below="@id/layout_source"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+
+	<ListView
+	        android:id="@+id/list_target_currencies"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" />    
+
+</RelativeLayout>
+
+</LinearLayout>
+
+
