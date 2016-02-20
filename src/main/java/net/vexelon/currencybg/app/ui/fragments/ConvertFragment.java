@@ -25,12 +25,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -240,28 +239,27 @@ public class ConvertFragment extends AbstractFragment {
 	 * 
 	 * @return
 	 */
-	private AlertDialog showAddCurrencyMenu() {
+	private MaterialDialog showAddCurrencyMenu() {
 		final Context context = getActivity();
 		ConvertTargetListAdapter adapter = new ConvertTargetListAdapter(context, R.layout.convert_target_row_layout,
 				currenciesList, false, new AppSettings(context).getCurrenciesPrecision());
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(context.getString(R.string.action_addcurrency));
-		builder.setCancelable(true);
-		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				CurrencyData currencyData = currenciesList.get(which);
-				if (currencyData != null) {
-					// TODO: check if already added
-					new AppSettings(context).addConvertCurrency(currencyData.getCode());
-					Toast.makeText(context, context.getString(R.string.action_currency_added, currencyData.getCode()),
-							Toast.LENGTH_SHORT).show();
-					updateTargetCurrenciesListView();
-					updateTargetCurrenciesCalculations();
-				}
-			}
-		});
-		return builder.create();
+		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
+				.adapter(adapter, new MaterialDialog.ListCallback() {
+					@Override
+					public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+						CurrencyData currencyData = currenciesList.get(which);
+						if (currencyData != null) {
+							// TODO: check if already added
+							new AppSettings(context).addConvertCurrency(currencyData.getCode());
+							Toast.makeText(context,
+									context.getString(R.string.action_currency_added, currencyData.getCode()),
+									Toast.LENGTH_SHORT).show();
+							updateTargetCurrenciesListView();
+							updateTargetCurrenciesCalculations();
+						}
+						dialog.dismiss();
+					}
+				}).build();
 	}
 
 	/**

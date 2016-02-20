@@ -21,11 +21,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Maps;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,272 +56,280 @@ import net.vexelon.currencybg.app.utils.IOUtils;
 
 public class CurrenciesFragment extends AbstractFragment {
 
-    private static boolean sortByAscending = true;
+	private static boolean sortByAscending = true;
 
-    private ListView lvCurrencies;
-    private TextView tvLastUpdate;
-    private String lastUpdateLastValue;
+	private ListView lvCurrencies;
+	private TextView tvLastUpdate;
+	private String lastUpdateLastValue;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        init(rootView);
-        return rootView;
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		init(rootView);
+		return rootView;
+	}
 
-    @Override
-    public void onResume() {
-        reloadRates(false);
-        super.onResume();
-    }
+	@Override
+	public void onResume() {
+		reloadRates(false);
+		super.onResume();
+	}
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // add refresh currencies menu option
-        inflater.inflate(R.menu.currencies, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// add refresh currencies menu option
+		inflater.inflate(R.menu.currencies, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_refresh:
-                reloadRates(true);
-                lastUpdateLastValue = tvLastUpdate.getText().toString();
-                tvLastUpdate.setText(R.string.last_update_updating_text);
-                setRefreshActionButtonState(true);
-                return true;
-            case R.id.action_sort:
-                newSortMenu().show();
-                return true;
-            case R.id.action_filter:
-                newFilterMenu().show();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		switch (id) {
+		case R.id.action_refresh:
+			reloadRates(true);
+			lastUpdateLastValue = tvLastUpdate.getText().toString();
+			tvLastUpdate.setText(R.string.last_update_updating_text);
+			setRefreshActionButtonState(true);
+			return true;
+		case R.id.action_sort:
+			newSortMenu().show();
+			return true;
+		case R.id.action_filter:
+			newFilterMenu().show();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
-    private void init(View view) {
-        lvCurrencies = (ListView) view.findViewById(R.id.list_currencies);
-        tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
-    }
+	private void init(View view) {
+		lvCurrencies = (ListView) view.findViewById(R.id.list_currencies);
+		tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
+	}
 
-    private AlertDialog newSortMenu() {
-        final AppSettings appSettings = new AppSettings(getActivity());
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.action_sort_title).setSingleChoiceItems(R.array.action_sort_values,
-                appSettings.getCurrenciesSortSelection(), new DialogInterface.OnClickListener() {
+	private MaterialDialog newSortMenu() {
+		final AppSettings appSettings = new AppSettings(getActivity());
+		return new MaterialDialog.Builder(getActivity())
+				.title(R.string.action_sort_title)
+				.items(R.array.action_sort_values)
+				.itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
+						new MaterialDialog.ListCallbackSingleChoice() {
+							@Override
+							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+								sortByAscending = appSettings.getCurrenciesSortSelection() != which ? true
+										: !sortByAscending;
+								appSettings.setCurrenciesSortSelection(which);
+								sortCurrenciesListView(which);
+								// notify user
+								switch (appSettings.getCurrenciesSortSelection()) {
+								case AppSettings.SORTBY_CODE:
+									Toast.makeText(
+											getActivity(),
+											sortByAscending ? R.string.action_sort_code_asc
+													: R.string.action_sort_code_desc, Toast.LENGTH_SHORT).show();
+									break;
+								case AppSettings.SORTBY_NAME:
+								default:
+									Toast.makeText(
+											getActivity(),
+											sortByAscending ? R.string.action_sort_name_asc
+													: R.string.action_sort_name_desc, Toast.LENGTH_SHORT).show();
+									break;
+								}
+								return true;
+							}
+						}).build();
+	}
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sortByAscending = appSettings.getCurrenciesSortSelection() != which ? true : !sortByAscending;
-                        appSettings.setCurrenciesSortSelection(which);
-                        sortCurrenciesListView(which);
-                        // notify user
-                        switch (appSettings.getCurrenciesSortSelection()) {
-                            case AppSettings.SORTBY_CODE:
-                                Toast.makeText(getActivity(),
-                                        sortByAscending ? R.string.action_sort_code_asc : R.string.action_sort_code_desc,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                            case AppSettings.SORTBY_NAME:
-                            default:
-                                Toast.makeText(getActivity(),
-                                        sortByAscending ? R.string.action_sort_name_asc : R.string.action_sort_name_desc,
-                                        Toast.LENGTH_SHORT).show();
-                                break;
-                        }
-                        dialog.dismiss();
-                    }
-                });
-        return builder.create();
-    }
+	private MaterialDialog newFilterMenu() {
+		final AppSettings appSettings = new AppSettings(getActivity());
+		return new MaterialDialog.Builder(getActivity())
+				.title(R.string.action_filter_title)
+				.items(R.array.action_filter_values)
+				.itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
+						new MaterialDialog.ListCallbackSingleChoice() {
+							@Override
+							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+								appSettings.setCurrenciesFilterSelection(which);
+								filterCurrenciesListView(which);
+								// notify user
+								switch (appSettings.getCurrenciesFilterSelection()) {
+								case AppSettings.FILTERBY_ALL:
+									Toast.makeText(getActivity(), R.string.action_filter_all, Toast.LENGTH_SHORT)
+											.show();
+									break;
+								case AppSettings.FILTERBY_NONFIXED:
+									Toast.makeText(getActivity(), R.string.action_filter_nonfixed, Toast.LENGTH_SHORT)
+											.show();
+									break;
+								case AppSettings.FILTERBY_FIXED:
+									Toast.makeText(getActivity(), R.string.action_filter_fixed, Toast.LENGTH_SHORT)
+											.show();
+									break;
+								}
+								return true;
+							}
+						}).build();
+	}
 
-    private AlertDialog newFilterMenu() {
-        final AppSettings appSettings = new AppSettings(getActivity());
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.action_filter_title).setSingleChoiceItems(R.array.action_filter_values,
-                appSettings.getCurrenciesFilterSelection(), new DialogInterface.OnClickListener() {
+	/**
+	 * Populates the list of currencies
+	 *
+	 * @param currenciesList
+	 */
+	private void updateCurrenciesListView(List<CurrencyData> currenciesList) {
+		final Activity activity = getActivity();
+		AppSettings appSettings = new AppSettings(activity);
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        appSettings.setCurrenciesFilterSelection(which);
-                        filterCurrenciesListView(which);
-                        // notify user
-                        switch (appSettings.getCurrenciesFilterSelection()) {
-                            case AppSettings.FILTERBY_ALL:
-                                Toast.makeText(getActivity(), R.string.action_filter_all, Toast.LENGTH_SHORT).show();
-                                break;
-                            case AppSettings.FILTERBY_NONFIXED:
-                                Toast.makeText(getActivity(), R.string.action_filter_nonfixed, Toast.LENGTH_SHORT).show();
-                                break;
-                            case AppSettings.FILTERBY_FIXED:
-                                Toast.makeText(getActivity(), R.string.action_filter_fixed, Toast.LENGTH_SHORT).show();
-                                break;
-                        }
-                        dialog.dismiss();
-                    }
-                });
-        return builder.create();
-    }
+		CurrencyListAdapter adapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout, currenciesList,
+				appSettings.getCurrenciesPrecision());
+		lvCurrencies.setAdapter(adapter);
 
-    /**
-     * Populates the list of currencies
-     *
-     * @param currenciesList
-     */
-    private void updateCurrenciesListView(List<CurrencyData> currenciesList) {
-        final Activity activity = getActivity();
-        AppSettings appSettings = new AppSettings(activity);
+		// sortCurrenciesListView(appSettings.getCurrenciesSortSelection());
+		filterCurrenciesListView(appSettings.getCurrenciesFilterSelection());
 
-        CurrencyListAdapter adapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout, currenciesList,
-                appSettings.getCurrenciesPrecision());
-        lvCurrencies.setAdapter(adapter);
+		Date lastUpdateDate = currenciesList.iterator().next().getCurrDate();
+		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, lastUpdateDate));
+	}
 
-        // sortCurrenciesListView(appSettings.getCurrenciesSortSelection());
-        filterCurrenciesListView(appSettings.getCurrenciesFilterSelection());
+	/**
+	 * Sorts currencies by given criteria
+	 *
+	 * @param sortBy
+	 */
+	private void sortCurrenciesListView(final int sortBy) {
+		CurrencyListAdapter adapter = (CurrencyListAdapter) lvCurrencies.getAdapter();
+		adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
+		adapter.notifyDataSetChanged();
+	}
 
-        Date lastUpdateDate = currenciesList.iterator().next().getCurrDate();
-        tvLastUpdate.setText(DateTimeUtils.toDateText(activity, lastUpdateDate));
-    }
+	/**
+	 * Filter currencies by rate type
+	 *
+	 * @param filterBy
+	 */
+	private void filterCurrenciesListView(final int filterBy) {
+		final CurrencyListAdapter adapter = (CurrencyListAdapter) lvCurrencies.getAdapter();
+		adapter.getFilter().filter(Integer.toString(filterBy), new Filter.FilterListener() {
+			@Override
+			public void onFilterComplete(int count) {
+				if (count > 0) {
+					adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
+					adapter.notifyDataSetChanged();
+				} else {
+					adapter.notifyDataSetInvalidated();
+				}
+			}
+		});
+	}
 
-    /**
-     * Sorts currencies by given criteria
-     *
-     * @param sortBy
-     */
-    private void sortCurrenciesListView(final int sortBy) {
-        CurrencyListAdapter adapter = (CurrencyListAdapter) lvCurrencies.getAdapter();
-        adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
-        adapter.notifyDataSetChanged();
-    }
+	/**
+	 * Reloads currencies from a remote source.
+	 *
+	 * @param useRemoteSource
+	 */
+	public void reloadRates(boolean useRemoteSource) {
+		if (!useRemoteSource) {
+			DataSource source = null;
+			try {
+				source = new SQLiteDataSource();
+				source.connect(getActivity());
+				List<CurrencyData> ratesList = source.getLastRates(getSelectedCurrenciesLocale());
+				ratesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
+				if (!ratesList.isEmpty()) {
+					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
+					updateCurrenciesListView(ratesList);
+				} else {
+					useRemoteSource = true;
+				}
+			} catch (DataSourceException e) {
+				Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
+				Toast.makeText(getActivity(), R.string.error_db_load_rates, Defs.TOAST_ERR_TIME).show();
+			} finally {
+				IOUtils.closeQuitely(source);
+			}
+		}
+		if (useRemoteSource) {
+			setRefreshActionButtonState(true);
+			new UpdateRatesTask().execute();
+		}
+	}
 
-    /**
-     * Filter currencies by rate type
-     *
-     * @param filterBy
-     */
-    private void filterCurrenciesListView(final int filterBy) {
-        final CurrencyListAdapter adapter = (CurrencyListAdapter) lvCurrencies.getAdapter();
-        adapter.getFilter().filter(Integer.toString(filterBy), new Filter.FilterListener() {
-            @Override
-            public void onFilterComplete(int count) {
-                if (count > 0) {
-                    adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    adapter.notifyDataSetInvalidated();
-                }
-            }
-        });
-    }
+	private class UpdateRatesTask extends AsyncTask<Void, Void, Map<CurrencyLocales, List<CurrencyData>>> {
 
-    /**
-     * Reloads currencies from a remote source.
-     *
-     * @param useRemoteSource
-     */
-    public void reloadRates(boolean useRemoteSource) {
-        if (!useRemoteSource) {
-            DataSource source = null;
-            try {
-                source = new SQLiteDataSource();
-                source.connect(getActivity());
-                List<CurrencyData> ratesList = source.getLastRates(getSelectedCurrenciesLocale());
-                ratesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
-                if (!ratesList.isEmpty()) {
-                    Log.v(Defs.LOG_TAG, "Displaying rates from database...");
-                    updateCurrenciesListView(ratesList);
-                } else {
-                    useRemoteSource = true;
-                }
-            } catch (DataSourceException e) {
-                Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-                Toast.makeText(getActivity(), R.string.error_db_load_rates, Defs.TOAST_ERR_TIME).show();
-            } finally {
-                IOUtils.closeQuitely(source);
-            }
-        }
-        if (useRemoteSource) {
-            setRefreshActionButtonState(true);
-            new UpdateRatesTask().execute();
-        }
-    }
+		private Activity activity;
+		private boolean updateOK = false;
+		private boolean downloadFixed = false;
 
-    private class UpdateRatesTask extends AsyncTask<Void, Void, Map<CurrencyLocales, List<CurrencyData>>> {
+		public UpdateRatesTask() {
+			activity = CurrenciesFragment.this.getActivity();
+		}
 
-        private Activity activity;
-        private boolean updateOK = false;
-        private boolean downloadFixed = false;
+		@Override
+		protected void onPreExecute() {
+		}
 
-        public UpdateRatesTask() {
-            activity = CurrenciesFragment.this.getActivity();
-        }
+		@Override
+		protected Map<CurrencyLocales, List<CurrencyData>> doInBackground(Void... params) {
+			Map<CurrencyLocales, List<CurrencyData>> rates = Maps.newHashMap();
+			Date currentYear = DateTimeUtils.getCurrentYear();
+			try {
+				DataSource dataSource = null;
+				try {
+					dataSource = new SQLiteDataSource();
+					dataSource.connect(activity);
+					downloadFixed = dataSource.getFixedRates(getSelectedCurrenciesLocale(), currentYear).isEmpty();
+				} catch (DataSourceException e) {
+					Log.e(Defs.LOG_TAG, "Could not read fixed currencies from database!", e);
+				} finally {
+					IOUtils.closeQuitely(dataSource);
+				}
+				Log.v(Defs.LOG_TAG, "Loading rates from remote source..., downloadFixed=" + downloadFixed);
+				Source source = new BNBSource();
+				rates = source.downloadRates(downloadFixed);
+				updateOK = true;
+			} catch (SourceException e) {
+				Log.e(Defs.LOG_TAG, "Could not load rates from remote!", e);
+			}
+			return rates;
+		}
 
-        @Override
-        protected void onPreExecute() {
-        }
+		@Override
+		protected void onPostExecute(Map<CurrencyLocales, List<CurrencyData>> result) {
+			setRefreshActionButtonState(false);
+			CurrencyLocales selectedCurrenciesLocale = getSelectedCurrenciesLocale();
+			if (updateOK && !result.isEmpty()) {
+				DataSource source = null;
+				try {
+					source = new SQLiteDataSource();
+					source.connect(activity);
+					source.addRates(result);
+					if (!downloadFixed) {
+						/**
+						 * We have downloaded only the non-fixed currencies, so
+						 * we need to fetch
+						 * the list of last downloaded fixed currencies and
+						 * update the view with all
+						 * entries.
+						 */
+						List<CurrencyData> currenciesList = result.get(selectedCurrenciesLocale);
+						currenciesList.addAll(source.getLastFixedRates(selectedCurrenciesLocale));
+						updateCurrenciesListView(currenciesList);
+						return;
+					}
+				} catch (DataSourceException e) {
+					Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
+					Toast.makeText(getActivity(), R.string.error_db_load_rates, Defs.TOAST_ERR_TIME).show();
+				} finally {
+					IOUtils.closeQuitely(source);
+				}
+				updateCurrenciesListView(result.get(selectedCurrenciesLocale));
+			} else {
+				tvLastUpdate.setText(lastUpdateLastValue);
+				Toast.makeText(getActivity(), R.string.error_download_rates, Defs.TOAST_ERR_TIME).show();
+			}
+		}
 
-        @Override
-        protected Map<CurrencyLocales, List<CurrencyData>> doInBackground(Void... params) {
-            Map<CurrencyLocales, List<CurrencyData>> rates = Maps.newHashMap();
-            Date currentYear = DateTimeUtils.getCurrentYear();
-            try {
-                DataSource dataSource = null;
-                try {
-                    dataSource = new SQLiteDataSource();
-                    dataSource.connect(activity);
-                    downloadFixed = dataSource.getFixedRates(getSelectedCurrenciesLocale(), currentYear).isEmpty();
-                } catch (DataSourceException e) {
-                    Log.e(Defs.LOG_TAG, "Could not read fixed currencies from database!", e);
-                } finally {
-                    IOUtils.closeQuitely(dataSource);
-                }
-                Log.v(Defs.LOG_TAG, "Loading rates from remote source..., downloadFixed=" + downloadFixed);
-                Source source = new BNBSource();
-                rates = source.downloadRates(downloadFixed);
-                updateOK = true;
-            } catch (SourceException e) {
-                Log.e(Defs.LOG_TAG, "Could not load rates from remote!", e);
-            }
-            return rates;
-        }
-
-        @Override
-        protected void onPostExecute(Map<CurrencyLocales, List<CurrencyData>> result) {
-            setRefreshActionButtonState(false);
-            CurrencyLocales selectedCurrenciesLocale = getSelectedCurrenciesLocale();
-            if (updateOK && !result.isEmpty()) {
-                DataSource source = null;
-                try {
-                    source = new SQLiteDataSource();
-                    source.connect(activity);
-                    source.addRates(result);
-                    if (!downloadFixed) {
-                        /**
-                         * We have downloaded only the non-fixed currencies, so we need to fetch
-                         * the list of last downloaded fixed currencies and update the view with all
-                         * entries.
-                         */
-                        List<CurrencyData> currenciesList = result.get(selectedCurrenciesLocale);
-                        currenciesList.addAll(source.getLastFixedRates(selectedCurrenciesLocale));
-                        updateCurrenciesListView(currenciesList);
-                        return;
-                    }
-                } catch (DataSourceException e) {
-                    Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-                    Toast.makeText(getActivity(), R.string.error_db_load_rates, Defs.TOAST_ERR_TIME).show();
-                } finally {
-                    IOUtils.closeQuitely(source);
-                }
-                updateCurrenciesListView(result.get(selectedCurrenciesLocale));
-            } else {
-                tvLastUpdate.setText(lastUpdateLastValue);
-                Toast.makeText(getActivity(), R.string.error_download_rates, Defs.TOAST_ERR_TIME).show();
-            }
-        }
-
-    }
+	}
 
 }
