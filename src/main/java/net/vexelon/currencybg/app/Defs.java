@@ -19,7 +19,7 @@ package net.vexelon.currencybg.app;
 
 public class Defs {
 
-	public final static String LOG_TAG = "net.vexelon.currencybg.app";
+	public final static String LOG_TAG = "net.vexelon.currencybg";
 
 	public final static int TOAST_INFO_TIME = 4000;
 	public final static int TOAST_ERR_TIME = 3000;
