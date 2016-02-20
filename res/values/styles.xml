@@ -4,18 +4,18 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="Theme.AppCompat">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
     </style>
-    
-    <!-- Application theme. -->
+
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:spinnerMode">dropdown</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="FontListCode" parent="@android:style/TextAppearance">
@@ -27,7 +27,7 @@
     <style name="FontList" parent="@android:style/TextAppearance">
         <item name="android:textSize">18sp</item>
     </style>
-    
+
     <style name="FontListRatioRate" parent="@android:style/TextAppearance">
         <item name="android:textSize">16sp</item>
     </style>
@@ -44,6 +44,6 @@
     <style name="FontStyleConvert" parent="@android:style/TextAppearance">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#D3D3D3</item>
-    </style>      
-    
+    </style>
+
 </resources>

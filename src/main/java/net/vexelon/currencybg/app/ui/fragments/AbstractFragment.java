@@ -23,8 +23,8 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;

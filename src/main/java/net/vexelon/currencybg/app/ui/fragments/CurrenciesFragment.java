@@ -27,6 +27,7 @@ import com.google.common.collect.Maps;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,10 +62,11 @@ public class CurrenciesFragment extends AbstractFragment {
 	private ListView lvCurrencies;
 	private TextView tvLastUpdate;
 	private String lastUpdateLastValue;
+	private View rootView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		rootView = inflater.inflate(R.layout.fragment_main, container, false);
 		init(rootView);
 		return rootView;
 	}
@@ -123,17 +125,17 @@ public class CurrenciesFragment extends AbstractFragment {
 								// notify user
 								switch (appSettings.getCurrenciesSortSelection()) {
 								case AppSettings.SORTBY_CODE:
-									Toast.makeText(
-											getActivity(),
+									Snackbar.make(
+											rootView,
 											sortByAscending ? R.string.action_sort_code_asc
-													: R.string.action_sort_code_desc, Toast.LENGTH_SHORT).show();
+													: R.string.action_sort_code_desc, Snackbar.LENGTH_SHORT).show();
 									break;
 								case AppSettings.SORTBY_NAME:
 								default:
-									Toast.makeText(
-											getActivity(),
+									Snackbar.make(
+											rootView,
 											sortByAscending ? R.string.action_sort_name_asc
-													: R.string.action_sort_name_desc, Toast.LENGTH_SHORT).show();
+													: R.string.action_sort_name_desc, Snackbar.LENGTH_SHORT).show();
 									break;
 								}
 								return true;
