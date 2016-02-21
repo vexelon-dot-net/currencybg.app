@@ -4,6 +4,9 @@
     <string name="text_ok">OK</string>
     <string name="text_cancel">Отказ</string>
 
+    <string name="drawer_open">Отваряне навигация</string>
+    <string name="drawer_close">Затваряне навигация</string>
+
     <string name="app_name">CurrencyBG M-Tel</string>
     <string name="app_name_pure">CurrencyBG</string>
     <string name="last_update">Последно обновено</string>

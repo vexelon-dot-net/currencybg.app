@@ -4,8 +4,10 @@
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
 
-    <string name="app_name">CurrencyBG M-Tel</string>
-    <string name="app_name_pure">CurrencyBG</string>
+    <string name="drawer_open">Open navigation</string>
+    <string name="drawer_close">Close navigation</string>
+
+    <string name="app_name">CurrencyBG</string>
     <string name="app_about">CurrencyBG About</string>
     <string name="last_update">Last update</string>
     <string name="last_update_updating_text">Downloading ...</string>
