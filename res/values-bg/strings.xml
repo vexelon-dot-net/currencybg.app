@@ -53,7 +53,7 @@
     </string-array>
     <string name="action_info">Инфо</string>
     <string name="action_settings">Настройки</string>
-    <string name="prefs_title">CurrencyBG Настройки</string>
+    <string name="prefs_title">Currency BG Настройки</string>
     <string-array name="pref_display_names">
         <item>По подразбиране</item>
         <item>Български</item>
@@ -68,6 +68,6 @@
     </string-array>
     <string name="pref_precision_title">Точност на валутните стойности</string>
     <string name="pref_precision_summary">Точност, която да се използва при изобразяване на валутните стойности</string>
-    <string name="pref_rateus_title">Гласувайте за CurrencyBG</string>
+    <string name="pref_rateus_title">Гласувайте за Currency BG</string>
     <string name="pref_rateus_summary">Подкрепете ни и дайте Вашето мнение за приложението</string>
 </resources>
