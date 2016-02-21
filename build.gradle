@@ -21,7 +21,7 @@ android {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        compile 'com.android.support:design:22.2.0',
+        compile 'com.android.support:design:23.1.1',
                 'com.google.guava:guava:18.+',
                 'org.jsoup:jsoup:1.8.+'
 
