@@ -7,8 +7,7 @@
     <string name="drawer_open">Отваряне навигация</string>
     <string name="drawer_close">Затваряне навигация</string>
 
-    <string name="app_name">CurrencyBG M-Tel</string>
-    <string name="app_name_pure">CurrencyBG</string>
+    <string name="app_name">Currency BG</string>
     <string name="last_update">Последно обновено</string>
     <string name="last_update_updating_text">Сваляне ...</string>
     <string name="error_download_rates">Грешка при сваляне на валути.</string>
@@ -43,7 +42,7 @@
         <item>Код</item>
     </string-array>
     <string name="action_filter">Филтър</string>
-    <string name="action_filter_title">Показване на валутни курсове</string>
+    <string name="action_filter_title">Показване на</string>
     <string name="action_filter_fixed">Фиксирани курсове</string>
     <string name="action_filter_nonfixed">Нефиксирани курсове</string>
     <string name="action_filter_all">Всички курсове</string>
@@ -52,6 +51,7 @@
         <item>Само нефиксирани курсове</item>
         <item>Само фиксирани курсове</item>
     </string-array>
+    <string name="action_info">Инфо</string>
     <string name="action_settings">Настройки</string>
     <string name="prefs_title">CurrencyBG Настройки</string>
     <string-array name="pref_display_names">
@@ -70,5 +70,4 @@
     <string name="pref_precision_summary">Точност, която да се използва при изобразяване на валутните стойности</string>
     <string name="pref_rateus_title">Гласувайте за CurrencyBG</string>
     <string name="pref_rateus_summary">Подкрепете ни и дайте Вашето мнение за приложението</string>
-    <string name="pref_about_title">Относно CurrencyBG</string>
 </resources>

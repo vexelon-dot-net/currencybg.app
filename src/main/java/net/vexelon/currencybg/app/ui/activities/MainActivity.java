@@ -48,10 +48,8 @@ import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
 public class MainActivity extends AppCompatActivity implements NotificationsListener {
 
 	private DrawerLayout drawerLayout;
-	private NavigationView drawerNav;
 	private ActionBarDrawerToggle drawerToggle;
 	private Toolbar toolbar;
-	private Menu menu;
 	private PendingIntent pendingIntent;
 
 	@Override
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		setSupportActionBar(toolbar);
 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerNav = (NavigationView) findViewById(R.id.navView);
+		NavigationView drawerNav = (NavigationView) findViewById(R.id.navView);
 		setupDrawerContent(drawerNav);
 		drawerToggle = setupDrawerToggle();
 
@@ -78,15 +76,18 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		drawerToggle.syncState();
-		try {
-			showFragment(CurrenciesFragment.class);
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (savedInstanceState == null) {
+			try {
+				showFragment(CurrenciesFragment.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
+		System.out.println("--- onConfigurationChanged");
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
@@ -94,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
-		this.menu = menu;
 		return true;
 	}
 
@@ -121,9 +121,12 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 				new NavigationView.OnNavigationItemSelectedListener() {
 					@Override
 					public boolean onNavigationItemSelected(MenuItem menuItem) {
+						// special case -> settings
 						if (menuItem.getItemId() == R.id.nav_settings) {
-							// special case -> settings
 							Intent intent = new Intent(context, PrefsActivity.class);
+							startActivity(intent);
+						} else if (menuItem.getItemId() == R.id.nav_info) {
+							Intent intent = new Intent(context, AboutActivity.class);
 							startActivity(intent);
 						} else {
 							selectDrawerItem(menuItem, getClassFromMenu(menuItem));
@@ -147,9 +150,9 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	 * Create a new fragment and specify the planet to show based on position.
 	 *
 	 * @param menuItem
+	 * @param clazz
 	 */
 	private <T extends AbstractFragment> void selectDrawerItem(MenuItem menuItem, Class<T> clazz) {
-		AbstractFragment fragment = null;
 		try {
 			showFragment(clazz);
 			// Highlight the selected item, update the title, and close the drawer

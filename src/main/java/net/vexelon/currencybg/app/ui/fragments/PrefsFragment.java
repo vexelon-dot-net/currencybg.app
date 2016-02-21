@@ -34,7 +34,6 @@ public class PrefsFragment extends PreferenceFragment implements OnPreferenceCli
 	public static final String KEY_PREF_CURRENCIES_LANGUAGE = "pref_currencies_language";
 	public static final String KEY_PREF_CURRENCIES_PRECISION = "pref_currencies_precision";
 	public static final String KEY_PREF_RATEUS = "rateus";
-	public static final String KEY_PREF_ABOUT = "about";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

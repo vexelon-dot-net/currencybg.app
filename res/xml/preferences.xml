@@ -25,10 +25,5 @@
         android:enabled="true"
         android:key="rateus"
         android:title="@string/pref_rateus_title" android:summary="@string/pref_rateus_summary"/>
-    <Preference
-        android:key="about"
-        android:title="@string/pref_about_title" >
-        <intent android:action="net.vexelon.currencybg.app.ui.activities.AboutActivity" />
-    </Preference>
 
 </PreferenceScreen>
