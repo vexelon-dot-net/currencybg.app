@@ -28,6 +28,7 @@ import java.util.Map;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.melnykov.fab.FloatingActionButton;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -103,12 +104,6 @@ public class ConvertFragment extends AbstractFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		switch (id) {
-		case R.id.action_addcurrency:
-			showAddCurrencyMenu().show();
-			return true;
-		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -178,6 +173,15 @@ public class ConvertFragment extends AbstractFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Toast.makeText(getActivity(), getActivity().getString(R.string.hint_currency_remove),
 						Toast.LENGTH_SHORT).show();
+			}
+		});
+		// add button
+		FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_convert);
+		fab.attachToListView(lvTargetCurrencies);
+		fab.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showAddCurrencyMenu().show();
 			}
 		});
 	}
