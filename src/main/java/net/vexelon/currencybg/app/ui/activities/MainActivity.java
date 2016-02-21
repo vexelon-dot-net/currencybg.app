@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 //			fragment.setArguments(args);
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+		fragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit();
 		return fragment;
 	}
 
