@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_currencies"
+            android:icon="@drawable/ic_euro_symbol"
+            android:title="@string/tab_title_currencies" />
+        <item
+            android:id="@+id/nav_second_fragment"
+            android:icon="@drawable/ic_swap_vertical_circle"
+            android:title="@string/tab_title_convert" />
+        <item android:title="">
+            <menu>
+                <item android:title="@string/action_settings" />
+            </menu>
+        </item>
+    </group>
+</menu>
