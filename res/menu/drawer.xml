@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/group_pages" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_currencies"
             android:checked="true"
@@ -9,5 +9,10 @@
             android:id="@+id/nav_convert"
             android:icon="@drawable/ic_swap_vertical_circle"
             android:title="@string/tab_title_convert" />
+    </group>
+    <group android:id="@+id/group_settings" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_settings"
+            android:title="@string/action_settings" />
     </group>
 </menu>

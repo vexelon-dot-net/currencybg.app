@@ -21,6 +21,7 @@ import java.util.Calendar;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -106,10 +107,6 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 			case android.R.id.home:
 				drawerLayout.openDrawer(GravityCompat.START);
 				break;
-			case R.id.action_settings:
-				Intent intent = new Intent(this, PrefsActivity.class);
-				startActivity(intent);
-				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -119,11 +116,18 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	}
 
 	private void setupDrawerContent(NavigationView navigationView) {
+		final Context context = this;
 		navigationView.setNavigationItemSelectedListener(
 				new NavigationView.OnNavigationItemSelectedListener() {
 					@Override
 					public boolean onNavigationItemSelected(MenuItem menuItem) {
-						selectDrawerItem(menuItem, getClassFromMenu(menuItem));
+						if (menuItem.getItemId() == R.id.nav_settings) {
+							// special case -> settings
+							Intent intent = new Intent(context, PrefsActivity.class);
+							startActivity(intent);
+						} else {
+							selectDrawerItem(menuItem, getClassFromMenu(menuItem));
+						}
 						return true;
 					}
 				});
