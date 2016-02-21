@@ -77,6 +77,11 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		drawerToggle.syncState();
+		try {
+			showFragment(CurrenciesFragment.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -139,19 +144,10 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	 *
 	 * @param menuItem
 	 */
-	public <T extends AbstractFragment> void selectDrawerItem(MenuItem menuItem, Class<T> clazz) {
+	private <T extends AbstractFragment> void selectDrawerItem(MenuItem menuItem, Class<T> clazz) {
 		AbstractFragment fragment = null;
 		try {
-			fragment = clazz.newInstance();
-			fragment.addListener(MainActivity.this);
-//			Bundle args = new Bundle();
-//			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//			fragment.setArguments(args);
-
-			// Insert the fragment by replacing any existing fragment
-			FragmentManager fragmentManager = getSupportFragmentManager();
-			fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
+			showFragment(clazz);
 			// Highlight the selected item, update the title, and close the drawer
 			menuItem.setChecked(true);
 			setTitle(menuItem.getTitle());
@@ -159,6 +155,18 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		} catch (Exception e) {
 			Log.e(Defs.LOG_TAG, "Unknown drawer section!", e);
 		}
+	}
+
+	private <T extends AbstractFragment> AbstractFragment showFragment(Class<T> clazz) throws Exception {
+		AbstractFragment fragment = clazz.newInstance();
+		fragment.addListener(MainActivity.this);
+//			Bundle args = new Bundle();
+//			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+//			fragment.setArguments(args);
+		// Insert the fragment by replacing any existing fragment
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+		return fragment;
 	}
 
 	@Override
