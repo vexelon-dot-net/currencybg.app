@@ -1,0 +1,20 @@
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:padding="10dp">
+
+	<TextView android:id="@+id/info_row1"
+	    style="@style/FontInfosKey"
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:layout_marginLeft="4sp" />
+
+	<TextView android:id="@+id/info_row2"
+		style="@style/FontInfosValue"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_below="@id/info_row1"
+		android:layout_marginLeft="4sp" />
+
+</RelativeLayout>

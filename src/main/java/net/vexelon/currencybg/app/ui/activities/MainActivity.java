@@ -44,6 +44,7 @@ import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 import net.vexelon.currencybg.app.ui.fragments.AbstractFragment;
 import net.vexelon.currencybg.app.ui.fragments.ConvertFragment;
 import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
+import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
 
 public class MainActivity extends AppCompatActivity implements NotificationsListener {
 
@@ -125,9 +126,6 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 						if (menuItem.getItemId() == R.id.nav_settings) {
 							Intent intent = new Intent(context, PrefsActivity.class);
 							startActivity(intent);
-						} else if (menuItem.getItemId() == R.id.nav_info) {
-							Intent intent = new Intent(context, AboutActivity.class);
-							startActivity(intent);
 						} else {
 							selectDrawerItem(menuItem, getClassFromMenu(menuItem));
 						}
@@ -140,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		switch(menuItem.getItemId()) {
 			case R.id.nav_convert:
 				return ConvertFragment.class;
+			case R.id.nav_info:
+				return InfoFragment.class;
 			case R.id.nav_currencies:
 			default:
 				return CurrenciesFragment.class;
