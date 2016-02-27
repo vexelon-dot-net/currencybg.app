@@ -58,11 +58,10 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		this.precisionMode = precisionMode;
 	}
 
-	private View _getView(int position, View convertView) {
+	private View _getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;
 		if (v == null) {
-			LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = li.inflate(R.layout.convert_target_row_layout, null);
+			v = LayoutInflater.from(getContext()).inflate(R.layout.convert_target_row_layout, parent, false);
 		}
 		CurrencyData currencyData = items.get(position);
 		ImageView icon = (ImageView) v.findViewById(R.id.icon);
@@ -95,7 +94,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		return _getView(position, convertView);
+		return _getView(position, convertView, parent);
 	}
 
 	@Override

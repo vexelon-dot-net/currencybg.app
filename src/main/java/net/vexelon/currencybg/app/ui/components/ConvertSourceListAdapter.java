@@ -39,11 +39,10 @@ public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 		this.items = items;
 	}
 
-	private View _getView(int position, View convertView) {
+	private View _getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;
 		if (v == null) {
-			LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = li.inflate(R.layout.convert_source_row_layout, null);
+			v = LayoutInflater.from(getContext()).inflate(R.layout.convert_source_row_layout, parent, false);
 		}
 		CurrencyData currencyData = items.get(position);
 		ImageView icon = (ImageView) v.findViewById(R.id.convert_image_icon);
@@ -57,12 +56,12 @@ public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
-		return _getView(position, convertView);
+		return _getView(position, convertView, parent);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		return _getView(position, convertView);
+		return _getView(position, convertView, parent);
 	}
 
 	public int getSelectedCurrencyPosition(String currencyCode) {

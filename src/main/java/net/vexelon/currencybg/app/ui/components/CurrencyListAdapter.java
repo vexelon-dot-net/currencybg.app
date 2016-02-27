@@ -58,8 +58,7 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyData> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;
 		if (v == null) {
-			LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = li.inflate(R.layout.currency_row_layout, null);
+			v = LayoutInflater.from(getContext()).inflate(R.layout.currency_row_layout, parent, false);
 		}
 		// set texts
 		CurrencyData currencyData = items.get(position);
