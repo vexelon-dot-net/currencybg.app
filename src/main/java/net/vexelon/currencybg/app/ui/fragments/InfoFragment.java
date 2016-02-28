@@ -57,39 +57,33 @@ public class InfoFragment extends AbstractFragment {
         });
     }
 
-    private List<Map<String, String>> getInfosList() {
-        List<Map<String, String>> infosList = Lists.newArrayList();
+    private List<InfoListAdapter.InfoItem> getInfosList() {
+        List<InfoListAdapter.InfoItem> infoList = Lists.newArrayList();
 
         PackageInfo packageInfo = null;
         try {
             packageInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), PackageManager.GET_GIDS);
-            infosList.add(newInfoRow(getString(R.string.about_version), packageInfo.versionName));
+            infoList.add(newInfoRow(getString(R.string.about_version), packageInfo.versionName));
         } catch (Exception e) {
             Log.e(Defs.LOG_TAG, "", e);
         }
 
-        infosList.add(newInfoRow(getString(R.string.about_rates_provider), getString(R.string.about_rates_provider_text), "http://www.bnb.bg"));
-        infosList.add(newInfoRow(getString(R.string.about_join_appdev), "github.com/vexelon-dot-net/currencybg.app", "https://github.com/vexelon-dot-net/currencybg.app"));
-        infosList.add(newInfoRow(getString(R.string.about_author), getString(R.string.about_author_text)));
-        infosList.add(newInfoRow(getString(R.string.about_logo), getString(R.string.about_logo_text), "http://www.stremena.com"));
-        infosList.add(newInfoRow(getString(R.string.about_flag_icons), "Copyright (c) 2013 Aha-Soft. http://www.aha-soft.com/free-icons/free-yellow-button-icons", "http://www.aha-soft.com/free-icons/free-yellow-button-icons"));
-        infosList.add(newInfoRow(getString(R.string.about_flag_icons), "Copyright (CC BY-ND 3.0) Visual Pharm. http://icons8.com", "http://icons8.com"));
-        infosList.add(newInfoRow(getString(R.string.about_3rdparty), "", URL_3RDPARTY));
+        infoList.add(newInfoRow(getString(R.string.about_rates_provider), getString(R.string.about_rates_provider_text), "http://www.bnb.bg"));
+        infoList.add(newInfoRow(getString(R.string.about_join_appdev), "github.com/vexelon-dot-net/currencybg.app", "https://github.com/vexelon-dot-net/currencybg.app"));
+        infoList.add(newInfoRow(getString(R.string.about_author), getString(R.string.about_author_text)));
+        infoList.add(newInfoRow(getString(R.string.about_logo), getString(R.string.about_logo_text), "http://www.stremena.com"));
+        infoList.add(newInfoRow(getString(R.string.about_flag_icons), "Copyright (c) 2013 Aha-Soft. http://www.aha-soft.com/free-icons/free-yellow-button-icons", "http://www.aha-soft.com/free-icons/free-yellow-button-icons"));
+        infoList.add(newInfoRow(getString(R.string.about_flag_icons), "Copyright (CC BY-ND 3.0) Visual Pharm. http://icons8.com", "http://icons8.com"));
+        infoList.add(newInfoRow(getString(R.string.about_3rdparty), "", URL_3RDPARTY));
 
-        return infosList;
+        return infoList;
     }
 
-    private Map<String, String> newInfoRow(String name, String value, String url) {
-        Map<String, String> row = Maps.newHashMap();
-        row.put(InfoListAdapter.ROW_NAME, name);
-        row.put(InfoListAdapter.ROW_VALUE, value);
-        if (!StringUtils.isEmpty(url)) {
-            row.put(InfoListAdapter.ROW_URL, url);
-        }
-        return row;
+    private InfoListAdapter.InfoItem newInfoRow(String name, String value, String url) {
+        return new InfoListAdapter.InfoItem(name, value, url);
     }
 
-    private Map<String, String> newInfoRow(String name, String value) {
+    private InfoListAdapter.InfoItem newInfoRow(String name, String value) {
         return newInfoRow(name, value, null);
     }
 }

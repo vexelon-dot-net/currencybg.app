@@ -29,15 +29,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class InfoListAdapter extends ArrayAdapter<Map<String, String>> {
+public class InfoListAdapter extends ArrayAdapter<InfoListAdapter.InfoItem> {
 
-	public static final String ROW_NAME = "_name";
-	public static final String ROW_VALUE = "_value";
-	public static final String ROW_URL = "_url";
+	private List<InfoItem> items;
 
-	private List<Map<String, String>> items;
-
-	public InfoListAdapter(Context context, int textViewResId, List<Map<String, String>> items) {
+	public InfoListAdapter(Context context, int textViewResId, List<InfoItem> items) {
 		super(context, textViewResId, items);
 		this.items = items;
 	}
@@ -49,18 +45,15 @@ public class InfoListAdapter extends ArrayAdapter<Map<String, String>> {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.info_row, parent, false);
 		}
 
-		Map<String, String> item = items.get(position);
-		setResText(v, R.id.info_row1, item.get(ROW_NAME));
-		setResText(v, R.id.info_row2, item.get(ROW_VALUE));
-		if (item.containsKey(ROW_URL)) {
-			// TODO
-		}
+		InfoItem item = items.get(position);
+		setResText(v, R.id.info_row1, item.getName());
+		setResText(v, R.id.info_row2, item.getValue());
 
 		return v;
 	}
 
 	public String getUrl(int position) {
-		return items.get(position).get(ROW_URL);
+		return items.get(position).getUrl();
 	}
 
 	private void setResText(View v, int id, CharSequence text) {
@@ -70,4 +63,27 @@ public class InfoListAdapter extends ArrayAdapter<Map<String, String>> {
 		}
 	}
 
+	public static class InfoItem {
+		private String name;
+		private String value;
+		private String url;
+
+		public InfoItem(String name, String value, String url) {
+			this.name = name;
+			this.value = value;
+			this.url = url;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public String getUrl() {
+			return url;
+		}
+	}
 }
