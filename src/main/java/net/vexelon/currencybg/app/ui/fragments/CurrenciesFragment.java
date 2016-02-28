@@ -148,7 +148,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		return new MaterialDialog.Builder(getActivity())
 				.title(R.string.action_filter_title)
 				.items(R.array.action_filter_values)
-				.itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
+				.itemsCallbackSingleChoice(appSettings.getCurrenciesFilterSelection(),
 						new MaterialDialog.ListCallbackSingleChoice() {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
