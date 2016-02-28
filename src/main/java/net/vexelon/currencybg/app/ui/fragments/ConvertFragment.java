@@ -46,7 +46,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
@@ -69,7 +68,7 @@ public class ConvertFragment extends AbstractFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_convert, container, false);
+		this.rootView = inflater.inflate(R.layout.fragment_convert, container, false);
 		init(rootView);
 		return rootView;
 	}
@@ -161,9 +160,7 @@ public class ConvertFragment extends AbstractFragment {
 				adapter.notifyDataSetChanged();
 				if (removed != null) {
 					new AppSettings(getActivity()).removeConvertCurrency(removed.getCode());
-					Toast.makeText(getActivity(),
-							getActivity().getString(R.string.action_currency_removed, removed.getCode()),
-							Toast.LENGTH_SHORT).show();
+					showSnackbar(getActivity().getString(R.string.action_currency_removed, removed.getCode()));
 				}
 				return false;
 			}
@@ -171,8 +168,7 @@ public class ConvertFragment extends AbstractFragment {
 		lvTargetCurrencies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(getActivity(), getActivity().getString(R.string.hint_currency_remove),
-						Toast.LENGTH_SHORT).show();
+				showSnackbar(getActivity().getString(R.string.hint_currency_remove));
 			}
 		});
 		// add button
@@ -195,8 +191,8 @@ public class ConvertFragment extends AbstractFragment {
 					android.R.layout.simple_spinner_item, currenciesList);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerSourceCurrency.setAdapter(adapter);
-			spinnerSourceCurrency.setSelection(adapter.getSelectedCurrencyPosition(appSettings
-					.getLastConvertCurrencySel()));
+			spinnerSourceCurrency
+					.setSelection(adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel()));
 		}
 		etSourceValue.setText(appSettings.getLastConvertValue());
 		updateTargetCurrenciesListView();
@@ -255,9 +251,7 @@ public class ConvertFragment extends AbstractFragment {
 						if (currencyData != null) {
 							// TODO: check if already added
 							new AppSettings(context).addConvertCurrency(currencyData.getCode());
-							Toast.makeText(context,
-									context.getString(R.string.action_currency_added, currencyData.getCode()),
-									Toast.LENGTH_SHORT).show();
+							showSnackbar(context.getString(R.string.action_currency_added, currencyData.getCode()));
 							updateTargetCurrenciesListView();
 							updateTargetCurrenciesCalculations();
 						}
@@ -280,7 +274,7 @@ public class ConvertFragment extends AbstractFragment {
 			currenciesList = source.getLastRates(getSelectedCurrenciesLocale());
 			currenciesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
 		} catch (DataSourceException e) {
-			Toast.makeText(getActivity(), R.string.error_db_load_rates, Defs.TOAST_ERR_TIME).show();
+			showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
 			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
 		} finally {
 			IOUtils.closeQuitely(source);

@@ -38,7 +38,6 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -62,11 +61,10 @@ public class CurrenciesFragment extends AbstractFragment {
 	private ListView lvCurrencies;
 	private TextView tvLastUpdate;
 	private String lastUpdateLastValue;
-	private View rootView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		this.rootView = inflater.inflate(R.layout.fragment_main, container, false);
 		init(rootView);
 		return rootView;
 	}
@@ -111,10 +109,8 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	private MaterialDialog newSortMenu() {
 		final AppSettings appSettings = new AppSettings(getActivity());
-		return new MaterialDialog.Builder(getActivity())
-				.title(R.string.action_sort_title)
-				.items(R.array.action_sort_values)
-				.itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sort_title)
+				.items(R.array.action_sort_values).itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
 						new MaterialDialog.ListCallbackSingleChoice() {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -125,31 +121,26 @@ public class CurrenciesFragment extends AbstractFragment {
 								// notify user
 								switch (appSettings.getCurrenciesSortSelection()) {
 								case AppSettings.SORTBY_CODE:
-									Snackbar.make(
-											rootView,
-											sortByAscending ? R.string.action_sort_code_asc
-													: R.string.action_sort_code_desc, Snackbar.LENGTH_SHORT).show();
+									showSnackbar(sortByAscending ? R.string.action_sort_code_asc
+											: R.string.action_sort_code_desc);
 									break;
 								case AppSettings.SORTBY_NAME:
 								default:
-									Snackbar.make(
-											rootView,
-											sortByAscending ? R.string.action_sort_name_asc
-													: R.string.action_sort_name_desc, Snackbar.LENGTH_SHORT).show();
+									showSnackbar(sortByAscending ? R.string.action_sort_name_asc
+											: R.string.action_sort_name_desc);
 									break;
 								}
 								return true;
 							}
-						}).build();
+						})
+				.build();
 	}
 
 	private MaterialDialog newFilterMenu() {
 		final AppSettings appSettings = new AppSettings(getActivity());
-		return new MaterialDialog.Builder(getActivity())
-				.title(R.string.action_filter_title)
-				.items(R.array.action_filter_values)
-				.itemsCallbackSingleChoice(appSettings.getCurrenciesFilterSelection(),
-						new MaterialDialog.ListCallbackSingleChoice() {
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
+				.items(R.array.action_filter_values).itemsCallbackSingleChoice(
+						appSettings.getCurrenciesFilterSelection(), new MaterialDialog.ListCallbackSingleChoice() {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 								appSettings.setCurrenciesFilterSelection(which);
@@ -157,21 +148,19 @@ public class CurrenciesFragment extends AbstractFragment {
 								// notify user
 								switch (appSettings.getCurrenciesFilterSelection()) {
 								case AppSettings.FILTERBY_ALL:
-									Toast.makeText(getActivity(), R.string.action_filter_all, Toast.LENGTH_SHORT)
-											.show();
+									showSnackbar(R.string.action_filter_all);
 									break;
 								case AppSettings.FILTERBY_NONFIXED:
-									Toast.makeText(getActivity(), R.string.action_filter_nonfixed, Toast.LENGTH_SHORT)
-											.show();
+									showSnackbar(R.string.action_filter_nonfixed);
 									break;
 								case AppSettings.FILTERBY_FIXED:
-									Toast.makeText(getActivity(), R.string.action_filter_fixed, Toast.LENGTH_SHORT)
-											.show();
+									showSnackbar(R.string.action_filter_fixed);
 									break;
 								}
 								return true;
 							}
-						}).build();
+						})
+				.build();
 	}
 
 	/**
@@ -246,7 +235,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				}
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-				Toast.makeText(getActivity(), R.string.error_db_load_rates, Defs.TOAST_ERR_TIME).show();
+				showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
 			} finally {
 				IOUtils.closeQuitely(source);
 			}
@@ -321,14 +310,14 @@ public class CurrenciesFragment extends AbstractFragment {
 					}
 				} catch (DataSourceException e) {
 					Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-					Toast.makeText(getActivity(), R.string.error_db_load_rates, Defs.TOAST_ERR_TIME).show();
+					showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
 				} finally {
 					IOUtils.closeQuitely(source);
 				}
 				updateCurrenciesListView(result.get(selectedCurrenciesLocale));
 			} else {
 				tvLastUpdate.setText(lastUpdateLastValue);
-				Toast.makeText(getActivity(), R.string.error_download_rates, Defs.TOAST_ERR_TIME).show();
+				showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME);
 			}
 		}
 

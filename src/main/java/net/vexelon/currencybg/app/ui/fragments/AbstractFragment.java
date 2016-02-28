@@ -24,11 +24,16 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
@@ -38,6 +43,7 @@ import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 
 public class AbstractFragment extends Fragment {
 
+	protected View rootView;
 	protected Menu mMenu;
 	protected List<NotificationsListener> listeners = new ArrayList<NotificationsListener>();
 
@@ -96,4 +102,28 @@ public class AbstractFragment extends Fragment {
 		return currenciesMap;
 	}
 
+	protected void showSnackbar(String text, int duration) {
+		Snackbar snackbar = Snackbar.make(rootView, text, duration);
+		View v = snackbar.getView();
+		v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+		snackbar.show();
+	}
+
+	protected void showSnackbar(String text) {
+		showSnackbar(text, Snackbar.LENGTH_SHORT);
+	}
+
+	protected void showSnackbar(int resId, int duration) {
+		Snackbar snackbar = Snackbar.make(rootView, resId, duration);
+		View v = snackbar.getView();
+		// TextView textView = (TextView)
+		// v.findViewById(android.support.design.R.id.snackbar_text);
+		// textView.setTextColor(getResources().getColor(R.color.colorAccent));
+		v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+		snackbar.show();
+	}
+
+	protected void showSnackbar(int resId) {
+		showSnackbar(resId, Snackbar.LENGTH_SHORT);
+	}
 }
