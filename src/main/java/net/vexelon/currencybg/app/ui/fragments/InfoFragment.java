@@ -1,10 +1,13 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -25,6 +29,8 @@ import java.util.Map;
 
 public class InfoFragment extends AbstractFragment {
 
+    private static final String URL_3RDPARTY= "intr://3rd";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_info, container, false);
@@ -33,6 +39,7 @@ public class InfoFragment extends AbstractFragment {
     }
 
     private void init(View view) {
+        final Activity activity = getActivity();
         ListView lvInfo = (ListView) view.findViewById(R.id.list_info);
         final InfoListAdapter adapter = new InfoListAdapter(getActivity(), R.layout.info_row, getInfosList());
         lvInfo.setAdapter(adapter);
@@ -40,7 +47,9 @@ public class InfoFragment extends AbstractFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String url = adapter.getUrl(position);
-                if (url != null) {
+                if (URL_3RDPARTY.equals(url)) {
+                    new MaterialDialog.Builder(getActivity()).customView(R.layout.fragment_thirdparty, true).positiveText(R.string.text_ok).build().show();
+                } else if (url != null) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(browserIntent);
                 }
@@ -65,7 +74,7 @@ public class InfoFragment extends AbstractFragment {
         infosList.add(newInfoRow(getString(R.string.about_logo), getString(R.string.about_logo_text), "http://www.stremena.com"));
         infosList.add(newInfoRow(getString(R.string.about_flag_icons), "Copyright (c) 2013 Aha-Soft. http://www.aha-soft.com/free-icons/free-yellow-button-icons", "http://www.aha-soft.com/free-icons/free-yellow-button-icons"));
         infosList.add(newInfoRow(getString(R.string.about_flag_icons), "Copyright (CC BY-ND 3.0) Visual Pharm. http://icons8.com", "http://icons8.com"));
-        infosList.add(newInfoRow(getString(R.string.about_3rdparty), ""));
+        infosList.add(newInfoRow(getString(R.string.about_3rdparty), "", URL_3RDPARTY));
 
         return infosList;
     }
