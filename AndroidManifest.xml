@@ -20,14 +20,6 @@
         <activity
             android:name=".ui.activities.PrefsActivity"
             android:label="@string/prefs_title"></activity>
-        <activity
-            android:name=".ui.activities.AboutActivity"
-            android:label="@string/app_about">
-            <intent-filter>
-                <action android:name="net.vexelon.currencybg.app.ui.activities.AboutActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <!--Service declared in manifest -->
         <service android:name="net.vexelon.currencybg.app.services.RateService" />

@@ -1,8 +1,11 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.ListView;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.ui.components.InfoListAdapter;
 import net.vexelon.currencybg.app.utils.StringUtils;
@@ -47,11 +51,21 @@ public class InfoFragment extends AbstractFragment {
     private List<Map<String, String>> getInfosList() {
         List<Map<String, String>> infosList = Lists.newArrayList();
 
-        infosList.add(newInfoRow("Version", "1.2.3"));
-        infosList.add(newInfoRow("Visit our website", "github.com/vexelon-dot-net/currencybg.app", "https://github.com/vexelon-dot-net/currencybg.app"));
-        infosList.add(newInfoRow("Authors", "Name1, Name2"));
-        infosList.add(newInfoRow("Logo image", "Stremena.com", "http://www.stremena.com"));
-        infosList.add(newInfoRow("Third-party libraries", ""));
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), PackageManager.GET_GIDS);
+            infosList.add(newInfoRow("Version", packageInfo.versionName));
+        } catch (Exception e) {
+            Log.e(Defs.LOG_TAG, "", e);
+        }
+
+        infosList.add(newInfoRow(getString(R.string.about_rates_provider), getString(R.string.about_rates_provider_text), "http://www.bnb.bg"));
+        infosList.add(newInfoRow(getString(R.string.about_join_appdev), "github.com/vexelon-dot-net/currencybg.app", "https://github.com/vexelon-dot-net/currencybg.app"));
+        infosList.add(newInfoRow(getString(R.string.about_author), getString(R.string.about_author_text)));
+        infosList.add(newInfoRow(getString(R.string.about_logo), getString(R.string.about_logo_text), "http://www.stremena.com"));
+        infosList.add(newInfoRow(getString(R.string.about_flag_icons), "Copyright (c) 2013 Aha-Soft. http://www.aha-soft.com/free-icons/free-yellow-button-icons", "http://www.aha-soft.com/free-icons/free-yellow-button-icons"));
+        infosList.add(newInfoRow(getString(R.string.about_flag_icons), "Copyright (CC BY-ND 3.0) Visual Pharm. http://icons8.com", "http://icons8.com"));
+        infosList.add(newInfoRow(getString(R.string.about_3rdparty), ""));
 
         return infosList;
     }
