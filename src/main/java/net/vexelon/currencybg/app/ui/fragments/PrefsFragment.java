@@ -20,14 +20,13 @@ package net.vexelon.currencybg.app.ui.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceFragment;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.widget.Toast;
 import net.vexelon.currencybg.app.R;
 
-public class PrefsFragment extends PreferenceFragment implements OnPreferenceClickListener, OnPreferenceChangeListener {
+public class PrefsFragment extends PreferenceFragmentCompat
+		implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
 	public static final String TAG = "preferences";
 	public static final String KEY_SCREEN_APP_PREFS = "app_prefs";
@@ -36,9 +35,7 @@ public class PrefsFragment extends PreferenceFragment implements OnPreferenceCli
 	public static final String KEY_PREF_RATEUS = "rateus";
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
+	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
 		// final Context ctx = getActivity();
 		// final AppSettings appSettings = new AppSettings(ctx);
@@ -63,7 +60,8 @@ public class PrefsFragment extends PreferenceFragment implements OnPreferenceCli
 
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		if (preference.getKey().equals(KEY_PREF_CURRENCIES_LANGUAGE) || preference.getKey().equals(KEY_PREF_CURRENCIES_PRECISION)) {
+		if (preference.getKey().equals(KEY_PREF_CURRENCIES_LANGUAGE)
+				|| preference.getKey().equals(KEY_PREF_CURRENCIES_PRECISION)) {
 			Toast.makeText(getActivity(), getString(R.string.pref_value_update, newValue), Toast.LENGTH_SHORT).show();
 		}
 		// update state with new value

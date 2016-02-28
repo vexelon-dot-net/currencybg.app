@@ -27,7 +27,8 @@ public class PrefsActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getFragmentManager().beginTransaction().replace(R.id.content, new PrefsFragment()).commit();
+		// getFragmentManager().beginTransaction().replace(R.id.content, new
+		// PrefsFragment()).commit();
 	}
 
 }

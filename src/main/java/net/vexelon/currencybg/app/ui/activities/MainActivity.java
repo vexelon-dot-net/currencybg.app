@@ -25,13 +25,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -45,6 +48,7 @@ import net.vexelon.currencybg.app.ui.fragments.AbstractFragment;
 import net.vexelon.currencybg.app.ui.fragments.ConvertFragment;
 import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
 import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
+import net.vexelon.currencybg.app.ui.fragments.PrefsFragment;
 
 public class MainActivity extends AppCompatActivity implements NotificationsListener {
 
@@ -104,45 +108,50 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		switch(item.getItemId()) {
-			case android.R.id.home:
-				drawerLayout.openDrawer(GravityCompat.START);
-				break;
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			drawerLayout.openDrawer(GravityCompat.START);
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	private ActionBarDrawerToggle setupDrawerToggle() {
-		return new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open,  R.string.drawer_close);
+		return new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
 	}
 
 	private void setupDrawerContent(NavigationView navigationView) {
 		final Context context = this;
-		navigationView.setNavigationItemSelectedListener(
-				new NavigationView.OnNavigationItemSelectedListener() {
-					@Override
-					public boolean onNavigationItemSelected(MenuItem menuItem) {
-						// special case -> settings
-						if (menuItem.getItemId() == R.id.nav_settings) {
-							Intent intent = new Intent(context, PrefsActivity.class);
-							startActivity(intent);
-						} else {
-							selectDrawerItem(menuItem, getClassFromMenu(menuItem));
-						}
-						return true;
-					}
-				});
+		navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+			@Override
+			public boolean onNavigationItemSelected(MenuItem menuItem) {
+				if (menuItem.getItemId() == R.id.nav_settings) {
+					// special case -> settings
+					PreferenceFragmentCompat fragment = new PrefsFragment();
+					FragmentManager fragmentManager = getSupportFragmentManager();
+					fragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit();
+					menuItem.setChecked(true);
+					setTitle(menuItem.getTitle());
+					drawerLayout.closeDrawers();
+				} else {
+					selectDrawerItem(menuItem, getClassFromMenu(menuItem));
+				}
+				return true;
+			}
+		});
 	}
 
 	private Class getClassFromMenu(MenuItem menuItem) {
-		switch(menuItem.getItemId()) {
-			case R.id.nav_convert:
-				return ConvertFragment.class;
-			case R.id.nav_info:
-				return InfoFragment.class;
-			case R.id.nav_currencies:
-			default:
-				return CurrenciesFragment.class;
+		switch (menuItem.getItemId()) {
+		case R.id.nav_convert:
+			return ConvertFragment.class;
+		case R.id.nav_info:
+			return InfoFragment.class;
+		case R.id.nav_settings:
+			return PrefsFragment.class;
+		case R.id.nav_currencies:
+		default:
+			return CurrenciesFragment.class;
 		}
 	}
 
@@ -155,7 +164,8 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	private <T extends AbstractFragment> void selectDrawerItem(MenuItem menuItem, Class<T> clazz) {
 		try {
 			showFragment(clazz);
-			// Highlight the selected item, update the title, and close the drawer
+			// Highlight the selected item, update the title, and close the
+			// drawer
 			menuItem.setChecked(true);
 			setTitle(menuItem.getTitle());
 			drawerLayout.closeDrawers();
@@ -167,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	private <T extends AbstractFragment> AbstractFragment showFragment(Class<T> clazz) throws Exception {
 		AbstractFragment fragment = clazz.newInstance();
 		fragment.addListener(MainActivity.this);
-//			Bundle args = new Bundle();
-//			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//			fragment.setArguments(args);
+		// Bundle args = new Bundle();
+		// args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+		// fragment.setArguments(args);
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit();
