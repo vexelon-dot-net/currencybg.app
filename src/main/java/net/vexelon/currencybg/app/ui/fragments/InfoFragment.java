@@ -63,7 +63,7 @@ public class InfoFragment extends AbstractFragment {
         PackageInfo packageInfo = null;
         try {
             packageInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), PackageManager.GET_GIDS);
-            infosList.add(newInfoRow("Version", packageInfo.versionName));
+            infosList.add(newInfoRow(getString(R.string.about_version), packageInfo.versionName));
         } catch (Exception e) {
             Log.e(Defs.LOG_TAG, "", e);
         }
