@@ -90,6 +90,16 @@ public class SQLiteDataSource implements DataSource {
 				}
 			}
 
+			// make sure there is sufficient data in the lists
+			if (dynamicCurrencies.isEmpty() || dynamicCurrencies.size() < 2) {
+				Log.w(Defs.LOG_TAG, "Dynamic currencies list is empty (" + dynamicCurrencies.size() + ")!");
+				return;
+			}
+			if (fixedCurrencies.isEmpty() || fixedCurrencies.size() < 2) {
+				Log.w(Defs.LOG_TAG, "Fixed currencies list is empty (" + fixedCurrencies.size() + ")!");
+				return;
+			}
+
 			// //За всеки от списъците се прави проверка дали го има в базата.
 			// За динамични валути
 			// TODO - да се ползва новия метод
@@ -112,7 +122,6 @@ public class SQLiteDataSource implements DataSource {
 																		// remove
 																		// comment
 					values = new ContentValues();
-
 				}
 
 				valuesDate.put(Defs.COLUMN_CURR_DATE,
@@ -121,7 +130,6 @@ public class SQLiteDataSource implements DataSource {
 				database.insert(Defs.TABLE_CURRENCY_DATE, null, valuesDate);// TODO
 																			// remove
 																			// comment
-
 				valuesDate = new ContentValues();
 			}
 
@@ -251,14 +259,14 @@ public class SQLiteDataSource implements DataSource {
 		String whereClause = Defs.COLUMN_LOCALE + " = ? ";
 		String[] whereArgs = new String[] { locale.toString() };
 
-		Cursor cursor = database.query(true, Defs.TABLE_CURRENCY_DATE, tableColumns, whereClause, whereArgs, null,
-				null, null, null);
+		Cursor cursor = database.query(true, Defs.TABLE_CURRENCY_DATE, tableColumns, whereClause, whereArgs, null, null,
+				null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			try {
-				resultCurrency.add(parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE)),
-						DATE_FORMAT));
+				resultCurrency.add(
+						parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE)), DATE_FORMAT));
 			} catch (ParseException e) {
 				// TODO: proper handling of date
 				e.printStackTrace();
@@ -349,8 +357,8 @@ public class SQLiteDataSource implements DataSource {
 		currency.setRate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_RATE)));
 		currency.setExtraInfo(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_EXTRAINFO)));
 		try {
-			currency.setCurrDate(parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE)),
-					DATE_FORMAT));
+			currency.setCurrDate(
+					parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE)), DATE_FORMAT));
 		} catch (ParseException e) {
 			// TODO: proper handling of date
 			e.printStackTrace();
