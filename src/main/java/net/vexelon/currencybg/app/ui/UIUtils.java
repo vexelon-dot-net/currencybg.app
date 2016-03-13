@@ -29,7 +29,7 @@ public class UIUtils {
 	/**
 	 * Display an alert dialog using resource IDs
 	 * 
-	 * @param context
+	 * @param activity
 	 * @param messageResId
 	 * @param titleResId
 	 */
@@ -41,9 +41,9 @@ public class UIUtils {
 	/**
 	 * Display alert dialog using string message
 	 * 
-	 * @param context
+	 * @param activity
 	 * @param message
-	 * @param titleResId
+	 * @param title
 	 */
 	public static void showAlertDialog(Activity activity, String message, String title) {
 		final Activity act = activity;
@@ -76,7 +76,7 @@ public class UIUtils {
 	 * 
 	 * @param context
 	 * @param message
-	 * @param titleResId
+	 * @param title
 	 * @return
 	 */
 	public static AlertDialog createAlertDialog(Context context, String message, String title) {

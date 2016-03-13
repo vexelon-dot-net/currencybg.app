@@ -1,4 +1,4 @@
-CurrencyBG Changes
+Currency BG Changes
 ===================
 
 ## v1.0.0
