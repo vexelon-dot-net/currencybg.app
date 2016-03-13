@@ -59,13 +59,13 @@ public class AbstractFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	public void addListener(NotificationsListener listner) {
-		listeners.add(listner);
-	}
-
-	public void removeListener(NotificationsListener listener) {
-		listeners.remove(listener);
-	}
+	// public void addListener(NotificationsListener listner) {
+	// listeners.add(listner);
+	// }
+	//
+	// public void removeListener(NotificationsListener listener) {
+	// listeners.remove(listener);
+	// }
 
 	public void notifyListeners(Notifications notification) {
 		for (NotificationsListener listener : listeners) {

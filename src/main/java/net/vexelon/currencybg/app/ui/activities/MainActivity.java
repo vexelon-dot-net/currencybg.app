@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 
 	private <T extends AbstractFragment> AbstractFragment showFragment(Class<T> clazz) throws Exception {
 		AbstractFragment fragment = clazz.newInstance();
-		fragment.addListener(MainActivity.this);
+		// fragment.addListener(MainActivity.this);
 		// Bundle args = new Bundle();
 		// args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		// fragment.setArguments(args);
