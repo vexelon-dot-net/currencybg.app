@@ -19,7 +19,7 @@
     <string name="about_rates_provider_text_long">Обменните валутни курсове на чуждестранните валути се изчисляват на основата на фиксирания курс на лева спрямо еврото, като за източник се използват публикуваните от Европейската централна банка курсове на еврото към същите валути за съответния ден.</string>
     <string name="about_join_appdev">Присъединете се към разработването</string>
     <string name="about_author">Разработчици</string>
-    <string name="about_author_text">Петър Петров, Цветослав Цветков</string>
+    <string name="about_author_text">Списък на допринесли към приложението</string>
     <string name="about_logo">Графично лого</string>
     <string name="about_logo_text">Стремена Тузсузова  http://stremena.com</string>
     <string name="about_3rdparty">Използвани библиотеки</string>

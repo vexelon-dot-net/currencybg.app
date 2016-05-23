@@ -19,7 +19,7 @@
     <string name="about_rates_provider_long">The exchange rates of currencies are calculated on the basis of the fixed exchange rate of the Bulgarian lev to the euro, and the information source is the exchange rates of the euro against these currencies published by the European Central Bank</string>
     <string name="about_join_appdev">Join app development</string>
     <string name="about_author">Developers</string>
-    <string name="about_author_text">Petar Petrov, Tsvetoslav Tsvetkov</string>
+    <string name="about_author_text">List of contributors</string>
     <string name="about_logo">Logo icon</string>
     <string name="about_logo_text">Stremena Tuzsuzova  http://stremena.com</string>
     <string name="about_3rdparty">Third-party libraries</string>
