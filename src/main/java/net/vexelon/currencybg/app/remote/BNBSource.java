@@ -205,7 +205,7 @@ public class BNBSource implements Source {
 
 			// Element element =
 			// doc.select("div#more_information > div.box > div.top > div > ul > li").first();
-			Element div = doc.select("div#content_box.content > div.doc_entry > div > table > tbody").first();
+			Element div = doc.select("div#content_box.content > div.doc_entry > center > table > tbody").first();
 			Elements divChildren = div.children();
 
 			int lineNumber = 1;
