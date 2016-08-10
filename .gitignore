@@ -14,8 +14,8 @@ gradle.properties
 libs/
 local.properties
 *.orig
+*.keystore
 
 # a-studio
 .idea
 *.iml
-
