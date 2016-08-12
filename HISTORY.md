@@ -1,6 +1,17 @@
 Currency BG Changes
 ===================
 
+## 1.0.1
+
+## EN
+
+  * Fixed currency download issue.
+
+## BG
+
+  * Отстранен проблем със сваляне на валутите.
+
+
 ## 1.0.0
 
 ## EN
