@@ -97,7 +97,8 @@ public class RateService extends Service {
 		try {
 			source = new SQLiteDataSource();
 			source.connect(ctx);
-			listCurrency = source.getRates(getSelectedCurrenciesLocale(), Calendar.getInstance().getTime());
+			//TODO - temporary commented
+//			listCurrency = source.getRates(getSelectedCurrenciesLocale(), Calendar.getInstance().getTime());
 			return listCurrency.size() > 0;
 		} catch (DataSourceException e) {
 			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
@@ -121,7 +122,8 @@ public class RateService extends Service {
 		try {
 			source = new SQLiteDataSource();
 			source.connect(ctx);
-			listFixedCurrency = source.getFixedRates(getSelectedCurrenciesLocale(), currentYear);
+			//TODO - temporary commented
+//			listFixedCurrency = source.getFixedRates(getSelectedCurrenciesLocale(), currentYear);
 			return listFixedCurrency.size() > 0;
 		} catch (DataSourceException e) {
 			Log.e(Defs.LOG_TAG, "Could not load fixed currencies from database!", e);
@@ -162,7 +164,8 @@ public class RateService extends Service {
 			try {
 				source = new SQLiteDataSource();
 				source.connect(ctx);
-				source.addRates(result);
+				//TODO - temporary commented
+//				source.addRates(result);
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
 			} finally {

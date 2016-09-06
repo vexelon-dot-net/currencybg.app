@@ -271,8 +271,9 @@ public class ConvertFragment extends AbstractFragment {
 		try {
 			source = new SQLiteDataSource();
 			source.connect(getActivity());
-			currenciesList = source.getLastRates(getSelectedCurrenciesLocale());
-			currenciesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
+			//TODO - temporary commented
+//			currenciesList = source.getLastRates(getSelectedCurrenciesLocale());
+//			currenciesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
 		} catch (DataSourceException e) {
 			showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
 			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);

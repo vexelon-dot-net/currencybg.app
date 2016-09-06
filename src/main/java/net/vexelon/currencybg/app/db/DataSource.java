@@ -24,6 +24,7 @@ import java.util.Map;
 
 import android.content.Context;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.db.models.CurrencyDataNew;
 import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 
 /**
@@ -42,6 +43,14 @@ public interface DataSource extends Closeable {
 	void connect(Context context) throws DataSourceException;
 
 	/**
+	 * Adds exchange rates data
+	 *
+	 * @param rates
+	 * @throws DataSourceException
+	 */
+	public void addRates(List<CurrencyDataNew> rates) throws DataSourceException;
+
+	/**
 	 * Fetches a list of dates for which exchange rates were downloaded and
 	 * available in the underlying data source.
 	 * 
@@ -50,7 +59,7 @@ public interface DataSource extends Closeable {
 	 *         if no dates are available.
 	 * @throws DataSourceException
 	 */
-	List<Date> getAvailableRatesDates(CurrencyLocales locale) throws DataSourceException;
+//	List<Date> getAvailableRatesDates(CurrencyLocales locale) throws DataSourceException;
 
 	/**
 	 * Fetches all exchange rates, for all dates, from the underlying data
@@ -61,7 +70,7 @@ public interface DataSource extends Closeable {
 	 *         available.
 	 * @throws DataSourceException
 	 */
-	List<CurrencyData> getRates(CurrencyLocales locale) throws DataSourceException;
+//	List<CurrencyData> getRates(CurrencyLocales locale) throws DataSourceException;
 
 	/**
 	 * Fetches exchange rates for a given date.
@@ -72,10 +81,10 @@ public interface DataSource extends Closeable {
 	 *         available for the given date.
 	 * @throws DataSourceException
 	 */
-	List<CurrencyData> getRates(CurrencyLocales locale, Date date) throws DataSourceException;
+//	List<CurrencyData> getRates(CurrencyLocales locale, Date date) throws DataSourceException;
 
 
-	List<CurrencyData> getFixedRates(CurrencyLocales locale, Date date) throws DataSourceException;
+//	List<CurrencyData> getFixedRates(CurrencyLocales locale, Date date) throws DataSourceException;
 
 	/**
 	 * Adds exchange rates data for given download {@link Date}.
@@ -85,7 +94,7 @@ public interface DataSource extends Closeable {
 	 *            values.
 	 * @throws DataSourceException
 	 */
-	void addRates(Map<CurrencyLocales, List<CurrencyData>> rates) throws DataSourceException;
+//	void addRates(Map<CurrencyLocales, List<CurrencyData>> rates) throws DataSourceException;
 
 	/**
 	 * Fetches the latest exchange rates from the underlying data source.
@@ -93,7 +102,7 @@ public interface DataSource extends Closeable {
 	 * @param locale
 	 * @throws DataSourceException
 	 */
-	List<CurrencyData> getLastRates(CurrencyLocales locale) throws DataSourceException;
+//	List<CurrencyData> getLastRates(CurrencyLocales locale) throws DataSourceException;
 
 	/**
 	 * Fetches the last exchange fixed rates from the underlying data source.
@@ -102,5 +111,5 @@ public interface DataSource extends Closeable {
 	 * @return
 	 * @throws DataSourceException
 	 */
-	List<CurrencyData> getLastFixedRates(CurrencyLocales locale) throws DataSourceException;
+//	List<CurrencyData> getLastFixedRates(CurrencyLocales locale) throws DataSourceException;
 }

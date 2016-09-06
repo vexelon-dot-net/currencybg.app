@@ -25,25 +25,46 @@ import android.util.Log;
 
 public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 
+	// // Table Create Statements
+	// // TABLE_CURRENCY table create statement
+	// private static final String CREATE_TABLE_CURRENCY = String.format(
+	// "create table %s(%s integer primary key autoincrement, %s integer not
+	// null, %s text not null, %s text not null, %s integer not null, %s text,
+	// %s text not null, %s text, %s text not null, %s text, %s integer not
+	// null, %s text);",
+	// Defs.TABLE_CURRENCY, Defs.COLUMN_ID, Defs.COLUMN_GOLD, Defs.COLUMN_NAME,
+	// Defs.COLUMN_CODE,
+	// Defs.COLUMN_RATIO, Defs.COLUMN_REVERSERATE, Defs.COLUMN_RATE,
+	// Defs.COLUMN_EXTRAINFO, Defs.COLUMN_CURR_DATE,
+	// Defs.COLUMN_TITLE, Defs.COLUMN_F_STAR, Defs.COLUMN_LOCALE);
+	//
+	// // TABLE_CURRENCY_DATE table create statement
+	// private static final String CREATE_TABLE_CURRENCY_DATE = String.format(
+	// "create table %s(%s integer primary key autoincrement, %s text not null,
+	// %s text not null);",
+	// Defs.TABLE_CURRENCY_DATE, Defs.COLUMN_ID, Defs.COLUMN_CURR_DATE,
+	// Defs.COLUMN_LOCALE);
+	//
+	// // CREATE_TABLE_FIXED_CURRENCY table create statement
+	// public static final String CREATE_TABLE_FIXED_CURRENCY = String.format(
+	// "create table %s(%s integer primary key autoincrement, %s integer not
+	// null, %s text not null, %s text not null, %s integer not null, %s text,
+	// %s text not null, %s text, %s text not null, %s text, %s integer not
+	// null, %s text);",
+	// Defs.TABLE_FIXED_CURRENCY, Defs.COLUMN_ID, Defs.COLUMN_GOLD,
+	// Defs.COLUMN_NAME, Defs.COLUMN_CODE,
+	// Defs.COLUMN_RATIO, Defs.COLUMN_REVERSERATE, Defs.COLUMN_RATE,
+	// Defs.COLUMN_EXTRAINFO, Defs.COLUMN_CURR_DATE,
+	// Defs.COLUMN_TITLE, Defs.COLUMN_F_STAR, Defs.COLUMN_LOCALE);
+
 	// Table Create Statements
 	// TABLE_CURRENCY table create statement
-	private static final String CREATE_TABLE_CURRENCY = String
-			.format("create table %s(%s integer primary key autoincrement, %s integer not null, %s text not null, %s text not null, %s integer not null, %s text, %s text not null, %s text, %s text not null, %s text, %s integer not null, %s text);",
-					Defs.TABLE_CURRENCY, Defs.COLUMN_ID, Defs.COLUMN_GOLD, Defs.COLUMN_NAME, Defs.COLUMN_CODE,
-					Defs.COLUMN_RATIO, Defs.COLUMN_REVERSERATE, Defs.COLUMN_RATE, Defs.COLUMN_EXTRAINFO,
-					Defs.COLUMN_CURR_DATE, Defs.COLUMN_TITLE, Defs.COLUMN_F_STAR, Defs.COLUMN_LOCALE);
+	private static final String CREATE_TABLE_CURRENCY_BG = String.format(
+			"create table %s(%s integer primary key autoincrement, %s text not null, %s integer not null, %s text, %s text, %s text not null, %s integer not null);",
+			Defs.TABLE_CURRENCY, Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY, Defs.COLUMN_SELL,
+			Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE);
 
-	// TABLE_CURRENCY_DATE table create statement
-	private static final String CREATE_TABLE_CURRENCY_DATE = String.format(
-			"create table %s(%s integer primary key autoincrement, %s text not null, %s text not null);",
-			Defs.TABLE_CURRENCY_DATE, Defs.COLUMN_ID, Defs.COLUMN_CURR_DATE, Defs.COLUMN_LOCALE);
-
-	// CREATE_TABLE_FIXED_CURRENCY table create statement
-	public static final String CREATE_TABLE_FIXED_CURRENCY = String
-			.format("create table %s(%s integer primary key autoincrement, %s integer not null, %s text not null, %s text not null, %s integer not null, %s text, %s text not null, %s text, %s text not null, %s text, %s integer not null, %s text);",
-					Defs.TABLE_FIXED_CURRENCY, Defs.COLUMN_ID, Defs.COLUMN_GOLD, Defs.COLUMN_NAME, Defs.COLUMN_CODE,
-					Defs.COLUMN_RATIO, Defs.COLUMN_REVERSERATE, Defs.COLUMN_RATE, Defs.COLUMN_EXTRAINFO,
-					Defs.COLUMN_CURR_DATE, Defs.COLUMN_TITLE, Defs.COLUMN_F_STAR, Defs.COLUMN_LOCALE);
+//	private static final String CREATE_TABLE_CURRENCY_BG = String.format("");
 
 	public CurrenciesSQLiteDB(Context context) {
 		super(context, Defs.DATABASE_NAME, null, Defs.DATABASE_VERSION);
@@ -52,9 +73,12 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		// creating required tables
-		database.execSQL(CREATE_TABLE_CURRENCY);
-		database.execSQL(CREATE_TABLE_CURRENCY_DATE);
-		database.execSQL(CREATE_TABLE_FIXED_CURRENCY);
+
+		// database.execSQL(CREATE_TABLE_CURRENCY);
+		// database.execSQL(CREATE_TABLE_CURRENCY_DATE);
+		// database.execSQL(CREATE_TABLE_FIXED_CURRENCY);
+
+		database.execSQL(CREATE_TABLE_CURRENCY_BG);
 	}
 
 	@Override
@@ -63,10 +87,12 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 		Log.i(Defs.LOG_TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
 		switch (oldVersion) {
 		case 1:
+		case 2:
 			/**
-			 * Upgrade from database v1 to v2
+			 * Upgrade from database v1 or v2 to v3
 			 */
-			database.execSQL(CREATE_TABLE_FIXED_CURRENCY);
+			database.execSQL(CREATE_TABLE_CURRENCY_BG);
+			// TODO - drop old tables if exists
 			break;
 		default:
 			Log.w(Defs.LOG_TAG, "Unknown old db version=" + oldVersion);

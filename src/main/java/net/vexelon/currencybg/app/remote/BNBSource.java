@@ -41,6 +41,7 @@ import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
 
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.db.models.CurrencyDataNew;
 import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
@@ -324,4 +325,24 @@ public class BNBSource implements Source {
 		return result;
 	}
 
+
+	@Override
+	public List<CurrencyDataNew> getAllRatesByDate(String initialTime) throws  SourceException{
+		return null;
+	}
+
+	@Override
+	public List<CurrencyDataNew> getAllRatesByDateSource(String initialTime, Integer sourceId) throws  SourceException{
+		return null;
+	}
+
+	@Override
+	public List<CurrencyDataNew> getAllCurrentRatesAfter(String initialTime) throws  SourceException{
+		return null;
+	}
+
+	@Override
+	public List<CurrencyDataNew> getAllCurrentRatesAfter(String initialTime, Integer sourceId) throws  SourceException{
+		return null;
+	}
 }

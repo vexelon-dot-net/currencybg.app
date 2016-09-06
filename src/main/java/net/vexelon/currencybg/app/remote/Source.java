@@ -17,10 +17,13 @@
  */
 package net.vexelon.currencybg.app.remote;
 
+import com.squareup.okhttp.OkHttpClient;
+
 import java.util.List;
 import java.util.Map;
 
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.db.models.CurrencyDataNew;
 import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 
 public interface Source {
@@ -33,6 +36,44 @@ public interface Source {
 	 *         {@link CurrencyData} is available.
 	 * @throws SourceException
 	 */
+	@Deprecated
 	Map<CurrencyLocales, List<CurrencyData>> downloadRates(boolean getFixedRates) throws SourceException;
 
+	/**
+	 * Fetches a list of currencies by date
+	 *
+	 * @param initialTime
+	 * @return
+	 * @throws SourceException
+	 */
+	List<CurrencyDataNew> getAllRatesByDate(String initialTime) throws SourceException;
+
+	/**
+	 * Fetches a list of currencies by sourceId and date
+	 *
+	 * @param initialTime
+	 * @param sourceId
+	 * @return
+	 * @throws SourceException
+	 */
+	List<CurrencyDataNew> getAllRatesByDateSource(String initialTime, Integer sourceId) throws SourceException;
+
+	/**
+	 * Fetches a list of currencies for the current date which are after DateTime
+	 *
+	 * @param timeFrom
+	 * @return
+	 * @throws SourceException
+	 */
+	List<CurrencyDataNew> getAllCurrentRatesAfter(String timeFrom) throws  SourceException;
+
+	/**
+	 * Fetches a list of currencies for the current date which are after timeFrom by sourceId
+	 *
+	 * @param timeFrom
+	 * @param sourceId
+	 * @return
+	 * @throws SourceException
+	 */
+	List<CurrencyDataNew> getAllCurrentRatesAfter(String timeFrom, Integer sourceId) throws  SourceException;
 }

@@ -17,12 +17,17 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Maps;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -46,7 +51,9 @@ import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.db.models.CurrencyDataNew;
 import net.vexelon.currencybg.app.db.models.CurrencyLocales;
+import net.vexelon.currencybg.app.remote.APISource;
 import net.vexelon.currencybg.app.remote.BNBSource;
 import net.vexelon.currencybg.app.remote.Source;
 import net.vexelon.currencybg.app.remote.SourceException;
@@ -220,19 +227,22 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param useRemoteSource
 	 */
 	public void reloadRates(boolean useRemoteSource) {
+		//TODO - temporary added this default value
+		useRemoteSource = true;
+
 		if (!useRemoteSource) {
 			DataSource source = null;
 			try {
 				source = new SQLiteDataSource();
 				source.connect(getActivity());
-				List<CurrencyData> ratesList = source.getLastRates(getSelectedCurrenciesLocale());
-				ratesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
-				if (!ratesList.isEmpty()) {
-					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
-					updateCurrenciesListView(ratesList);
-				} else {
-					useRemoteSource = true;
-				}
+//				List<CurrencyData> ratesList = source.getLastRates(getSelectedCurrenciesLocale());
+//				ratesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
+//				if (!ratesList.isEmpty()) {
+//					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
+//					updateCurrenciesListView(ratesList);
+//				} else {
+//					useRemoteSource = true;
+//				}
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
 				showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
@@ -264,24 +274,64 @@ public class CurrenciesFragment extends AbstractFragment {
 		protected Map<CurrencyLocales, List<CurrencyData>> doInBackground(Void... params) {
 			Map<CurrencyLocales, List<CurrencyData>> rates = Maps.newHashMap();
 			Date currentYear = DateTimeUtils.getCurrentYear();
-			try {
-				DataSource dataSource = null;
-				try {
-					dataSource = new SQLiteDataSource();
-					dataSource.connect(activity);
-					downloadFixed = dataSource.getFixedRates(getSelectedCurrenciesLocale(), currentYear).isEmpty();
-				} catch (DataSourceException e) {
-					Log.e(Defs.LOG_TAG, "Could not read fixed currencies from database!", e);
-				} finally {
-					IOUtils.closeQuitely(dataSource);
-				}
+//			try {
+//				DataSource dataSource = null;
+//				try {
+//					dataSource = new SQLiteDataSource();
+//					dataSource.connect(activity);
+//					downloadFixed = dataSource.getFixedRates(getSelectedCurrenciesLocale(), currentYear).isEmpty();
+//				} catch (DataSourceException e) {
+//					Log.e(Defs.LOG_TAG, "Could not read fixed currencies from database!", e);
+//				} finally {
+//					IOUtils.closeQuitely(dataSource);
+//				}
 				Log.v(Defs.LOG_TAG, "Loading rates from remote source..., downloadFixed=" + downloadFixed);
-				Source source = new BNBSource();
-				rates = source.downloadRates(downloadFixed);
-				updateOK = true;
+//				Source source = new BNBSource();
+//				rates = source.downloadRates(downloadFixed);
+//				updateOK = true;
+
+			//TODO - Test download
+
+
+//			OkHttpClient client = new OkHttpClient();
+//
+//			Request request = new Request.Builder()
+//					.url("http://currencybg-tsvetoslav.rhcloud.com/currencybg.server/api/currencies/2016-08-31T20:55:06+0300")
+//					.header("APIKey", "CurrencyBgUser")
+//					.build();
+//
+//			Response response = null;
+//			try {
+//				response = client.newCall(request).execute();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			String getResponse = null;
+//			try {
+//				getResponse = response.body().string();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+
+//			System.out.println(getResponse);
+
+
+			Source source = new APISource();
+			List<CurrencyDataNew> currencies = new ArrayList<CurrencyDataNew>();
+			try {
+//				currencies = source.getAllRatesByDateSource("2016-08-31T20:55:06+0300");
+//				currencies = source.getAllRatesByDateSource("2016-08-31T20:55:06+0300",200);
+//				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+02:00");
+				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+03:00",300);
 			} catch (SourceException e) {
-				Log.e(Defs.LOG_TAG, "Could not load rates from remote!", e);
+				e.printStackTrace();
 			}
+
+
+				//TODO - new API source
+//			} catch (SourceException e) {
+//				Log.e(Defs.LOG_TAG, "Could not load rates from remote!", e);
+//			}
 			return rates;
 		}
 
@@ -289,31 +339,41 @@ public class CurrenciesFragment extends AbstractFragment {
 		protected void onPostExecute(Map<CurrencyLocales, List<CurrencyData>> result) {
 			setRefreshActionButtonState(false);
 			CurrencyLocales selectedCurrenciesLocale = getSelectedCurrenciesLocale();
+			//TODO - Temporary code
+			CurrencyData currency = new CurrencyData();
+			currency.setCode("TEST");
+			List<CurrencyData> currencies = new ArrayList<CurrencyData>();
+			currencies.add(currency);
+			result.put(CurrencyLocales.EN, currencies);
+//			updateOK = true;
+			////
+
+
 			if (updateOK && !result.isEmpty()) {
 				DataSource source = null;
-				try {
-					source = new SQLiteDataSource();
-					source.connect(activity);
-					source.addRates(result);
-					if (!downloadFixed) {
-						/**
-						 * We have downloaded only the non-fixed currencies, so
-						 * we need to fetch
-						 * the list of last downloaded fixed currencies and
-						 * update the view with all
-						 * entries.
-						 */
-						List<CurrencyData> currenciesList = result.get(selectedCurrenciesLocale);
-						currenciesList.addAll(source.getLastFixedRates(selectedCurrenciesLocale));
-						updateCurrenciesListView(currenciesList);
-						return;
-					}
-				} catch (DataSourceException e) {
-					Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-					showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
-				} finally {
-					IOUtils.closeQuitely(source);
-				}
+//				try {
+//					source = new SQLiteDataSource();
+//					source.connect(activity);
+//					source.addRates(result);
+//					if (!downloadFixed) {
+//						/**
+//						 * We have downloaded only the non-fixed currencies, so
+//						 * we need to fetch
+//						 * the list of last downloaded fixed currencies and
+//						 * update the view with all
+//						 * entries.
+//						 */
+//						List<CurrencyData> currenciesList = result.get(selectedCurrenciesLocale);
+//						currenciesList.addAll(source.getLastFixedRates(selectedCurrenciesLocale));
+//						updateCurrenciesListView(currenciesList);
+//						return;
+//					}
+//				} catch (DataSourceException e) {
+//					Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
+//					showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
+//				} finally {
+//					IOUtils.closeQuitely(source);
+//				}
 				updateCurrenciesListView(result.get(selectedCurrenciesLocale));
 			} else {
 				tvLastUpdate.setText(lastUpdateLastValue);
