@@ -93,18 +93,18 @@ public class CurrenciesFragment extends AbstractFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch (id) {
-		case R.id.action_refresh:
-			reloadRates(true);
-			lastUpdateLastValue = tvLastUpdate.getText().toString();
-			tvLastUpdate.setText(R.string.last_update_updating_text);
-			setRefreshActionButtonState(true);
-			return true;
-		case R.id.action_sort:
-			newSortMenu().show();
-			return true;
-		case R.id.action_filter:
-			newFilterMenu().show();
-			return true;
+			case R.id.action_refresh:
+				reloadRates(true);
+				lastUpdateLastValue = tvLastUpdate.getText().toString();
+				tvLastUpdate.setText(R.string.last_update_updating_text);
+				setRefreshActionButtonState(true);
+				return true;
+			case R.id.action_sort:
+				newSortMenu().show();
+				return true;
+			case R.id.action_filter:
+				newFilterMenu().show();
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -127,15 +127,15 @@ public class CurrenciesFragment extends AbstractFragment {
 								sortCurrenciesListView(which);
 								// notify user
 								switch (appSettings.getCurrenciesSortSelection()) {
-								case AppSettings.SORTBY_CODE:
-									showSnackbar(sortByAscending ? R.string.action_sort_code_asc
-											: R.string.action_sort_code_desc);
-									break;
-								case AppSettings.SORTBY_NAME:
-								default:
-									showSnackbar(sortByAscending ? R.string.action_sort_name_asc
-											: R.string.action_sort_name_desc);
-									break;
+									case AppSettings.SORTBY_CODE:
+										showSnackbar(sortByAscending ? R.string.action_sort_code_asc
+												: R.string.action_sort_code_desc);
+										break;
+									case AppSettings.SORTBY_NAME:
+									default:
+										showSnackbar(sortByAscending ? R.string.action_sort_name_asc
+												: R.string.action_sort_name_desc);
+										break;
 								}
 								return true;
 							}
@@ -154,15 +154,15 @@ public class CurrenciesFragment extends AbstractFragment {
 								filterCurrenciesListView(which);
 								// notify user
 								switch (appSettings.getCurrenciesFilterSelection()) {
-								case AppSettings.FILTERBY_ALL:
-									showSnackbar(R.string.action_filter_all);
-									break;
-								case AppSettings.FILTERBY_NONFIXED:
-									showSnackbar(R.string.action_filter_nonfixed);
-									break;
-								case AppSettings.FILTERBY_FIXED:
-									showSnackbar(R.string.action_filter_fixed);
-									break;
+									case AppSettings.FILTERBY_ALL:
+										showSnackbar(R.string.action_filter_all);
+										break;
+									case AppSettings.FILTERBY_NONFIXED:
+										showSnackbar(R.string.action_filter_nonfixed);
+										break;
+									case AppSettings.FILTERBY_FIXED:
+										showSnackbar(R.string.action_filter_fixed);
+										break;
 								}
 								return true;
 							}
@@ -186,7 +186,8 @@ public class CurrenciesFragment extends AbstractFragment {
 		// sortCurrenciesListView(appSettings.getCurrenciesSortSelection());
 		filterCurrenciesListView(appSettings.getCurrenciesFilterSelection());
 
-		Date lastUpdateDate = currenciesList.iterator().next().getCurrDate();
+//		Date lastUpdateDate = currenciesList.iterator().next().getCurrDate();
+		Date lastUpdateDate = currenciesList.iterator().next().getDate();
 		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, lastUpdateDate));
 	}
 
@@ -197,7 +198,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	 */
 	private void sortCurrenciesListView(final int sortBy) {
 		CurrencyListAdapter adapter = (CurrencyListAdapter) lvCurrencies.getAdapter();
-		adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
+//		adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
 		adapter.notifyDataSetChanged();
 	}
 
@@ -212,7 +213,7 @@ public class CurrenciesFragment extends AbstractFragment {
 			@Override
 			public void onFilterComplete(int count) {
 				if (count > 0) {
-					adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
+//					adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
 					adapter.notifyDataSetChanged();
 				} else {
 					adapter.notifyDataSetInvalidated();
@@ -256,7 +257,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		}
 	}
 
-	private class UpdateRatesTask extends AsyncTask<Void, Void, Map<CurrencyLocales, List<CurrencyData>>> {
+	private class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
 		private Activity activity;
 		private boolean updateOK = false;
@@ -271,8 +272,8 @@ public class CurrenciesFragment extends AbstractFragment {
 		}
 
 		@Override
-		protected Map<CurrencyLocales, List<CurrencyData>> doInBackground(Void... params) {
-			Map<CurrencyLocales, List<CurrencyData>> rates = Maps.newHashMap();
+		protected List<CurrencyData> doInBackground(Void... params) {
+			List<CurrencyData> rates = new ArrayList<CurrencyData>();
 			Date currentYear = DateTimeUtils.getCurrentYear();
 //			try {
 //				DataSource dataSource = null;
@@ -285,7 +286,7 @@ public class CurrenciesFragment extends AbstractFragment {
 //				} finally {
 //					IOUtils.closeQuitely(dataSource);
 //				}
-				Log.v(Defs.LOG_TAG, "Loading rates from remote source..., downloadFixed=" + downloadFixed);
+			Log.v(Defs.LOG_TAG, "Loading rates from remote source..., downloadFixed=" + downloadFixed);
 //				Source source = new BNBSource();
 //				rates = source.downloadRates(downloadFixed);
 //				updateOK = true;
@@ -317,26 +318,44 @@ public class CurrenciesFragment extends AbstractFragment {
 
 
 			Source source = new APISource();
-			List<CurrencyDataNew> currencies = new ArrayList<CurrencyDataNew>();
+
+
+			List<CurrencyData> currencies = new ArrayList<CurrencyData>();
 			try {
-//				currencies = source.getAllRatesByDateSource("2016-08-31T20:55:06+0300");
+//				currencies = source.getAllRatesByDate("2016-08-31T20:55:06+0300");
 //				currencies = source.getAllRatesByDateSource("2016-08-31T20:55:06+0300",200);
-//				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+02:00");
-				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+03:00",300);
+				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+02:00");
+//				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+03:00",300);
 			} catch (SourceException e) {
 				e.printStackTrace();
 			}
 
+			System.out.println("Number of currencies from OpenShift: "+currencies.size());
+			System.out.println("Row: " + currencies.get(1).getCode() + " " + currencies.get(1).getBuy() + " " + currencies.get(1).getSell() + " " + currencies.get(1).getSource());
+			System.out.println("Before DB Method");
+			System.out.println();
 
-				//TODO - new API source
-//			} catch (SourceException e) {
-//				Log.e(Defs.LOG_TAG, "Could not load rates from remote!", e);
+//			DataSource dataSource = null;
+//			try {
+//				dataSource = new SQLiteDataSource();
+//				dataSource.connect(activity);
+//				dataSource.deleteRates();
+//				dataSource.addRates(currencies);
+//				currencies = dataSource.getLastRates();
+//			} catch (DataSourceException e) {
+//				Log.e(Defs.LOG_TAG, "Could not read fixed currencies from database!", e);
+//			} finally {
+//				IOUtils.closeQuitely(dataSource);
 //			}
-			return rates;
+//
+//			System.out.println("Number of currencies from DB: " + currencies.size());
+//			System.out.println("Row: " + currencies.get(1).getCode() + " "+currencies.get(1).getBuy() + " " +currencies.get(1).getSell() + " "+currencies.get(1).getSource());
+
+			return currencies;
 		}
 
 		@Override
-		protected void onPostExecute(Map<CurrencyLocales, List<CurrencyData>> result) {
+		protected void onPostExecute(List<CurrencyData> result) {
 			setRefreshActionButtonState(false);
 			CurrencyLocales selectedCurrenciesLocale = getSelectedCurrenciesLocale();
 			//TODO - Temporary code
@@ -344,8 +363,8 @@ public class CurrenciesFragment extends AbstractFragment {
 			currency.setCode("TEST");
 			List<CurrencyData> currencies = new ArrayList<CurrencyData>();
 			currencies.add(currency);
-			result.put(CurrencyLocales.EN, currencies);
-//			updateOK = true;
+//			result.put(CurrencyLocales.EN, currencies);
+			updateOK = true;
 			////
 
 
@@ -374,7 +393,7 @@ public class CurrenciesFragment extends AbstractFragment {
 //				} finally {
 //					IOUtils.closeQuitely(source);
 //				}
-				updateCurrenciesListView(result.get(selectedCurrenciesLocale));
+				updateCurrenciesListView(result);
 			} else {
 				tvLastUpdate.setText(lastUpdateLastValue);
 				showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME);

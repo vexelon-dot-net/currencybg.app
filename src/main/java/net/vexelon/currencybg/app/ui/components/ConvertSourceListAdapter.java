@@ -50,7 +50,7 @@ public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 		if (imageId != -1) {
 			icon.setImageResource(imageId);
 		}
-		setResText(v, R.id.convert_text, currencyData.getName());
+//		setResText(v, R.id.convert_text, currencyData.getName());
 		return v;
 	}
 

@@ -31,7 +31,7 @@ public interface Source {
 	/**
 	 * Fetches exchange rates from the underlying source and serves back a ready
 	 * to consume {@link CurrencyData} language mapped list.
-	 * 
+	 *
 	 * @return {@link Map} of languages for each of which a list of
 	 *         {@link CurrencyData} is available.
 	 * @throws SourceException
@@ -46,7 +46,7 @@ public interface Source {
 	 * @return
 	 * @throws SourceException
 	 */
-	List<CurrencyDataNew> getAllRatesByDate(String initialTime) throws SourceException;
+	List<CurrencyData> getAllRatesByDate(String initialTime) throws SourceException;
 
 	/**
 	 * Fetches a list of currencies by sourceId and date
@@ -56,7 +56,7 @@ public interface Source {
 	 * @return
 	 * @throws SourceException
 	 */
-	List<CurrencyDataNew> getAllRatesByDateSource(String initialTime, Integer sourceId) throws SourceException;
+	List<CurrencyData> getAllRatesByDateSource(String initialTime, Integer sourceId) throws SourceException;
 
 	/**
 	 * Fetches a list of currencies for the current date which are after DateTime
@@ -65,7 +65,7 @@ public interface Source {
 	 * @return
 	 * @throws SourceException
 	 */
-	List<CurrencyDataNew> getAllCurrentRatesAfter(String timeFrom) throws  SourceException;
+	List<CurrencyData> getAllCurrentRatesAfter(String timeFrom) throws  SourceException;
 
 	/**
 	 * Fetches a list of currencies for the current date which are after timeFrom by sourceId
@@ -75,5 +75,5 @@ public interface Source {
 	 * @return
 	 * @throws SourceException
 	 */
-	List<CurrencyDataNew> getAllCurrentRatesAfter(String timeFrom, Integer sourceId) throws  SourceException;
+	List<CurrencyData> getAllCurrentRatesAfter(String timeFrom, Integer sourceId) throws  SourceException;
 }

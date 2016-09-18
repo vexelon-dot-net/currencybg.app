@@ -73,6 +73,7 @@ public class BNBSource implements Source {
 	public BNBSource() {
 	}
 
+	//TODO - everything commended in /*  */  is from refactoring
 	public List<CurrencyData> getRatesFromUrl(String ratesUrl) throws SourceException {
 		List<CurrencyData> listCurrencyData = Lists.newArrayList();
 		InputStream is = null;
@@ -105,68 +106,73 @@ public class BNBSource implements Source {
 
 				String tagname = parser.getName();
 				switch (eventType) {
-				case XmlPullParser.START_TAG:
-					if (tagname.equalsIgnoreCase(XML_TAG_ROW)) {
-						if (header == 0) {
-							header = 1;
-						} else {
-							header = 2;
-						}
-						// create a new instance of CurrencyData
-						if (header > 1) {
-							currencyData = new CurrencyData();
-							// defaults
-							currencyData.setRate("0");
-							currencyData.setReverseRate("0");
-						}
-					}
-					break;
-
-				case XmlPullParser.TEXT:
-					if (header > 1) {
-						text = parser.getText();
-					}
-					break;
-
-				case XmlPullParser.END_TAG:
-					if (header > 1) {
+					case XmlPullParser.START_TAG:
 						if (tagname.equalsIgnoreCase(XML_TAG_ROW)) {
-							// add employee object to list
-							listCurrencyData.add(currencyData);
-						} else if (tagname.equalsIgnoreCase(XML_TAG_GOLD)) {
+							if (header == 0) {
+								header = 1;
+							} else {
+								header = 2;
+							}
+							// create a new instance of CurrencyData
+							if (header > 1) {
+								currencyData = new CurrencyData();
+								// defaults
+//							currencyData.setRate("0");
+//							currencyData.setReverseRate("0");
+								currencyData.setBuy("0");
+								currencyData.setSell("0");
+							}
+						}
+						break;
+
+					case XmlPullParser.TEXT:
+						if (header > 1) {
+							text = parser.getText();
+						}
+						break;
+
+					case XmlPullParser.END_TAG:
+						if (header > 1) {
+							if (tagname.equalsIgnoreCase(XML_TAG_ROW)) {
+								// add employee object to list
+								listCurrencyData.add(currencyData);
+							} /*else if (tagname.equalsIgnoreCase(XML_TAG_GOLD)) {
 							currencyData.setGold(Integer.parseInt(text));
-						} else if (tagname.equalsIgnoreCase(XML_TAG_NAME)) {
+						} *//*else if (tagname.equalsIgnoreCase(XML_TAG_NAME)) {
 							currencyData.setName(text);
 							eventType = parser.next();// ?
-						} else if (tagname.equalsIgnoreCase(XML_TAG_CODE)) {
-							currencyData.setCode(text);
-						} else if (tagname.equalsIgnoreCase(XML_TAG_RATIO)) {
-							currencyData.setRatio(Integer.parseInt(text));
-						} else if (tagname.equalsIgnoreCase(XML_TAG_REVERSERATE)) {
-							currencyData.setReverseRate(text);
-						} else if (tagname.equalsIgnoreCase(XML_TAG_RATE)) {
-							currencyData.setRate(text);
-						} else if (tagname.equalsIgnoreCase(XML_TAG_EXTRAINFO)) {
+						} */else if (tagname.equalsIgnoreCase(XML_TAG_CODE)) {
+								currencyData.setCode(text);
+							} else if (tagname.equalsIgnoreCase(XML_TAG_RATIO)) {
+								currencyData.setRatio(Integer.parseInt(text));
+							} else if (tagname.equalsIgnoreCase(XML_TAG_REVERSERATE)) {
+								currencyData.setBuy(text);
+//							currencyData.setReverseRate(text);
+							} else if (tagname.equalsIgnoreCase(XML_TAG_RATE)) {
+								currencyData.setSell(text);
+//							currencyData.setRate(text);
+							} /*else if (tagname.equalsIgnoreCase(XML_TAG_EXTRAINFO)) {
 							currencyData.setExtraInfo(text);
-						} else if (tagname.equalsIgnoreCase(XML_TAG_CURR_DATE)) {
-							try {
-								currencyDate = dateFormat.parse(text);
-							} catch (ParseException e1) {
-								e1.printStackTrace();
-								// use default (today)
-								currencyDate = new Date();
-							}
-							currencyData.setCurrDate(currencyDate);
-						} else if (tagname.equalsIgnoreCase(XML_TAG_TITLE)) {
+						} */else if (tagname.equalsIgnoreCase(XML_TAG_CURR_DATE)) {
+								try {
+									currencyDate = dateFormat.parse(text);
+								} catch (ParseException e1) {
+									e1.printStackTrace();
+									// use default (today)
+									currencyDate = new Date();
+								}
+								currencyData.setDate(currencyDate);
+//							currencyData.setCurrDate(currencyDate);
+							} /*else if (tagname.equalsIgnoreCase(XML_TAG_TITLE)) {
 							currencyData.setTitle(text);
-						} else if (tagname.equalsIgnoreCase(XML_TAG_F_STAR)) {
+						} *//*else if (tagname.equalsIgnoreCase(XML_TAG_F_STAR)) {
 							currencyData.setfStar(Integer.parseInt(text));
+						}*/
 						}
-					}
-					break;
+						break;
 
-				default:
-					break;
+					default:
+						break;
 				}
 				eventType = parser.next();
 			}
@@ -215,31 +221,34 @@ public class BNBSource implements Source {
 					// System.out.println(table.tagName());
 					Elements tableChildren = table.children();
 					int elementNumber = 1;
-					fixedCurrencyData.setGold(1);
-					fixedCurrencyData.setfStar(0);
-					fixedCurrencyData.setCurrDate(currentYear);
-					fixedCurrencyData.setIsFixed(true);
+//					fixedCurrencyData.setGold(1);
+					/*fixedCurrencyData.setfStar(0);*/
+					fixedCurrencyData.setDate(currentYear);
+//					fixedCurrencyData.setCurrDate(currentYear);
+//					fixedCurrencyData.setIsFixed(true);
 					for (Element elem : tableChildren) {
 						// System.out.println(elem.tagName());
 						Element elemChild = elem.children().first();
 						// System.out.print(elemChild.text());//
 						// elemChild.text()
 						switch (elementNumber) {
-						case 1:
+						/*case 1:
 							fixedCurrencyData.setName(elemChild.text());
-							break;
-						case 2:
-							fixedCurrencyData.setCode(elemChild.text());
-							break;
-						case 3:
-							fixedCurrencyData.setRatio(Integer.parseInt(elemChild.text()));
-							break;
-						case 4:
-							fixedCurrencyData.setRate(elemChild.text());
-							break;
-						case 5:
-							fixedCurrencyData.setReverseRate(elemChild.text());
-							break;
+							break;*/
+							case 2:
+								fixedCurrencyData.setCode(elemChild.text());
+								break;
+							case 3:
+								fixedCurrencyData.setRatio(Integer.parseInt(elemChild.text()));
+								break;
+							case 4:
+								fixedCurrencyData.setBuy(elemChild.text());
+//							fixedCurrencyData.setRate(elemChild.text());
+								break;
+							case 5:
+								fixedCurrencyData.setSell(elemChild.text());
+//							fixedCurrencyData.setReverseRate(elemChild.text());
+								break;
 						}
 						elementNumber++;
 					}
@@ -262,18 +271,21 @@ public class BNBSource implements Source {
 	private CurrencyData setEuroCurrency(CurrencyLocales currencyName, Date currencyDate) throws SourceException {
 		CurrencyData euroValue = new CurrencyData();
 		String euro = getEuroValue();
-		euroValue.setGold(1);
-		if (currencyName == CurrencyLocales.BG) {
+//		euroValue.setGold(1);
+		/*if (currencyName == CurrencyLocales.BG) {
 			euroValue.setName("Евро");
 		} else {
 			euroValue.setName("Euro");
-		}
+		}*/
 		euroValue.setCode("EUR");
 		euroValue.setRatio(1);
-		euroValue.setReverseRate("0.511292"); // TODO parse from webpage
-		euroValue.setRate(euro.substring(0, 7));
-		euroValue.setCurrDate(currencyDate);
-		euroValue.setfStar(0);
+		euroValue.setBuy("0.511292"); // TODO parse from webpage
+		euroValue.setSell(euro.substring(0, 7));
+//		euroValue.setReverseRate("0.511292"); // TODO parse from webpage
+//		euroValue.setRate(euro.substring(0, 7));
+		euroValue.setDate(currencyDate);
+//		euroValue.setCurrDate(currencyDate);
+		/*euroValue.setfStar(0);*/
 		return euroValue;
 	}
 
@@ -327,22 +339,22 @@ public class BNBSource implements Source {
 
 
 	@Override
-	public List<CurrencyDataNew> getAllRatesByDate(String initialTime) throws  SourceException{
+	public List<CurrencyData> getAllRatesByDate(String initialTime) throws  SourceException{
 		return null;
 	}
 
 	@Override
-	public List<CurrencyDataNew> getAllRatesByDateSource(String initialTime, Integer sourceId) throws  SourceException{
+	public List<CurrencyData> getAllRatesByDateSource(String initialTime, Integer sourceId) throws  SourceException{
 		return null;
 	}
 
 	@Override
-	public List<CurrencyDataNew> getAllCurrentRatesAfter(String initialTime) throws  SourceException{
+	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime) throws  SourceException{
 		return null;
 	}
 
 	@Override
-	public List<CurrencyDataNew> getAllCurrentRatesAfter(String initialTime, Integer sourceId) throws  SourceException{
+	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime, Integer sourceId) throws  SourceException{
 		return null;
 	}
 }
