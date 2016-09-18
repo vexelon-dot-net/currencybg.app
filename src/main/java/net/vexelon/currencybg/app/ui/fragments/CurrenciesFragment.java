@@ -324,8 +324,8 @@ public class CurrenciesFragment extends AbstractFragment {
 			try {
 //				currencies = source.getAllRatesByDate("2016-08-31T20:55:06+0300");
 //				currencies = source.getAllRatesByDateSource("2016-08-31T20:55:06+0300",200);
-				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+02:00");
-//				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+03:00",300);
+//				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+02:00");
+				currencies = source.getAllCurrentRatesAfter("2016-08-31T20:55:06+03:00",300);
 			} catch (SourceException e) {
 				e.printStackTrace();
 			}
@@ -335,21 +335,21 @@ public class CurrenciesFragment extends AbstractFragment {
 			System.out.println("Before DB Method");
 			System.out.println();
 
-//			DataSource dataSource = null;
-//			try {
-//				dataSource = new SQLiteDataSource();
-//				dataSource.connect(activity);
-//				dataSource.deleteRates();
-//				dataSource.addRates(currencies);
-//				currencies = dataSource.getLastRates();
-//			} catch (DataSourceException e) {
-//				Log.e(Defs.LOG_TAG, "Could not read fixed currencies from database!", e);
-//			} finally {
-//				IOUtils.closeQuitely(dataSource);
-//			}
-//
-//			System.out.println("Number of currencies from DB: " + currencies.size());
-//			System.out.println("Row: " + currencies.get(1).getCode() + " "+currencies.get(1).getBuy() + " " +currencies.get(1).getSell() + " "+currencies.get(1).getSource());
+			DataSource dataSource = null;
+			try {
+				dataSource = new SQLiteDataSource();
+				dataSource.connect(activity);
+				dataSource.deleteRates();
+				dataSource.addRates(currencies);
+				currencies = dataSource.getLastRates();
+			} catch (DataSourceException e) {
+				Log.e(Defs.LOG_TAG, "Could not read fixed currencies from database!", e);
+			} finally {
+				IOUtils.closeQuitely(dataSource);
+			}
+
+			System.out.println("Number of currencies from DB: " + currencies.size());
+			System.out.println("Row: " + currencies.get(1).getCode() + " "+currencies.get(1).getBuy() + " " +currencies.get(1).getSell() + " "+currencies.get(1).getSource());
 
 			return currencies;
 		}

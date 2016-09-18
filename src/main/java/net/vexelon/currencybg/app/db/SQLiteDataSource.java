@@ -46,11 +46,17 @@ public class SQLiteDataSource implements DataSource {
 	// Defs.COLUMN_EXTRAINFO, Defs.COLUMN_CURR_DATE,
 	// Defs.COLUMN_TITLE, Defs.COLUMN_F_STAR };
 
-	private static final String[] ALL_COLUMNS = { Defs.COLUMN_ID, Defs.COLUMN_GOLD, Defs.COLUMN_NAME, Defs.COLUMN_CODE,
-			Defs.COLUMN_RATIO, Defs.COLUMN_REVERSERATE, Defs.COLUMN_RATE, Defs.COLUMN_EXTRAINFO, Defs.COLUMN_CURR_DATE,
-			Defs.COLUMN_TITLE, Defs.COLUMN_F_STAR };
+	// private static final String[] ALL_COLUMNS = { Defs.COLUMN_ID,
+	// Defs.COLUMN_GOLD, Defs.COLUMN_NAME, Defs.COLUMN_CODE,
+	// Defs.COLUMN_RATIO, Defs.COLUMN_REVERSERATE, Defs.COLUMN_RATE,
+	// Defs.COLUMN_EXTRAINFO, Defs.COLUMN_CURR_DATE,
+	// Defs.COLUMN_TITLE, Defs.COLUMN_F_STAR };
 
-	private static final String DATE_FORMAT = "yyyy-MM-dd";
+	private static final String[] ALL_COLUMNS = { Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY,
+			Defs.COLUMN_SELL, Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE };
+
+	 private static final String DATE_FORMAT = "yyyy-MM-dd";
+//	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mmZ";
 
 	private SQLiteDatabase database;
 	private CurrenciesSQLiteDB dbHelper;
@@ -81,16 +87,19 @@ public class SQLiteDataSource implements DataSource {
 	}
 
 	@Override
-	public void addRates(List<CurrencyDataNew> rates) throws DataSourceException {
+	public void addRates(List<CurrencyData> rates) throws DataSourceException {
 
 		ContentValues values = new ContentValues();
 
-		for (CurrencyDataNew rate : rates) {
+		for (CurrencyData rate : rates) {
+
 			values.put(Defs.COLUMN_CODE, rate.getCode());
 			values.put(Defs.COLUMN_RATIO, rate.getRatio());
 			values.put(Defs.COLUMN_BUY, rate.getBuy());
 			values.put(Defs.COLUMN_SELL, rate.getSell());
-			values.put(Defs.COLUMN_CURR_DATE, parseDateToString(rate.getDate(), DATE_FORMAT));
+			values.put(Defs.COLUMN_CURR_DATE,
+					/* parseDateToString(rate.getDate(), DATE_FORMAT) */"2016-08-31");
+			// System.out.println("DB ADD METHOD: "+rate.getSource());
 			values.put(Defs.COLUMN_SOURCE, rate.getSource());
 
 			database.insert(Defs.TABLE_CURRENCY, null, values);
@@ -99,6 +108,83 @@ public class SQLiteDataSource implements DataSource {
 		}
 
 	}
+
+	@Override
+	public void deleteRates() throws DataSourceException {
+		database.delete(Defs.TABLE_CURRENCY, null, null);
+	}
+
+	@Override
+	public List<CurrencyData> getLastRates()/*getAllCurrencies*/ throws DataSourceException {
+		List<CurrencyData> resultCurrency = Lists.newArrayList();
+		;
+		// String whereClause = Defs.COLUMN_CURR_DATE + " = ? AND " +
+		// Defs.COLUMN_LOCALE + " = ? ";
+		// String[] whereArgs = new String[] { parseDateToString(dateOfCurrency,
+		// DATE_FORMAT), locale.toString() };
+
+		Cursor cursor = database.query(Defs.TABLE_CURRENCY, ALL_COLUMNS, null/* whereClause */, null/* whereArgs */,
+				null, null, null);
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			CurrencyData comment = cursorToCurrency(cursor);
+			resultCurrency.add(comment);
+			cursor.moveToNext();
+		}
+		// make sure to close the cursor
+		cursor.close();
+
+		System.out.println("DB METHOD: " + resultCurrency.get(1).getCode() + " " + resultCurrency.get(1).getBuy() + " "
+				+ resultCurrency.get(1).getSell() + " " + resultCurrency.get(1).getSource());
+
+		return resultCurrency;
+	}
+
+	/*
+	* getAllCurrencies(Int Source)
+	* getAllRates(Code Currency)*/
+
+
+	// private String code;
+	// private int ratio = 0; // default
+	// private String buy = "0"; // default
+	// private String sell = "0"; // default
+	// private Date date;
+	// private int source;
+
+	private CurrencyData cursorToCurrency(Cursor cursor/* , boolean isFixed */) {
+		CurrencyData currency = new CurrencyData();
+
+		/*
+		 * Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY,
+		 * Defs.COLUMN_SELL,
+		 * Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE
+		 */
+
+		// currency.setGold(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_GOLD)));
+		// currency.setName(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_NAME)));
+		currency.setCode(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CODE)));
+		currency.setRatio(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_RATIO)));
+		currency.setBuy(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_BUY)));
+		currency.setSell(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_SELL)));
+		// currency.setExtraInfo(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_EXTRAINFO)));
+		try {
+			currency.setDate(
+					parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE)), DATE_FORMAT));
+		} catch (ParseException e) {
+			// TODO: proper handling of date
+			e.printStackTrace();
+		}
+		// System.out.println("DB Set method:
+		// "+cursor.getColumnIndex(Defs.COLUMN_SOURCE));
+		currency.setSource(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_SOURCE)));
+		// currency.setfStar(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_F_STAR)));
+		// currency.setIsFixed(isFixed);
+		return currency;
+	}
+
+	/////////////////////////////////////////////////////////////
 
 	// @Override
 	// public void addRates(Map<CurrencyLocales, List<CurrencyData>> rates)

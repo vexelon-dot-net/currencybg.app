@@ -35,7 +35,7 @@ public interface DataSource extends Closeable {
 
 	/**
 	 * Establishes connection to data source.
-	 * 
+	 *
 	 * @param context
 	 * @throws DataSourceException
 	 *             If an SQL error is thrown.
@@ -48,12 +48,26 @@ public interface DataSource extends Closeable {
 	 * @param rates
 	 * @throws DataSourceException
 	 */
-	public void addRates(List<CurrencyDataNew> rates) throws DataSourceException;
+	public void addRates(List<CurrencyData> rates) throws DataSourceException;
+
+	/**
+	 *
+	 *
+	 * @return
+	 * @throws DataSourceException
+	 */
+	public List<CurrencyData> getLastRates() throws  DataSourceException;
+
+	/**
+	 *
+	 * @throws DataSourceException
+	 */
+	public void deleteRates() throws DataSourceException;
 
 	/**
 	 * Fetches a list of dates for which exchange rates were downloaded and
 	 * available in the underlying data source.
-	 * 
+	 *
 	 * @param locale
 	 * @return A {@link List} of {@link Date} objects or an empty {@link List},
 	 *         if no dates are available.
@@ -64,7 +78,7 @@ public interface DataSource extends Closeable {
 	/**
 	 * Fetches all exchange rates, for all dates, from the underlying data
 	 * source.
-	 * 
+	 *
 	 * @param locale
 	 * @return {@link List} or {@code null}, if no rates are
 	 *         available.
@@ -74,7 +88,7 @@ public interface DataSource extends Closeable {
 
 	/**
 	 * Fetches exchange rates for a given date.
-	 * 
+	 *
 	 * @param locale
 	 * @param date
 	 * @return {@link List} or {@code null}, if no rates are
@@ -88,7 +102,7 @@ public interface DataSource extends Closeable {
 
 	/**
 	 * Adds exchange rates data for given download {@link Date}.
-	 * 
+	 *
 	 * @param rates
 	 *            A {@link Map} of language and {@link CurrencyData} list
 	 *            values.
@@ -98,7 +112,7 @@ public interface DataSource extends Closeable {
 
 	/**
 	 * Fetches the latest exchange rates from the underlying data source.
-	 * 
+	 *
 	 * @param locale
 	 * @throws DataSourceException
 	 */
