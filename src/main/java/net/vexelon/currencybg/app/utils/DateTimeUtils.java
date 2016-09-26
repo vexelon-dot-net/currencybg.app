@@ -27,6 +27,13 @@ import java.util.TimeZone;
 
 import android.content.Context;
 
+import net.vexelon.currencybg.app.Defs;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
 public class DateTimeUtils {
 
 	public static final long MILLIS_PER_DAY = (24 * 60 * 60 * 1000);
@@ -34,6 +41,61 @@ public class DateTimeUtils {
 	protected static final Calendar CALENDAR = Calendar.getInstance();
 	protected static DateFormat DT_FORMAT = null;
 	protected static DateFormat DATE_FORMAT = null;
+
+
+	public static void main(String[] args){
+		DateFormat dateFormat = new SimpleDateFormat(Defs.DATEFORMAT_ISO_8601);
+		Date date = new Date();
+		System.out.println("Currect Time: " + dateFormat.format(date)); //2014/08/06 15:59:48
+		System.out.println();
+
+
+		SimpleDateFormat sdfAmerica = new SimpleDateFormat(Defs.DATEFORMAT_ISO_8601);
+		TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
+		sdfAmerica.setTimeZone(tzInAmerica);
+
+
+		String sDateInAmerica = sdfAmerica.format(date);
+		System.out.println("America String: " + sDateInAmerica);
+		Date dateObject1 = parseStringToDate(sDateInAmerica);
+		System.out.println("Bulgaria Date: " + dateFormat.format(dateObject1));
+		System.out.println();
+
+		try {
+			Date dateInAmerica = sdfAmerica.parse(sDateInAmerica);
+			System.out.println("America Date: " + sDateInAmerica);
+			String stringOject = parseDateToString(dateInAmerica,Defs.DATEFORMAT_ISO_8601);
+			System.out.println("Bulgaria String: " + stringOject);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
+	/**
+	 *
+	 * @param dateTime
+	 * @param dateFormater
+     * @return
+     */
+	public static String parseDateToString(Date dateTime, String dateFormater){
+		DateTime jodaTime = new DateTime(dateTime);
+		DateTimeFormatter jodaFormater = DateTimeFormat.forPattern(dateFormater);
+		return jodaFormater.print(jodaTime);
+	}
+
+	/**
+	 *
+	 * @param dateTime
+     * @return
+     */
+	public static Date parseStringToDate(String dateTime){
+		DateTimeFormatter parse = ISODateTimeFormat.dateTimeParser();
+		DateTime dateTimeHere = parse.parseDateTime(dateTime);
+		Date dateNew = dateTimeHere.toDate();
+		return  dateNew;
+	}
 
 	/**
 	 * Датата се сетва, като се вземе текущата година и се добави 01.01.

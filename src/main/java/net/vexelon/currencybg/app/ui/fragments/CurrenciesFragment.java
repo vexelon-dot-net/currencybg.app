@@ -352,15 +352,24 @@ public class CurrenciesFragment extends AbstractFragment {
 			System.out.println();
 
 			System.out.println("JODA TEST");
+
 			// JODA tests
+			//ToString
+//			DateTime dateTime = new DateTime(currencies.get(1).getDate());
+//			DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+////			String dtStr = fmt.print(dt);
+//			String dateTimeString =fmt.print(dateTime);
+			String dateTimeString = DateTimeUtils.parseDateToString(currencies.get(1).getDate(), "yyyy-MM-dd'T'HH:mm:ssZ");
+
+
+			//ToObject
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 			formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-			DateTime dateTime = new DateTime(currencies.get(1).getDate());
-
 			String s = formatter.format(currencies.get(1).getDate());
 			System.out.println("STRING DATE: " + s);
 			DateTimeFormatter parse = ISODateTimeFormat.dateTimeParser();
-//			DateTimeFormatter parse = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+			// DateTimeFormatter parse =
+			// DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
 			DateTime dateTimeHere = parse.parseDateTime("2016-09-20T06:04:00+02:00");
 			System.out.println("STRING Object: " + dateTimeHere);
 
@@ -368,6 +377,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 			DataSource dataSource = null;
 			try {
+
 				dataSource = new SQLiteDataSource();
 				dataSource.connect(activity);
 				dataSource.deleteRates();
