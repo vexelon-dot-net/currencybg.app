@@ -363,15 +363,15 @@ public class CurrenciesFragment extends AbstractFragment {
 
 
 			//ToObject
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-			formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-			String s = formatter.format(currencies.get(1).getDate());
-			System.out.println("STRING DATE: " + s);
-			DateTimeFormatter parse = ISODateTimeFormat.dateTimeParser();
-			// DateTimeFormatter parse =
-			// DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
-			DateTime dateTimeHere = parse.parseDateTime("2016-09-20T06:04:00+02:00");
-			System.out.println("STRING Object: " + dateTimeHere);
+//			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+//			formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+//			String s = formatter.format(currencies.get(1).getDate());
+//			System.out.println("STRING DATE: " + s);
+//			DateTimeFormatter parse = ISODateTimeFormat.dateTimeParser();
+//			// DateTimeFormatter parse =
+//			// DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+//			DateTime dateTimeHere = parse.parseDateTime("2016-09-20T06:04:00+02:00");
+//			System.out.println("STRING Object: " + dateTimeHere);
 
 			///
 

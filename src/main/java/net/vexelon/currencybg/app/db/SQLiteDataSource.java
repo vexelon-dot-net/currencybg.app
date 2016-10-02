@@ -28,6 +28,8 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.CurrencyDataNew;
 import net.vexelon.currencybg.app.db.models.CurrencyLocales;
+import net.vexelon.currencybg.app.utils.DateTimeUtils;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -98,7 +100,7 @@ public class SQLiteDataSource implements DataSource {
 			values.put(Defs.COLUMN_BUY, rate.getBuy());
 			values.put(Defs.COLUMN_SELL, rate.getSell());
 			values.put(Defs.COLUMN_CURR_DATE,
-					/* parseDateToString(rate.getDate(), DATE_FORMAT) */"2016-08-31");
+					/* parseDateToString(rate.getDate(), DATE_FORMAT) */DateTimeUtils.parseDateToString(rate.getDate(),Defs.DATEFORMAT_ISO_8601));
 			// System.out.println("DB ADD METHOD: "+rate.getSource());
 			values.put(Defs.COLUMN_SOURCE, rate.getSource());
 
@@ -169,13 +171,16 @@ public class SQLiteDataSource implements DataSource {
 		currency.setBuy(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_BUY)));
 		currency.setSell(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_SELL)));
 		// currency.setExtraInfo(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_EXTRAINFO)));
-		try {
+//		try {
+
 			currency.setDate(
-					parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE)), DATE_FORMAT));
-		} catch (ParseException e) {
-			// TODO: proper handling of date
-			e.printStackTrace();
-		}
+					DateTimeUtils.parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE))));
+//			currency.setDate(
+//					parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE)), DATE_FORMAT));
+//		} catch (ParseException e) {
+//			// TODO: proper handling of date
+//			e.printStackTrace();
+//		}
 		// System.out.println("DB Set method:
 		// "+cursor.getColumnIndex(Defs.COLUMN_SOURCE));
 		currency.setSource(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_SOURCE)));
