@@ -383,6 +383,9 @@ public class CurrenciesFragment extends AbstractFragment {
 				dataSource.deleteRates();
 				dataSource.addRates(currencies);
 				currencies = dataSource.getLastRates();
+				List<CurrencyData> currenciesCode = dataSource.getAllRates("RUB");
+				List<CurrencyData> currencies2 = dataSource.getAllCurrencies(300);
+
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not read fixed currencies from database!", e);
 			} finally {

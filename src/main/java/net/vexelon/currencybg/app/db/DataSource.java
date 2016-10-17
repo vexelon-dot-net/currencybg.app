@@ -59,6 +59,24 @@ public interface DataSource extends Closeable {
 	public List<CurrencyData> getLastRates() throws  DataSourceException;
 
 	/**
+	 * Returns all currencies for the specific source
+	 *
+	 * @param source
+	 * @return
+	 * @throws DataSourceException
+     */
+	public List<CurrencyData> getAllCurrencies(Integer source) throws DataSourceException;
+
+	/**
+	 * Returns all currencies for the specific code
+	 *
+	 * @param code
+	 * @return
+	 * @throws DataSourceException
+     */
+	public List<CurrencyData> getAllRates(String code) throws  DataSourceException;
+
+	/**
 	 *
 	 * @throws DataSourceException
 	 */
