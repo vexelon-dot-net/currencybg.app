@@ -43,6 +43,7 @@ public class DateTimeUtils {
 	protected static DateFormat DATE_FORMAT = null;
 
 
+	//Test Joda time methods
 	public static void main(String[] args){
 		DateFormat dateFormat = new SimpleDateFormat(Defs.DATEFORMAT_ISO_8601);
 		Date date = new Date();

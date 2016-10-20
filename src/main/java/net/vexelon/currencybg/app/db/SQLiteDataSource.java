@@ -26,7 +26,6 @@ import java.util.Map;
 
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyDataNew;
 import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 

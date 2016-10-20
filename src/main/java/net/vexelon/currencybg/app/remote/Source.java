@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyDataNew;
 import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 
 public interface Source {
