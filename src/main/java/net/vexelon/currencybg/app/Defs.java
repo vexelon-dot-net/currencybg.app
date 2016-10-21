@@ -38,26 +38,15 @@ public class Defs {
 	public static final int DATABASE_VERSION = 3;
 	// table name
 
-	//TODO - to be removed unused elements
 	public static final String TABLE_CURRENCY = "currencies";
-	public static final String TABLE_CURRENCY_DATE = "currenciesdate";
-	public static final String TABLE_FIXED_CURRENCY = "fixedcurrencies";
 	// Name of columns in table TABLE_CURRENCY
 	public static final String COLUMN_ID = "id";
-	public static final String COLUMN_GOLD = "gold";
-	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_CODE = "code";
 	public static final String COLUMN_RATIO = "ratio";
 	public static final String COLUMN_BUY = "buy";
 	public static final String COLUMN_SELL = "sell";
 	public static final String COLUMN_SOURCE = "source";
-	public static final String COLUMN_REVERSERATE = "reverserate";
-	public static final String COLUMN_RATE = "rate";
-	public static final String COLUMN_EXTRAINFO = "extrainfo";
 	public static final String COLUMN_CURR_DATE = "curr_date";
-	public static final String COLUMN_TITLE = "title";
-	public static final String COLUMN_F_STAR = "f_star";
-	public static final String COLUMN_LOCALE = "locale";
 
 	public static final String DATEFORMAT_ISO_8601 = "yyyy-MM-dd'T'HH:mmZ";
 	public static final String SERVER_ADDRESS = "http://currencybg-tsvetoslav.rhcloud.com/currencybg.server/api/currencies/";
