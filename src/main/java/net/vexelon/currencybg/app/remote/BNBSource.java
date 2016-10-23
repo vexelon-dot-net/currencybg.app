@@ -45,6 +45,7 @@ import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 
+//TODO - Remove this class when all his calls are changed
 public class BNBSource implements Source {
 
 	// Addresses on BNB for get on XML file
