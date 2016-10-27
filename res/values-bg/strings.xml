@@ -16,7 +16,6 @@
     <string name="about_version">Версия</string>
     <string name="about_rates_provider">Обменни курсове</string>
     <string name="about_rates_provider_text">От web сайта на Българска Национална Банка http://www.bnb.bg</string>
-    <string name="about_rates_provider_text_long">Обменните валутни курсове на чуждестранните валути се изчисляват на основата на фиксирания курс на лева спрямо еврото, като за източник се използват публикуваните от Европейската централна банка курсове на еврото към същите валути за съответния ден.</string>
     <string name="about_join_appdev">Присъединете се към разработването</string>
     <string name="about_author">Разработчици</string>
     <string name="about_author_text">Списък на допринесли към приложението</string>
