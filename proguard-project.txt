@@ -83,3 +83,5 @@
 
 -dontwarn javax.annotation.**
 -dontwarn sun.misc.**
+-dontwarn okio.**
+-dontwarn org.joda.convert.**
