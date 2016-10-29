@@ -17,12 +17,19 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Maps;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -47,12 +54,18 @@ import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.CurrencyLocales;
+import net.vexelon.currencybg.app.remote.APISource;
 import net.vexelon.currencybg.app.remote.BNBSource;
 import net.vexelon.currencybg.app.remote.Source;
 import net.vexelon.currencybg.app.remote.SourceException;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 public class CurrenciesFragment extends AbstractFragment {
 
@@ -179,7 +192,8 @@ public class CurrenciesFragment extends AbstractFragment {
 		// sortCurrenciesListView(appSettings.getCurrenciesSortSelection());
 		filterCurrenciesListView(appSettings.getCurrenciesFilterSelection());
 
-		Date lastUpdateDate = currenciesList.iterator().next().getCurrDate();
+		// Date lastUpdateDate = currenciesList.iterator().next().getCurrDate();
+		Date lastUpdateDate = currenciesList.iterator().next().getDate();
 		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, lastUpdateDate));
 	}
 
@@ -190,7 +204,9 @@ public class CurrenciesFragment extends AbstractFragment {
 	 */
 	private void sortCurrenciesListView(final int sortBy) {
 		CurrencyListAdapter adapter = (CurrencyListAdapter) lvCurrencies.getAdapter();
-		adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
+		// adapter.sortBy(new
+		// AppSettings(getActivity()).getCurrenciesSortSelection(),
+		// sortByAscending);
 		adapter.notifyDataSetChanged();
 	}
 
@@ -205,7 +221,9 @@ public class CurrenciesFragment extends AbstractFragment {
 			@Override
 			public void onFilterComplete(int count) {
 				if (count > 0) {
-					adapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
+					// adapter.sortBy(new
+					// AppSettings(getActivity()).getCurrenciesSortSelection(),
+					// sortByAscending);
 					adapter.notifyDataSetChanged();
 				} else {
 					adapter.notifyDataSetInvalidated();
@@ -220,13 +238,18 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param useRemoteSource
 	 */
 	public void reloadRates(boolean useRemoteSource) {
+//		useRemoteSource=true;
+
+
 		if (!useRemoteSource) {
 			DataSource source = null;
+			List<CurrencyData> ratesList = null;
 			try {
 				source = new SQLiteDataSource();
 				source.connect(getActivity());
-				List<CurrencyData> ratesList = source.getLastRates(getSelectedCurrenciesLocale());
-				ratesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
+				ratesList = source.getLastRates();
+
+				// ratesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
 				if (!ratesList.isEmpty()) {
 					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
 					updateCurrenciesListView(ratesList);
@@ -246,7 +269,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		}
 	}
 
-	private class UpdateRatesTask extends AsyncTask<Void, Void, Map<CurrencyLocales, List<CurrencyData>>> {
+	private class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
 		private Activity activity;
 		private boolean updateOK = false;
@@ -261,60 +284,46 @@ public class CurrenciesFragment extends AbstractFragment {
 		}
 
 		@Override
-		protected Map<CurrencyLocales, List<CurrencyData>> doInBackground(Void... params) {
-			Map<CurrencyLocales, List<CurrencyData>> rates = Maps.newHashMap();
-			Date currentYear = DateTimeUtils.getCurrentYear();
+		protected List<CurrencyData> doInBackground(Void... params) {
+
+			Log.v(Defs.LOG_TAG, "Loading rates from remote source...");
+			Source source = new APISource();
+			List<CurrencyData> currencies = new ArrayList<CurrencyData>();
 			try {
-				DataSource dataSource = null;
-				try {
-					dataSource = new SQLiteDataSource();
-					dataSource.connect(activity);
-					downloadFixed = dataSource.getFixedRates(getSelectedCurrenciesLocale(), currentYear).isEmpty();
-				} catch (DataSourceException e) {
-					Log.e(Defs.LOG_TAG, "Could not read fixed currencies from database!", e);
-				} finally {
-					IOUtils.closeQuitely(dataSource);
-				}
-				Log.v(Defs.LOG_TAG, "Loading rates from remote source..., downloadFixed=" + downloadFixed);
-				Source source = new BNBSource();
-				rates = source.downloadRates(downloadFixed);
+				// currencies =
+				// source.getAllRatesByDate("2016-08-31T20:55:06+0300");
+				// currencies =
+				// source.getAllRatesByDateSource("2016-08-31T20:55:06+0300",200);
+				// currencies =
+				// source.getAllCurrentRatesAfter("2016-08-31T20:55:06+02:00");
+				currencies = source.getAllCurrentRatesAfter("2016-09-19T20:55:06+03:00", 300);
 				updateOK = true;
 			} catch (SourceException e) {
-				Log.e(Defs.LOG_TAG, "Could not load rates from remote!", e);
+				e.printStackTrace();
 			}
-			return rates;
+
+
+			return currencies;
 		}
 
 		@Override
-		protected void onPostExecute(Map<CurrencyLocales, List<CurrencyData>> result) {
+		protected void onPostExecute(List<CurrencyData> result) {
 			setRefreshActionButtonState(false);
-			CurrencyLocales selectedCurrenciesLocale = getSelectedCurrenciesLocale();
+
 			if (updateOK && !result.isEmpty()) {
 				DataSource source = null;
-				try {
-					source = new SQLiteDataSource();
-					source.connect(activity);
-					source.addRates(result);
-					if (!downloadFixed) {
-						/**
-						 * We have downloaded only the non-fixed currencies, so
-						 * we need to fetch
-						 * the list of last downloaded fixed currencies and
-						 * update the view with all
-						 * entries.
-						 */
-						List<CurrencyData> currenciesList = result.get(selectedCurrenciesLocale);
-						currenciesList.addAll(source.getLastFixedRates(selectedCurrenciesLocale));
-						updateCurrenciesListView(currenciesList);
-						return;
-					}
-				} catch (DataSourceException e) {
-					Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-					showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
-				} finally {
-					IOUtils.closeQuitely(source);
-				}
-				updateCurrenciesListView(result.get(selectedCurrenciesLocale));
+				 try {
+				 source = new SQLiteDataSource();
+				 source.connect(activity);
+				 source.addRates(result);
+				 } catch (DataSourceException e) {
+				 Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
+				 showSnackbar(R.string.error_db_load_rates,
+				 Defs.TOAST_ERR_TIME);
+				 } finally {
+				 IOUtils.closeQuitely(source);
+				 }
+				updateCurrenciesListView(result);
 			} else {
 				tvLastUpdate.setText(lastUpdateLastValue);
 				showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME);

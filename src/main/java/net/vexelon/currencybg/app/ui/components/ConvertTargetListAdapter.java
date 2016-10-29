@@ -69,7 +69,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		if (imageId != -1) {
 			icon.setImageResource(imageId);
 		}
-		setResText(v, R.id.name, currencyData.getName());
+//		setResText(v, R.id.name, currencyData.getName());
 		setResText(v, R.id.code, currencyData.getCode());
 		if (showValues) {
 			BigDecimal value = values.get(position);
@@ -111,7 +111,8 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		// convert source currency to BGN value
 		BigDecimal valueBGN;
 		try {
-			BigDecimal rate = new BigDecimal(sourceCurrency.getRate(), mathContext);
+//			BigDecimal rate = new BigDecimal(sourceCurrency.getRate(), mathContext);
+			BigDecimal rate = new BigDecimal(sourceCurrency.getBuy(), mathContext);
 			BigDecimal ratio = new BigDecimal(sourceCurrency.getRatio(), mathContext);
 			valueBGN = value.multiply(rate.divide(ratio, mathContext), mathContext);
 		} catch (Exception e) {
@@ -124,12 +125,18 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 			BigDecimal result = BigDecimal.ZERO;
 			try {
 				BigDecimal reverseRate;
-				if ("0".equals(currency.getReverseRate())) {
+				if ("0".equals(currency.getBuy())) {
 					BigDecimal ratio0 = new BigDecimal(currency.getRatio());
-					reverseRate = ratio0.divide(new BigDecimal(currency.getRate(), mathContext), mathContext);
+					reverseRate = ratio0.divide(new BigDecimal(currency.getSell(), mathContext), mathContext);
 				} else {
-					reverseRate = new BigDecimal(currency.getReverseRate(), mathContext);
+					reverseRate = new BigDecimal(currency.getBuy(), mathContext);
 				}
+//				if ("0".equals(currency.getReverseRate())) {
+//					BigDecimal ratio0 = new BigDecimal(currency.getRatio());
+//					reverseRate = ratio0.divide(new BigDecimal(currency.getRate(), mathContext), mathContext);
+//				} else {
+//					reverseRate = new BigDecimal(currency.getReverseRate(), mathContext);
+//				}
 				BigDecimal ratio = new BigDecimal(currency.getRatio(), mathContext);
 				result = valueBGN.multiply(reverseRate, mathContext);
 				// result = reverseRate.multiply(ratio,
