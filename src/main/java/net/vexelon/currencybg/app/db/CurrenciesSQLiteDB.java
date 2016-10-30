@@ -58,6 +58,11 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 			 */
 			database.execSQL(CREATE_TABLE_CURRENCY_BG);
 			// TODO - drop old tables if exists
+			/*
+			*try{
+			* drop the old tables
+			* catch
+			 */
 			break;
 		default:
 			Log.w(Defs.LOG_TAG, "Unknown old db version=" + oldVersion);
