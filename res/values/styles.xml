@@ -33,10 +33,18 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="FontListHeader" parent="@android:style/TextAppearance">
+        <item name="android:textSize">15sp</item>
+    </style>
+
     <style name="FontListCode" parent="@android:style/TextAppearance">
         <item name="android:textColor">#D3D3D3</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="FontListName" parent="@android:style/TextAppearance">
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="FontList" parent="@android:style/TextAppearance">

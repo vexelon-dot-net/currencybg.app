@@ -17,14 +17,14 @@
  */
 package net.vexelon.currencybg.app.ui;
 
-import android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.KeyEvent;
+import android.R;
 
-public class UIUtils {
+public final class UIUtils {
 
 	/**
 	 * Display an alert dialog using resource IDs

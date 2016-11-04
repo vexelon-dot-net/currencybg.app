@@ -27,6 +27,8 @@
     <string name="tab_title_currencies">Обменни курсове</string>
     <string name="tab_title_convert">Преобразуване</string>
     <string name="hint_currency_remove">Натисни и задръж, за да премахнеш.</string>
+    <string name="buy">Купува</string>
+    <string name="sell">Продава</string>
     <string name="action_refresh">Обновяване</string>
     <string name="action_addcurrency">Добави валута</string>
     <string name="action_currency_added">Добавяне на %1$s</string>
@@ -41,50 +43,9 @@
         <item>Наименование</item>
         <item>Код</item>
     </string-array>
-    <string-array name="currency_names">
-        <item>Дирхам на ОАЕ (Арабски дирхам)</item>
-        <item>Албански лек</item>
-        <item>Австралийски долар</item>
-        <item>Конвертабилна марка на Босна и Херцеговина</item>
-        <item>Бразилски реал</item>
-        <item>Канадски долар</item>
-        <item>Швейцарски франк</item>
-        <item>Китайски юан</item>
-        <item>Чешка крона</item>
-        <item>Датска крона</item>
-        <item>Доминиканско песо</item>
-        <item>стонска крона</item>
-        <item>Египетска лира</item>
-        <item>Евро</item>
-        <item>Британска лира</item>
-        <item>Хонгконгски долар</item>
-        <item>Хърватска куна</item>
-        <item>Унгарски форинт</item>
-        <item>Индонезийска рупия</item>
-        <item>Израелски шекел</item>
-        <item>Японска йена</item>
-        <item>Кенийски шилинг</item>
-        <item>Южнокорейски вон</item>
-        <item>Литовски литас</item>
-        <item>Латвийски лат</item>
-        <item>Македонски денар</item>
-        <item>Мавританска рупия</item>
-        <item>Мексиканско песо</item>
-        <item>Малайзийски рингит</item>
-        <item>Норвежка крона</item>
-        <item>Новозеландски долар</item>
-        <item>Полска злота</item>
-        <item>Румънска лея</item>
-        <item>Сръбски динар</item>
-        <item>Руска рубла</item>
-        <item>Шведска крона</item>
-        <item>Сингапурски долар</item>
-        <item>Тайландски бат</item>
-        <item>Нова турска лира</item>
-        <item>Украинска гривна</item>
-        <item>Щатски долар</item>
-        <item>Южноафрикански ранд</item>
-    </string-array>
+    <string name="source_tavex">ТАВЕКС</string>
+    <string name="source_polana">ПОЛАНА1</string>
+    <string name="source_fib">ФИБ</string>
     <string name="action_filter">Филтър</string>
     <string name="action_filter_title">Показване на</string>
     <string name="action_filter_fixed">Фиксирани курсове</string>

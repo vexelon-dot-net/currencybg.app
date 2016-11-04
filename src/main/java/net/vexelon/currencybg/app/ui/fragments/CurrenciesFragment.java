@@ -74,11 +74,12 @@ public class CurrenciesFragment extends AbstractFragment {
 	private ListView lvCurrencies;
 	private TextView tvLastUpdate;
 	private String lastUpdateLastValue;
+	private CurrencyListAdapter currencyListAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		this.rootView = inflater.inflate(R.layout.fragment_main, container, false);
-		init(rootView);
+		init(rootView, inflater);
 		return rootView;
 	}
 
@@ -115,8 +116,11 @@ public class CurrenciesFragment extends AbstractFragment {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void init(View view) {
+	private void init(View view, LayoutInflater inflater) {
 		lvCurrencies = (ListView) view.findViewById(R.id.list_currencies);
+		View header = inflater.inflate(R.layout.currency_row_header_layout, null);
+		lvCurrencies.addHeaderView(header);
+
 		tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
 	}
 
@@ -185,9 +189,9 @@ public class CurrenciesFragment extends AbstractFragment {
 		final Activity activity = getActivity();
 		AppSettings appSettings = new AppSettings(activity);
 
-		CurrencyListAdapter adapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout, currenciesList,
+		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout, currenciesList,
 				appSettings.getCurrenciesPrecision());
-		lvCurrencies.setAdapter(adapter);
+		lvCurrencies.setAdapter(currencyListAdapter);
 
 		// sortCurrenciesListView(appSettings.getCurrenciesSortSelection());
 		filterCurrenciesListView(appSettings.getCurrenciesFilterSelection());
@@ -203,11 +207,10 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param sortBy
 	 */
 	private void sortCurrenciesListView(final int sortBy) {
-		CurrencyListAdapter adapter = (CurrencyListAdapter) lvCurrencies.getAdapter();
-		// adapter.sortBy(new
+		// currencyListAdapter.sortBy(new
 		// AppSettings(getActivity()).getCurrenciesSortSelection(),
 		// sortByAscending);
-		adapter.notifyDataSetChanged();
+		currencyListAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -216,17 +219,16 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param filterBy
 	 */
 	private void filterCurrenciesListView(final int filterBy) {
-		final CurrencyListAdapter adapter = (CurrencyListAdapter) lvCurrencies.getAdapter();
-		adapter.getFilter().filter(Integer.toString(filterBy), new Filter.FilterListener() {
+		currencyListAdapter.getFilter().filter(Integer.toString(filterBy), new Filter.FilterListener() {
 			@Override
 			public void onFilterComplete(int count) {
 				if (count > 0) {
 					// adapter.sortBy(new
 					// AppSettings(getActivity()).getCurrenciesSortSelection(),
 					// sortByAscending);
-					adapter.notifyDataSetChanged();
+					currencyListAdapter.notifyDataSetChanged();
 				} else {
-					adapter.notifyDataSetInvalidated();
+					currencyListAdapter.notifyDataSetInvalidated();
 				}
 			}
 		});
@@ -238,8 +240,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param useRemoteSource
 	 */
 	public void reloadRates(boolean useRemoteSource) {
-//		useRemoteSource=true;
-
+		// useRemoteSource=true;
 
 		if (!useRemoteSource) {
 			DataSource source = null;
@@ -302,7 +303,6 @@ public class CurrenciesFragment extends AbstractFragment {
 				e.printStackTrace();
 			}
 
-
 			return currencies;
 		}
 
@@ -312,17 +312,16 @@ public class CurrenciesFragment extends AbstractFragment {
 
 			if (updateOK && !result.isEmpty()) {
 				DataSource source = null;
-				 try {
-				 source = new SQLiteDataSource();
-				 source.connect(activity);
-				 source.addRates(result);
-				 } catch (DataSourceException e) {
-				 Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-				 showSnackbar(R.string.error_db_load_rates,
-				 Defs.TOAST_ERR_TIME);
-				 } finally {
-				 IOUtils.closeQuitely(source);
-				 }
+				try {
+					source = new SQLiteDataSource();
+					source.connect(activity);
+					source.addRates(result);
+				} catch (DataSourceException e) {
+					Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
+					showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
+				} finally {
+					IOUtils.closeQuitely(source);
+				}
 				updateCurrenciesListView(result);
 			} else {
 				tvLastUpdate.setText(lastUpdateLastValue);

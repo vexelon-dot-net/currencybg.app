@@ -38,6 +38,7 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
+import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
 public class CurrencyListAdapter extends ArrayAdapter<CurrencyData> {
@@ -60,42 +61,45 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyData> {
 		if (v == null) {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.currency_row_layout, parent, false);
 		}
+
 		// set texts
 		CurrencyData currencyData = items.get(position);
 		if (currencyData != null) {
-//			setResText(v, R.id.name, currencyData.getName());
-			setResText(v, R.id.code, currencyData.getCode());
-			setResText(v, R.id.ratio, Integer.toString(currencyData.getRatio()));
-			// rate
-//			BigDecimal rateDecimal = new BigDecimal(currencyData.getRate());
-			BigDecimal rateDecimal;
-			if(currencyData.getSell()!=null){
-				rateDecimal = new BigDecimal(currencyData.getSell());
-			}else{
-				rateDecimal = new BigDecimal("0.0");
-			}
-
-			switch (precisionMode) {
-				case AppSettings.PRECISION_ADVANCED:
-					String rate = NumberUtils.scaleCurrency(rateDecimal, Defs.SCALE_SHOW_LONG);
-					setResText(v, R.id.rate, rate.substring(0, rate.length() - 3));
-					setResText(v, R.id.rate_decimals, rate.substring(rate.length() - 3));
-					break;
-				case AppSettings.PRECISION_SIMPLE:
-				default:
-					setResText(v, R.id.rate, NumberUtils.scaleCurrency(rateDecimal, Defs.BGN_CODE));
-					break;
-			}
 			// country ID icon
 			ImageView icon = (ImageView) v.findViewById(R.id.icon);
 			int imageId = UIFlags.getResourceFromCode(currencyData.getCode());
 			if (imageId != -1) {
 				icon.setImageResource(imageId);
 			}
-			// add tendency icon
-			// ImageView tendencyIcon = (ImageView)
-			// v.findViewById(R.id.tendency);
-			// tendencyIcon.setImageResource(ExchangeRates.getResourceFromTendency(ci.getTendency()));
+
+			setResText(v, R.id.name, UiCodes.getCurrencyName(v.getResources(), currencyData.getCode()));
+			setResText(v, R.id.code, currencyData.getCode());
+
+			// rate
+			// BigDecimal rateDecimal = new BigDecimal(currencyData.getRate());
+			BigDecimal rateDecimal;
+			if (currencyData.getSell() != null) {
+				rateDecimal = new BigDecimal(currencyData.getSell());
+			} else {
+				rateDecimal = new BigDecimal("0.0");
+			}
+
+			switch (precisionMode) {
+			case AppSettings.PRECISION_ADVANCED:
+				String rate = NumberUtils.scaleCurrency(rateDecimal, Defs.SCALE_SHOW_LONG);
+				setResText(v, R.id.rate, rate.substring(0, rate.length() - 3));
+				// setResText(v, R.id.rate_decimals,
+				// rate.substring(rate.length() - 3));
+				break;
+			case AppSettings.PRECISION_SIMPLE:
+			default:
+				setResText(v, R.id.rate_tavex, NumberUtils.scaleCurrency(rateDecimal, 2));
+				setResText(v, R.id.rate_polana1, NumberUtils.scaleCurrency(rateDecimal, 2));
+				setResText(v, R.id.rate_fib, NumberUtils.scaleCurrency(rateDecimal, 2));
+				// setResText(v, R.id.rate,
+				// NumberUtils.scaleCurrency(rateDecimal, Defs.BGN_CODE));
+				break;
+			}
 		}
 		return v;
 	}
@@ -113,26 +117,26 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyData> {
 		return filter;
 	}
 
-//	public void sortBy(final int sortBy, final boolean sortByAscending) {
-//		Collections.sort(items, new Comparator<CurrencyData>() {
-//			@Override
-//			public int compare(CurrencyData lhs, CurrencyData rhs) {
-//				switch (sortBy) {
-//				case AppSettings.SORTBY_CODE:
-//					if (sortByAscending) {
-//						return lhs.getCode().compareToIgnoreCase(rhs.getCode());
-//					}
-//					return rhs.getCode().compareToIgnoreCase(lhs.getCode());
-//				case AppSettings.SORTBY_NAME:
-//				default:
-//					if (sortByAscending) {
-//						return lhs.getName().compareToIgnoreCase(rhs.getName());
-//					}
-//					return rhs.getName().compareToIgnoreCase(lhs.getName());
-//				}
-//			}
-//		});
-//	}
+	// public void sortBy(final int sortBy, final boolean sortByAscending) {
+	// Collections.sort(items, new Comparator<CurrencyData>() {
+	// @Override
+	// public int compare(CurrencyData lhs, CurrencyData rhs) {
+	// switch (sortBy) {
+	// case AppSettings.SORTBY_CODE:
+	// if (sortByAscending) {
+	// return lhs.getCode().compareToIgnoreCase(rhs.getCode());
+	// }
+	// return rhs.getCode().compareToIgnoreCase(lhs.getCode());
+	// case AppSettings.SORTBY_NAME:
+	// default:
+	// if (sortByAscending) {
+	// return lhs.getName().compareToIgnoreCase(rhs.getName());
+	// }
+	// return rhs.getName().compareToIgnoreCase(lhs.getName());
+	// }
+	// }
+	// });
+	// }
 
 	private void setResText(View v, int id, CharSequence text) {
 		TextView tx = (TextView) v.findViewById(id);
@@ -150,25 +154,25 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyData> {
 			int filterBy = Integer.parseInt(constraint.toString());
 
 			switch (filterBy) {
-				case AppSettings.FILTERBY_ALL:
-					currenciesFiltered.addAll(itemsImmutable);
-					break;
-				case AppSettings.FILTERBY_NONFIXED:
-					for (CurrencyData currency : itemsImmutable) {
-						//TODO
-						if (/*!currency.isFixed()*/true) {
-							currenciesFiltered.add(currency);
-						}
+			case AppSettings.FILTERBY_ALL:
+				currenciesFiltered.addAll(itemsImmutable);
+				break;
+			case AppSettings.FILTERBY_NONFIXED:
+				for (CurrencyData currency : itemsImmutable) {
+					// TODO
+					if (/* !currency.isFixed() */true) {
+						currenciesFiltered.add(currency);
 					}
-					break;
-				case AppSettings.FILTERBY_FIXED:
-					for (CurrencyData currency : itemsImmutable) {
-						//TODO
-						if (/*currency.isFixed()*/true) {
-							currenciesFiltered.add(currency);
-						}
+				}
+				break;
+			case AppSettings.FILTERBY_FIXED:
+				for (CurrencyData currency : itemsImmutable) {
+					// TODO
+					if (/* currency.isFixed() */true) {
+						currenciesFiltered.add(currency);
 					}
-					break;
+				}
+				break;
 			}
 
 			results.values = currenciesFiltered;

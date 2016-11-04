@@ -123,9 +123,6 @@ public class SQLiteDataSource implements DataSource {
 		// make sure to close the cursor
 		cursor.close();
 
-		System.out.println("DB METHOD: " + resultCurrency.get(1).getCode() + " " + resultCurrency.get(1).getBuy() + " "
-				+ resultCurrency.get(1).getSell() + " " + resultCurrency.get(1).getSource());
-
 		return resultCurrency;
 	}
 
