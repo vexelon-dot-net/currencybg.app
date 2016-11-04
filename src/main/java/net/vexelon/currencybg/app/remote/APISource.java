@@ -23,9 +23,10 @@ import java.util.Map;
  */
 public class APISource implements Source {
 
-	OkHttpClient client = new OkHttpClient();
-	Gson gson = new GsonBuilder().setDateFormat(Defs.DATEFORMAT_ISO_8601).create();
-	Type type = new TypeToken<List<CurrencyData>>() {}.getType();
+	private OkHttpClient client = new OkHttpClient();
+	private Gson gson = new GsonBuilder().setDateFormat(Defs.DATEFORMAT_ISO_8601).create();
+	private Type type = new TypeToken<List<CurrencyData>>() {
+	}.getType();
 
 	@Override
 	public Map<CurrencyLocales, List<CurrencyData>> downloadRates(boolean getFixedRates) throws SourceException {
@@ -36,7 +37,7 @@ public class APISource implements Source {
 	@Override
 	public List<CurrencyData> getAllRatesByDate(String initialTime) throws SourceException {
 
-		String address = Defs.SERVER_ADDRESS+initialTime;
+		String address = Defs.SERVER_ADDRESS + initialTime;
 
 		String rates;
 		try {
@@ -49,9 +50,9 @@ public class APISource implements Source {
 		// TODO - to be set Authentication information
 		List<CurrencyData> currencies = gson.fromJson(rates, type);
 
-//		for (CurrencyData currency : currencies) {
-//			System.out.println(currency.getCode());
-//		}
+		// for (CurrencyData currency : currencies) {
+		// System.out.println(currency.getCode());
+		// }
 
 		return currencies;
 	}
@@ -59,7 +60,7 @@ public class APISource implements Source {
 	@Override
 	public List<CurrencyData> getAllRatesByDateSource(String initialTime, Integer sourceId) throws SourceException {
 
-		String address = Defs.SERVER_ADDRESS+initialTime+"/"+sourceId;
+		String address = Defs.SERVER_ADDRESS + initialTime + "/" + sourceId;
 
 		String rates;
 		try {
@@ -72,9 +73,9 @@ public class APISource implements Source {
 		// TODO - to be set Authentication information
 		List<CurrencyData> currencies = gson.fromJson(rates, type);
 
-//		for (CurrencyData currency : currencies) {
-//			System.out.println(currency.getCode());
-//		}
+		// for (CurrencyData currency : currencies) {
+		// System.out.println(currency.getCode());
+		// }
 
 		return currencies;
 	}
@@ -82,7 +83,7 @@ public class APISource implements Source {
 	@Override
 	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime) throws SourceException {
 
-		String address = Defs.SERVER_ADDRESS+"today/"+initialTime;
+		String address = Defs.SERVER_ADDRESS + "today/" + initialTime;
 
 		String rates;
 		try {
@@ -95,9 +96,9 @@ public class APISource implements Source {
 		// TODO - to be set Authentication information
 		List<CurrencyData> currencies = gson.fromJson(rates, type);
 
-//		for (CurrencyData currency : currencies) {
-//			System.out.println(currency.getCode());
-//		}
+		// for (CurrencyData currency : currencies) {
+		// System.out.println(currency.getCode());
+		// }
 
 		return currencies;
 	}
@@ -105,7 +106,7 @@ public class APISource implements Source {
 	@Override
 	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime, Integer sourceId) throws SourceException {
 
-		String address = Defs.SERVER_ADDRESS+"today/"+initialTime+"/"+sourceId;
+		String address = Defs.SERVER_ADDRESS + "today/" + initialTime + "/" + sourceId;
 
 		String rates;
 		try {
@@ -118,23 +119,18 @@ public class APISource implements Source {
 		// TODO - to be set Authentication information
 		List<CurrencyData> currencies = gson.fromJson(rates, type);
 
-//		for (CurrencyData currency : currencies) {
-//			System.out.println(currency.getCode());
-//		}
+		// for (CurrencyData currency : currencies) {
+		// System.out.println(currency.getCode());
+		// }
 
 		return currencies;
 	}
 
 	String downloadRates(String url) throws IOException {
-		Request request = new Request.Builder()
-				.url(url)
-				.header("APIKey", "CurrencyBgUser")
-				.build();
+		Request request = new Request.Builder().url(url).header("APIKey", "CurrencyBgUser").build();
 
 		Response response = client.newCall(request).execute();
 		return response.body().string();
 	}
-
-
 
 }

@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -98,8 +99,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		switch (id) {
+		switch (item.getItemId()) {
 		case R.id.action_refresh:
 			reloadRates(true);
 			lastUpdateLastValue = tvLastUpdate.getText().toString();
@@ -240,17 +240,13 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param useRemoteSource
 	 */
 	public void reloadRates(boolean useRemoteSource) {
-		// useRemoteSource=true;
-
 		if (!useRemoteSource) {
 			DataSource source = null;
-			List<CurrencyData> ratesList = null;
 			try {
 				source = new SQLiteDataSource();
 				source.connect(getActivity());
-				ratesList = source.getLastRates();
 
-				// ratesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
+				List<CurrencyData> ratesList = source.getLastRates();
 				if (!ratesList.isEmpty()) {
 					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
 					updateCurrenciesListView(ratesList);
@@ -286,21 +282,16 @@ public class CurrenciesFragment extends AbstractFragment {
 
 		@Override
 		protected List<CurrencyData> doInBackground(Void... params) {
-
 			Log.v(Defs.LOG_TAG, "Loading rates from remote source...");
+
+			List<CurrencyData> currencies = Lists.newArrayList();
 			Source source = new APISource();
-			List<CurrencyData> currencies = new ArrayList<CurrencyData>();
+
 			try {
-				// currencies =
-				// source.getAllRatesByDate("2016-08-31T20:55:06+0300");
-				// currencies =
-				// source.getAllRatesByDateSource("2016-08-31T20:55:06+0300",200);
-				// currencies =
-				// source.getAllCurrentRatesAfter("2016-08-31T20:55:06+02:00");
 				currencies = source.getAllCurrentRatesAfter("2016-09-19T20:55:06+03:00", 300);
 				updateOK = true;
 			} catch (SourceException e) {
-				e.printStackTrace();
+				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
 			}
 
 			return currencies;
