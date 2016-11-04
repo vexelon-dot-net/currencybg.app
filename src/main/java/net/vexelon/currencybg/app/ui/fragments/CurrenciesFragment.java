@@ -288,7 +288,7 @@ public class CurrenciesFragment extends AbstractFragment {
 			Source source = new APISource();
 
 			try {
-				currencies = source.getAllCurrentRatesAfter("2016-09-19T20:55:06+03:00", 300);
+				currencies = source.getAllCurrentRatesAfter("2016-09-19T20:55:06+03:00");
 				updateOK = true;
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);

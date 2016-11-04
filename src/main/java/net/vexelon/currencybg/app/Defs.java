@@ -50,4 +50,12 @@ public class Defs {
 
 	public static final String DATEFORMAT_ISO_8601 = "yyyy-MM-dd'T'HH:mmZ";
 	public static final String SERVER_ADDRESS = "http://currencybg-tsvetoslav.rhcloud.com/currencybg.server/api/currencies/";
+
+	/**
+	 * Remote currency sources
+	 */
+	public static final int SOURCE_TAVEX = 100;
+	public static final int SOURCE_POLANA1 = 200;
+	public static final int SOURCE_FIB = 300;
+
 }
