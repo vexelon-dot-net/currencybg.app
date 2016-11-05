@@ -42,12 +42,6 @@ public class APISource implements Source {
 	}
 
 	@Override
-	public Map<CurrencyLocales, List<CurrencyData>> downloadRates(boolean getFixedRates) throws SourceException {
-
-		return null;
-	}
-
-	@Override
 	public List<CurrencyData> getAllRatesByDate(String initialTime) throws SourceException {
 
 		String address = SERVER_ADDRESS + initialTime;

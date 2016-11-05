@@ -26,17 +26,6 @@ import net.vexelon.currencybg.app.common.CurrencyLocales;
 public interface Source {
 
 	/**
-	 * Fetches exchange rates from the underlying source and serves back a ready
-	 * to consume {@link CurrencyData} language mapped list.
-	 *
-	 * @return {@link Map} of languages for each of which a list of
-	 *         {@link CurrencyData} is available.
-	 * @throws SourceException
-	 */
-	@Deprecated
-	Map<CurrencyLocales, List<CurrencyData>> downloadRates(boolean getFixedRates) throws SourceException;
-
-	/**
 	 * Fetches a list of currencies by date
 	 *
 	 * @param initialTime
@@ -56,21 +45,23 @@ public interface Source {
 	List<CurrencyData> getAllRatesByDateSource(String initialTime, Integer sourceId) throws SourceException;
 
 	/**
-	 * Fetches a list of currencies for the current date which are after DateTime
+	 * Fetches a list of currencies for the current date which are after
+	 * DateTime
 	 *
 	 * @param timeFrom
 	 * @return
 	 * @throws SourceException
 	 */
-	List<CurrencyData> getAllCurrentRatesAfter(String timeFrom) throws  SourceException;
+	List<CurrencyData> getAllCurrentRatesAfter(String timeFrom) throws SourceException;
 
 	/**
-	 * Fetches a list of currencies for the current date which are after timeFrom by sourceId
+	 * Fetches a list of currencies for the current date which are after
+	 * timeFrom by sourceId
 	 *
 	 * @param timeFrom
 	 * @param sourceId
 	 * @return
 	 * @throws SourceException
 	 */
-	List<CurrencyData> getAllCurrentRatesAfter(String timeFrom, Integer sourceId) throws  SourceException;
+	List<CurrencyData> getAllCurrentRatesAfter(String timeFrom, Integer sourceId) throws SourceException;
 }

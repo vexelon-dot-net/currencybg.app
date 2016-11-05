@@ -36,7 +36,6 @@ import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.common.CurrencyLocales;
-import net.vexelon.currencybg.app.remote.BNBSource;
 import net.vexelon.currencybg.app.remote.Source;
 import net.vexelon.currencybg.app.remote.SourceException;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
@@ -96,8 +95,9 @@ public class RateService extends Service {
 		try {
 			source = new SQLiteDataSource();
 			source.connect(ctx);
-			//TODO - temporary commented
-//			listCurrency = source.getRates(getSelectedCurrenciesLocale(), Calendar.getInstance().getTime());
+			// TODO - temporary commented
+			// listCurrency = source.getRates(getSelectedCurrenciesLocale(),
+			// Calendar.getInstance().getTime());
 			return listCurrency.size() > 0;
 		} catch (DataSourceException e) {
 			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
@@ -121,8 +121,9 @@ public class RateService extends Service {
 		try {
 			source = new SQLiteDataSource();
 			source.connect(ctx);
-			//TODO - temporary commented
-//			listFixedCurrency = source.getFixedRates(getSelectedCurrenciesLocale(), currentYear);
+			// TODO - temporary commented
+			// listFixedCurrency =
+			// source.getFixedRates(getSelectedCurrenciesLocale(), currentYear);
 			return listFixedCurrency.size() > 0;
 		} catch (DataSourceException e) {
 			Log.e(Defs.LOG_TAG, "Could not load fixed currencies from database!", e);
@@ -141,13 +142,13 @@ public class RateService extends Service {
 			// for(Object object : param){
 			// isFixed = (Boolean)object;
 			// }
-			try {
-				Log.v(Defs.LOG_TAG, "Loading rates from remote source...");
-				Source source = new BNBSource();
-				rates = source.downloadRates(isFixed);
-			} catch (SourceException e) {
-				Log.e(Defs.LOG_TAG, "Could not load rates from remote!", e);
-			}
+//			try {
+//				Log.v(Defs.LOG_TAG, "Loading rates from remote source...");
+				// Source source = new BNBSource();
+				// rates = source.downloadRates(isFixed);
+			// } catch (SourceException e) {
+			// Log.e(Defs.LOG_TAG, "Could not load rates from remote!", e);
+			// }
 			return rates;
 		}
 
@@ -163,8 +164,8 @@ public class RateService extends Service {
 			try {
 				source = new SQLiteDataSource();
 				source.connect(ctx);
-				//TODO - temporary commented
-//				source.addRates(result);
+				// TODO - temporary commented
+				// source.addRates(result);
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
 			} finally {
