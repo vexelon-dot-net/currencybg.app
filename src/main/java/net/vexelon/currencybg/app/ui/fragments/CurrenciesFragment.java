@@ -28,6 +28,7 @@ import com.google.common.collect.Maps;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -295,15 +296,25 @@ public class CurrenciesFragment extends AbstractFragment {
 		protected List<CurrencyData> doInBackground(Void... params) {
 			Log.v(Defs.LOG_TAG, "Loading rates from remote source...");
 
+			DataSource source = null;
 			List<CurrencyData> currencies = Lists.newArrayList();
-			Source source = new APISource();
 
 			try {
 				// TODO change date
-				currencies = source.getAllCurrentRatesAfter("2016-10-19T01:00:06+03:00");
+				currencies = new APISource().getAllCurrentRatesAfter("2016-10-19T01:00:06+03:00");
+
+				source = new SQLiteDataSource();
+				source.connect(activity);
+				source.addRates(currencies);
+
 				updateOK = true;
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
+			} catch (DataSourceException e) {
+				Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
+				showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
+			} finally {
+				IOUtils.closeQuitely(source);
 			}
 
 			return currencies;
@@ -314,17 +325,6 @@ public class CurrenciesFragment extends AbstractFragment {
 			setRefreshActionButtonState(false);
 
 			if (updateOK && !result.isEmpty()) {
-				DataSource source = null;
-				try {
-					source = new SQLiteDataSource();
-					source.connect(activity);
-					source.addRates(result);
-				} catch (DataSourceException e) {
-					Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-					showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
-				} finally {
-					IOUtils.closeQuitely(source);
-				}
 				updateCurrenciesListView(result);
 			} else {
 				tvLastUpdate.setText(lastUpdateLastValue);
