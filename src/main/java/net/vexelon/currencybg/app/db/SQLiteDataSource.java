@@ -19,14 +19,11 @@ package net.vexelon.currencybg.app.db;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 
 import android.content.ContentValues;
@@ -34,8 +31,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.util.Log;
 
 import com.google.common.collect.Lists;
 

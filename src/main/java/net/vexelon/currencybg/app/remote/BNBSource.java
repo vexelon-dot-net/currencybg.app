@@ -41,7 +41,7 @@ import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
 
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
+import net.vexelon.currencybg.app.common.CurrencyLocales;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 

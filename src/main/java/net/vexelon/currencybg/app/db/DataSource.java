@@ -18,13 +18,10 @@
 package net.vexelon.currencybg.app.db;
 
 import java.io.Closeable;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Context;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 
 /**
  * Encapsulates the available read-write operations to and from an underlying

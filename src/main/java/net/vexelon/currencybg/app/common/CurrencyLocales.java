@@ -1,4 +1,4 @@
-package net.vexelon.currencybg.app.db.models;
+package net.vexelon.currencybg.app.common;
 
 import java.util.Locale;
 

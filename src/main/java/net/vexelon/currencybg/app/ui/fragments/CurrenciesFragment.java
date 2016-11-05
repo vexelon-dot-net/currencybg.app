@@ -17,25 +17,17 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,23 +42,18 @@ import android.widget.TextView;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.CurrencyListRow;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 import net.vexelon.currencybg.app.remote.APISource;
-import net.vexelon.currencybg.app.remote.BNBSource;
 import net.vexelon.currencybg.app.remote.Source;
 import net.vexelon.currencybg.app.remote.SourceException;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 public class CurrenciesFragment extends AbstractFragment {
 
@@ -183,21 +170,21 @@ public class CurrenciesFragment extends AbstractFragment {
 	/**
 	 * Populates the list of currencies
 	 *
-	 * @param currenciesList
+	 * @param currencies
 	 */
-	private void updateCurrenciesListView(List<CurrencyData> currenciesList) {
+	private void updateCurrenciesListView(List<CurrencyData> currencies) {
 		final Activity activity = getActivity();
 		AppSettings appSettings = new AppSettings(activity);
 
-		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout, currenciesList,
-				appSettings.getCurrenciesPrecision());
+		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout,
+				toCurrencyRows(currencies), appSettings.getCurrenciesPrecision());
 		lvCurrencies.setAdapter(currencyListAdapter);
 
 		// sortCurrenciesListView(appSettings.getCurrenciesSortSelection());
-		filterCurrenciesListView(appSettings.getCurrenciesFilterSelection());
+		// filterCurrenciesListView(appSettings.getCurrenciesFilterSelection());
 
-		// Date lastUpdateDate = currenciesList.iterator().next().getCurrDate();
-		Date lastUpdateDate = currenciesList.iterator().next().getDate();
+		// Date lastUpdateDate = currencies.iterator().next().getCurrDate();
+		Date lastUpdateDate = currencies.iterator().next().getDate();
 		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, lastUpdateDate));
 	}
 
@@ -260,10 +247,29 @@ public class CurrenciesFragment extends AbstractFragment {
 				IOUtils.closeQuitely(source);
 			}
 		}
+
 		if (useRemoteSource) {
 			setRefreshActionButtonState(true);
 			new UpdateRatesTask().execute();
 		}
+	}
+
+	private List<CurrencyListRow> toCurrencyRows(List<CurrencyData> currencies) {
+		Map<String, CurrencyListRow> map = Maps.newHashMap();
+
+		for (CurrencyData c : currencies) {
+			CurrencyListRow row = map.get(c.getCode());
+			if (row == null) {
+				row = new CurrencyListRow(c.getCode());
+				map.put(c.getCode(), row);
+			}
+
+			System.out.println("Sourece " + c.getSource() + " = " + c.getCode());
+
+			row.addColumn(Sources.valueOf(c.getSource()), c);
+		}
+
+		return Lists.newArrayList(map.values());
 	}
 
 	private class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
@@ -288,7 +294,7 @@ public class CurrenciesFragment extends AbstractFragment {
 			Source source = new APISource();
 
 			try {
-				currencies = source.getAllCurrentRatesAfter("2016-09-19T20:55:06+03:00");
+				currencies = source.getAllCurrentRatesAfter("2016-10-19T01:00:06+03:00");
 				updateOK = true;
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
@@ -321,5 +327,4 @@ public class CurrenciesFragment extends AbstractFragment {
 		}
 
 	}
-
 }

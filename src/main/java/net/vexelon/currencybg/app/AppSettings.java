@@ -25,7 +25,7 @@ import com.google.common.collect.Sets;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
+import net.vexelon.currencybg.app.common.CurrencyLocales;
 
 public class AppSettings {
 

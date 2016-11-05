@@ -25,7 +25,6 @@ import android.util.Log;
 
 public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 
-
 	// Table Create Statements
 	// TABLE_CURRENCY table create statement
 	private static final String CREATE_TABLE_CURRENCY_BG = String.format(
@@ -33,7 +32,7 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 			Defs.TABLE_CURRENCY, Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY, Defs.COLUMN_SELL,
 			Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE);
 
-//	private static final String CREATE_TABLE_CURRENCY_BG = String.format("");
+	// private static final String CREATE_TABLE_CURRENCY_BG = String.format("");
 
 	public CurrenciesSQLiteDB(Context context) {
 		super(context, Defs.DATABASE_NAME, null, Defs.DATABASE_VERSION);
@@ -59,9 +58,7 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 			database.execSQL(CREATE_TABLE_CURRENCY_BG);
 			// TODO - drop old tables if exists
 			/*
-			*try{
-			* drop the old tables
-			* catch
+			 * try{ drop the old tables catch
 			 */
 			break;
 		default:

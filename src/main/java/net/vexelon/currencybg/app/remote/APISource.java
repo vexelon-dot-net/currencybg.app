@@ -3,15 +3,14 @@ package net.vexelon.currencybg.app.remote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import net.vexelon.currencybg.app.Defs;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
+import net.vexelon.currencybg.app.common.CurrencyLocales;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -96,9 +95,9 @@ public class APISource implements Source {
 		// TODO - to be set Authentication information
 		List<CurrencyData> currencies = gson.fromJson(rates, type);
 
-		// for (CurrencyData currency : currencies) {
-		// System.out.println(currency.getCode());
-		// }
+		for (CurrencyData currency : currencies) {
+			System.out.println(currency.getCode() + " - " + Sources.valueOf(currency.getSource()));
+		}
 
 		return currencies;
 	}

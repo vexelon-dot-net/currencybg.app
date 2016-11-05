@@ -36,19 +36,21 @@ import com.google.common.collect.Lists;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.CurrencyListRow;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
 import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
-public class CurrencyListAdapter extends ArrayAdapter<CurrencyData> {
+public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 
-	private final List<CurrencyData> itemsImmutable;
-	private List<CurrencyData> items;
+	private final List<CurrencyListRow> itemsImmutable;
+	private List<CurrencyListRow> items;
 	private int precisionMode = AppSettings.PRECISION_SIMPLE;
-	private CurrencyFilter filter = null;
+	// private CurrencyFilter filter = null;
 
-	public CurrencyListAdapter(Context context, int textViewResId, List<CurrencyData> items, int precisionMode) {
+	public CurrencyListAdapter(Context context, int textViewResId, List<CurrencyListRow> items, int precisionMode) {
 		super(context, textViewResId, items);
 		this.itemsImmutable = Lists.newArrayList(items.iterator());
 		this.items = items;
@@ -63,45 +65,54 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyData> {
 		}
 
 		// set texts
-		CurrencyData currencyData = items.get(position);
-		if (currencyData != null) {
+		CurrencyListRow row = items.get(position);
+		if (row != null) {
 			// country ID icon
 			ImageView icon = (ImageView) v.findViewById(R.id.icon);
-			int imageId = UIFlags.getResourceFromCode(currencyData.getCode());
+			int imageId = UIFlags.getResourceFromCode(row.getCode());
 			if (imageId != -1) {
 				icon.setImageResource(imageId);
 			}
 
-			setResText(v, R.id.name, UiCodes.getCurrencyName(v.getResources(), currencyData.getCode()));
-			setResText(v, R.id.code, currencyData.getCode());
-
-			// rate
-			// BigDecimal rateDecimal = new BigDecimal(currencyData.getRate());
-			BigDecimal rateDecimal;
-			if (currencyData.getSell() != null) {
-				rateDecimal = new BigDecimal(currencyData.getSell());
-			} else {
-				rateDecimal = new BigDecimal("0.0");
-			}
-
-			switch (precisionMode) {
-			case AppSettings.PRECISION_ADVANCED:
-				String rate = NumberUtils.scaleCurrency(rateDecimal, Defs.SCALE_SHOW_LONG);
-				setResText(v, R.id.rate, rate.substring(0, rate.length() - 3));
-				// setResText(v, R.id.rate_decimals,
-				// rate.substring(rate.length() - 3));
-				break;
-			case AppSettings.PRECISION_SIMPLE:
-			default:
-				setResText(v, R.id.rate_tavex, NumberUtils.scaleCurrency(rateDecimal, 2));
-				setResText(v, R.id.rate_polana1, NumberUtils.scaleCurrency(rateDecimal, 2));
-				setResText(v, R.id.rate_fib, NumberUtils.scaleCurrency(rateDecimal, 2));
-				// setResText(v, R.id.rate,
-				// NumberUtils.scaleCurrency(rateDecimal, Defs.BGN_CODE));
-				break;
-			}
+			setResText(v, R.id.name, UiCodes.getCurrencyName(v.getResources(), row.getCode()));
+			setResText(v, R.id.code, row.getCode());
+			setResText(v, R.id.rate_tavex, getColumnValue(row, Sources.TAVEX));
+			setResText(v, R.id.rate_polana1, getColumnValue(row, Sources.POLANA1));
+			setResText(v, R.id.rate_fib, getColumnValue(row, Sources.FIB));
 		}
 		return v;
+	}
+
+	private String getColumnValue(CurrencyListRow row, Sources source) {
+		if (!row.getColumn(source).isPresent()) {
+			return "";
+		}
+
+		// switch (precisionMode) {
+		// case AppSettings.PRECISION_ADVANCED:
+		// String rate = NumberUtils.scaleCurrency(rateDecimal,
+		// Defs.SCALE_SHOW_LONG);
+		// setResText(v, R.id.rate, rate.substring(0, rate.length() - 3));
+		// // setResText(v, R.id.rate_decimals,
+		// // rate.substring(rate.length() - 3));
+		// break;
+		// case AppSettings.PRECISION_SIMPLE:
+		// default:
+		// setResText(v, R.id.rate_tavex,
+		// NumberUtils.scaleCurrency(row.getColumn(Sources.TAVEX).or(), 2));
+		// setResText(v, R.id.rate_polana1,
+		// NumberUtils.scaleCurrency(rateDecimal, 2));
+		// setResText(v, R.id.rate_fib, NumberUtils.scaleCurrency(rateDecimal,
+		// 2));
+		// // setResText(v, R.id.rate,
+		// // NumberUtils.scaleCurrency(rateDecimal, Defs.BGN_CODE));
+		// break;
+		// }
+
+		String value = row.getColumn(source).get().getSell();
+		value = value.replace(",", "");
+
+		return value.isEmpty() ? value : NumberUtils.scaleCurrency(new BigDecimal(value), 2);
 	}
 
 	@Override
@@ -111,10 +122,11 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyData> {
 
 	@Override
 	public Filter getFilter() {
-		if (filter == null) {
-			filter = new CurrencyFilter();
-		}
-		return filter;
+		// if (filter == null) {
+		// filter = new CurrencyFilter();
+		// }
+		// return filter;
+		return null;
 	}
 
 	// public void sortBy(final int sortBy, final boolean sortByAscending) {
@@ -145,47 +157,48 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyData> {
 		}
 	}
 
-	private class CurrencyFilter extends Filter {
-
-		@Override
-		protected FilterResults performFiltering(CharSequence constraint) {
-			FilterResults results = new FilterResults();
-			List<CurrencyData> currenciesFiltered = Lists.newArrayList();
-			int filterBy = Integer.parseInt(constraint.toString());
-
-			switch (filterBy) {
-			case AppSettings.FILTERBY_ALL:
-				currenciesFiltered.addAll(itemsImmutable);
-				break;
-			case AppSettings.FILTERBY_NONFIXED:
-				for (CurrencyData currency : itemsImmutable) {
-					// TODO
-					if (/* !currency.isFixed() */true) {
-						currenciesFiltered.add(currency);
-					}
-				}
-				break;
-			case AppSettings.FILTERBY_FIXED:
-				for (CurrencyData currency : itemsImmutable) {
-					// TODO
-					if (/* currency.isFixed() */true) {
-						currenciesFiltered.add(currency);
-					}
-				}
-				break;
-			}
-
-			results.values = currenciesFiltered;
-			results.count = currenciesFiltered.size();
-			return results;
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		protected void publishResults(CharSequence constraint, FilterResults results) {
-			if (results.count > 0) {
-				items = (List<CurrencyData>) results.values;
-			}
-		}
-	}
+	// private class CurrencyFilter extends Filter {
+	//
+	// @Override
+	// protected FilterResults performFiltering(CharSequence constraint) {
+	// FilterResults results = new FilterResults();
+	// List<CurrencyData> currenciesFiltered = Lists.newArrayList();
+	// int filterBy = Integer.parseInt(constraint.toString());
+	//
+	// switch (filterBy) {
+	// case AppSettings.FILTERBY_ALL:
+	// currenciesFiltered.addAll(itemsImmutable);
+	// break;
+	// case AppSettings.FILTERBY_NONFIXED:
+	// for (CurrencyData currency : itemsImmutable) {
+	// // TODO
+	// if (/* !currency.isFixed() */true) {
+	// currenciesFiltered.add(currency);
+	// }
+	// }
+	// break;
+	// case AppSettings.FILTERBY_FIXED:
+	// for (CurrencyData currency : itemsImmutable) {
+	// // TODO
+	// if (/* currency.isFixed() */true) {
+	// currenciesFiltered.add(currency);
+	// }
+	// }
+	// break;
+	// }
+	//
+	// results.values = currenciesFiltered;
+	// results.count = currenciesFiltered.size();
+	// return results;
+	// }
+	//
+	// @SuppressWarnings("unchecked")
+	// @Override
+	// protected void publishResults(CharSequence constraint, FilterResults
+	// results) {
+	// if (results.count > 0) {
+	// items = (List<CurrencyData>) results.values;
+	// }
+	// }
+	// }
 }

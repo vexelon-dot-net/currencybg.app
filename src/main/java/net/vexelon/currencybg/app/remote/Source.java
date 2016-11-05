@@ -17,13 +17,11 @@
  */
 package net.vexelon.currencybg.app.remote;
 
-import com.squareup.okhttp.OkHttpClient;
-
 import java.util.List;
 import java.util.Map;
 
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
+import net.vexelon.currencybg.app.common.CurrencyLocales;
 
 public interface Source {
 
