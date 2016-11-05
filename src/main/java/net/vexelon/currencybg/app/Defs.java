@@ -49,6 +49,4 @@ public class Defs {
 	public static final String COLUMN_CURR_DATE = "curr_date";
 
 	public static final String DATEFORMAT_ISO_8601 = "yyyy-MM-dd'T'HH:mmZ";
-	public static final String SERVER_ADDRESS = "http://currencybg-tsvetoslav.rhcloud.com/currencybg.server/api/currencies/";
-
 }
