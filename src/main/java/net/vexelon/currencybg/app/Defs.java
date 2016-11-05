@@ -17,6 +17,9 @@
  */
 package net.vexelon.currencybg.app;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Defs {
 
 	public final static String LOG_TAG = "net.vexelon.currencybg";
@@ -49,4 +52,9 @@ public class Defs {
 	public static final String COLUMN_CURR_DATE = "curr_date";
 
 	public static final String DATEFORMAT_ISO_8601 = "yyyy-MM-dd'T'HH:mmZ";
+
+	/**
+	 * Codes of currencies we don't want to show
+	 */
+	public static final List<String> HIDDEN_CURRENCY_CODES = Arrays.asList(new String[] { "SBP" });
 }

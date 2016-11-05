@@ -42,6 +42,7 @@ import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
 import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.utils.NumberUtils;
+import net.vexelon.currencybg.app.utils.StringUtils;
 
 public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 
@@ -74,7 +75,7 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 				icon.setImageResource(imageId);
 			}
 
-			setResText(v, R.id.name, UiCodes.getCurrencyName(v.getResources(), row.getCode()));
+			setResText(v, R.id.name, row.getName());
 			setResText(v, R.id.code, row.getCode());
 			setResText(v, R.id.rate_tavex, getColumnValue(row, Sources.TAVEX));
 			setResText(v, R.id.rate_polana1, getColumnValue(row, Sources.POLANA1));
@@ -129,26 +130,29 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		return null;
 	}
 
-	// public void sortBy(final int sortBy, final boolean sortByAscending) {
-	// Collections.sort(items, new Comparator<CurrencyData>() {
-	// @Override
-	// public int compare(CurrencyData lhs, CurrencyData rhs) {
-	// switch (sortBy) {
-	// case AppSettings.SORTBY_CODE:
-	// if (sortByAscending) {
-	// return lhs.getCode().compareToIgnoreCase(rhs.getCode());
-	// }
-	// return rhs.getCode().compareToIgnoreCase(lhs.getCode());
-	// case AppSettings.SORTBY_NAME:
-	// default:
-	// if (sortByAscending) {
-	// return lhs.getName().compareToIgnoreCase(rhs.getName());
-	// }
-	// return rhs.getName().compareToIgnoreCase(lhs.getName());
-	// }
-	// }
-	// });
-	// }
+	public void sortBy(final int sortBy, final boolean sortByAscending) {
+		Collections.sort(items, new Comparator<CurrencyListRow>() {
+			@Override
+			public int compare(CurrencyListRow lhs, CurrencyListRow rhs) {
+				switch (sortBy) {
+				case AppSettings.SORTBY_CODE:
+					if (sortByAscending) {
+						return lhs.getCode().compareToIgnoreCase(rhs.getCode());
+					}
+					return rhs.getCode().compareToIgnoreCase(lhs.getCode());
+
+				case AppSettings.SORTBY_NAME:
+				default:
+					if (sortByAscending) {
+						return StringUtils.emptyIfNull(lhs.getName())
+								.compareToIgnoreCase(StringUtils.emptyIfNull(rhs.getName()));
+					}
+					return StringUtils.emptyIfNull(rhs.getName())
+							.compareToIgnoreCase(StringUtils.emptyIfNull(lhs.getName()));
+				}
+			}
+		});
+	}
 
 	private void setResText(View v, int id, CharSequence text) {
 		TextView tx = (TextView) v.findViewById(id);

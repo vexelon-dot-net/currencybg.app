@@ -16,11 +16,13 @@ import java.util.Map;
 public class CurrencyListRow {
 
 	private String code;
+	private String name;
 
 	private Map<Sources, CurrencyData> columns = Maps.newHashMap();
 
-	public CurrencyListRow(String code) {
+	public CurrencyListRow(String code, String name) {
 		this.code = code;
+		this.name = name;
 	}
 
 	public CurrencyListRow addColumn(Sources source, CurrencyData currencyData) {
@@ -34,5 +36,9 @@ public class CurrencyListRow {
 
 	public String getCode() {
 		return code;
+	}
+
+	public String getName() {
+		return name;
 	}
 }

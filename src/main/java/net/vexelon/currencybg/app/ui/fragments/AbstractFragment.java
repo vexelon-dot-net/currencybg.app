@@ -18,9 +18,12 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import android.os.Bundle;
@@ -34,11 +37,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import net.vexelon.currencybg.app.AppSettings;
+import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.common.CurrencyLocales;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
+
+import org.jsoup.helper.StringUtil;
 
 public class AbstractFragment extends Fragment {
 
@@ -99,6 +106,24 @@ public class AbstractFragment extends Fragment {
 			currenciesMap.put(currencyData.getCode(), currencyData);
 		}
 		return currenciesMap;
+	}
+
+	/**
+	 * Removes currencies that should not be shown to users
+	 * 
+	 * @param currencies
+	 * @return
+	 */
+	protected List<CurrencyData> getFilteredCurrencies(List<CurrencyData> currencies) {
+		Iterator<CurrencyData> iterator = currencies.iterator();
+		while (iterator.hasNext()) {
+			CurrencyData c = iterator.next();
+			if (Defs.HIDDEN_CURRENCY_CODES.contains(c.getCode())) {
+				iterator.remove();
+			}
+		}
+
+		return currencies;
 	}
 
 	protected void showSnackbar(String text, int duration) {

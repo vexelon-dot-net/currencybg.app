@@ -51,6 +51,7 @@ import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.remote.APISource;
 import net.vexelon.currencybg.app.remote.Source;
 import net.vexelon.currencybg.app.remote.SourceException;
+import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
@@ -177,7 +178,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		AppSettings appSettings = new AppSettings(activity);
 
 		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout,
-				toCurrencyRows(currencies), appSettings.getCurrenciesPrecision());
+				toCurrencyRows(getFilteredCurrencies(currencies)), appSettings.getCurrenciesPrecision());
 		lvCurrencies.setAdapter(currencyListAdapter);
 
 		// sortCurrenciesListView(appSettings.getCurrenciesSortSelection());
@@ -194,9 +195,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param sortBy
 	 */
 	private void sortCurrenciesListView(final int sortBy) {
-		// currencyListAdapter.sortBy(new
-		// AppSettings(getActivity()).getCurrenciesSortSelection(),
-		// sortByAscending);
+		currencyListAdapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
 		currencyListAdapter.notifyDataSetChanged();
 	}
 
@@ -254,18 +253,23 @@ public class CurrenciesFragment extends AbstractFragment {
 		}
 	}
 
+	/**
+	 * Converts list of currencies from various sources to a table with rows &
+	 * columns
+	 * 
+	 * @param currencies
+	 * @return
+	 */
 	private List<CurrencyListRow> toCurrencyRows(List<CurrencyData> currencies) {
 		Map<String, CurrencyListRow> map = Maps.newHashMap();
+		final Activity activity = getActivity();
 
 		for (CurrencyData c : currencies) {
 			CurrencyListRow row = map.get(c.getCode());
 			if (row == null) {
-				row = new CurrencyListRow(c.getCode());
+				row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(activity.getResources(), c.getCode()));
 				map.put(c.getCode(), row);
 			}
-
-			System.out.println("Sourece " + c.getSource() + " = " + c.getCode());
-
 			row.addColumn(Sources.valueOf(c.getSource()), c);
 		}
 
@@ -284,6 +288,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 		@Override
 		protected void onPreExecute() {
+			// do nothing
 		}
 
 		@Override
@@ -294,6 +299,7 @@ public class CurrenciesFragment extends AbstractFragment {
 			Source source = new APISource();
 
 			try {
+				// TODO change date
 				currencies = source.getAllCurrentRatesAfter("2016-10-19T01:00:06+03:00");
 				updateOK = true;
 			} catch (SourceException e) {
