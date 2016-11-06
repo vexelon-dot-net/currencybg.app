@@ -39,6 +39,8 @@ public class Defs {
 	// table name
 
 	public static final String TABLE_CURRENCY = "currencies";
+	public static final String TABLE_CURRENCY_DATE = "currenciesdate";
+	public static final String TABLE_FIXED_CURRENCY = "fixedcurrencies";
 	// Name of columns in table TABLE_CURRENCY
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_CODE = "code";
