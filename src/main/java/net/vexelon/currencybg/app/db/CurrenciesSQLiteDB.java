@@ -55,11 +55,13 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 			/**
 			 * Upgrade from database v1 or v2 to v3
 			 */
+			//Delete old table, if they are existing
+			database.execSQL("DROP TABLE IF EXISTS " + Defs.TABLE_CURRENCY);
+			database.execSQL("DROP TABLE IF EXISTS " + Defs.TABLE_CURRENCY_DATE);
+			database.execSQL("DROP TABLE IF EXISTS " + Defs.TABLE_FIXED_CURRENCY);
+
+			//Create a new table(with new structure) in which is collected all data
 			database.execSQL(CREATE_TABLE_CURRENCY_BG);
-			// TODO - drop old tables if exists
-			/*
-			 * try{ drop the old tables catch
-			 */
 			break;
 		default:
 			Log.w(Defs.LOG_TAG, "Unknown old db version=" + oldVersion);
