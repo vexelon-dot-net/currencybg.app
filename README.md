@@ -3,17 +3,17 @@ Currency BG
 
 [![Build Status](https://travis-ci.org/vexelon-dot-net/currencybg.app.svg?branch=master)](https://travis-ci.org/vexelon-dot-net/currencybg.app)
 
-[Currency BG](https://play.google.com/store/apps/details?id=net.vexelon.currencybg.app) is an Android application that delivers up-to-date currency exchange rates for Bulgarian Lev (BGN). Exchange rate information is updated from the web site of the Bulgarian National Bank - http://www.bnb.bg
+[Currency BG](https://play.google.com/store/apps/details?id=net.vexelon.currencybg.app) is an Android application that delivers up-to-date currency exchange rates for Bulgarian Lev (BGN).
 
-Please read [HISTORY](HISTORY) for a list of changes.
+[Currency BG](https://play.google.com/store/apps/details?id=net.vexelon.currencybg.app) е Android приложение, което предоставя информация относно обменните курсове на валутите спрямо Българският Лев (BGN).
 
-# Requirements
+  * Requires Android `4.0.3+` (API `15+`)
 
-  * Requires Android `4.0.3+` (API Level `15+`)
-  * Requires Internet connection
-  * Localization - `EN` and `BG`
+# Contributing
 
-# Development 
+Please log feature requests or bug reports using the [Issues Board](https://github.com/vexelon-dot-net/currencybg.app/issues) or fork this repository and contribute back using [pull requests](https://github.com/vexelon-dot-net/currencybg.app/pulls).
+
+## Development
 
 To build the project run:
 
@@ -24,4 +24,5 @@ To install a debug build run:
     gradle installDebug
 
 # License
+
 [GPL](LICENSE)
