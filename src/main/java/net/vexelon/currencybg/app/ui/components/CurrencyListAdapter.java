@@ -38,6 +38,7 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
+import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
@@ -90,22 +91,21 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			return Defs.LONG_DASH;
 		}
 
+		CurrencyData currencyData = row.getColumn(source).get();
+
 		String value;
 		if (rateBy == AppSettings.RATE_SELL) {
-			value = row.getColumn(source).get().getSell();
+			value = NumberUtils.cleanValue(currencyData.getSell());
 		} else {
-			value = row.getColumn(source).get().getBuy();
+			value = NumberUtils.cleanValue(currencyData.getBuy());
 		}
 
-		// cleanup faulty characters
-		value = value.replace(",", "");
-
 		if (!value.isEmpty()) {
+			BigDecimal rate = new BigDecimal(value).divide(new BigDecimal(currencyData.getRatio()));
+
 			switch (precisionMode) {
 			case AppSettings.PRECISION_ADVANCED:
-				return value.substring(0, Math.min(value.length(), Defs.SCALE_SHOW_LONG));
-			// return NumberUtils.scaleCurrency(new BigDecimal(value),
-			// Defs.SCALE_SHOW_LONG);
+				return NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_LONG);
 			// String rate = NumberUtils.scaleCurrency(rateDecimal,
 			// Defs.SCALE_SHOW_LONG);
 			// setResText(v, R.id.rate, rate.substring(0, rate.length() -
@@ -114,7 +114,7 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			// rate.substring(rate.length() - 3));
 			case AppSettings.PRECISION_SIMPLE:
 			default:
-				return value.substring(0, Math.min(value.length(), 4));
+				return NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_SHORT);
 			}
 		}
 

@@ -80,4 +80,14 @@ public class NumberUtils {
 	public static String scaleCurrency(BigDecimal number, int n) {
 		return number.setScale(n, RoundingMode.HALF_EVEN).toPlainString();
 	}
+
+	/**
+	 * Removes unwanted characters
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String cleanValue(String value) {
+		return value.replace(",", "");
+	}
 }
