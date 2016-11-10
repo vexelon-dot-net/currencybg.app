@@ -29,6 +29,9 @@ import net.vexelon.currencybg.app.common.CurrencyLocales;
 
 public class AppSettings {
 
+	public static final int RATE_BUY = 0;
+	public static final int RATE_SELL = 1;
+
 	public static final int SORTBY_NAME = 0;
 	public static final int SORTBY_CODE = 1;
 
@@ -48,6 +51,19 @@ public class AppSettings {
 	}
 
 	/**
+	 * Gets what type of rate to show on currencies list fragment
+	 * 
+	 * @return
+	 */
+	public int getCurrenciesRateSelection() {
+		return generalPrefs.getInt("pref_currencies_rate", RATE_BUY);
+	}
+
+	public void setCurrenciesRateSelection(int value) {
+		generalPrefs.edit().putInt("pref_currencies_rate", value).apply();
+	}
+
+	/**
 	 * Gets currencies sorting
 	 * 
 	 * @return
@@ -60,10 +76,6 @@ public class AppSettings {
 		return generalPrefs.getInt("pref_currencies_sortby", -1);
 	}
 
-	/**
-	 * 
-	 * @param value
-	 */
 	public void setCurrenciesSortSelection(int value) {
 		generalPrefs.edit().putInt("pref_currencies_sortby", value).apply();
 	}
@@ -81,10 +93,6 @@ public class AppSettings {
 		return generalPrefs.getInt("pref_currencies_filterby", FILTERBY_NONFIXED);
 	}
 
-	/**
-	 * 
-	 * @param value
-	 */
 	public void setCurrenciesFilterSelection(int value) {
 		generalPrefs.edit().putInt("pref_currencies_filterby", value).apply();
 	}
@@ -110,7 +118,8 @@ public class AppSettings {
 
 	/**
 	 *
-	 * @return <ul>
+	 * @return
+	 *         <ul>
 	 *         <li>0 - PRECISION_SIMPLE</li>
 	 *         <li>1 - PRECISION_ADVANCED</li>
 	 *         </ul>

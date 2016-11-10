@@ -38,9 +38,7 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
-import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
-import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
 
@@ -49,13 +47,16 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 	private final List<CurrencyListRow> itemsImmutable;
 	private List<CurrencyListRow> items;
 	private int precisionMode = AppSettings.PRECISION_SIMPLE;
+	private int rateBy = AppSettings.RATE_BUY;
 	// private CurrencyFilter filter = null;
 
-	public CurrencyListAdapter(Context context, int textViewResId, List<CurrencyListRow> items, int precisionMode) {
+	public CurrencyListAdapter(Context context, int textViewResId, List<CurrencyListRow> items, int precisionMode,
+			int rateBy) {
 		super(context, textViewResId, items);
 		this.itemsImmutable = Lists.newArrayList(items.iterator());
 		this.items = items;
 		this.precisionMode = precisionMode;
+		this.rateBy = rateBy;
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 
 	private String getColumnValue(CurrencyListRow row, Sources source) {
 		if (!row.getColumn(source).isPresent()) {
-			return "";
+			return Defs.LONG_DASH;
 		}
 
 		// switch (precisionMode) {
@@ -110,10 +111,17 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		// break;
 		// }
 
-		String value = row.getColumn(source).get().getSell();
+		String value;
+		if (rateBy == AppSettings.RATE_SELL) {
+			value = row.getColumn(source).get().getSell();
+		} else {
+			value = row.getColumn(source).get().getBuy();
+		}
+
+		// cleanup faulty characters
 		value = value.replace(",", "");
 
-		return value.isEmpty() ? value : NumberUtils.scaleCurrency(new BigDecimal(value), 2);
+		return value.isEmpty() ? Defs.LONG_DASH : NumberUtils.scaleCurrency(new BigDecimal(value), 2);
 	}
 
 	@Override
@@ -130,7 +138,11 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		return null;
 	}
 
-	public void sortBy(final int sortBy, final boolean sortByAscending) {
+	public void setRateBy(final int rateBy) {
+		this.rateBy = rateBy;
+	}
+
+	public void setSortBy(final int sortBy, final boolean sortByAscending) {
 		Collections.sort(items, new Comparator<CurrencyListRow>() {
 			@Override
 			public int compare(CurrencyListRow lhs, CurrencyListRow rhs) {

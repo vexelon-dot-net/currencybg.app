@@ -4,14 +4,15 @@
     android:padding="4dp">
 
     <TextView
-        android:id="@+id/header_name"
+        android:id="@+id/header_currencies_rate"
         style="@style/FontListHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8sp"
         android:layout_toRightOf="@id/icon"
         android:layout_weight="2"
-        android:text="@string/sell" />
+        android:text="@string/buy"
+        android:textAllCaps="true" />
 
     <TextView
         android:id="@+id/header_src_tavex"

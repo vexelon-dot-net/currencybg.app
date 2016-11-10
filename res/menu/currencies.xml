@@ -16,6 +16,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_rate"
+        android:orderInCategory="9"
+        android:title="@string/action_rate"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_sort"
         android:orderInCategory="10"
         android:title="@string/action_sort"

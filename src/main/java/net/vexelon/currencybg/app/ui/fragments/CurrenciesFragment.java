@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,7 +50,6 @@ import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.remote.APISource;
-import net.vexelon.currencybg.app.remote.Source;
 import net.vexelon.currencybg.app.remote.SourceException;
 import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
@@ -63,6 +62,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	private ListView lvCurrencies;
 	private TextView tvLastUpdate;
+	private TextView tvCurrenciesRate;
 	private String lastUpdateLastValue;
 	private CurrencyListAdapter currencyListAdapter;
 
@@ -95,6 +95,9 @@ public class CurrenciesFragment extends AbstractFragment {
 			tvLastUpdate.setText(R.string.last_update_updating_text);
 			setRefreshActionButtonState(true);
 			return true;
+		case R.id.action_rate:
+			newRateMenu().show();
+			return true;
 		case R.id.action_sort:
 			newSortMenu().show();
 			return true;
@@ -110,7 +113,33 @@ public class CurrenciesFragment extends AbstractFragment {
 		View header = inflater.inflate(R.layout.currency_row_header_layout, null);
 		lvCurrencies.addHeaderView(header);
 
+		tvCurrenciesRate = (TextView) view.findViewById(R.id.header_currencies_rate);
 		tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
+	}
+
+	private MaterialDialog newRateMenu() {
+		final AppSettings appSettings = new AppSettings(getActivity());
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_rate_title)
+				.items(R.array.action_rate_values).itemsCallbackSingleChoice(appSettings.getCurrenciesRateSelection(),
+						new MaterialDialog.ListCallbackSingleChoice() {
+							@Override
+							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+								appSettings.setCurrenciesRateSelection(which);
+								setCurrenciesRate(which);
+								// notify user
+								switch (appSettings.getCurrenciesRateSelection()) {
+								case AppSettings.RATE_SELL:
+									showSnackbar(R.string.action_rate_sell_desc);
+									break;
+								case AppSettings.RATE_BUY:
+								default:
+									showSnackbar(R.string.action_rate_buy_desc);
+									break;
+								}
+								return true;
+							}
+						})
+				.build();
 	}
 
 	private MaterialDialog newSortMenu() {
@@ -123,7 +152,7 @@ public class CurrenciesFragment extends AbstractFragment {
 								sortByAscending = appSettings.getCurrenciesSortSelection() != which ? true
 										: !sortByAscending;
 								appSettings.setCurrenciesSortSelection(which);
-								sortCurrenciesListView(which);
+								setCurrenciesSort(which);
 								// notify user
 								switch (appSettings.getCurrenciesSortSelection()) {
 								case AppSettings.SORTBY_CODE:
@@ -150,7 +179,7 @@ public class CurrenciesFragment extends AbstractFragment {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 								appSettings.setCurrenciesFilterSelection(which);
-								filterCurrenciesListView(which);
+								setCurrenciesFilter(which);
 								// notify user
 								switch (appSettings.getCurrenciesFilterSelection()) {
 								case AppSettings.FILTERBY_ALL:
@@ -179,14 +208,15 @@ public class CurrenciesFragment extends AbstractFragment {
 		AppSettings appSettings = new AppSettings(activity);
 
 		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout,
-				toCurrencyRows(getFilteredCurrencies(currencies)), appSettings.getCurrenciesPrecision());
+				toCurrencyRows(getFilteredCurrencies(currencies)), appSettings.getCurrenciesPrecision(),
+				appSettings.getCurrenciesRateSelection());
 		lvCurrencies.setAdapter(currencyListAdapter);
 
-		// sortCurrenciesListView(appSettings.getCurrenciesSortSelection());
-		// filterCurrenciesListView(appSettings.getCurrenciesFilterSelection());
+		updateCurrenciesRateTitle(appSettings.getCurrenciesRateSelection());
+		setCurrenciesSort(appSettings.getCurrenciesSortSelection());
+		// setCurrenciesFilter(appSettings.getCurrenciesFilterSelection());
 
-		// Date lastUpdateDate = currencies.iterator().next().getCurrDate();
-		Date lastUpdateDate = currencies.iterator().next().getDate();
+		Date lastUpdateDate = Iterables.getFirst(currencies, new CurrencyData()).getDate();
 		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, lastUpdateDate));
 	}
 
@@ -195,8 +225,31 @@ public class CurrenciesFragment extends AbstractFragment {
 	 *
 	 * @param sortBy
 	 */
-	private void sortCurrenciesListView(final int sortBy) {
-		currencyListAdapter.sortBy(new AppSettings(getActivity()).getCurrenciesSortSelection(), sortByAscending);
+	private void setCurrenciesSort(final int sortBy) {
+		currencyListAdapter.setSortBy(sortBy, sortByAscending);
+		currencyListAdapter.notifyDataSetChanged();
+	}
+
+	private void updateCurrenciesRateTitle(final int rateBy) {
+		switch (rateBy) {
+		case AppSettings.RATE_SELL:
+			tvCurrenciesRate.setText(R.string.sell);
+			break;
+		case AppSettings.RATE_BUY:
+		default:
+			tvCurrenciesRate.setText(R.string.buy);
+			break;
+		}
+	}
+
+	/**
+	 * Shows buy/sell currencies rate info
+	 * 
+	 * @param rateBy
+	 */
+	private void setCurrenciesRate(final int rateBy) {
+		updateCurrenciesRateTitle(rateBy);
+		currencyListAdapter.setRateBy(rateBy);
 		currencyListAdapter.notifyDataSetChanged();
 	}
 
@@ -205,7 +258,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	 *
 	 * @param filterBy
 	 */
-	private void filterCurrenciesListView(final int filterBy) {
+	private void setCurrenciesFilter(final int filterBy) {
 		currencyListAdapter.getFilter().filter(Integer.toString(filterBy), new Filter.FilterListener() {
 			@Override
 			public void onFilterComplete(int count) {
@@ -301,7 +354,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 			try {
 				// TODO change date
-				currencies = new APISource().getAllCurrentRatesAfter("2016-10-19T01:00:06+03:00");
+				currencies = new APISource().getAllCurrentRatesAfter("2016-11-09T01:00:06+03:00");
 
 				source = new SQLiteDataSource();
 				source.connect(activity);

@@ -30,20 +30,23 @@ public class Defs {
 	public final static int SCALE_SHOW_SHORT = 2;
 	public final static int SCALE_CALCULATIONS = 10;
 	public final static String BGN_CODE = "BGN";
+	public static final String LONG_DASH = "\u2014";
 
-	// //////Tsvetoslav
-	// Time for request to BNB
-	public static final long NOTIFY_INTERVAL = 6 * 3600 * 1000; // 6 hours
-	// Parameters which used into SQLite//
-	// Name of DB
+	/**
+	 * How often to wake-up the Android service
+	 */
+	public static final long SERVICE_RUN_INTERVAL = 6 * 3600 * 1000; // 6 hours
+
+	/**
+	 * Parameters which used into SQLite
+	 */
 	public static final String DATABASE_NAME = "currencies.db";
-	// Version of DB
 	public static final int DATABASE_VERSION = 3;
-	// table name
 
 	public static final String TABLE_CURRENCY = "currencies";
 	public static final String TABLE_CURRENCY_DATE = "currenciesdate";
 	public static final String TABLE_FIXED_CURRENCY = "fixedcurrencies";
+
 	// Name of columns in table TABLE_CURRENCY
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_CODE = "code";

@@ -25,10 +25,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -207,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 30);
         long initialStartTimeout = calendar.getTimeInMillis();
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, initialStartTimeout, Defs.NOTIFY_INTERVAL,
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, initialStartTimeout, Defs.SERVICE_RUN_INTERVAL,
                 pendingIntent);
     }
 
