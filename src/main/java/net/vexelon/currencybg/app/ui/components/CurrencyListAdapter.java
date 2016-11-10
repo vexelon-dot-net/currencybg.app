@@ -90,27 +90,6 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			return Defs.LONG_DASH;
 		}
 
-		// switch (precisionMode) {
-		// case AppSettings.PRECISION_ADVANCED:
-		// String rate = NumberUtils.scaleCurrency(rateDecimal,
-		// Defs.SCALE_SHOW_LONG);
-		// setResText(v, R.id.rate, rate.substring(0, rate.length() - 3));
-		// // setResText(v, R.id.rate_decimals,
-		// // rate.substring(rate.length() - 3));
-		// break;
-		// case AppSettings.PRECISION_SIMPLE:
-		// default:
-		// setResText(v, R.id.rate_tavex,
-		// NumberUtils.scaleCurrency(row.getColumn(Sources.TAVEX).or(), 2));
-		// setResText(v, R.id.rate_polana1,
-		// NumberUtils.scaleCurrency(rateDecimal, 2));
-		// setResText(v, R.id.rate_fib, NumberUtils.scaleCurrency(rateDecimal,
-		// 2));
-		// // setResText(v, R.id.rate,
-		// // NumberUtils.scaleCurrency(rateDecimal, Defs.BGN_CODE));
-		// break;
-		// }
-
 		String value;
 		if (rateBy == AppSettings.RATE_SELL) {
 			value = row.getColumn(source).get().getSell();
@@ -121,7 +100,25 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		// cleanup faulty characters
 		value = value.replace(",", "");
 
-		return value.isEmpty() ? Defs.LONG_DASH : NumberUtils.scaleCurrency(new BigDecimal(value), 2);
+		if (!value.isEmpty()) {
+			switch (precisionMode) {
+			case AppSettings.PRECISION_ADVANCED:
+				return value.substring(0, Math.min(value.length(), Defs.SCALE_SHOW_LONG));
+			// return NumberUtils.scaleCurrency(new BigDecimal(value),
+			// Defs.SCALE_SHOW_LONG);
+			// String rate = NumberUtils.scaleCurrency(rateDecimal,
+			// Defs.SCALE_SHOW_LONG);
+			// setResText(v, R.id.rate, rate.substring(0, rate.length() -
+			// 3));
+			// setResText(v, R.id.rate_decimals,
+			// rate.substring(rate.length() - 3));
+			case AppSettings.PRECISION_SIMPLE:
+			default:
+				return value.substring(0, Math.min(value.length(), 4));
+			}
+		}
+
+		return Defs.LONG_DASH;
 	}
 
 	@Override
@@ -167,10 +164,8 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 	}
 
 	private void setResText(View v, int id, CharSequence text) {
-		TextView tx = (TextView) v.findViewById(id);
-		if (tx != null) {
-			tx.setText(text);
-		}
+		TextView textView = (TextView) v.findViewById(id);
+		textView.setText(text);
 	}
 
 	// private class CurrencyFilter extends Filter {
