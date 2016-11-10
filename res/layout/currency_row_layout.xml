@@ -33,7 +33,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/rate_tavex"
+        android:id="@+id/rate_src_1"
         style="@style/FontListRatioRate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:gravity="right" />
 
     <TextView
-        android:id="@+id/rate_polana1"
+        android:id="@+id/rate_src_2"
         style="@style/FontListRatioRate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         android:paddingLeft="6sp" />
 
     <TextView
-        android:id="@+id/rate_fib"
+        android:id="@+id/rate_src_3"
         style="@style/FontListRatioRate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

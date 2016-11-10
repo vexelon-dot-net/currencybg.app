@@ -78,9 +78,9 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 
 			setResText(v, R.id.name, row.getName());
 			setResText(v, R.id.code, row.getCode());
-			setResText(v, R.id.rate_tavex, getColumnValue(row, Sources.TAVEX));
-			setResText(v, R.id.rate_polana1, getColumnValue(row, Sources.POLANA1));
-			setResText(v, R.id.rate_fib, getColumnValue(row, Sources.FIB));
+			setResText(v, R.id.rate_src_1, getColumnValue(row, Sources.TAVEX));
+			setResText(v, R.id.rate_src_2, getColumnValue(row, Sources.POLANA1));
+			setResText(v, R.id.rate_src_3, getColumnValue(row, Sources.FIB));
 		}
 		return v;
 	}
