@@ -46,7 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/rate_tavex"
-        android:layout_weight="1.3"
+        android:layout_weight="1.2"
         android:gravity="right"
         android:paddingLeft="6sp" />
 
@@ -56,7 +56,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/rate_polana1"
-        android:layout_weight="0.9"
+        android:layout_weight="1.0"
         android:gravity="right"
         android:paddingLeft="6sp"
         android:paddingRight="5sp" />

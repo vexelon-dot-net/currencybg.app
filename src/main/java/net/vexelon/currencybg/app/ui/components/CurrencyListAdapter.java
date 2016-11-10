@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,9 +80,9 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 
 			setResText(v, R.id.name, row.getName());
 			setResText(v, R.id.code, row.getCode());
-			setResText(v, R.id.rate_src_1, getColumnValue(row, Sources.TAVEX));
-			setResText(v, R.id.rate_src_2, getColumnValue(row, Sources.POLANA1));
-			setResText(v, R.id.rate_src_3, getColumnValue(row, Sources.FIB));
+			setResText(v, R.id.rate_src_1, getColumnValue(row, Sources.TAVEX), true);
+			setResText(v, R.id.rate_src_2, getColumnValue(row, Sources.POLANA1), true);
+			setResText(v, R.id.rate_src_3, getColumnValue(row, Sources.FIB), true);
 		}
 		return v;
 	}
@@ -101,20 +102,17 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		}
 
 		if (!value.isEmpty()) {
-			BigDecimal rate = new BigDecimal(value).divide(new BigDecimal(currencyData.getRatio()));
+			BigDecimal rate = NumberUtils.divCurrency(new BigDecimal(value), new BigDecimal(currencyData.getRatio()));
 
 			switch (precisionMode) {
 			case AppSettings.PRECISION_ADVANCED:
-				return NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_LONG);
-			// String rate = NumberUtils.scaleCurrency(rateDecimal,
-			// Defs.SCALE_SHOW_LONG);
-			// setResText(v, R.id.rate, rate.substring(0, rate.length() -
-			// 3));
-			// setResText(v, R.id.rate_decimals,
-			// rate.substring(rate.length() - 3));
+				String v = NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_LONG);
+				String first = v.substring(0, Math.min(v.length() - 3, v.length()));
+				String second = v.substring(Math.min(v.length() - 3, v.length()), v.length());
+				return "<font color='#00BFFF'>" + first + "</font><small>" + second + "</small>";
 			case AppSettings.PRECISION_SIMPLE:
 			default:
-				return NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_SHORT);
+				return "<font color='#00BFFF'>" + NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_SHORT) + "</font>";
 			}
 		}
 
@@ -163,9 +161,13 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		});
 	}
 
-	private void setResText(View v, int id, CharSequence text) {
+	private void setResText(View v, int id, CharSequence text, boolean isHtml) {
 		TextView textView = (TextView) v.findViewById(id);
-		textView.setText(text);
+		textView.setText(isHtml ? Html.fromHtml(text.toString()) : text);
+	}
+
+	private void setResText(View v, int id, CharSequence text) {
+		setResText(v, id, text, false);
 	}
 
 	// private class CurrencyFilter extends Filter {

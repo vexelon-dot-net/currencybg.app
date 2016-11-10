@@ -65,6 +65,10 @@ public class NumberUtils {
 		return number.round(new MathContext(n, RoundingMode.HALF_UP)).toPlainString();
 	}
 
+	public static BigDecimal divCurrency(BigDecimal number, BigDecimal divisor) {
+		return number.divide(divisor, RoundingMode.HALF_EVEN);
+	}
+
 	public static String scaleCurrency(BigDecimal number, String code) {
 		try {
 			Currency currency = Currency.getInstance(code);
