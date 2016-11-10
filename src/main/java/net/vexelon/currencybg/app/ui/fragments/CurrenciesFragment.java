@@ -113,8 +113,15 @@ public class CurrenciesFragment extends AbstractFragment {
 		View header = inflater.inflate(R.layout.currency_row_header_layout, null);
 		lvCurrencies.addHeaderView(header);
 
-		tvCurrenciesRate = (TextView) view.findViewById(R.id.header_currencies_rate);
 		tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
+
+		tvCurrenciesRate = (TextView) view.findViewById(R.id.header_currencies_rate);
+		tvCurrenciesRate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				newRateMenu().show();
+			}
+		});
 	}
 
 	private MaterialDialog newRateMenu() {
