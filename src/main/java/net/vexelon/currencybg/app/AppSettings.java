@@ -114,6 +114,7 @@ public class AppSettings {
 	 *
 	 * @return {@link CurrencyLocales}
 	 */
+	@Deprecated
 	public CurrencyLocales getCurrenciesLanguage() {
 		String value = getCurrenciesLanguageRaw();
 		if ("en".equals(value)) {
@@ -124,6 +125,7 @@ public class AppSettings {
 		return CurrencyLocales.getAppLocale(context);
 	}
 
+	@Deprecated
 	public String getCurrenciesLanguageRaw() {
 		return generalPrefs.getString("pref_currencies_language", "default");
 	}
