@@ -41,6 +41,7 @@ import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
+import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
 
@@ -95,10 +96,13 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		CurrencyData currencyData = row.getColumn(source).get();
 
 		String value;
+		String color;
 		if (rateBy == AppSettings.RATE_SELL) {
 			value = NumberUtils.cleanValue(currencyData.getSell());
+			color = Defs.COLOR_DARK_ORANGE;
 		} else {
 			value = NumberUtils.cleanValue(currencyData.getBuy());
+			color = Defs.COLOR_NAVY_BLUE;
 		}
 
 		if (!value.isEmpty()) {
@@ -109,10 +113,10 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 				String v = NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_LONG);
 				String first = v.substring(0, Math.min(v.length() - 3, v.length()));
 				String second = v.substring(Math.min(v.length() - 3, v.length()), v.length());
-				return "<font color='#00BFFF'>" + first + "</font><small>" + second + "</small>";
+				return UIUtils.toHtmlColor(first, color) + "<small>" + second + "</small>";
 			case AppSettings.PRECISION_SIMPLE:
 			default:
-				return "<font color='#00BFFF'>" + NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_SHORT) + "</font>";
+				return UIUtils.toHtmlColor(NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_SHORT), color);
 			}
 		}
 

@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.R;
 
@@ -90,6 +91,10 @@ public final class UIUtils {
 						return false;
 					}
 				}).create();
+	}
+
+	public static String toHtmlColor(String text, String color) {
+		return "<font color=\"" + color + "\">" + text + "</font>";
 	}
 
 }

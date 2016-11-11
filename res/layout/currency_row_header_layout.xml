@@ -11,8 +11,7 @@
         android:layout_marginLeft="8sp"
         android:layout_toRightOf="@id/icon"
         android:layout_weight="2"
-        android:text="@string/buy"
-        android:textAllCaps="true" />
+        android:text="@string/buy" />
 
     <TextView
         android:id="@+id/header_src_1"

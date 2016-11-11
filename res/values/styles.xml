@@ -39,7 +39,6 @@
 
     <style name="FontListHeaderRate" parent="FontListHeader">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#00BFFF</item>
     </style>
 
     <style name="FontListCode" parent="@android:style/TextAppearance">

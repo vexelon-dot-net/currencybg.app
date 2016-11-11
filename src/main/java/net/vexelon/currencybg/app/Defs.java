@@ -31,6 +31,8 @@ public class Defs {
 	public final static int SCALE_CALCULATIONS = 10;
 	public final static String BGN_CODE = "BGN";
 	public static final String LONG_DASH = "\u2014";
+	public static final String COLOR_NAVY_BLUE = "#00BFFF";
+	public static final String COLOR_DARK_ORANGE = "#FF7F50";
 
 	/**
 	 * How often to wake-up the Android service

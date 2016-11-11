@@ -29,6 +29,7 @@ import com.google.common.collect.Maps;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,6 +52,7 @@ import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.remote.APISource;
 import net.vexelon.currencybg.app.remote.SourceException;
+import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
@@ -240,11 +242,13 @@ public class CurrenciesFragment extends AbstractFragment {
 	private void updateCurrenciesRateTitle(final int rateBy) {
 		switch (rateBy) {
 		case AppSettings.RATE_SELL:
-			tvCurrenciesRate.setText(R.string.sell);
+			tvCurrenciesRate.setText(
+					Html.fromHtml(UIUtils.toHtmlColor(getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
 			break;
 		case AppSettings.RATE_BUY:
 		default:
-			tvCurrenciesRate.setText(R.string.buy);
+			tvCurrenciesRate.setText(
+					Html.fromHtml(UIUtils.toHtmlColor(getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
 			break;
 		}
 	}
