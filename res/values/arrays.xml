@@ -5,6 +5,11 @@
         <item>@string/source_polana</item>
         <item>@string/source_fib</item>
     </string-array>
+    <integer-array name="currency_sources_ids">
+        <item>200</item>
+        <item>300</item>
+        <item>100</item>
+    </integer-array>
     <string-array name="currency_codes">
         <item>AED</item>
         <item>ALL</item>

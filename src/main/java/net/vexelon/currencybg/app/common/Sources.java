@@ -2,7 +2,9 @@ package net.vexelon.currencybg.app.common;
 
 /**
  * Available currency sources
- * 
+ * <p>
+ * Should any values be updated here, make sure to also update the
+ * {@code currency_sources_ids} array in {@code arrays.xml}.
  */
 public enum Sources {
 
@@ -10,6 +12,7 @@ public enum Sources {
 	 * @deprecated
 	 */
 	BNB(1),
+
 	FIB(100),
 	TAVEX(200),
 	POLANA1(300);

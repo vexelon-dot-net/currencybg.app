@@ -33,6 +33,7 @@ public class Defs {
 	public static final String LONG_DASH = "\u2014";
 	public static final String COLOR_NAVY_BLUE = "#00BFFF";
 	public static final String COLOR_DARK_ORANGE = "#FF7F50";
+	public static final int MAX_SOURCES_TO_SHOW = 3;
 
 	/**
 	 * How often to wake-up the Android service

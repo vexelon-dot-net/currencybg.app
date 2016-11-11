@@ -20,12 +20,16 @@ package net.vexelon.currencybg.app;
 import java.math.BigDecimal;
 import java.util.Set;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
 import net.vexelon.currencybg.app.common.CurrencyLocales;
+import net.vexelon.currencybg.app.common.Sources;
 
 public class AppSettings {
 
@@ -34,10 +38,6 @@ public class AppSettings {
 
 	public static final int SORTBY_NAME = 0;
 	public static final int SORTBY_CODE = 1;
-
-	public static final int FILTERBY_ALL = 0;
-	public static final int FILTERBY_NONFIXED = 1;
-	public static final int FILTERBY_FIXED = 2;
 
 	public static final int PRECISION_SIMPLE = 0;
 	public static final int PRECISION_ADVANCED = 1;
@@ -52,7 +52,7 @@ public class AppSettings {
 
 	/**
 	 * Gets what type of rate to show on currencies list fragment
-	 * 
+	 *
 	 * @return
 	 */
 	public int getCurrenciesRateSelection() {
@@ -65,7 +65,7 @@ public class AppSettings {
 
 	/**
 	 * Gets currencies sorting
-	 * 
+	 *
 	 * @return
 	 *         <ul>
 	 *         <li>-1 None (Default)
@@ -81,25 +81,37 @@ public class AppSettings {
 	}
 
 	/**
-	 * Gets currencies filtering
-	 * 
-	 * @return
-	 *         <ul>
-	 *         <li>0 All
-	 *         <li>1 Non-Fixed (Default)
-	 *         <li>2 Fixed
+	 * Gets currencies filtering by sources
+	 *
+	 * @return Sources
 	 */
-	public int getCurrenciesFilterSelection() {
-		return generalPrefs.getInt("pref_currencies_filterby", FILTERBY_NONFIXED);
+	public Set<Sources> getCurrenciesFilter() {
+		Set<String> values = Sets.newHashSet();
+
+		values = generalPrefs.getStringSet("pref_currencies_filter_sources", values);
+		if (values.isEmpty()) {
+			// default
+			return Sets.newHashSet(Sources.TAVEX, Sources.POLANA1, Sources.FIB);
+		}
+
+		Set<Sources> result = Sets.newHashSet();
+		for (String value : values) {
+			result.add(Sources.valueOf(Integer.parseInt(value)));
+		}
+		return result;
 	}
 
-	public void setCurrenciesFilterSelection(int value) {
-		generalPrefs.edit().putInt("pref_currencies_filterby", value).apply();
+	public void setCurrenciesFilter(Set<Sources> sources) {
+		Set<String> values = Sets.newHashSet();
+		for (Sources source : sources) {
+			values.add(Integer.toString(source.getID()));
+		}
+		generalPrefs.edit().putStringSet("pref_currencies_filter_sources", values).apply();
 	}
 
 	/**
 	 * Gets currencies language selection
-	 * 
+	 *
 	 * @return {@link CurrencyLocales}
 	 */
 	public CurrencyLocales getCurrenciesLanguage() {
@@ -117,7 +129,6 @@ public class AppSettings {
 	}
 
 	/**
-	 *
 	 * @return
 	 *         <ul>
 	 *         <li>0 - PRECISION_SIMPLE</li>
@@ -130,7 +141,6 @@ public class AppSettings {
 	}
 
 	/**
-	 * 
 	 * @param currencyCodes
 	 *            List of currency codes (case-sensitive)
 	 */
@@ -140,7 +150,7 @@ public class AppSettings {
 
 	/**
 	 * Gets saved target convert currencies
-	 * 
+	 *
 	 * @return
 	 */
 	public Set<String> getConvertCurrencies() {
@@ -163,7 +173,7 @@ public class AppSettings {
 
 	/**
 	 * Sets the last set decimal value for currency convertion
-	 * 
+	 *
 	 * @param value
 	 *            A {@link BigDecimal} converted to {@link String}.
 	 */
@@ -177,7 +187,7 @@ public class AppSettings {
 
 	/**
 	 * Sets the last selected currency (code) to convert from
-	 * 
+	 *
 	 * @param currencyCode
 	 */
 	public void setLastConvertCurrencySel(String currencyCode) {

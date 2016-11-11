@@ -114,7 +114,7 @@ public class AbstractFragment extends Fragment {
 	 * @param currencies
 	 * @return
 	 */
-	protected List<CurrencyData> getFilteredCurrencies(List<CurrencyData> currencies) {
+	protected List<CurrencyData> getVisibleCurrencies(List<CurrencyData> currencies) {
 		Iterator<CurrencyData> iterator = currencies.iterator();
 		while (iterator.hasNext()) {
 			CurrencyData c = iterator.next();

@@ -13,6 +13,7 @@
     <string name="error_download_rates">Грешка при сваляне на валути.</string>
     <string name="error_parse_rates">Грешка при четене на файла с обменните курсове!</string>
     <string name="error_db_load_rates">Грешка при четене на данни!</string>
+    <string name="error_filter_selection">Трябва да бъде избран поне един източник!</string>
     <string name="about_version">Версия</string>
     <string name="about_rates_provider">Обменни курсове</string>
     <string name="about_rates_provider_text">От web сайта на Българска Национална Банка http://www.bnb.bg</string>
@@ -51,15 +52,7 @@
     <string name="source_polana">ПОЛАНА1</string>
     <string name="source_fib">ФИБ</string>
     <string name="action_filter">Филтър</string>
-    <string name="action_filter_title">Показване на</string>
-    <string name="action_filter_fixed">Фиксирани курсове</string>
-    <string name="action_filter_nonfixed">Нефиксирани курсове</string>
-    <string name="action_filter_all">Всички курсове</string>
-    <string-array name="action_filter_values">
-        <item>Всички курсове</item>
-        <item>Само нефиксирани курсове</item>
-        <item>Само фиксирани курсове</item>
-    </string-array>
+    <string name="action_filter_title">Показване курсове от</string>
     <string name="action_info">Инфо</string>
     <string name="action_settings">Настройки</string>
     <string name="prefs_title">Currency BG Настройки</string>

@@ -20,11 +20,14 @@ package net.vexelon.currencybg.app.ui.fragments;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.Interner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -57,6 +60,7 @@ import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
+import net.vexelon.currencybg.app.utils.StringUtils;
 
 public class CurrenciesFragment extends AbstractFragment {
 
@@ -183,28 +187,68 @@ public class CurrenciesFragment extends AbstractFragment {
 	private MaterialDialog newFilterMenu() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 		return new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
-				.items(R.array.action_filter_values).itemsCallbackSingleChoice(
-						appSettings.getCurrenciesFilterSelection(), new MaterialDialog.ListCallbackSingleChoice() {
+				.items(R.array.currency_sources)
+				.itemsCallbackMultiChoice(toSourcesFilterIndices(appSettings.getCurrenciesFilter()),
+						new MaterialDialog.ListCallbackMultiChoice() {
 							@Override
-							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-								appSettings.setCurrenciesFilterSelection(which);
-								setCurrenciesFilter(which);
-								// notify user
-								switch (appSettings.getCurrenciesFilterSelection()) {
-								case AppSettings.FILTERBY_ALL:
-									showSnackbar(R.string.action_filter_all);
-									break;
-								case AppSettings.FILTERBY_NONFIXED:
-									showSnackbar(R.string.action_filter_nonfixed);
-									break;
-								case AppSettings.FILTERBY_FIXED:
-									showSnackbar(R.string.action_filter_fixed);
-									break;
+							public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+								if (which.length == 0) {
+									showSnackbar(R.string.error_filter_selection, Defs.TOAST_ERR_TIME);
+									return false;
 								}
+
+								Set<Sources> sources = getSourcesFilterIndices(which);
+								appSettings.setCurrenciesFilter(sources);
+								setCurrenciesSourcesFilter(sources);
+
+								// notify user
+								String selected = "";
+								for (int i : which) {
+									if (!selected.isEmpty()) {
+										selected += ", ";
+									}
+									selected += getResources().getStringArray(R.array.currency_sources)[i];
+								}
+								showSnackbar(getResources().getString(R.string.action_filter_desc, selected));
+
 								return true;
 							}
 						})
-				.build();
+				.positiveText(R.string.text_ok).build();
+	}
+
+	/**
+	 * Converts checkbox sources selection to a {@link Sources} set.
+	 *
+	 * @param indices
+	 *            {@code 0..n}
+	 * @return
+	 */
+	private Set<Sources> getSourcesFilterIndices(Integer[] indices) {
+		Set<Sources> result = Sets.newHashSet();
+		int[] sources = getResources().getIntArray(R.array.currency_sources_ids);
+
+		for (int i : indices) {
+			result.add(Sources.valueOf(sources[i]));
+		}
+
+		return result;
+	}
+
+	private Integer[] toSourcesFilterIndices(Set<Sources> sources) {
+		int[] sourcesIdx = getResources().getIntArray(R.array.currency_sources_ids);
+		Set<Integer> result = Sets.newHashSet();
+
+		for (Sources source : sources) {
+			for (int i = 0; i < sourcesIdx.length; i++) {
+				if (sourcesIdx[i] == source.getID()) {
+					result.add(i);
+					break;
+				}
+			}
+		}
+
+		return result.toArray(new Integer[0]);
 	}
 
 	/**
@@ -217,13 +261,12 @@ public class CurrenciesFragment extends AbstractFragment {
 		AppSettings appSettings = new AppSettings(activity);
 
 		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout,
-				toCurrencyRows(getFilteredCurrencies(currencies)), appSettings.getCurrenciesPrecision(),
-				appSettings.getCurrenciesRateSelection());
+				toCurrencyRows(getVisibleCurrencies(currencies)), appSettings.getCurrenciesPrecision(),
+				appSettings.getCurrenciesRateSelection(), appSettings.getCurrenciesFilter());
 		lvCurrencies.setAdapter(currencyListAdapter);
 
 		updateCurrenciesRateTitle(appSettings.getCurrenciesRateSelection());
 		setCurrenciesSort(appSettings.getCurrenciesSortSelection());
-		// setCurrenciesFilter(appSettings.getCurrenciesFilterSelection());
 
 		Date lastUpdateDate = Iterables.getFirst(currencies, new CurrencyData()).getDate();
 		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, lastUpdateDate));
@@ -255,7 +298,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	/**
 	 * Shows buy/sell currencies rate info
-	 * 
+	 *
 	 * @param rateBy
 	 */
 	private void setCurrenciesRate(final int rateBy) {
@@ -265,24 +308,27 @@ public class CurrenciesFragment extends AbstractFragment {
 	}
 
 	/**
-	 * Filter currencies by rate type
+	 * Filter currencies by given sources
 	 *
-	 * @param filterBy
+	 * @param sources
 	 */
-	private void setCurrenciesFilter(final int filterBy) {
-		currencyListAdapter.getFilter().filter(Integer.toString(filterBy), new Filter.FilterListener() {
-			@Override
-			public void onFilterComplete(int count) {
-				if (count > 0) {
-					// adapter.sortBy(new
-					// AppSettings(getActivity()).getCurrenciesSortSelection(),
-					// sortByAscending);
-					currencyListAdapter.notifyDataSetChanged();
-				} else {
-					currencyListAdapter.notifyDataSetInvalidated();
-				}
-			}
-		});
+	private void setCurrenciesSourcesFilter(Set<Sources> sources) {
+		currencyListAdapter.setFilterBy(sources);
+		currencyListAdapter.notifyDataSetChanged();
+		// currencyListAdapter.getFilter().filter(Integer.toString(filterBy),
+		// new Filter.FilterListener() {
+		// @Override
+		// public void onFilterComplete(int count) {
+		// if (count > 0) {
+		// // adapter.sortBy(new
+		// // AppSettings(getActivity()).getCurrenciesSortSelection(),
+		// // sortByAscending);
+		// currencyListAdapter.notifyDataSetChanged();
+		// } else {
+		// currencyListAdapter.notifyDataSetInvalidated();
+		// }
+		// }
+		// });
 	}
 
 	/**
@@ -321,7 +367,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	/**
 	 * Converts list of currencies from various sources to a table with rows &
 	 * columns
-	 * 
+	 *
 	 * @param currencies
 	 * @return
 	 */
