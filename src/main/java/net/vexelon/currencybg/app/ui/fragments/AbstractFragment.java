@@ -126,28 +126,38 @@ public class AbstractFragment extends Fragment {
 		return currencies;
 	}
 
-	protected void showSnackbar(String text, int duration) {
+	protected void showSnackbar(String text, int duration, boolean isError) {
 		Snackbar snackbar = Snackbar.make(rootView, text, duration);
 		View v = snackbar.getView();
-		v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+		v.setBackgroundColor(
+				ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
 		snackbar.show();
 	}
 
-	protected void showSnackbar(String text) {
-		showSnackbar(text, Snackbar.LENGTH_SHORT);
+	protected void showSnackbar(String text, boolean isError) {
+		showSnackbar(text, Snackbar.LENGTH_SHORT, isError);
 	}
 
-	protected void showSnackbar(int resId, int duration) {
+	protected void showSnackbar(String text) {
+		showSnackbar(text, Snackbar.LENGTH_SHORT, false);
+	}
+
+	protected void showSnackbar(int resId, int duration, boolean isError) {
 		Snackbar snackbar = Snackbar.make(rootView, resId, duration);
 		View v = snackbar.getView();
 		// TextView textView = (TextView)
 		// v.findViewById(android.support.design.R.id.snackbar_text);
 		// textView.setTextColor(getResources().getColor(R.color.colorAccent));
-		v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+		v.setBackgroundColor(
+				ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
 		snackbar.show();
 	}
 
+	protected void showSnackbar(int resId, boolean isError) {
+		showSnackbar(resId, Snackbar.LENGTH_SHORT, isError);
+	}
+
 	protected void showSnackbar(int resId) {
-		showSnackbar(resId, Snackbar.LENGTH_SHORT);
+		showSnackbar(resId, Snackbar.LENGTH_SHORT, false);
 	}
 }

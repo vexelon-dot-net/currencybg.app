@@ -193,7 +193,7 @@ public class CurrenciesFragment extends AbstractFragment {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 								if (which.length == 0) {
-									showSnackbar(R.string.error_filter_selection, Defs.TOAST_ERR_TIME);
+									showSnackbar(R.string.error_filter_selection, Defs.TOAST_ERR_TIME, true);
 									return false;
 								}
 
@@ -352,7 +352,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				}
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-				showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
+				showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME, true);
 			} finally {
 				IOUtils.closeQuitely(source);
 			}
@@ -422,7 +422,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-				showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
+				showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME, true);
 			} finally {
 				IOUtils.closeQuitely(source);
 			}
@@ -438,7 +438,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				updateCurrenciesListView(result);
 			} else {
 				tvLastUpdate.setText(lastUpdateLastValue);
-				showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME);
+				showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME, true);
 			}
 		}
 

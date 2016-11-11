@@ -84,8 +84,8 @@ public class ConvertFragment extends AbstractFragment {
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser) {
 			/*
-			 * Back from Currencies fragment view, so we reload all
-			 * currencies. The user might have updated them.
+			 * Back from Currencies fragment view, so we reload all currencies.
+			 * The user might have updated them.
 			 */
 			refreshUIData();
 		}
@@ -268,23 +268,24 @@ public class ConvertFragment extends AbstractFragment {
 		try {
 			source = new SQLiteDataSource();
 			source.connect(getActivity());
-			//TODO - temporary commented
-//			currenciesList = source.getLastRates(getSelectedCurrenciesLocale());
-//			currenciesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
+			// TODO - temporary commented
+			// currenciesList =
+			// source.getLastRates(getSelectedCurrenciesLocale());
+			// currenciesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
 		} catch (DataSourceException e) {
-			showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
+			showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME, true);
 			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
 		} finally {
 			IOUtils.closeQuitely(source);
 		}
 		addBGNToCurrencyList(currenciesList);
 		// sort by name
-//		Collections.sort(currenciesList, new Comparator<CurrencyData>() {
-//			@Override
-//			public int compare(CurrencyData lhs, CurrencyData rhs) {
-//				return lhs.getName().compareToIgnoreCase(rhs.getName());
-//			}
-//		});
+		// Collections.sort(currenciesList, new Comparator<CurrencyData>() {
+		// @Override
+		// public int compare(CurrencyData lhs, CurrencyData rhs) {
+		// return lhs.getName().compareToIgnoreCase(rhs.getName());
+		// }
+		// });
 		return currenciesList;
 	}
 
@@ -295,21 +296,21 @@ public class ConvertFragment extends AbstractFragment {
 	 */
 	private void addBGNToCurrencyList(List<CurrencyData> currencyList) {
 		CurrencyData currency = new CurrencyData();
-//		if (getSelectedCurrenciesLocale() == CurrencyLocales.BG) {
-//			currency.setName("Български лев");
-//		} else {
-//			currency.setName("Bulgarian Lev");
-//		}
-//		currency.setGold(1);
+		// if (getSelectedCurrenciesLocale() == CurrencyLocales.BG) {
+		// currency.setName("Български лев");
+		// } else {
+		// currency.setName("Bulgarian Lev");
+		// }
+		// currency.setGold(1);
 		currency.setCode("BGN");
 		currency.setRatio(1);
 		currency.setBuy("1");
 		currency.setSell("1");
-//		currency.setReverseRate("1");
-//		currency.setRate("1");
+		// currency.setReverseRate("1");
+		// currency.setRate("1");
 		currency.setDate(new Date());
-//		currency.setCurrDate(new Date());
-		/*currency.setfStar(0);*/
+		// currency.setCurrDate(new Date());
+		/* currency.setfStar(0); */
 		currencyList.add(currency);
 	}
 

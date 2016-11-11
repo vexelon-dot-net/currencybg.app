@@ -37,10 +37,6 @@
     <string name="action_currency_removed">Removed: %1$s</string>
     <string name="action_rate">Rates</string>
     <string name="action_rate_title">Show rates for</string>
-    <string-array name="action_rate_values">
-        <item>@string/buy</item>
-        <item>@string/sell</item>
-    </string-array>
     <string name="action_rate_buy_desc">Buy rates</string>
     <string name="action_rate_sell_desc">Sell rates</string>
     <string name="action_sort">Sort</string>

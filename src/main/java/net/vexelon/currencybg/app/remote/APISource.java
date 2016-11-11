@@ -23,6 +23,8 @@ import java.util.Map;
 public class APISource implements Source {
 
 	private static final String SERVER_ADDRESS = "http://currencybg-tsvetoslav.rhcloud.com/currencybg.server/api/currencies/";
+	private static final String HEADER = "APIKey";
+	private static final String TOKEN = "CurrencyBgUser";
 
 	private OkHttpClient client = new OkHttpClient();
 	private Gson gson = new GsonBuilder().setDateFormat(Defs.DATEFORMAT_ISO_8601).create();
@@ -114,9 +116,13 @@ public class APISource implements Source {
 	}
 
 	String downloadRates(String url) throws IOException {
-		Request request = new Request.Builder().url(url).header("APIKey", "CurrencyBgUser").build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
+		try {
+			Request request = new Request.Builder().url(url).header(HEADER, TOKEN).build();
+			Response response = client.newCall(request).execute();
+			return response.body().string();
+		} catch (RuntimeException e) {
+			throw new IOException("API error!", e);
+		}
 	}
 
 }
