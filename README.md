@@ -3,7 +3,7 @@ Currency BG
 
 [![Build Status](https://travis-ci.org/vexelon-dot-net/currencybg.app.svg?branch=master)](https://travis-ci.org/vexelon-dot-net/currencybg.app)
 
-<a href='https://play.google.com/store/apps/details?id=net.vexelon.currencybg.app&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='undefined' src='https://play.google.com/intl/en_us/badges/images/generic/bg_badge_web_generic.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=net.vexelon.currencybg.app&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='undefined' src='https://play.google.com/intl/en_us/badges/images/generic/bg_badge_web_generic.png' width="180px"/></a>
 
 **Currency BG** is an Android application that delivers up-to-date currency exchange rates for Bulgarian Lev (BGN).
 
