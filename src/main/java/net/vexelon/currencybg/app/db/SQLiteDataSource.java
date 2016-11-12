@@ -82,7 +82,7 @@ public class SQLiteDataSource implements DataSource {
 			values.put(Defs.COLUMN_BUY, rate.getBuy());
 			values.put(Defs.COLUMN_SELL, rate.getSell());
 			values.put(Defs.COLUMN_CURR_DATE,
-					DateTimeUtils.parseDateToString(rate.getDate(), Defs.DATEFORMAT_ISO_8601));
+					DateTimeUtils.parseDateToString(rate.getDate(), Defs.DATEFORMAT_ISO8601));
 			values.put(Defs.COLUMN_SOURCE, rate.getSource());
 
 			database.insert(Defs.TABLE_CURRENCY, null, values);

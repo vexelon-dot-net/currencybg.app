@@ -12,7 +12,8 @@
     <string name="last_update_updating_text">Сваляне ...</string>
     <string name="error_download_rates">Грешка при сваляне на валути.</string>
     <string name="error_parse_rates">Грешка при четене на файла с обменните курсове!</string>
-    <string name="error_db_load_rates">Грешка при четене на данни!</string>
+    <string name="error_db_load">Грешка при четене на данни!</string>
+    <string name="error_db_save">Грешка при запис на данни!</string>
     <string name="error_filter_selection">Трябва да бъде избран поне един източник!</string>
     <string name="about_version">Версия</string>
     <string name="about_rates_provider">Обменни курсове</string>

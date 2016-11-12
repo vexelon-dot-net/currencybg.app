@@ -36,25 +36,23 @@ import org.joda.time.format.ISODateTimeFormat;
 
 public class DateTimeUtils {
 
-	public static final long MILLIS_PER_DAY = (24 * 60 * 60 * 1000);
+	public static final long MS_PER_DAY = (24 * 60 * 60 * 1000);
 
 	protected static final Calendar CALENDAR = Calendar.getInstance();
 	protected static DateFormat DT_FORMAT = null;
 	protected static DateFormat DATE_FORMAT = null;
 
-
-	//Test Joda time methods
-	public static void main(String[] args){
-		DateFormat dateFormat = new SimpleDateFormat(Defs.DATEFORMAT_ISO_8601);
+	// Test Joda time methods
+	public static void main(String[] args) {
+		DateFormat dateFormat = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
 		Date date = new Date();
-		System.out.println("Currect Time: " + dateFormat.format(date)); //2014/08/06 15:59:48
+		System.out.println("Currect Time: " + dateFormat.format(date)); // 2014/08/06
+																		// 15:59:48
 		System.out.println();
 
-
-		SimpleDateFormat sdfAmerica = new SimpleDateFormat(Defs.DATEFORMAT_ISO_8601);
+		SimpleDateFormat sdfAmerica = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
 		TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
 		sdfAmerica.setTimeZone(tzInAmerica);
-
 
 		String sDateInAmerica = sdfAmerica.format(date);
 		System.out.println("America String: " + sDateInAmerica);
@@ -65,7 +63,7 @@ public class DateTimeUtils {
 		try {
 			Date dateInAmerica = sdfAmerica.parse(sDateInAmerica);
 			System.out.println("America Date: " + sDateInAmerica);
-			String stringOject = parseDateToString(dateInAmerica,Defs.DATEFORMAT_ISO_8601);
+			String stringOject = parseDateToString(dateInAmerica, Defs.DATEFORMAT_ISO8601);
 			System.out.println("Bulgaria String: " + stringOject);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -73,14 +71,13 @@ public class DateTimeUtils {
 
 	}
 
-
 	/**
 	 *
 	 * @param dateTime
 	 * @param dateFormater
-     * @return
-     */
-	public static String parseDateToString(Date dateTime, String dateFormater){
+	 * @return
+	 */
+	public static String parseDateToString(Date dateTime, String dateFormater) {
 		DateTime jodaTime = new DateTime(dateTime);
 		DateTimeFormatter jodaFormater = DateTimeFormat.forPattern(dateFormater);
 		return jodaFormater.print(jodaTime);
@@ -89,13 +86,13 @@ public class DateTimeUtils {
 	/**
 	 *
 	 * @param dateTime
-     * @return
-     */
-	public static Date parseStringToDate(String dateTime){
+	 * @return
+	 */
+	public static Date parseStringToDate(String dateTime) {
 		DateTimeFormatter parse = ISODateTimeFormat.dateTimeParser();
 		DateTime dateTimeHere = parse.parseDateTime(dateTime);
 		Date dateNew = dateTimeHere.toDate();
-		return  dateNew;
+		return dateNew;
 	}
 
 	/**
@@ -120,8 +117,8 @@ public class DateTimeUtils {
 
 	private static void initDateFormat(Context context) {
 		if (DT_FORMAT == null) {
-			DT_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, context.getResources()
-					.getConfiguration().locale);
+			DT_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT,
+					context.getResources().getConfiguration().locale);
 		}
 		if (DATE_FORMAT == null) {
 			DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM,
@@ -147,7 +144,7 @@ public class DateTimeUtils {
 
 	public static long getTimeFromDate(Date date) {
 		Date now = Calendar.getInstance().getTime();
-		long timePortion = now.getTime() % MILLIS_PER_DAY;
+		long timePortion = now.getTime() % MS_PER_DAY;
 
 		return timePortion;
 	}

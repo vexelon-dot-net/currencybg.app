@@ -19,9 +19,8 @@ package net.vexelon.currencybg.app;
 
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.TimeZone;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 
 import android.content.Context;
@@ -30,6 +29,10 @@ import android.preference.PreferenceManager;
 
 import net.vexelon.currencybg.app.common.CurrencyLocales;
 import net.vexelon.currencybg.app.common.Sources;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
 
 public class AppSettings {
 
@@ -48,6 +51,31 @@ public class AppSettings {
 	public AppSettings(Context context) {
 		this.context = context;
 		this.generalPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+	}
+
+	/**
+	 * 
+	 * @return Date and time of the last update in the Europe/Sofia time zone.
+	 *         If this is not available, it returns the date time from 00:00:00
+	 *         (beginning of the current day) in Europe/Sofia.
+	 */
+	public DateTime getLastUpdateDate() {
+		String value = generalPrefs.getString("pref_currencies_lastupdate", "");
+		if (value.isEmpty()) {
+			return DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA))).withTime(0, 0,
+					0, 0);
+		}
+
+		return DateTime.parse(value);
+	}
+
+	/**
+	 * Saves the last update time as ISO8601 formatted text
+	 * 
+	 * @param dateTime
+	 */
+	public void setLastUpdateDate(DateTime dateTime) {
+		generalPrefs.edit().putString("pref_currencies_lastupdate", dateTime.toString()).apply();
 	}
 
 	/**

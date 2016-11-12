@@ -273,7 +273,7 @@ public class ConvertFragment extends AbstractFragment {
 			// source.getLastRates(getSelectedCurrenciesLocale());
 			// currenciesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
 		} catch (DataSourceException e) {
-			showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME, true);
+			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
 			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
 		} finally {
 			IOUtils.closeQuitely(source);

@@ -10,12 +10,10 @@ import com.squareup.okhttp.Response;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.common.CurrencyLocales;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Tsvetoslav on 27.8.2016 г..
@@ -27,7 +25,7 @@ public class APISource implements Source {
 	private static final String TOKEN = "CurrencyBgUser";
 
 	private OkHttpClient client = new OkHttpClient();
-	private Gson gson = new GsonBuilder().setDateFormat(Defs.DATEFORMAT_ISO_8601).create();
+	private Gson gson = new GsonBuilder().setDateFormat(Defs.DATEFORMAT_ISO8601).create();
 	private Type type = new TypeToken<List<CurrencyData>>() {
 	}.getType();
 

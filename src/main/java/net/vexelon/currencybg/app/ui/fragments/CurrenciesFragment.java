@@ -21,9 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.common.collect.Interner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -40,7 +40,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -60,7 +59,10 @@ import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
-import net.vexelon.currencybg.app.utils.StringUtils;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
 
 public class CurrenciesFragment extends AbstractFragment {
 
@@ -268,8 +270,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		updateCurrenciesRateTitle(appSettings.getCurrenciesRateSelection());
 		setCurrenciesSort(appSettings.getCurrenciesSortSelection());
 
-		Date lastUpdateDate = Iterables.getFirst(currencies, new CurrencyData()).getDate();
-		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, lastUpdateDate));
+		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, appSettings.getLastUpdateDate().toDate()));
 	}
 
 	/**
@@ -352,7 +353,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				}
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-				showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME, true);
+				showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
 			} finally {
 				IOUtils.closeQuitely(source);
 			}
@@ -390,6 +391,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	private class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
 		private Activity activity;
+		private DateTime lastUpdate;
 		private boolean updateOK = false;
 		private boolean downloadFixed = false;
 
@@ -399,30 +401,36 @@ public class CurrenciesFragment extends AbstractFragment {
 
 		@Override
 		protected void onPreExecute() {
-			// do nothing
+			lastUpdate = new AppSettings(activity).getLastUpdateDate();
 		}
 
 		@Override
 		protected List<CurrencyData> doInBackground(Void... params) {
-			Log.v(Defs.LOG_TAG, "Loading rates from remote source...");
+			Log.v(Defs.LOG_TAG, "Downloading rates from remote source...");
 
 			DataSource source = null;
 			List<CurrencyData> currencies = Lists.newArrayList();
 
 			try {
-				// TODO change date
-				currencies = new APISource().getAllCurrentRatesAfter("2016-11-09T01:00:06+03:00");
+				String iso8601Time = lastUpdate.toString();
+				Log.d(Defs.LOG_TAG, "Downloading all rates since " + iso8601Time + " onwards...");
+
+				// format, e.g., "2016-11-09T01:00:06+03:00"
+				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
 
 				source = new SQLiteDataSource();
 				source.connect(activity);
 				source.addRates(currencies);
+
+				// reload merged currencies
+				currencies = source.getLastRates();
 
 				updateOK = true;
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-				showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME, true);
+				showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_TIME, true);
 			} finally {
 				IOUtils.closeQuitely(source);
 			}
@@ -436,10 +444,18 @@ public class CurrenciesFragment extends AbstractFragment {
 
 			if (updateOK && !result.isEmpty()) {
 				updateCurrenciesListView(result);
+
+				// bump last update
+				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
+				Log.d(Defs.LOG_TAG, "Last rate download on " + lastUpdate.toString());
+				new AppSettings(activity).setLastUpdateDate(lastUpdate);
+
+				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
 			} else {
-				tvLastUpdate.setText(lastUpdateLastValue);
 				showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME, true);
 			}
+
+			tvLastUpdate.setText(lastUpdateLastValue);
 		}
 
 	}
