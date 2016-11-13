@@ -87,7 +87,7 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		// set texts
 		CurrencyListRow row = items.get(position);
 		if (row != null) {
-			// country ID icon
+			// set country flag icon
 			ImageView icon = (ImageView) v.findViewById(R.id.icon);
 			int imageId = UIFlags.getResourceFromCode(row.getCode());
 			if (imageId != -1) {
