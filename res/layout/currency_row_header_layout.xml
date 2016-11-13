@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="4dp">
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:padding="4dp">
 
     <TextView
         android:id="@+id/header_currencies_rate"
@@ -11,7 +11,7 @@
         android:layout_marginLeft="8sp"
         android:layout_toRightOf="@id/icon"
         android:layout_weight="2"
-        android:text="@string/buy" />
+        android:text="@string/buy"/>
 
     <TextView
         android:id="@+id/header_src_1"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.9"
         android:gravity="right"
-        android:text="@string/source_tavex" />
+        android:text="@string/source_tavex"/>
 
     <TextView
         android:id="@+id/header_src_2"
@@ -31,7 +31,7 @@
         android:layout_weight="1.2"
         android:gravity="right"
         android:paddingLeft="6sp"
-        android:text="@string/source_polana" />
+        android:text="@string/source_polana"/>
 
     <TextView
         android:id="@+id/header_src_3"
@@ -42,6 +42,6 @@
         android:layout_weight="1.0"
         android:gravity="right"
         android:paddingLeft="6sp"
-        android:text="@string/source_fib" />
+        android:text="@string/source_fib"/>
 
 </LinearLayout>

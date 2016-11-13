@@ -32,7 +32,7 @@ public class Defs {
 	public final static String BGN_CODE = "BGN";
 	public static final String LONG_DASH = "\u2014";
 	public static final String COLOR_NAVY_BLUE = "#00BFFF";
-	public static final String COLOR_DARK_ORANGE = "#FF7F50";
+	public static final String COLOR_DARK_ORANGE = "#FFB400";
 	public static final int MAX_SOURCES_TO_SHOW = 3;
 
 	/**

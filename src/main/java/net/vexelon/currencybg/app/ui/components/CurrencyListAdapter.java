@@ -49,196 +49,196 @@ import net.vexelon.currencybg.app.utils.StringUtils;
 
 public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 
-    private final List<CurrencyListRow> itemsImmutable;
-    private List<CurrencyListRow> items;
-    private int precisionMode = AppSettings.PRECISION_SIMPLE;
-    private int rateBy = AppSettings.RATE_BUY;
-    private Set<Sources> sourcesFilter = Sets.newHashSet();
-    // private CurrencyFilter filter = null;
+	private final List<CurrencyListRow> itemsImmutable;
+	private List<CurrencyListRow> items;
+	private int precisionMode = AppSettings.PRECISION_SIMPLE;
+	private int rateBy = AppSettings.RATE_BUY;
+	private Set<Sources> sourcesFilter = Sets.newHashSet();
+	// private CurrencyFilter filter = null;
 
-    /**
-     * @param context
-     * @param textViewResId
-     * @param items         Currency rows
-     * @param precisionMode
-     * @param rateBy        Show buy or sell values
-     * @param sources       Sources to show currencies for
-     */
-    public CurrencyListAdapter(Context context, int textViewResId, List<CurrencyListRow> items, int precisionMode,
-                               int rateBy, Set<Sources> sources) {
-        super(context, textViewResId, items);
-        this.itemsImmutable = Lists.newArrayList(items.iterator());
-        this.items = items;
-        this.precisionMode = precisionMode;
-        this.rateBy = rateBy;
-        this.sourcesFilter = sources;
-    }
+	/**
+	 * @param context
+	 * @param textViewResId
+	 * @param items
+	 *            Currency rows
+	 * @param precisionMode
+	 * @param rateBy
+	 *            Show buy or sell values
+	 * @param sources
+	 *            Sources to show currencies for
+	 */
+	public CurrencyListAdapter(Context context, int textViewResId, List<CurrencyListRow> items, int precisionMode,
+			int rateBy, Set<Sources> sources) {
+		super(context, textViewResId, items);
+		this.itemsImmutable = Lists.newArrayList(items.iterator());
+		this.items = items;
+		this.precisionMode = precisionMode;
+		this.rateBy = rateBy;
+		this.sourcesFilter = sources;
+	}
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
-        if (v == null) {
-            v = LayoutInflater.from(getContext()).inflate(R.layout.currency_row_layout, parent, false);
-        }
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View v = convertView;
+		if (v == null) {
+			v = LayoutInflater.from(getContext()).inflate(R.layout.currency_row_layout, parent, false);
+		}
 
-        // set texts
-        CurrencyListRow row = items.get(position);
-        if (row != null) {
-            // country ID icon
-            ImageView icon = (ImageView) v.findViewById(R.id.icon);
-            int imageId = UIFlags.getResourceFromCode(row.getCode());
-            if (imageId != -1) {
-                icon.setImageResource(imageId);
-            }
+		// set texts
+		CurrencyListRow row = items.get(position);
+		if (row != null) {
+			// country ID icon
+			ImageView icon = (ImageView) v.findViewById(R.id.icon);
+			int imageId = UIFlags.getResourceFromCode(row.getCode());
+			if (imageId != -1) {
+				icon.setImageResource(imageId);
+			}
 
-            setResText(v, R.id.name, row.getName());
-            setResText(v, R.id.code, row.getCode());
+			setResText(v, R.id.name, row.getName());
+			setResText(v, R.id.code, row.getCode());
 
-            setResText(v, R.id.rate_src_1,
-                    sourcesFilter.contains(Sources.TAVEX) ? getColumnValue(row, Sources.TAVEX) : Defs.LONG_DASH,
-                    true);
-            setResText(v, R.id.rate_src_2,
-                    sourcesFilter.contains(Sources.POLANA1) ? getColumnValue(row, Sources.POLANA1) : Defs.LONG_DASH,
-                    true);
-            setResText(v, R.id.rate_src_3,
-                    sourcesFilter.contains(Sources.FIB) ? getColumnValue(row, Sources.FIB) : Defs.LONG_DASH,
-                    true);
-        }
-        return v;
-    }
+			setResText(v, R.id.rate_src_1,
+					sourcesFilter.contains(Sources.TAVEX) ? getColumnValue(row, Sources.TAVEX) : "", true);
+			setResText(v, R.id.rate_src_2,
+					sourcesFilter.contains(Sources.POLANA1) ? getColumnValue(row, Sources.POLANA1) : "", true);
+			setResText(v, R.id.rate_src_3, sourcesFilter.contains(Sources.FIB) ? getColumnValue(row, Sources.FIB) : "",
+					true);
+		}
+		return v;
+	}
 
-    private String getColumnValue(CurrencyListRow row, Sources source) {
-        if (!row.getColumn(source).isPresent()) {
-            return Defs.LONG_DASH;
-        }
+	private String getColumnValue(CurrencyListRow row, Sources source) {
+		if (!row.getColumn(source).isPresent()) {
+			return Defs.LONG_DASH;
+		}
 
-        CurrencyData currencyData = row.getColumn(source).get();
+		CurrencyData currencyData = row.getColumn(source).get();
 
-        String value;
-        String color;
-        if (rateBy == AppSettings.RATE_SELL) {
-            value = NumberUtils.cleanValue(currencyData.getSell());
-            color = Defs.COLOR_DARK_ORANGE;
-        } else {
-            value = NumberUtils.cleanValue(currencyData.getBuy());
-            color = Defs.COLOR_NAVY_BLUE;
-        }
+		String value;
+		String color;
+		if (rateBy == AppSettings.RATE_SELL) {
+			value = NumberUtils.cleanValue(currencyData.getSell());
+			color = Defs.COLOR_DARK_ORANGE;
+		} else {
+			value = NumberUtils.cleanValue(currencyData.getBuy());
+			color = Defs.COLOR_NAVY_BLUE;
+		}
 
-        if (!value.isEmpty()) {
-            BigDecimal rate = NumberUtils.divCurrency(new BigDecimal(value), new BigDecimal(currencyData.getRatio()));
+		if (!value.isEmpty()) {
+			BigDecimal rate = NumberUtils.divCurrency(new BigDecimal(value), new BigDecimal(currencyData.getRatio()));
 
-            switch (precisionMode) {
-                case AppSettings.PRECISION_ADVANCED:
-                    String v = NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_LONG);
-                    String first = v.substring(0, Math.min(v.length() - 3, v.length()));
-                    String second = v.substring(Math.min(v.length() - 3, v.length()), v.length());
-                    return UIUtils.toHtmlColor(first, color) + "<small>" + second + "</small>";
-                case AppSettings.PRECISION_SIMPLE:
-                default:
-                    return UIUtils.toHtmlColor(NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_SHORT), color);
-            }
-        }
+			switch (precisionMode) {
+			case AppSettings.PRECISION_ADVANCED:
+				String v = NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_LONG);
+				String first = v.substring(0, Math.min(v.length() - 3, v.length()));
+				String second = v.substring(Math.min(v.length() - 3, v.length()), v.length());
+				return UIUtils.toHtmlColor(first, color) + "<small>" + second + "</small>";
+			case AppSettings.PRECISION_SIMPLE:
+			default:
+				return UIUtils.toHtmlColor(NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_SHORT), color);
+			}
+		}
 
-        return Defs.LONG_DASH;
-    }
+		return Defs.LONG_DASH;
+	}
 
-    @Override
-    public int getCount() {
-        return items.size();
-    }
+	@Override
+	public int getCount() {
+		return items.size();
+	}
 
-    // @Override
-    // public Filter getFilter() {
-    // if (filter == null) {
-    // filter = new CurrencyFilter();
-    // }
-    // return filter;
-    // return null;
-    // }
+	// @Override
+	// public Filter getFilter() {
+	// if (filter == null) {
+	// filter = new CurrencyFilter();
+	// }
+	// return filter;
+	// return null;
+	// }
 
-    public void setFilterBy(Set<Sources> sources) {
-        this.sourcesFilter = sources;
-    }
+	public void setFilterBy(Set<Sources> sources) {
+		this.sourcesFilter = sources;
+	}
 
-    public void setRateBy(final int rateBy) {
-        this.rateBy = rateBy;
-    }
+	public void setRateBy(final int rateBy) {
+		this.rateBy = rateBy;
+	}
 
-    public void setSortBy(final int sortBy, final boolean sortByAscending) {
-        Collections.sort(items, new Comparator<CurrencyListRow>() {
-            @Override
-            public int compare(CurrencyListRow lhs, CurrencyListRow rhs) {
-                switch (sortBy) {
-                    case AppSettings.SORTBY_CODE:
-                        if (sortByAscending) {
-                            return lhs.getCode().compareToIgnoreCase(rhs.getCode());
-                        }
-                        return rhs.getCode().compareToIgnoreCase(lhs.getCode());
+	public void setSortBy(final int sortBy, final boolean sortByAscending) {
+		Collections.sort(items, new Comparator<CurrencyListRow>() {
+			@Override
+			public int compare(CurrencyListRow lhs, CurrencyListRow rhs) {
+				switch (sortBy) {
+				case AppSettings.SORTBY_CODE:
+					if (sortByAscending) {
+						return lhs.getCode().compareToIgnoreCase(rhs.getCode());
+					}
+					return rhs.getCode().compareToIgnoreCase(lhs.getCode());
 
-                    case AppSettings.SORTBY_NAME:
-                    default:
-                        if (sortByAscending) {
-                            return StringUtils.emptyIfNull(lhs.getName())
-                                    .compareToIgnoreCase(StringUtils.emptyIfNull(rhs.getName()));
-                        }
-                        return StringUtils.emptyIfNull(rhs.getName())
-                                .compareToIgnoreCase(StringUtils.emptyIfNull(lhs.getName()));
-                }
-            }
-        });
-    }
+				case AppSettings.SORTBY_NAME:
+				default:
+					if (sortByAscending) {
+						return StringUtils.emptyIfNull(lhs.getName())
+								.compareToIgnoreCase(StringUtils.emptyIfNull(rhs.getName()));
+					}
+					return StringUtils.emptyIfNull(rhs.getName())
+							.compareToIgnoreCase(StringUtils.emptyIfNull(lhs.getName()));
+				}
+			}
+		});
+	}
 
-    private void setResText(View v, int id, CharSequence text, boolean isHtml) {
-        TextView textView = (TextView) v.findViewById(id);
-        textView.setText(isHtml ? Html.fromHtml(text.toString()) : text);
-    }
+	private void setResText(View v, int id, CharSequence text, boolean isHtml) {
+		TextView textView = (TextView) v.findViewById(id);
+		textView.setText(isHtml ? Html.fromHtml(text.toString()) : text);
+	}
 
-    private void setResText(View v, int id, CharSequence text) {
-        setResText(v, id, text, false);
-    }
+	private void setResText(View v, int id, CharSequence text) {
+		setResText(v, id, text, false);
+	}
 
-    // private class CurrencyFilter extends Filter {
-    //
-    // @Override
-    // protected FilterResults performFiltering(CharSequence constraint) {
-    // FilterResults results = new FilterResults();
-    // List<CurrencyData> currenciesFiltered = Lists.newArrayList();
-    // int filterBy = Integer.parseInt(constraint.toString());
-    //
-    // switch (filterBy) {
-    // case AppSettings.FILTERBY_ALL:
-    // currenciesFiltered.addAll(itemsImmutable);
-    // break;
-    // case AppSettings.FILTERBY_NONFIXED:
-    // for (CurrencyData currency : itemsImmutable) {
-    // // TODO
-    // if (/* !currency.isFixed() */true) {
-    // currenciesFiltered.add(currency);
-    // }
-    // }
-    // break;
-    // case AppSettings.FILTERBY_FIXED:
-    // for (CurrencyData currency : itemsImmutable) {
-    // // TODO
-    // if (/* currency.isFixed() */true) {
-    // currenciesFiltered.add(currency);
-    // }
-    // }
-    // break;
-    // }
-    //
-    // results.values = currenciesFiltered;
-    // results.count = currenciesFiltered.size();
-    // return results;
-    // }
-    //
-    // @SuppressWarnings("unchecked")
-    // @Override
-    // protected void publishResults(CharSequence constraint, FilterResults
-    // results) {
-    // if (results.count > 0) {
-    // items = (List<CurrencyData>) results.values;
-    // }
-    // }
-    // }
+	// private class CurrencyFilter extends Filter {
+	//
+	// @Override
+	// protected FilterResults performFiltering(CharSequence constraint) {
+	// FilterResults results = new FilterResults();
+	// List<CurrencyData> currenciesFiltered = Lists.newArrayList();
+	// int filterBy = Integer.parseInt(constraint.toString());
+	//
+	// switch (filterBy) {
+	// case AppSettings.FILTERBY_ALL:
+	// currenciesFiltered.addAll(itemsImmutable);
+	// break;
+	// case AppSettings.FILTERBY_NONFIXED:
+	// for (CurrencyData currency : itemsImmutable) {
+	// // TODO
+	// if (/* !currency.isFixed() */true) {
+	// currenciesFiltered.add(currency);
+	// }
+	// }
+	// break;
+	// case AppSettings.FILTERBY_FIXED:
+	// for (CurrencyData currency : itemsImmutable) {
+	// // TODO
+	// if (/* currency.isFixed() */true) {
+	// currenciesFiltered.add(currency);
+	// }
+	// }
+	// break;
+	// }
+	//
+	// results.values = currenciesFiltered;
+	// results.count = currenciesFiltered.size();
+	// return results;
+	// }
+	//
+	// @SuppressWarnings("unchecked")
+	// @Override
+	// protected void publishResults(CharSequence constraint, FilterResults
+	// results) {
+	// if (results.count > 0) {
+	// items = (List<CurrencyData>) results.values;
+	// }
+	// }
+	// }
 }

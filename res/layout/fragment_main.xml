@@ -1,33 +1,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="net.vexelon.currencybg.MainActivity$PlaceholderFragment" >
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="net.vexelon.currencybg.MainActivity$PlaceholderFragment">
 
-<TextView
-    android:id="@+id/text_last_update"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentTop="true"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"    
-    android:gravity="right"
-    android:background="@color/background_updates"
-    android:text=""
-    android:textAppearance="?android:attr/textAppearanceSmall" />
+    <TextView
+        android:id="@+id/text_last_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/background_updates"
+        android:gravity="right"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <RelativeLayout
-        android:layout_below="@id/text_last_update"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/text_last_update"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <include
+            android:id="@+id/inc_currency_row_header_layout"
+            layout="@layout/currency_row_header_layout"/>
 
         <ListView
             android:id="@+id/list_currencies"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/inc_currency_row_header_layout"/>
 
     </RelativeLayout>
 
