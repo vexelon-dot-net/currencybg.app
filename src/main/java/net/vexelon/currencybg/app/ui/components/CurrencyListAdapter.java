@@ -130,9 +130,13 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			switch (precisionMode) {
 			case AppSettings.PRECISION_ADVANCED:
 				String v = NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_LONG);
-				String first = v.substring(0, Math.min(v.length() - 3, v.length()));
-				String second = v.substring(Math.min(v.length() - 3, v.length()), v.length());
-				return UIUtils.toHtmlColor(first, color) + "<small>" + second + "</small>";
+				return UIUtils.toHtmlColor(v, color);
+			// String first = v.substring(0, Math.min(v.length() - 3,
+			// v.length()));
+			// String second = v.substring(Math.min(v.length() - 3, v.length()),
+			// v.length());
+			// return UIUtils.toHtmlColor(first, color) + "<small>" + second +
+			// "</small>";
 			case AppSettings.PRECISION_SIMPLE:
 			default:
 				return UIUtils.toHtmlColor(NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_SHORT), color);
