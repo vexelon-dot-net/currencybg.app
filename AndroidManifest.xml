@@ -20,7 +20,7 @@
             android:label="@string/prefs_title"></activity>
 
         <!--Service declared in manifest -->
-        <service android:name="net.vexelon.currencybg.app.services.RateService" />
+        <service android:name="net.vexelon.currencybg.app.services.BackgroundService" />
 
     </application>
 
