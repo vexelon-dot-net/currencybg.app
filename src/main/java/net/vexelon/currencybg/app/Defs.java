@@ -39,6 +39,7 @@ public class Defs {
 	 * How often to wake-up the Android service
 	 */
 	public static final long SERVICE_RUN_INTERVAL = 6 * 3600 * 1000; // 6 hours
+	public static final String SERVICE_ACTION_NOTIFY_UPDATE = "_CBG_NOTIFY_UPDATE";
 
 	/**
 	 * Parameters which used into SQLite

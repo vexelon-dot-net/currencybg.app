@@ -21,12 +21,15 @@ import java.util.Calendar;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	private ActionBarDrawerToggle drawerToggle;
 	private Toolbar toolbar;
 	private PendingIntent pendingIntent;
+	private BroadcastReceiver receiver;
+	private Fragment currentFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-		startService();
+		// TODO make sure service is started
+		// startService();
+		startReceivers();
 	}
 
 	@Override
@@ -80,11 +87,17 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		drawerToggle.syncState();
 		if (savedInstanceState == null) {
 			try {
-				showFragment(CurrenciesFragment.class);
+				currentFragment = showFragment(CurrenciesFragment.class);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		cancelReceivers();
+		super.onDestroy();
 	}
 
 	@Override
@@ -159,9 +172,11 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	 */
 	private <T extends AbstractFragment> void selectDrawerItem(MenuItem menuItem, Class<T> clazz) {
 		try {
-			showFragment(clazz);
-			// Highlight the selected item, update the title, and close the
-			// drawer
+			currentFragment = showFragment(clazz);
+			/*
+			 * Highlight the selected item, update the title, and close the
+			 * drawer
+			 */
 			menuItem.setChecked(true);
 			setTitle(menuItem.getTitle());
 			drawerLayout.closeDrawers();
@@ -203,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		calendar.add(Calendar.SECOND, 30);
 		long initialStartTimeout = calendar.getTimeInMillis();
+		// TODO: remove initial update -> not needed!!!
 
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, initialStartTimeout, Defs.SERVICE_RUN_INTERVAL,
@@ -212,6 +228,39 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	public void cancelService() {
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		alarmManager.cancel(pendingIntent);
+	}
+
+	/**
+	 * Registers receivers for service sent intents
+	 * 
+	 */
+	public void startReceivers() {
+		receiver = new Receiver();
+		registerReceiver(receiver, new IntentFilter(Defs.SERVICE_ACTION_NOTIFY_UPDATE));
+	}
+
+	public void cancelReceivers() {
+		if (receiver != null) {
+			unregisterReceiver(receiver);
+		}
+	}
+
+	/**
+	 * Processes actions sent by the background service
+	 */
+	private class Receiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (Defs.SERVICE_ACTION_NOTIFY_UPDATE.equals(intent.getAction())) {
+				/**
+				 * Set last update time
+				 */
+				if (currentFragment instanceof CurrenciesFragment) {
+					((CurrenciesFragment) currentFragment).setLastUpdate(intent.getStringExtra("LAST_UPDATE"));
+				}
+			}
+		}
 	}
 
 }

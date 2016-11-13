@@ -35,6 +35,7 @@ import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.remote.APISource;
 import net.vexelon.currencybg.app.remote.SourceException;
+import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 
 import org.joda.time.DateTime;
@@ -119,6 +120,11 @@ public class BackgroundService extends Service {
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
 				Log.d(Defs.LOG_TAG, "[Service] Last rate download on " + lastUpdate.toString());
 				new AppSettings(BackgroundService.this).setLastUpdateDate(lastUpdate);
+
+				// notify main fragment
+				Intent intent = new Intent(Defs.SERVICE_ACTION_NOTIFY_UPDATE);
+				intent.putExtra("LAST_UPDATE", DateTimeUtils.toDateText(BackgroundService.this, lastUpdate.toDate()));
+				sendBroadcast(intent);
 			}
 		}
 	}

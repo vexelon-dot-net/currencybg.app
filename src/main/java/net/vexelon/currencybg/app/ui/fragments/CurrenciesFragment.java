@@ -66,410 +66,415 @@ import org.joda.time.format.DateTimeFormat;
 
 public class CurrenciesFragment extends AbstractFragment {
 
-    private static boolean sortByAscending = true;
+	private static boolean sortByAscending = true;
 
-    private ListView lvCurrencies;
-    private TextView tvLastUpdate;
-    private TextView tvCurrenciesRate;
-    private String lastUpdateLastValue;
-    private CurrencyListAdapter currencyListAdapter;
-    private Map<Sources, TextView> tvSources = Maps.newHashMap();
+	private ListView lvCurrencies;
+	private TextView tvLastUpdate;
+	private TextView tvCurrenciesRate;
+	private String lastUpdateLastValue;
+	private CurrencyListAdapter currencyListAdapter;
+	private Map<Sources, TextView> tvSources = Maps.newHashMap();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        init(rootView, inflater);
-        return rootView;
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		this.rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		init(rootView, inflater);
+		return rootView;
+	}
 
-    @Override
-    public void onResume() {
-        reloadRates(false);
-        super.onResume();
-    }
+	@Override
+	public void onResume() {
+		reloadRates(false);
+		super.onResume();
+	}
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // add refresh currencies menu option
-        inflater.inflate(R.menu.currencies, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// add refresh currencies menu option
+		inflater.inflate(R.menu.currencies, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                reloadRates(true);
-                lastUpdateLastValue = tvLastUpdate.getText().toString();
-                tvLastUpdate.setText(R.string.last_update_updating_text);
-                setRefreshActionButtonState(true);
-                return true;
-            case R.id.action_rate:
-                newRateMenu().show();
-                return true;
-            case R.id.action_sort:
-                newSortMenu().show();
-                return true;
-            case R.id.action_filter:
-                newFilterMenu().show();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_refresh:
+			reloadRates(true);
+			lastUpdateLastValue = tvLastUpdate.getText().toString();
+			tvLastUpdate.setText(R.string.last_update_updating_text);
+			setRefreshActionButtonState(true);
+			return true;
+		case R.id.action_rate:
+			newRateMenu().show();
+			return true;
+		case R.id.action_sort:
+			newSortMenu().show();
+			return true;
+		case R.id.action_filter:
+			newFilterMenu().show();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
-    private void init(View view, LayoutInflater inflater) {
-        lvCurrencies = (ListView) view.findViewById(R.id.list_currencies);
-        tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
-        tvSources.put(Sources.TAVEX, (TextView) view.findViewById(R.id.header_src_1));
-        tvSources.put(Sources.POLANA1, (TextView) view.findViewById(R.id.header_src_2));
-        tvSources.put(Sources.FIB, (TextView) view.findViewById(R.id.header_src_3));
+	private void init(View view, LayoutInflater inflater) {
+		lvCurrencies = (ListView) view.findViewById(R.id.list_currencies);
+		tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
+		tvSources.put(Sources.TAVEX, (TextView) view.findViewById(R.id.header_src_1));
+		tvSources.put(Sources.POLANA1, (TextView) view.findViewById(R.id.header_src_2));
+		tvSources.put(Sources.FIB, (TextView) view.findViewById(R.id.header_src_3));
 
-        tvCurrenciesRate = (TextView) view.findViewById(R.id.header_currencies_rate);
-        tvCurrenciesRate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newRateMenu().show();
-            }
-        });
-    }
+		tvCurrenciesRate = (TextView) view.findViewById(R.id.header_currencies_rate);
+		tvCurrenciesRate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				newRateMenu().show();
+			}
+		});
+	}
 
-    private MaterialDialog newRateMenu() {
-        final AppSettings appSettings = new AppSettings(getActivity());
-        return new MaterialDialog.Builder(getActivity()).title(R.string.action_rate_title)
-                .items(R.array.action_rate_values).itemsCallbackSingleChoice(appSettings.getCurrenciesRateSelection(),
-                        new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                appSettings.setCurrenciesRateSelection(which);
-                                setCurrenciesRate(which);
-                                // notify user
-                                switch (appSettings.getCurrenciesRateSelection()) {
-                                    case AppSettings.RATE_SELL:
-                                        showSnackbar(R.string.action_rate_sell_desc);
-                                        break;
-                                    case AppSettings.RATE_BUY:
-                                    default:
-                                        showSnackbar(R.string.action_rate_buy_desc);
-                                        break;
-                                }
-                                return true;
-                            }
-                        })
-                .build();
-    }
+	public void setLastUpdate(String lastUpdate) {
+		tvLastUpdate.setText(lastUpdate);
+	}
 
-    private MaterialDialog newSortMenu() {
-        final AppSettings appSettings = new AppSettings(getActivity());
-        return new MaterialDialog.Builder(getActivity()).title(R.string.action_sort_title)
-                .items(R.array.action_sort_values).itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
-                        new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                sortByAscending = appSettings.getCurrenciesSortSelection() != which ? true
-                                        : !sortByAscending;
-                                appSettings.setCurrenciesSortSelection(which);
-                                setCurrenciesSort(which);
-                                // notify user
-                                switch (appSettings.getCurrenciesSortSelection()) {
-                                    case AppSettings.SORTBY_CODE:
-                                        showSnackbar(sortByAscending ? R.string.action_sort_code_asc
-                                                : R.string.action_sort_code_desc);
-                                        break;
-                                    case AppSettings.SORTBY_NAME:
-                                    default:
-                                        showSnackbar(sortByAscending ? R.string.action_sort_name_asc
-                                                : R.string.action_sort_name_desc);
-                                        break;
-                                }
-                                return true;
-                            }
-                        })
-                .build();
-    }
+	private MaterialDialog newRateMenu() {
+		final AppSettings appSettings = new AppSettings(getActivity());
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_rate_title)
+				.items(R.array.action_rate_values).itemsCallbackSingleChoice(appSettings.getCurrenciesRateSelection(),
+						new MaterialDialog.ListCallbackSingleChoice() {
+							@Override
+							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+								appSettings.setCurrenciesRateSelection(which);
+								setCurrenciesRate(which);
+								// notify user
+								switch (appSettings.getCurrenciesRateSelection()) {
+								case AppSettings.RATE_SELL:
+									showSnackbar(R.string.action_rate_sell_desc);
+									break;
+								case AppSettings.RATE_BUY:
+								default:
+									showSnackbar(R.string.action_rate_buy_desc);
+									break;
+								}
+								return true;
+							}
+						})
+				.build();
+	}
 
-    private MaterialDialog newFilterMenu() {
-        final AppSettings appSettings = new AppSettings(getActivity());
-        return new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
-                .items(R.array.currency_sources)
-                .itemsCallbackMultiChoice(toSourcesFilterIndices(appSettings.getCurrenciesFilter()),
-                        new MaterialDialog.ListCallbackMultiChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                                if (which.length == 0) {
-                                    showSnackbar(R.string.error_filter_selection, Defs.TOAST_ERR_TIME, true);
-                                    return false;
-                                }
+	private MaterialDialog newSortMenu() {
+		final AppSettings appSettings = new AppSettings(getActivity());
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sort_title)
+				.items(R.array.action_sort_values).itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
+						new MaterialDialog.ListCallbackSingleChoice() {
+							@Override
+							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+								sortByAscending = appSettings.getCurrenciesSortSelection() != which ? true
+										: !sortByAscending;
+								appSettings.setCurrenciesSortSelection(which);
+								setCurrenciesSort(which);
+								// notify user
+								switch (appSettings.getCurrenciesSortSelection()) {
+								case AppSettings.SORTBY_CODE:
+									showSnackbar(sortByAscending ? R.string.action_sort_code_asc
+											: R.string.action_sort_code_desc);
+									break;
+								case AppSettings.SORTBY_NAME:
+								default:
+									showSnackbar(sortByAscending ? R.string.action_sort_name_asc
+											: R.string.action_sort_name_desc);
+									break;
+								}
+								return true;
+							}
+						})
+				.build();
+	}
 
-                                Set<Sources> sources = getSourcesFilterIndices(which);
-                                appSettings.setCurrenciesFilter(sources);
-                                setCurrenciesSourcesFilter(sources);
+	private MaterialDialog newFilterMenu() {
+		final AppSettings appSettings = new AppSettings(getActivity());
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
+				.items(R.array.currency_sources)
+				.itemsCallbackMultiChoice(toSourcesFilterIndices(appSettings.getCurrenciesFilter()),
+						new MaterialDialog.ListCallbackMultiChoice() {
+							@Override
+							public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+								if (which.length == 0) {
+									showSnackbar(R.string.error_filter_selection, Defs.TOAST_ERR_TIME, true);
+									return false;
+								}
 
-                                // notify user
-                                String selected = "";
-                                for (int i : which) {
-                                    if (!selected.isEmpty()) {
-                                        selected += ", ";
-                                    }
-                                    selected += getResources().getStringArray(R.array.currency_sources)[i];
-                                }
-                                showSnackbar(getResources().getString(R.string.action_filter_desc, selected));
+								Set<Sources> sources = getSourcesFilterIndices(which);
+								appSettings.setCurrenciesFilter(sources);
+								setCurrenciesSourcesFilter(sources);
 
-                                return true;
-                            }
-                        })
-                .positiveText(R.string.text_ok).build();
-    }
+								// notify user
+								String selected = "";
+								for (int i : which) {
+									if (!selected.isEmpty()) {
+										selected += ", ";
+									}
+									selected += getResources().getStringArray(R.array.currency_sources)[i];
+								}
+								showSnackbar(getResources().getString(R.string.action_filter_desc, selected));
 
-    /**
-     * Converts checkbox sources selection to a {@link Sources} set.
-     *
-     * @param indices {@code 0..n}
-     * @return
-     */
-    private Set<Sources> getSourcesFilterIndices(Integer[] indices) {
-        Set<Sources> result = Sets.newHashSet();
-        int[] sources = getResources().getIntArray(R.array.currency_sources_ids);
+								return true;
+							}
+						})
+				.positiveText(R.string.text_ok).build();
+	}
 
-        for (int i : indices) {
-            result.add(Sources.valueOf(sources[i]));
-        }
+	/**
+	 * Converts checkbox sources selection to a {@link Sources} set.
+	 *
+	 * @param indices
+	 *            {@code 0..n}
+	 * @return
+	 */
+	private Set<Sources> getSourcesFilterIndices(Integer[] indices) {
+		Set<Sources> result = Sets.newHashSet();
+		int[] sources = getResources().getIntArray(R.array.currency_sources_ids);
 
-        return result;
-    }
+		for (int i : indices) {
+			result.add(Sources.valueOf(sources[i]));
+		}
 
-    private Integer[] toSourcesFilterIndices(Set<Sources> sources) {
-        int[] sourcesIdx = getResources().getIntArray(R.array.currency_sources_ids);
-        Set<Integer> result = Sets.newHashSet();
+		return result;
+	}
 
-        for (Sources source : sources) {
-            for (int i = 0; i < sourcesIdx.length; i++) {
-                if (sourcesIdx[i] == source.getID()) {
-                    result.add(i);
-                    break;
-                }
-            }
-        }
+	private Integer[] toSourcesFilterIndices(Set<Sources> sources) {
+		int[] sourcesIdx = getResources().getIntArray(R.array.currency_sources_ids);
+		Set<Integer> result = Sets.newHashSet();
 
-        return result.toArray(new Integer[0]);
-    }
+		for (Sources source : sources) {
+			for (int i = 0; i < sourcesIdx.length; i++) {
+				if (sourcesIdx[i] == source.getID()) {
+					result.add(i);
+					break;
+				}
+			}
+		}
 
-    /**
-     * Populates the list of currencies
-     *
-     * @param currencies
-     */
-    private void updateCurrenciesListView(List<CurrencyData> currencies) {
-        final Activity activity = getActivity();
-        AppSettings appSettings = new AppSettings(activity);
+		return result.toArray(new Integer[0]);
+	}
 
-        currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout,
-                toCurrencyRows(getVisibleCurrencies(currencies)), appSettings.getCurrenciesPrecision(),
-                appSettings.getCurrenciesRateSelection(), appSettings.getCurrenciesFilter());
-        lvCurrencies.setAdapter(currencyListAdapter);
+	/**
+	 * Populates the list of currencies
+	 *
+	 * @param currencies
+	 */
+	private void updateCurrenciesListView(List<CurrencyData> currencies) {
+		final Activity activity = getActivity();
+		AppSettings appSettings = new AppSettings(activity);
 
-        updateCurrenciesRateTitle(appSettings.getCurrenciesRateSelection());
-        updateCurrenciesSourcesTitles(appSettings.getCurrenciesFilter());
-        setCurrenciesSort(appSettings.getCurrenciesSortSelection());
+		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout,
+				toCurrencyRows(getVisibleCurrencies(currencies)), appSettings.getCurrenciesPrecision(),
+				appSettings.getCurrenciesRateSelection(), appSettings.getCurrenciesFilter());
+		lvCurrencies.setAdapter(currencyListAdapter);
 
-        tvLastUpdate.setText(DateTimeUtils.toDateText(activity, appSettings.getLastUpdateDate().toDate()));
-    }
+		updateCurrenciesRateTitle(appSettings.getCurrenciesRateSelection());
+		updateCurrenciesSourcesTitles(appSettings.getCurrenciesFilter());
+		setCurrenciesSort(appSettings.getCurrenciesSortSelection());
 
-    /**
-     * Sorts currencies by given criteria
-     *
-     * @param sortBy
-     */
-    private void setCurrenciesSort(final int sortBy) {
-        currencyListAdapter.setSortBy(sortBy, sortByAscending);
-        currencyListAdapter.notifyDataSetChanged();
-    }
+		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, appSettings.getLastUpdateDate().toDate()));
+	}
 
-    private void updateCurrenciesRateTitle(final int rateBy) {
-        switch (rateBy) {
-            case AppSettings.RATE_SELL:
-                tvCurrenciesRate.setText(
-                        Html.fromHtml(UIUtils.toHtmlColor(getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
-                break;
-            case AppSettings.RATE_BUY:
-            default:
-                tvCurrenciesRate.setText(
-                        Html.fromHtml(UIUtils.toHtmlColor(getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
-                break;
-        }
-    }
+	/**
+	 * Sorts currencies by given criteria
+	 *
+	 * @param sortBy
+	 */
+	private void setCurrenciesSort(final int sortBy) {
+		currencyListAdapter.setSortBy(sortBy, sortByAscending);
+		currencyListAdapter.notifyDataSetChanged();
+	}
 
-    /**
-     * Shows buy/sell currencies rate info
-     *
-     * @param rateBy
-     */
-    private void setCurrenciesRate(final int rateBy) {
-        updateCurrenciesRateTitle(rateBy);
-        currencyListAdapter.setRateBy(rateBy);
-        currencyListAdapter.notifyDataSetChanged();
-    }
+	private void updateCurrenciesRateTitle(final int rateBy) {
+		switch (rateBy) {
+		case AppSettings.RATE_SELL:
+			tvCurrenciesRate.setText(
+					Html.fromHtml(UIUtils.toHtmlColor(getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
+			break;
+		case AppSettings.RATE_BUY:
+		default:
+			tvCurrenciesRate.setText(
+					Html.fromHtml(UIUtils.toHtmlColor(getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
+			break;
+		}
+	}
 
-    private void updateCurrenciesSourcesTitles(Set<Sources> sources) {
-        // toggle header visibility
-        for (TextView tv : tvSources.values()) {
-            tv.setVisibility(View.INVISIBLE);
-        }
+	/**
+	 * Shows buy/sell currencies rate info
+	 *
+	 * @param rateBy
+	 */
+	private void setCurrenciesRate(final int rateBy) {
+		updateCurrenciesRateTitle(rateBy);
+		currencyListAdapter.setRateBy(rateBy);
+		currencyListAdapter.notifyDataSetChanged();
+	}
 
-        for (Sources source : sources) {
-            tvSources.get(source).setVisibility(View.VISIBLE);
-        }
-    }
+	private void updateCurrenciesSourcesTitles(Set<Sources> sources) {
+		// toggle header visibility
+		for (TextView tv : tvSources.values()) {
+			tv.setVisibility(View.INVISIBLE);
+		}
 
-    /**
-     * Filter currencies by given sources
-     *
-     * @param sources
-     */
-    private void setCurrenciesSourcesFilter(Set<Sources> sources) {
-        updateCurrenciesSourcesTitles(sources);
-        currencyListAdapter.setFilterBy(sources);
-        currencyListAdapter.notifyDataSetChanged();
-        // currencyListAdapter.getFilter().filter(Integer.toString(filterBy),
-        // new Filter.FilterListener() {
-        // @Override
-        // public void onFilterComplete(int count) {
-        // if (count > 0) {
-        // // adapter.sortBy(new
-        // // AppSettings(getActivity()).getCurrenciesSortSelection(),
-        // // sortByAscending);
-        // currencyListAdapter.notifyDataSetChanged();
-        // } else {
-        // currencyListAdapter.notifyDataSetInvalidated();
-        // }
-        // }
-        // });
-    }
+		for (Sources source : sources) {
+			tvSources.get(source).setVisibility(View.VISIBLE);
+		}
+	}
 
-    /**
-     * Reloads currencies from a remote source.
-     *
-     * @param useRemoteSource
-     */
-    public void reloadRates(boolean useRemoteSource) {
-        if (!useRemoteSource) {
-            DataSource source = null;
-            try {
-                source = new SQLiteDataSource();
-                source.connect(getActivity());
+	/**
+	 * Filter currencies by given sources
+	 *
+	 * @param sources
+	 */
+	private void setCurrenciesSourcesFilter(Set<Sources> sources) {
+		updateCurrenciesSourcesTitles(sources);
+		currencyListAdapter.setFilterBy(sources);
+		currencyListAdapter.notifyDataSetChanged();
+		// currencyListAdapter.getFilter().filter(Integer.toString(filterBy),
+		// new Filter.FilterListener() {
+		// @Override
+		// public void onFilterComplete(int count) {
+		// if (count > 0) {
+		// // adapter.sortBy(new
+		// // AppSettings(getActivity()).getCurrenciesSortSelection(),
+		// // sortByAscending);
+		// currencyListAdapter.notifyDataSetChanged();
+		// } else {
+		// currencyListAdapter.notifyDataSetInvalidated();
+		// }
+		// }
+		// });
+	}
 
-                List<CurrencyData> ratesList = source.getLastRates();
-                if (!ratesList.isEmpty()) {
-                    Log.v(Defs.LOG_TAG, "Displaying rates from database...");
-                    updateCurrenciesListView(ratesList);
-                } else {
-                    useRemoteSource = true;
-                }
-            } catch (DataSourceException e) {
-                Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-                showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
-            } finally {
-                IOUtils.closeQuitely(source);
-            }
-        }
+	/**
+	 * Reloads currencies from a remote source.
+	 *
+	 * @param useRemoteSource
+	 */
+	public void reloadRates(boolean useRemoteSource) {
+		if (!useRemoteSource) {
+			DataSource source = null;
+			try {
+				source = new SQLiteDataSource();
+				source.connect(getActivity());
 
-        if (useRemoteSource) {
-            setRefreshActionButtonState(true);
-            new UpdateRatesTask().execute();
-        }
-    }
+				List<CurrencyData> ratesList = source.getLastRates();
+				if (!ratesList.isEmpty()) {
+					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
+					updateCurrenciesListView(ratesList);
+				} else {
+					useRemoteSource = true;
+				}
+			} catch (DataSourceException e) {
+				Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
+				showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+			} finally {
+				IOUtils.closeQuitely(source);
+			}
+		}
 
-    /**
-     * Converts list of currencies from various sources to a table with rows &
-     * columns
-     *
-     * @param currencies
-     * @return
-     */
-    private List<CurrencyListRow> toCurrencyRows(List<CurrencyData> currencies) {
-        Map<String, CurrencyListRow> map = Maps.newHashMap();
-        final Activity activity = getActivity();
+		if (useRemoteSource) {
+			setRefreshActionButtonState(true);
+			new UpdateRatesTask().execute();
+		}
+	}
 
-        for (CurrencyData c : currencies) {
-            CurrencyListRow row = map.get(c.getCode());
-            if (row == null) {
-                row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(activity.getResources(), c.getCode()));
-                map.put(c.getCode(), row);
-            }
-            row.addColumn(Sources.valueOf(c.getSource()), c);
-        }
+	/**
+	 * Converts list of currencies from various sources to a table with rows &
+	 * columns
+	 *
+	 * @param currencies
+	 * @return
+	 */
+	private List<CurrencyListRow> toCurrencyRows(List<CurrencyData> currencies) {
+		Map<String, CurrencyListRow> map = Maps.newHashMap();
+		final Activity activity = getActivity();
 
-        return Lists.newArrayList(map.values());
-    }
+		for (CurrencyData c : currencies) {
+			CurrencyListRow row = map.get(c.getCode());
+			if (row == null) {
+				row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(activity.getResources(), c.getCode()));
+				map.put(c.getCode(), row);
+			}
+			row.addColumn(Sources.valueOf(c.getSource()), c);
+		}
 
-    private class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
+		return Lists.newArrayList(map.values());
+	}
 
-        private Activity activity;
-        private DateTime lastUpdate;
-        private boolean updateOK = false;
-        private boolean downloadFixed = false;
+	private class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
-        public UpdateRatesTask() {
-            activity = CurrenciesFragment.this.getActivity();
-        }
+		private Activity activity;
+		private DateTime lastUpdate;
+		private boolean updateOK = false;
+		private boolean downloadFixed = false;
 
-        @Override
-        protected void onPreExecute() {
-            lastUpdate = new AppSettings(activity).getLastUpdateDate();
-        }
+		public UpdateRatesTask() {
+			activity = CurrenciesFragment.this.getActivity();
+		}
 
-        @Override
-        protected List<CurrencyData> doInBackground(Void... params) {
-            Log.v(Defs.LOG_TAG, "Downloading rates from remote source...");
+		@Override
+		protected void onPreExecute() {
+			lastUpdate = new AppSettings(activity).getLastUpdateDate();
+		}
 
-            DataSource source = null;
-            List<CurrencyData> currencies = Lists.newArrayList();
+		@Override
+		protected List<CurrencyData> doInBackground(Void... params) {
+			Log.v(Defs.LOG_TAG, "Downloading rates from remote source...");
 
-            try {
-                String iso8601Time = lastUpdate.toString();
-                Log.d(Defs.LOG_TAG, "Downloading all rates since " + iso8601Time + " onwards...");
+			DataSource source = null;
+			List<CurrencyData> currencies = Lists.newArrayList();
 
-                // format, e.g., "2016-11-09T01:00:06+03:00"
-                currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
+			try {
+				String iso8601Time = lastUpdate.toString();
+				Log.d(Defs.LOG_TAG, "Downloading all rates since " + iso8601Time + " onwards...");
 
-                source = new SQLiteDataSource();
-                source.connect(activity);
-                source.addRates(currencies);
+				// format, e.g., "2016-11-09T01:00:06+03:00"
+				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
 
-                // reload merged currencies
-                currencies = source.getLastRates();
+				source = new SQLiteDataSource();
+				source.connect(activity);
+				source.addRates(currencies);
 
-                updateOK = true;
-            } catch (SourceException e) {
-                Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
-            } catch (DataSourceException e) {
-                Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-                showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_TIME, true);
-            } finally {
-                IOUtils.closeQuitely(source);
-            }
+				// reload merged currencies
+				currencies = source.getLastRates();
 
-            return currencies;
-        }
+				updateOK = true;
+			} catch (SourceException e) {
+				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
+			} catch (DataSourceException e) {
+				Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
+				showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_TIME, true);
+			} finally {
+				IOUtils.closeQuitely(source);
+			}
 
-        @Override
-        protected void onPostExecute(List<CurrencyData> result) {
-            setRefreshActionButtonState(false);
+			return currencies;
+		}
 
-            if (updateOK && !result.isEmpty()) {
-                updateCurrenciesListView(result);
+		@Override
+		protected void onPostExecute(List<CurrencyData> result) {
+			setRefreshActionButtonState(false);
 
-                // bump last update
-                lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
-                Log.d(Defs.LOG_TAG, "Last rate download on " + lastUpdate.toString());
-                new AppSettings(activity).setLastUpdateDate(lastUpdate);
+			if (updateOK && !result.isEmpty()) {
+				updateCurrenciesListView(result);
 
-                lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
-            } else {
-                showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME, true);
-            }
+				// bump last update
+				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
+				Log.d(Defs.LOG_TAG, "Last rate download on " + lastUpdate.toString());
+				new AppSettings(activity).setLastUpdateDate(lastUpdate);
 
-            tvLastUpdate.setText(lastUpdateLastValue);
-        }
+				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
+			} else {
+				showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME, true);
+			}
 
-    }
+			tvLastUpdate.setText(lastUpdateLastValue);
+		}
+
+	}
 }
