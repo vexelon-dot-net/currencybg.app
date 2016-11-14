@@ -24,8 +24,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -40,8 +42,10 @@ import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.CurrencyListRow;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.common.CurrencyLocales;
+import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 
@@ -124,6 +128,29 @@ public class AbstractFragment extends Fragment {
 		}
 
 		return currencies;
+	}
+
+	/**
+	 * Converts list of currencies from various sources to a table with rows &
+	 * columns
+	 *
+	 * @param currencies
+	 * @return
+	 */
+	protected List<CurrencyListRow> toCurrencyRows(List<CurrencyData> currencies) {
+		Map<String, CurrencyListRow> map = Maps.newHashMap();
+		final Activity activity = getActivity();
+
+		for (CurrencyData c : currencies) {
+			CurrencyListRow row = map.get(c.getCode());
+			if (row == null) {
+				row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(activity.getResources(), c.getCode()));
+				map.put(c.getCode(), row);
+			}
+			row.addColumn(Sources.valueOf(c.getSource()), c);
+		}
+
+		return Lists.newArrayList(map.values());
 	}
 
 	protected void showSnackbar(String text, int duration, boolean isError) {

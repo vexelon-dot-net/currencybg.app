@@ -47,7 +47,8 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 	private boolean showValues = false;
 	private int precisionMode = AppSettings.PRECISION_SIMPLE;
 
-	public ConvertTargetListAdapter(Context context, int textViewResId, List<CurrencyData> items, boolean showValues, int precisionMode) {
+	public ConvertTargetListAdapter(Context context, int textViewResId, List<CurrencyData> items, boolean showValues,
+			int precisionMode) {
 		super(context, textViewResId, items);
 		this.items = items;
 		this.values = Lists.newArrayList();
@@ -63,30 +64,35 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		if (v == null) {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.convert_target_row_layout, parent, false);
 		}
+
 		CurrencyData currencyData = items.get(position);
 		ImageView icon = (ImageView) v.findViewById(R.id.icon);
 		int imageId = UIFlags.getResourceFromCode(currencyData.getCode());
 		if (imageId != -1) {
 			icon.setImageResource(imageId);
 		}
-//		setResText(v, R.id.name, currencyData.getName());
+
+		// setResText(v, R.id.name, currencyData.getName());
 		setResText(v, R.id.code, currencyData.getCode());
 		if (showValues) {
 			BigDecimal value = values.get(position);
 			if (value == null) {
 				value = BigDecimal.ZERO;
 			}
+
 			switch (precisionMode) {
-				case AppSettings.PRECISION_ADVANCED:
-					String rate = NumberUtils.scaleCurrency(value, Defs.SCALE_SHOW_LONG);
-					setResText(v, R.id.rate, rate);
-//					setResText(v, R.id.rate, rate.substring(0, rate.length() - 3));
-					//setResText(v, R.id.rate_decimals, rate.substring(rate.length() - 3));
-					break;
-				case AppSettings.PRECISION_SIMPLE:
-				default:
-					setResText(v, R.id.rate, NumberUtils.scaleCurrency(value, currencyData.getCode()));
-					break;
+			case AppSettings.PRECISION_ADVANCED:
+				String rate = NumberUtils.scaleCurrency(value, Defs.SCALE_SHOW_LONG);
+				setResText(v, R.id.rate, rate);
+				// setResText(v, R.id.rate, rate.substring(0, rate.length() -
+				// 3));
+				// setResText(v, R.id.rate_decimals,
+				// rate.substring(rate.length() - 3));
+				break;
+			case AppSettings.PRECISION_SIMPLE:
+			default:
+				setResText(v, R.id.rate, NumberUtils.scaleCurrency(value, currencyData.getCode()));
+				break;
 			}
 		}
 		return v;
@@ -111,7 +117,8 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		// convert source currency to BGN value
 		BigDecimal valueBGN;
 		try {
-//			BigDecimal rate = new BigDecimal(sourceCurrency.getRate(), mathContext);
+			// BigDecimal rate = new BigDecimal(sourceCurrency.getRate(),
+			// mathContext);
 			BigDecimal rate = new BigDecimal(sourceCurrency.getBuy(), mathContext);
 			BigDecimal ratio = new BigDecimal(sourceCurrency.getRatio(), mathContext);
 			valueBGN = value.multiply(rate.divide(ratio, mathContext), mathContext);
@@ -123,6 +130,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		for (int i = 0; i < items.size(); i++) {
 			CurrencyData currency = items.get(i);
 			BigDecimal result = BigDecimal.ZERO;
+
 			try {
 				BigDecimal reverseRate;
 				if ("0".equals(currency.getBuy())) {
@@ -131,12 +139,14 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 				} else {
 					reverseRate = new BigDecimal(currency.getBuy(), mathContext);
 				}
-//				if ("0".equals(currency.getReverseRate())) {
-//					BigDecimal ratio0 = new BigDecimal(currency.getRatio());
-//					reverseRate = ratio0.divide(new BigDecimal(currency.getRate(), mathContext), mathContext);
-//				} else {
-//					reverseRate = new BigDecimal(currency.getReverseRate(), mathContext);
-//				}
+				// if ("0".equals(currency.getReverseRate())) {
+				// BigDecimal ratio0 = new BigDecimal(currency.getRatio());
+				// reverseRate = ratio0.divide(new
+				// BigDecimal(currency.getRate(), mathContext), mathContext);
+				// } else {
+				// reverseRate = new BigDecimal(currency.getReverseRate(),
+				// mathContext);
+				// }
 				BigDecimal ratio = new BigDecimal(currency.getRatio(), mathContext);
 				result = valueBGN.multiply(reverseRate, mathContext);
 				// result = reverseRate.multiply(ratio,
@@ -144,6 +154,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 			} catch (Exception e) {
 				Log.e(Defs.LOG_TAG, "Failed to calculate currency " + currency.getCode() + "!", e);
 			}
+
 			values.set(i, result);
 		}
 	}

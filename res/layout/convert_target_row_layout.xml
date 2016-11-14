@@ -1,46 +1,49 @@
 <RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:padding="4dp">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="4dp">
 
-	<ImageView android:id="@+id/icon" 
-	    android:scaleType="fitCenter" 
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:layout_alignParentLeft="true" 
-	    android:layout_centerVertical="true" />
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"/>
 
-	<TextView android:id="@+id/name" 
-	    style="@style/FontList" 
-	    android:layout_height="wrap_content" 
-	    android:layout_width="wrap_content" 
-	    android:layout_toRightOf="@id/icon" 
-	    android:layout_marginLeft="8sp" />
+    <TextView
+        android:id="@+id/name"
+        style="@style/FontList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8sp"
+        android:layout_toRightOf="@id/icon"/>
 
-	<TextView android:id="@+id/code" 
-	    style="@style/FontListCode" 
-	    android:layout_height="wrap_content" 
-	    android:layout_width="wrap_content" 
-	    android:layout_below="@+id/name" 
-	    android:layout_toRightOf="@id/icon" 
-	    android:layout_marginLeft="8sp" />
+    <TextView
+        android:id="@+id/code"
+        style="@style/FontListCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_marginLeft="8sp"
+        android:layout_toRightOf="@id/icon"/>
 
-	<RelativeLayout
-	  android:layout_width="wrap_content"
-	  android:layout_height="wrap_content"
-	  android:layout_alignParentRight="true"
-	  android:layout_below="@+id/name"
-	  android:gravity="right"
-	  style="@style/FontListCode">
-	
-		<TextView android:id="@+id/rate" 
-		    style="@style/FontListRatioRate" 
-		    android:layout_height="wrap_content" 
-		    android:layout_width="wrap_content" 
-		    android:layout_toRightOf="@+id/tendency" 
-		    android:paddingLeft="1sp" />
-		
-	</RelativeLayout>
+    <RelativeLayout
+        style="@style/FontListCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/name"
+        android:gravity="right">
+
+        <TextView
+            android:id="@+id/rate"
+            style="@style/FontListRatioRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="1sp"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

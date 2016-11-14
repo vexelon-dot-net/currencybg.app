@@ -18,9 +18,15 @@
 package net.vexelon.currencybg.app;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 
 import android.content.Context;
@@ -29,10 +35,10 @@ import android.preference.PreferenceManager;
 
 import net.vexelon.currencybg.app.common.CurrencyLocales;
 import net.vexelon.currencybg.app.common.Sources;
+import net.vexelon.currencybg.app.db.models.CurrencyData;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
 
 public class AppSettings {
 
@@ -171,11 +177,11 @@ public class AppSettings {
 	}
 
 	/**
-	 * @param currencyCodes
-	 *            List of currency codes (case-sensitive)
+	 * 
+	 * @param currencies
 	 */
-	private void setConvertCurrencies(Set<String> currencyCodes) {
-		generalPrefs.edit().putStringSet("pref_convert_currencycodes", currencyCodes).apply();
+	private void setConvertCurrencies(Set<String> currencies) {
+		generalPrefs.edit().putStringSet("pref_convert_currencies", currencies).apply();
 	}
 
 	/**
@@ -183,21 +189,68 @@ public class AppSettings {
 	 *
 	 * @return
 	 */
-	public Set<String> getConvertCurrencies() {
+	public Set<String> getConvertCurrenciesRaw() {
 		Set<String> emptySet = Sets.newHashSet();
 		// Needs a new Set instance - http://stackoverflow.com/a/14034804
-		return Sets.newHashSet(generalPrefs.getStringSet("pref_convert_currencycodes", emptySet));
+		return Sets.newHashSet(generalPrefs.getStringSet("pref_convert_currencies", emptySet));
 	}
 
-	public void addConvertCurrency(String currencyCode) {
-		Set<String> convertCurrencies = getConvertCurrencies();
-		convertCurrencies.add(currencyCode);
+	/**
+	 * 
+	 * @return A list of dummy {@link CurrencyData} objects that have only their
+	 *         code and source id set.
+	 */
+	public List<CurrencyData> getConvertCurrencies() {
+		List<CurrencyData> result = Lists.newArrayList();
+		Set<String> convertCurrencies = getConvertCurrenciesRaw();
+
+		Iterator<String> iterator = convertCurrencies.iterator();
+		while (iterator.hasNext()) {
+			String next = iterator.next();
+
+			// CSV deserialization
+			List<String> tokens = Splitter.on(",").splitToList(next);
+			if (tokens.size() == 2) {
+				CurrencyData c = new CurrencyData();
+				c.setCode(tokens.get(0));
+				c.setSource(Integer.parseInt(tokens.get(1)));
+				result.add(c);
+			}
+		}
+
+		return result;
+	}
+
+	public void addConvertCurrency(CurrencyData currency) {
+		Set<String> convertCurrencies = getConvertCurrenciesRaw();
+		// CSV serialization
+		convertCurrencies.add(currency.getCode() + "," + Integer.toString(currency.getSource()));
 		setConvertCurrencies(convertCurrencies);
 	}
 
-	public void removeConvertCurrency(String currencyCode) {
-		Set<String> convertCurrencies = getConvertCurrencies();
-		convertCurrencies.remove(currencyCode);
+	/**
+	 * Removes a previously stored target convert currency
+	 * 
+	 * @param currency
+	 *            Currency to search by code and source id
+	 */
+	public void removeConvertCurrency(CurrencyData currency) {
+		Set<String> convertCurrencies = getConvertCurrenciesRaw();
+
+		Iterator<String> iterator = convertCurrencies.iterator();
+		while (iterator.hasNext()) {
+			String next = iterator.next();
+
+			// CSV deserialization
+			List<String> tokens = Splitter.on(",").splitToList(next);
+			if (tokens.size() == 2) {
+				if (currency.getCode().equals(tokens.get(0))
+						&& currency.getSource() == Integer.parseInt(tokens.get(1))) {
+					iterator.remove();
+				}
+			}
+		}
+
 		setConvertCurrencies(convertCurrencies);
 	}
 

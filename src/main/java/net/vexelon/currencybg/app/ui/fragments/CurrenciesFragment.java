@@ -383,29 +383,6 @@ public class CurrenciesFragment extends AbstractFragment {
 		}
 	}
 
-	/**
-	 * Converts list of currencies from various sources to a table with rows &
-	 * columns
-	 *
-	 * @param currencies
-	 * @return
-	 */
-	private List<CurrencyListRow> toCurrencyRows(List<CurrencyData> currencies) {
-		Map<String, CurrencyListRow> map = Maps.newHashMap();
-		final Activity activity = getActivity();
-
-		for (CurrencyData c : currencies) {
-			CurrencyListRow row = map.get(c.getCode());
-			if (row == null) {
-				row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(activity.getResources(), c.getCode()));
-				map.put(c.getCode(), row);
-			}
-			row.addColumn(Sources.valueOf(c.getSource()), c);
-		}
-
-		return Lists.newArrayList(map.values());
-	}
-
 	private class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
 		private Activity activity;

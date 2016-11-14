@@ -27,8 +27,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.CurrencyListRow;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
+import net.vexelon.currencybg.app.ui.UiCodes;
 
 public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 
@@ -44,13 +47,19 @@ public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 		if (v == null) {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.convert_source_row_layout, parent, false);
 		}
-		CurrencyData currencyData = items.get(position);
-		ImageView icon = (ImageView) v.findViewById(R.id.convert_image_icon);
-		int imageId = UIFlags.getResourceFromCode(currencyData.getCode());
+
+		CurrencyData row = items.get(position);
+
+		ImageView icon = (ImageView) v.findViewById(R.id.convert_icon);
+		int imageId = UIFlags.getResourceFromCode(row.getCode());
 		if (imageId != -1) {
 			icon.setImageResource(imageId);
 		}
-//		setResText(v, R.id.convert_text, currencyData.getName());
+
+		setResText(v, R.id.convert_code, row.getCode());
+		setResText(v, R.id.convert_name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
+		setResText(v, R.id.convert_source, Sources.getName(row.getSource(), getContext()));
+
 		return v;
 	}
 
