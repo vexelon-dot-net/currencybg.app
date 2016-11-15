@@ -31,6 +31,7 @@ import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
+import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
 
 public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
@@ -56,9 +57,9 @@ public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 			icon.setImageResource(imageId);
 		}
 
-		setResText(v, R.id.convert_code, row.getCode());
-		setResText(v, R.id.convert_name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
-		setResText(v, R.id.convert_source, Sources.getName(row.getSource(), getContext()));
+		UIUtils.setText(v, R.id.convert_code, row.getCode());
+		UIUtils.setText(v, R.id.convert_name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
+		UIUtils.setText(v, R.id.convert_source, Sources.getName(row.getSource(), getContext()));
 
 		return v;
 	}
@@ -80,13 +81,6 @@ public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 			}
 		}
 		return -1;
-	}
-
-	private void setResText(View v, int id, CharSequence text) {
-		TextView tx = (TextView) v.findViewById(id);
-		if (tx != null) {
-			tx.setText(text);
-		}
 	}
 
 }

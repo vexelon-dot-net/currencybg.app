@@ -38,24 +38,24 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
+import net.vexelon.currencybg.app.ui.UIUtils;
+import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
 public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 
 	private List<CurrencyData> items;
 	private List<BigDecimal> values;
-	private boolean showValues = false;
+	// private boolean showValues = false;
 	private int precisionMode = AppSettings.PRECISION_SIMPLE;
 
-	public ConvertTargetListAdapter(Context context, int textViewResId, List<CurrencyData> items, boolean showValues,
-			int precisionMode) {
+	public ConvertTargetListAdapter(Context context, int textViewResId, List<CurrencyData> items, int precisionMode) {
 		super(context, textViewResId, items);
 		this.items = items;
 		this.values = Lists.newArrayList();
 		for (int i = 0; i < items.size(); i++) {
 			values.add(BigDecimal.ZERO);
 		}
-		this.showValues = showValues;
 		this.precisionMode = precisionMode;
 	}
 
@@ -65,36 +65,32 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.convert_target_row_layout, parent, false);
 		}
 
-		CurrencyData currencyData = items.get(position);
+		CurrencyData row = items.get(position);
 		ImageView icon = (ImageView) v.findViewById(R.id.icon);
-		int imageId = UIFlags.getResourceFromCode(currencyData.getCode());
+		int imageId = UIFlags.getResourceFromCode(row.getCode());
 		if (imageId != -1) {
 			icon.setImageResource(imageId);
 		}
 
-		// setResText(v, R.id.name, currencyData.getName());
-		setResText(v, R.id.code, currencyData.getCode());
-		if (showValues) {
-			BigDecimal value = values.get(position);
-			if (value == null) {
-				value = BigDecimal.ZERO;
-			}
+		UIUtils.setText(v, R.id.name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
+		UIUtils.setText(v, R.id.code, row.getCode());
 
-			switch (precisionMode) {
-			case AppSettings.PRECISION_ADVANCED:
-				String rate = NumberUtils.scaleCurrency(value, Defs.SCALE_SHOW_LONG);
-				setResText(v, R.id.rate, rate);
-				// setResText(v, R.id.rate, rate.substring(0, rate.length() -
-				// 3));
-				// setResText(v, R.id.rate_decimals,
-				// rate.substring(rate.length() - 3));
-				break;
-			case AppSettings.PRECISION_SIMPLE:
-			default:
-				setResText(v, R.id.rate, NumberUtils.scaleCurrency(value, currencyData.getCode()));
-				break;
-			}
+		BigDecimal value = values.get(position);
+		if (value == null) {
+			value = BigDecimal.ZERO;
 		}
+
+		switch (precisionMode) {
+		case AppSettings.PRECISION_ADVANCED:
+			String rate = NumberUtils.scaleCurrency(value, Defs.SCALE_SHOW_LONG);
+			UIUtils.setText(v, R.id.rate, rate);
+			break;
+		case AppSettings.PRECISION_SIMPLE:
+		default:
+			UIUtils.setText(v, R.id.rate, NumberUtils.scaleCurrency(value, row.getCode()));
+			break;
+		}
+
 		return v;
 	}
 
@@ -156,13 +152,6 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 			}
 
 			values.set(i, result);
-		}
-	}
-
-	private void setResText(View v, int id, CharSequence text) {
-		TextView tx = (TextView) v.findViewById(id);
-		if (tx != null) {
-			tx.setText(text);
 		}
 	}
 

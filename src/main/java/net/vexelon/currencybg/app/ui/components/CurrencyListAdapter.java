@@ -94,15 +94,15 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 				icon.setImageResource(imageId);
 			}
 
-			setResText(v, R.id.name, row.getName());
-			setResText(v, R.id.code, row.getCode());
+			UIUtils.setText(v, R.id.name, row.getName());
+			UIUtils.setText(v, R.id.code, row.getCode());
 
-			setResText(v, R.id.rate_src_1,
+			UIUtils.setText(v, R.id.rate_src_1,
 					sourcesFilter.contains(Sources.TAVEX) ? getColumnValue(row, Sources.TAVEX) : "", true);
-			setResText(v, R.id.rate_src_2,
+			UIUtils.setText(v, R.id.rate_src_2,
 					sourcesFilter.contains(Sources.POLANA1) ? getColumnValue(row, Sources.POLANA1) : "", true);
-			setResText(v, R.id.rate_src_3, sourcesFilter.contains(Sources.FIB) ? getColumnValue(row, Sources.FIB) : "",
-					true);
+			UIUtils.setText(v, R.id.rate_src_3,
+					sourcesFilter.contains(Sources.FIB) ? getColumnValue(row, Sources.FIB) : "", true);
 		}
 		return v;
 	}
@@ -190,15 +190,6 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 				}
 			}
 		});
-	}
-
-	private void setResText(View v, int id, CharSequence text, boolean isHtml) {
-		TextView textView = (TextView) v.findViewById(id);
-		textView.setText(isHtml ? Html.fromHtml(text.toString()) : text);
-	}
-
-	private void setResText(View v, int id, CharSequence text) {
-		setResText(v, id, text, false);
 	}
 
 	// private class CurrencyFilter extends Filter {
