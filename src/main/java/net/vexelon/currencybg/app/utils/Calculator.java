@@ -23,25 +23,21 @@ public class Calculator {
 
 
 	public Calculator add(BigDecimal b) {
-		System.out.println("Add "+b);
 		this.result = this.result.add(b);
 		return this;
 	}
 
 	public Calculator sub(BigDecimal b) {
-		System.out.println("Sub "+b);
 		this.result = this.result.subtract(b);
 		return this;
 	}
 
 	public Calculator div(BigDecimal b) {
-		System.out.println("Div "+b);
-		this.result = this.result.divide(b);
+		this.result = this.result.divide(b, this.scale, RoundingMode.HALF_UP);
 		return this;
 	}
 
 	public Calculator mul(BigDecimal b) {
-		System.out.println("Mul "+b);
 		this.result = this.result.multiply(b);
 		return this;
 	}
