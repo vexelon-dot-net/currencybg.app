@@ -36,6 +36,7 @@ import android.widget.TextView;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIFlags;
 import net.vexelon.currencybg.app.ui.UIUtils;
@@ -66,14 +67,15 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		}
 
 		CurrencyData row = items.get(position);
-		ImageView icon = (ImageView) v.findViewById(R.id.icon);
+		ImageView icon = (ImageView) v.findViewById(R.id.target_icon);
 		int imageId = UIFlags.getResourceFromCode(row.getCode());
 		if (imageId != -1) {
 			icon.setImageResource(imageId);
 		}
 
-		UIUtils.setText(v, R.id.name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
-		UIUtils.setText(v, R.id.code, row.getCode());
+		UIUtils.setText(v, R.id.target_name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
+		UIUtils.setText(v, R.id.target_code, row.getCode());
+		UIUtils.setText(v, R.id.target_source, Sources.getName(row.getSource(), getContext()));
 
 		BigDecimal value = values.get(position);
 		if (value == null) {
@@ -83,11 +85,11 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		switch (precisionMode) {
 		case AppSettings.PRECISION_ADVANCED:
 			String rate = NumberUtils.scaleCurrency(value, Defs.SCALE_SHOW_LONG);
-			UIUtils.setText(v, R.id.rate, rate);
+			UIUtils.setText(v, R.id.target_rate, rate);
 			break;
 		case AppSettings.PRECISION_SIMPLE:
 		default:
-			UIUtils.setText(v, R.id.rate, NumberUtils.scaleCurrency(value, row.getCode()));
+			UIUtils.setText(v, R.id.target_rate, NumberUtils.scaleCurrency(value, row.getCode()));
 			break;
 		}
 
