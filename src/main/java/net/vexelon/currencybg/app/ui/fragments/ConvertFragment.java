@@ -22,12 +22,9 @@ import java.math.MathContext;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -241,11 +238,11 @@ public class ConvertFragment extends AbstractFragment {
 			MathContext mathContext = new MathContext(Defs.SCALE_CALCULATIONS);
 			try {
 				BigDecimal value = new BigDecimal(etSourceValue.getText().toString(), mathContext);
-				adapter.updateValues(sourceCurrency, value);
+				adapter.updateConvert(sourceCurrency, value);
 				adapter.notifyDataSetChanged();
 				return true;
 			} catch (Exception e) {
-				Log.w(Defs.LOG_TAG, "Could not parse source currency value! " + e.getMessage());
+				Log.w(Defs.LOG_TAG, "Could not parse source currency value! ", e);
 			}
 		}
 

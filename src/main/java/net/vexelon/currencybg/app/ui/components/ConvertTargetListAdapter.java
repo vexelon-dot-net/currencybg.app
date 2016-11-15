@@ -30,15 +30,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UIFlags;
 import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.utils.NumberUtils;
@@ -106,47 +103,53 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		return items.remove(position);
 	}
 
-	public void updateValues(CurrencyData sourceCurrency, BigDecimal value) {
+	/**
+	 * Calculates exchange values from {@code source} currency to all selected
+	 * target currencies.
+	 * 
+	 * @param source
+	 * @param amount
+	 */
+	public void updateConvert(CurrencyData source, BigDecimal amount) {
 		MathContext mathContext = new MathContext(Defs.SCALE_CALCULATIONS, RoundingMode.HALF_EVEN);
-		// convert source currency to BGN value
-		BigDecimal valueBGN;
+
+		/*
+		 * Converts source currency to BGN value (Buy Lev)
+		 */
+		BigDecimal amountOfBGN;
 		try {
-			// BigDecimal rate = new BigDecimal(sourceCurrency.getRate(),
-			// mathContext);
-			BigDecimal rate = new BigDecimal(sourceCurrency.getBuy(), mathContext);
-			BigDecimal ratio = new BigDecimal(sourceCurrency.getRatio(), mathContext);
-			valueBGN = value.multiply(rate.divide(ratio, mathContext), mathContext);
+			BigDecimal buy = BigDecimal.ZERO;
+			if (!source.getBuy().isEmpty()) {
+				buy = new BigDecimal(source.getBuy(), mathContext);
+			}
+
+			BigDecimal ratio = new BigDecimal(source.getRatio(), mathContext);
+			amountOfBGN = amount.multiply(buy.divide(ratio, mathContext), mathContext);
+
 		} catch (Exception e) {
 			Log.e(Defs.LOG_TAG, "Failed to convert source currency to BGN!", e);
 			return;
 		}
-		// convert each destination currency from BGN
+
+		/*
+		 * Convert each destination currency from BGN (Sell Lev for target
+		 * currency)
+		 */
 		for (int i = 0; i < items.size(); i++) {
-			CurrencyData currency = items.get(i);
+			CurrencyData targetCurrency = items.get(i);
 			BigDecimal result = BigDecimal.ZERO;
 
 			try {
-				BigDecimal reverseRate;
-				if ("0".equals(currency.getBuy())) {
-					BigDecimal ratio0 = new BigDecimal(currency.getRatio());
-					reverseRate = ratio0.divide(new BigDecimal(currency.getSell(), mathContext), mathContext);
-				} else {
-					reverseRate = new BigDecimal(currency.getBuy(), mathContext);
+				BigDecimal sell = BigDecimal.ZERO;
+				if (!targetCurrency.getSell().isEmpty()) {
+					sell = new BigDecimal(targetCurrency.getSell(), mathContext);
 				}
-				// if ("0".equals(currency.getReverseRate())) {
-				// BigDecimal ratio0 = new BigDecimal(currency.getRatio());
-				// reverseRate = ratio0.divide(new
-				// BigDecimal(currency.getRate(), mathContext), mathContext);
-				// } else {
-				// reverseRate = new BigDecimal(currency.getReverseRate(),
-				// mathContext);
-				// }
-				BigDecimal ratio = new BigDecimal(currency.getRatio(), mathContext);
-				result = valueBGN.multiply(reverseRate, mathContext);
-				// result = reverseRate.multiply(ratio,
-				// mathContext).multiply(valueBGN, mathContext);
+
+				BigDecimal ratio = new BigDecimal(targetCurrency.getRatio(), mathContext);
+				result = amountOfBGN.divide(sell, mathContext).multiply(ratio, mathContext);
+
 			} catch (Exception e) {
-				Log.e(Defs.LOG_TAG, "Failed to calculate currency " + currency.getCode() + "!", e);
+				Log.e(Defs.LOG_TAG, "Failed to convert currency " + targetCurrency.getCode() + "!", e);
 			}
 
 			values.set(i, result);

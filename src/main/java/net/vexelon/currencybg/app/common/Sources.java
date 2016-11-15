@@ -59,6 +59,6 @@ public enum Sources {
 			}
 		}
 
-		return "?";
+		return "";
 	}
 }
