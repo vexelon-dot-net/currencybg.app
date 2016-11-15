@@ -67,12 +67,8 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		}
 
 		CurrencyData row = items.get(position);
-		ImageView icon = (ImageView) v.findViewById(R.id.target_icon);
-		int imageId = UIFlags.getResourceFromCode(row.getCode());
-		if (imageId != -1) {
-			icon.setImageResource(imageId);
-		}
 
+		UIUtils.setFlagIcon(v, R.id.target_icon, row.getCode());
 		UIUtils.setText(v, R.id.target_name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
 		UIUtils.setText(v, R.id.target_code, row.getCode());
 		UIUtils.setText(v, R.id.target_source, Sources.getName(row.getSource(), getContext()));

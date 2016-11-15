@@ -84,26 +84,19 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.currency_row_layout, parent, false);
 		}
 
-		// set texts
 		CurrencyListRow row = items.get(position);
-		if (row != null) {
-			// set country flag icon
-			ImageView icon = (ImageView) v.findViewById(R.id.icon);
-			int imageId = UIFlags.getResourceFromCode(row.getCode());
-			if (imageId != -1) {
-				icon.setImageResource(imageId);
-			}
 
-			UIUtils.setText(v, R.id.name, row.getName());
-			UIUtils.setText(v, R.id.code, row.getCode());
+		UIUtils.setFlagIcon(v, R.id.icon, row.getCode());
+		UIUtils.setText(v, R.id.name, row.getName());
+		UIUtils.setText(v, R.id.code, row.getCode());
 
-			UIUtils.setText(v, R.id.rate_src_1,
-					sourcesFilter.contains(Sources.TAVEX) ? getColumnValue(row, Sources.TAVEX) : "", true);
-			UIUtils.setText(v, R.id.rate_src_2,
-					sourcesFilter.contains(Sources.POLANA1) ? getColumnValue(row, Sources.POLANA1) : "", true);
-			UIUtils.setText(v, R.id.rate_src_3,
-					sourcesFilter.contains(Sources.FIB) ? getColumnValue(row, Sources.FIB) : "", true);
-		}
+		UIUtils.setText(v, R.id.rate_src_1,
+				sourcesFilter.contains(Sources.TAVEX) ? getColumnValue(row, Sources.TAVEX) : "", true);
+		UIUtils.setText(v, R.id.rate_src_2,
+				sourcesFilter.contains(Sources.POLANA1) ? getColumnValue(row, Sources.POLANA1) : "", true);
+		UIUtils.setText(v, R.id.rate_src_3, sourcesFilter.contains(Sources.FIB) ? getColumnValue(row, Sources.FIB) : "",
+				true);
+
 		return v;
 	}
 

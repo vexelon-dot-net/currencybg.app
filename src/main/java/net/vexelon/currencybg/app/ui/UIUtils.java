@@ -25,6 +25,7 @@ import android.text.Html;
 import android.view.KeyEvent;
 import android.R;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public final class UIUtils {
@@ -97,6 +98,21 @@ public final class UIUtils {
 
 	public static String toHtmlColor(String text, String color) {
 		return "<font color=\"" + color + "\">" + text + "</font>";
+	}
+
+	/**
+	 * Sets flag icon by doing a {@link UIFlags} lookup.
+	 * 
+	 * @param view
+	 * @param id
+	 * @param code
+	 */
+	public static void setFlagIcon(View view, int id, String code) {
+		ImageView icon = (ImageView) view.findViewById(id);
+		int imageId = UIFlags.getResourceFromCode(code);
+		if (imageId != -1) {
+			icon.setImageResource(imageId);
+		}
 	}
 
 	/**
