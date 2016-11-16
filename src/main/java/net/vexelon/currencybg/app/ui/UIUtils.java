@@ -24,6 +24,9 @@ import android.content.DialogInterface;
 import android.text.Html;
 import android.view.KeyEvent;
 import android.R;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public final class UIUtils {
 
@@ -97,4 +100,38 @@ public final class UIUtils {
 		return "<font color=\"" + color + "\">" + text + "</font>";
 	}
 
+	/**
+	 * Sets flag icon by doing a {@link UIFlags} lookup.
+	 * 
+	 * @param view
+	 * @param id
+	 * @param code
+	 */
+	public static void setFlagIcon(View view, int id, String code) {
+		ImageView icon = (ImageView) view.findViewById(id);
+		int imageId = UIFlags.getResourceFromCode(code);
+		if (imageId != -1) {
+			icon.setImageResource(imageId);
+		}
+	}
+
+	/**
+	 * 
+	 * @param view
+	 * @param id
+	 * @param text
+	 * @param isHtml
+	 *            Set to {@code true}, if {@code text} contains html tags.
+	 */
+	public static void setText(View view, int id, CharSequence text, boolean isHtml) {
+		TextView textView = (TextView) view.findViewById(id);
+		textView.setText(isHtml ? Html.fromHtml(text.toString()) : text);
+	}
+
+	/**
+	 * @see #setText(View, int, CharSequence, boolean)
+	 */
+	public static void setText(View view, int id, CharSequence text) {
+		setText(view, id, text, false);
+	}
 }

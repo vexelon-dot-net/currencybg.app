@@ -1,5 +1,13 @@
 package net.vexelon.currencybg.app.common;
 
+import android.content.Context;
+
+import com.google.common.collect.Sets;
+
+import net.vexelon.currencybg.app.R;
+
+import java.util.Set;
+
 /**
  * Available currency sources
  * <p>
@@ -39,5 +47,18 @@ public enum Sources {
 			}
 		}
 		return null;
+	}
+
+	public static String getName(int id, Context context) {
+		int[] sourceIds = context.getResources().getIntArray(R.array.currency_sources_ids);
+		String[] sourceNames = context.getResources().getStringArray(R.array.currency_sources);
+
+		for (int i = 0; i < sourceIds.length; i++) {
+			if (sourceIds[i] == id) {
+				return sourceNames[i];
+			}
+		}
+
+		return "";
 	}
 }
