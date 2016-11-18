@@ -69,20 +69,24 @@ public class NumberUtils {
 		return number.divide(divisor, RoundingMode.HALF_EVEN);
 	}
 
-	public static String scaleCurrency(BigDecimal number, String code) {
-		try {
-			Currency currency = Currency.getInstance(code);
-			NumberFormat format = NumberFormat.getCurrencyInstance();
-			format.setCurrency(currency);
-			return format.format(number.doubleValue());
-		} catch (IllegalArgumentException e) {
-			// default
+	public static String getCurrencyFormat(BigDecimal number, int n, String code) {
+		if (!StringUtils.isEmpty(code)) {
+			try {
+				Currency currency = Currency.getInstance(code);
+				NumberFormat format = NumberFormat.getCurrencyInstance();
+				format.setMaximumFractionDigits(n);
+				format.setCurrency(currency);
+				return format.format(number.doubleValue());
+			} catch (IllegalArgumentException e) {
+				// default
+			}
 		}
-		return number.setScale(2, RoundingMode.HALF_EVEN).toPlainString();
+
+		return number.setScale(n, RoundingMode.HALF_EVEN).toPlainString();
 	}
 
-	public static String scaleCurrency(BigDecimal number, int n) {
-		return number.setScale(n, RoundingMode.HALF_EVEN).toPlainString();
+	public static String getCurrencyFormat(BigDecimal number, String code) {
+		return getCurrencyFormat(number, Defs.SCALE_SHOW_SHORT, code);
 	}
 
 	/**

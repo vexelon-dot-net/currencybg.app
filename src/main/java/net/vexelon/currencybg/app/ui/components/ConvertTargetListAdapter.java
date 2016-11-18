@@ -77,12 +77,12 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 
 		switch (precisionMode) {
 		case AppSettings.PRECISION_ADVANCED:
-			String rate = NumberUtils.scaleCurrency(value, Defs.SCALE_SHOW_LONG);
-			UIUtils.setText(v, R.id.target_rate, rate);
+			UIUtils.setText(v, R.id.target_rate,
+					NumberUtils.getCurrencyFormat(value, Defs.SCALE_SHOW_LONG, row.getCode()));
 			break;
 		case AppSettings.PRECISION_SIMPLE:
 		default:
-			UIUtils.setText(v, R.id.target_rate, NumberUtils.scaleCurrency(value, row.getCode()));
+			UIUtils.setText(v, R.id.target_rate, NumberUtils.getCurrencyFormat(value, row.getCode()));
 			break;
 		}
 

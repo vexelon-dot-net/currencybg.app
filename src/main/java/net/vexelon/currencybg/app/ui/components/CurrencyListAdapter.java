@@ -24,14 +24,10 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -42,7 +38,6 @@ import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UIFlags;
 import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
@@ -122,7 +117,7 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 
 			switch (precisionMode) {
 			case AppSettings.PRECISION_ADVANCED:
-				String v = NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_LONG);
+				String v = NumberUtils.getCurrencyFormat(rate, Defs.SCALE_SHOW_LONG, null);
 				return UIUtils.toHtmlColor(v, color);
 			// String first = v.substring(0, Math.min(v.length() - 3,
 			// v.length()));
@@ -132,7 +127,7 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			// "</small>";
 			case AppSettings.PRECISION_SIMPLE:
 			default:
-				return UIUtils.toHtmlColor(NumberUtils.scaleCurrency(rate, Defs.SCALE_SHOW_SHORT), color);
+				return UIUtils.toHtmlColor(NumberUtils.getCurrencyFormat(rate, Defs.SCALE_SHOW_SHORT, null), color);
 			}
 		}
 
