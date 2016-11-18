@@ -1,5 +1,8 @@
 package net.vexelon.currencybg.app.remote;
 
+import android.util.Log;
+
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -10,6 +13,7 @@ import com.squareup.okhttp.Response;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.utils.StringUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -41,22 +45,28 @@ public class APISource implements Source {
 		return currencies;
 	}
 
+	private List<CurrencyData> toList(String json) throws SourceException {
+		if (!StringUtils.isEmpty(json)) {
+			return gson.fromJson(json, type);
+		}
+
+		// can't parse json, return an empty list to prevent NPEs
+		return Lists.newArrayList();
+	}
+
 	@Override
 	public List<CurrencyData> getAllRatesByDate(String initialTime) throws SourceException {
 
 		String address = SERVER_ADDRESS + initialTime;
 
-		String rates;
+		// TODO - to be set Authentication information
+
 		try {
-			rates = downloadRates(address);
+			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
 					"Failed in method getAllRatesByDate(String initialTime) to loading currencies from OpenShift!", io);
 		}
-
-		// TODO - to be set Authentication information
-		List<CurrencyData> currencies = gson.fromJson(rates, type);
-		return currencies;
 	}
 
 	@Override
@@ -64,17 +74,14 @@ public class APISource implements Source {
 
 		String address = SERVER_ADDRESS + initialTime + "/" + sourceId;
 
-		String rates;
+		// TODO - to be set Authentication information
+
 		try {
-			rates = downloadRates(address);
+			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
 					"Failed in method getAllRatesByDate(String initialTime) to loading currencies from OpenShift!", io);
 		}
-
-		// TODO - to be set Authentication information
-
-		return gson.fromJson(rates, type);
 	}
 
 	@Override
@@ -82,17 +89,14 @@ public class APISource implements Source {
 
 		String address = SERVER_ADDRESS + "today/" + initialTime;
 
-		String rates;
+		// TODO - to be set Authentication information
+
 		try {
-			rates = downloadRates(address);
+			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
 					"Failed in method getAllRatesByDate(String initialTime) to loading currencies from OpenShift!", io);
 		}
-
-		// TODO - to be set Authentication information
-
-		return gson.fromJson(rates, type);
 	}
 
 	@Override
@@ -100,17 +104,14 @@ public class APISource implements Source {
 
 		String address = SERVER_ADDRESS + "today/" + initialTime + "/" + sourceId;
 
-		String rates;
+		// TODO - to be set Authentication information
+
 		try {
-			rates = downloadRates(address);
+			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
 					"Failed in method getAllRatesByDate(String initialTime) to loading currencies from OpenShift!", io);
 		}
-
-		// TODO - to be set Authentication information
-
-		return gson.fromJson(rates, type);
 	}
 
 	String downloadRates(String url) throws IOException {
