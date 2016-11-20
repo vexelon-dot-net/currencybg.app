@@ -17,6 +17,7 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -356,13 +357,31 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param useRemoteSource
 	 */
 	public void reloadRates(boolean useRemoteSource) {
+		//TODO - temp set value
+//		useRemoteSource=false;
+
 		if (!useRemoteSource) {
 			DataSource source = null;
 			try {
 				source = new SQLiteDataSource();
 				source.connect(getActivity());
 
+				//TODO - temp commented
 				List<CurrencyData> ratesList = source.getLastRates();
+				///////////////
+				//TODO - Temp row
+//				List<CurrencyData> ratesList = new ArrayList<CurrencyData>();
+//				CurrencyData rate = new CurrencyData();
+//				rate.setCode("Test");
+//				rate.setBuy("11");
+//				rate.setSell("12");
+//				rate.setSource(100);
+//				ratesList.add(rate);
+
+
+//				source.addRatesTest(ratesList);
+//				source.getDate();
+				//////////////
 				if (!ratesList.isEmpty()) {
 					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
 					updateCurrenciesListView(ratesList);
@@ -407,7 +426,10 @@ public class CurrenciesFragment extends AbstractFragment {
 			List<CurrencyData> currencies = Lists.newArrayList();
 
 			try {
+				//TODO - temp commented
 				String iso8601Time = lastUpdate.toString();
+//				String iso8601Time  = "2016-11-15T13:14:01+02:00";
+
 				Log.d(Defs.LOG_TAG, "Downloading all rates since " + iso8601Time + " onwards...");
 
 				// format, e.g., "2016-11-09T01:00:06+03:00"
@@ -415,9 +437,15 @@ public class CurrenciesFragment extends AbstractFragment {
 
 				source = new SQLiteDataSource();
 				source.connect(activity);
+				//TODO - temp commented
 				source.addRates(currencies);
+				//////////
+				//TODO - temp row
+//				source.addRatesTest(currencies);
+				///////////////
 
 				// reload merged currencies
+				//TODO - temp commented
 				currencies = source.getLastRates();
 
 				updateOK = true;

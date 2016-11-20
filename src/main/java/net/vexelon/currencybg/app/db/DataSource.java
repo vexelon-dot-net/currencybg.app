@@ -29,6 +29,15 @@ import net.vexelon.currencybg.app.db.models.CurrencyData;
  */
 public interface DataSource extends Closeable {
 
+
+	/////////
+	//TODO - test method
+	public void getDate() throws DataSourceException;
+
+	public void addRatesTest(List<CurrencyData> rates) throws DataSourceException;
+	////////////////
+
+
 	/**
 	 * Establishes connection to data source.
 	 *

@@ -17,6 +17,7 @@
  */
 package net.vexelon.currencybg.app.utils;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +31,8 @@ import android.content.Context;
 import net.vexelon.currencybg.app.Defs;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -44,32 +47,72 @@ public class DateTimeUtils {
 
 	// Test Joda time methods
 	public static void main(String[] args) {
-		DateFormat dateFormat = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
-		Date date = new Date();
-		System.out.println("Currect Time: " + dateFormat.format(date)); // 2014/08/06
-																		// 15:59:48
-		System.out.println();
+//		SimpleDateFormat sdfBulgaria = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
+//		TimeZone tzInBulgaria = TimeZone.getTimeZone("Europe/Sofia");
+//		sdfBulgaria.setTimeZone(tzInBulgaria);
+//
+//
+//		SimpleDateFormat sdf = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
+//
+//		Date date = new Date();
+//		System.out.println(sdf.format(new Timestamp(date.getTime())));
+//
+//		DateTime dateTime = new DateTime(new Timestamp(date.getTime()));
+//		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(Defs.DATEFORMAT_ISO8601);
+//		System.out.println(dateTimeFormatter.print(dateTime));
 
-		SimpleDateFormat sdfAmerica = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
-		TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-		sdfAmerica.setTimeZone(tzInAmerica);
 
-		String sDateInAmerica = sdfAmerica.format(date);
-		System.out.println("America String: " + sDateInAmerica);
-		Date dateObject1 = parseStringToDate(sDateInAmerica);
-		System.out.println("Bulgaria Date: " + dateFormat.format(dateObject1));
-		System.out.println();
+//		DateTimeZone timeZone = DateTimeZone.getDefault();
+//		DateTime dateTime = new DateTime();
+//		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ").withZone(DateTimeZone.forID("Europe/Sofia"));//America/New_York
+//		System.out.println(dateTimeFormatter.print(dateTime.minusDays(3)).replace("+0200","+02:00"));
 
-		try {
-			Date dateInAmerica = sdfAmerica.parse(sDateInAmerica);
-			System.out.println("America Date: " + sDateInAmerica);
-			String stringOject = parseDateToString(dateInAmerica, Defs.DATEFORMAT_ISO8601);
-			System.out.println("Bulgaria String: " + stringOject);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		System.out.print(getOldDate(3));
+
+
 
 	}
+
+	/**
+	 *  Returns OldDate = CurrencyDate - X days. An example format - 2016-11-17T14:49:41+02:00
+	 * @param minusDays
+	 * @return
+     */
+	public static String getOldDate(int minusDays){
+		DateTime dateTime = new DateTime();
+		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ").withZone(DateTimeZone.forID("Europe/Sofia"));//America/New_York
+		return dateTimeFormatter.print(dateTime.minusDays(minusDays)).replace("+0200","+02:00");
+	}
+
+
+
+//	public static void main(String[] args) {
+//		DateFormat dateFormat = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
+//		Date date = new Date();
+//		System.out.println("Currect Time: " + dateFormat.format(date)); // 2014/08/06
+//																		// 15:59:48
+//		System.out.println();
+//
+//		SimpleDateFormat sdfAmerica = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
+//		TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
+//		sdfAmerica.setTimeZone(tzInAmerica);
+//
+//		String sDateInAmerica = sdfAmerica.format(date);
+//		System.out.println("America String: " + sDateInAmerica);
+//		Date dateObject1 = parseStringToDate(sDateInAmerica);
+//		System.out.println("Bulgaria Date: " + dateFormat.format(dateObject1));
+//		System.out.println();
+//
+//		try {
+//			Date dateInAmerica = sdfAmerica.parse(sDateInAmerica);
+//			System.out.println("America Date: " + sDateInAmerica);
+//			String stringOject = parseDateToString(dateInAmerica, Defs.DATEFORMAT_ISO8601);
+//			System.out.println("Bulgaria String: " + stringOject);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 
 	/**
 	 *
