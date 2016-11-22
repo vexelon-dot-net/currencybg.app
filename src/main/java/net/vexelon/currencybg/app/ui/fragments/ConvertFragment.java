@@ -322,7 +322,8 @@ public class ConvertFragment extends AbstractFragment {
 		currency.setBuy("1");
 		currency.setSell("1");
 		currency.setSource(0);
-		currency.setDate(new Date());
+//		currency.setDate(new Date());
+		currency.setDate("2016-11-15T13:14:01+02:00");
 
 		currencies.add(currency);
 		return currencies;

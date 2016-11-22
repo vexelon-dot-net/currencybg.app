@@ -368,6 +368,8 @@ public class CurrenciesFragment extends AbstractFragment {
 
 				//TODO - temp commented
 				List<CurrencyData> ratesList = source.getLastRates();
+
+
 				///////////////
 				//TODO - Temp row
 //				List<CurrencyData> ratesList = new ArrayList<CurrencyData>();

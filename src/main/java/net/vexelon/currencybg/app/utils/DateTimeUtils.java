@@ -80,8 +80,7 @@ public class DateTimeUtils {
      */
 	public static String getOldDate(int minusDays){
 		DateTime dateTime = new DateTime();
-		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ").withZone(DateTimeZone.forID("Europe/Sofia"));//America/New_York
-		return dateTimeFormatter.print(dateTime.minusDays(minusDays)).replace("+0200","+02:00");
+		return dateTime.minusDays(minusDays).withZone(DateTimeZone.forID("Europe/Sofia")).toString();
 	}
 
 

@@ -8,7 +8,7 @@ public class CurrencyData {
 	private int ratio = 1; // default
 	private String buy;
 	private String sell;
-	private Date date;
+	private String date;
 	private int source;
 
 	public String getCode() {
@@ -43,11 +43,11 @@ public class CurrencyData {
 		this.sell = sell;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
