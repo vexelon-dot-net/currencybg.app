@@ -45,33 +45,6 @@ public class DateTimeUtils {
 	protected static DateFormat DT_FORMAT = null;
 	protected static DateFormat DATE_FORMAT = null;
 
-	// Test Joda time methods
-	public static void main(String[] args) {
-//		SimpleDateFormat sdfBulgaria = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
-//		TimeZone tzInBulgaria = TimeZone.getTimeZone("Europe/Sofia");
-//		sdfBulgaria.setTimeZone(tzInBulgaria);
-//
-//
-//		SimpleDateFormat sdf = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
-//
-//		Date date = new Date();
-//		System.out.println(sdf.format(new Timestamp(date.getTime())));
-//
-//		DateTime dateTime = new DateTime(new Timestamp(date.getTime()));
-//		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(Defs.DATEFORMAT_ISO8601);
-//		System.out.println(dateTimeFormatter.print(dateTime));
-
-
-//		DateTimeZone timeZone = DateTimeZone.getDefault();
-//		DateTime dateTime = new DateTime();
-//		DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ").withZone(DateTimeZone.forID("Europe/Sofia"));//America/New_York
-//		System.out.println(dateTimeFormatter.print(dateTime.minusDays(3)).replace("+0200","+02:00"));
-
-		System.out.print(getOldDate(3));
-
-
-
-	}
 
 	/**
 	 *  Returns OldDate = CurrencyDate - X days. An example format - 2016-11-17T14:49:41+02:00
@@ -80,7 +53,7 @@ public class DateTimeUtils {
      */
 	public static String getOldDate(int minusDays){
 		DateTime dateTime = new DateTime();
-		return dateTime.minusDays(minusDays).withZone(DateTimeZone.forID("Europe/Sofia")).toString();
+		return dateTime.withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfDay(0).minusDays(minusDays).withZone(DateTimeZone.forID("Europe/Sofia")).toString();
 	}
 
 

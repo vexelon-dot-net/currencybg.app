@@ -97,76 +97,20 @@ public class SQLiteDataSource implements DataSource {
 		database.delete(Defs.TABLE_CURRENCY, null, null);
 	}
 
-	/////////////////////////////////
-
 	@Override
-	public void addRatesTest(List<CurrencyData> rates) throws DataSourceException {
-
-
-//		String dateInString = "2016-11-16T15:23:01";
-		String dateInString = "2016-10-29T22:14:01+02:00";
-
-		ContentValues values = new ContentValues();
-
-		for (CurrencyData rate : rates) {
-
-			values.put(Defs.COLUMN_CODE, rate.getCode());
-			values.put(Defs.COLUMN_RATIO, rate.getRatio());
-			values.put(Defs.COLUMN_BUY, rate.getBuy());
-			values.put(Defs.COLUMN_SELL, rate.getSell());
-			values.put(Defs.COLUMN_CURR_DATE, dateInString/*DateTimeUtils.parseDateToString(rate.getDate(), Defs.DATEFORMAT_ISO8601)*/);
-			values.put(Defs.COLUMN_SOURCE, rate.getSource());
-
-			database.insert(Defs.TABLE_CURRENCY, null, values);
-
-			values = new ContentValues();
-		}
+	public void deleteOlderRates(int days)throws  DataSourceException{
+		database.execSQL("DELETE FROM currencies WHERE strftime('%s', curr_date) < strftime('%s', '"+DateTimeUtils.getOldDate(days)+"' )");//'2016-11-19T20:48:29.022+02:00'
 
 	}
 
 	@Override
-	public void getDate()throws  DataSourceException{
+	public List<CurrencyData> getLastRates() throws DataSourceException {
 		List<CurrencyData> resultCurrency = Lists.newArrayList();
-
-
-
-//		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE CAST(strftime('%s', curr_date)  AS  integer) >=CAST(strftime('%s', '2016-11-05 15:23:01')  AS  integer) ; ", null);
-//		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE CAST(strftime('%s', curr_date)  AS  integer) >=CAST(strftime('%s', '2016-11-05 15:23:01')  AS  integer) ORDER BY CAST(strftime('%s', curr_date)  AS  integer) ASC; ", null);
-//		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE strftime('%s', curr_date) <=strftime('%s', '2016-11-16T22:23:39+02:00' ) ORDER BY strftime('%s', curr_date)  DESC; ", null);
-		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE strftime('%s', curr_date) <=strftime('%s', ? ) ORDER BY strftime('%s', curr_date)  ASC; ", new String [] {String.valueOf(/*"2016-11-16T22:23:39+02:00"*/DateTimeUtils.getOldDate(0))});
-//		Cursor cursor = database.rawQuery("SELECT * FROM currencies ", null);
-		cursor.moveToFirst();
-		while(!cursor.isAfterLast()){
-			String test = cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE));
-//			CurrencyData comment = cursorToCurrency(cursor);
-//			resultCurrency.add(comment);
-			cursor.moveToNext();
-		}
-
-		cursor.close();
-
-
-	}
-	/////////////////////////////////////
-
-	@Override
-	public List<CurrencyData> getLastRates()/* getAllCurrencies */ throws DataSourceException {
-		List<CurrencyData> resultCurrency = Lists.newArrayList();
-
-		// String whereClause = Defs.COLUMN_CURR_DATE + " = ? AND " +
-		// Defs.COLUMN_LOCALE + " = ? ";
-		// String[] whereArgs = new String[] { parseDateToString(dateOfCurrency,
-		// DATE_FORMAT), locale.toString() };
-
-//		Cursor cursor = database.query(Defs.TABLE_CURRENCY, ALL_COLUMNS, null/* whereClause */, null/* whereArgs */,
-//				null, null, null);
 
 		Cursor cursor = database.rawQuery("SELECT * FROM currencies ORDER BY strftime('%s', curr_date)  ASC; ", null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			//TODO - temp code
-			String test = cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE));
 
 			CurrencyData comment = cursorToCurrency(cursor);
 			resultCurrency.add(comment);
@@ -181,12 +125,6 @@ public class SQLiteDataSource implements DataSource {
 	@Override
 	public List<CurrencyData> getAllCurrencies(Integer source) throws DataSourceException {
 		List<CurrencyData> resultCurrencies = Lists.newArrayList();
-
-		//TODO - remove unused code from methods
-//		String whereClause = Defs.COLUMN_SOURCE + " = ? ";
-//		String[] whereArgs = new String[] { source.toString() };
-
-//		Cursor cursor = database.query(Defs.TABLE_CURRENCY, ALL_COLUMNS, whereClause, whereArgs, null, null, null);
 
 		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE "+Defs.COLUMN_SOURCE +" = ? ORDER BY strftime('%s', curr_date)  ASC; ", new String [] {String.valueOf(source)});
 
@@ -205,11 +143,6 @@ public class SQLiteDataSource implements DataSource {
 	@Override
 	public List<CurrencyData> getAllRates(String code) throws DataSourceException {
 		List<CurrencyData> resultCurrencies = Lists.newArrayList();
-
-//		String whereClause = Defs.COLUMN_CODE + " = ? ";
-//		String[] whereArgs = new String[] { code };
-
-//		Cursor cursor = database.query(Defs.TABLE_CURRENCY, ALL_COLUMNS, whereClause, whereArgs, null, null, null);
 
 		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE "+Defs.COLUMN_CODE +" = ? ORDER BY strftime('%s', curr_date)  ASC; ", new String [] {String.valueOf(code)});
 
@@ -231,7 +164,6 @@ public class SQLiteDataSource implements DataSource {
 		currency.setRatio(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_RATIO)));
 		currency.setBuy(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_BUY)));
 		currency.setSell(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_SELL)));
-//		currency.setDate(DateTimeUtils.parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE))));
 		currency.setDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE)));
 		currency.setSource(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_SOURCE)));
 
