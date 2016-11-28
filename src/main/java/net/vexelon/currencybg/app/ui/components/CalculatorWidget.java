@@ -24,57 +24,88 @@ import java.math.BigDecimal;
  */
 public class CalculatorWidget implements View.OnClickListener {
 
-	private static final int OP_CLEAR = 0;
-	private static final int OP_DIV = 1;
-	private static final int OP_MUL = 2;
-	private static final int OP_MINUS = 3;
-	private static final int OP_PLUS = 4;
-	private static final int OP_EQUAL = 5;
-	private static final int OP_DECIMAL = 6;
-	private static final int OP_PERCENT = 7;
+	private static final int BASE_INDEX = 0x80;
+
+	private static final int OP_0 = 0;
+	private static final int OP_1 = 1;
+	private static final int OP_2 = 2;
+	private static final int OP_3 = 3;
+	private static final int OP_4 = 4;
+	private static final int OP_5 = 5;
+	private static final int OP_6 = 6;
+	private static final int OP_7 = 7;
+	private static final int OP_8 = 8;
+	private static final int OP_9 = 9;
+	private static final int OP_CLEAR = 10;
+	private static final int OP_DIV = 11;
+	private static final int OP_MUL = 12;
+	private static final int OP_MINUS = 13;
+	private static final int OP_PLUS = 14;
+	private static final int OP_EQUAL = 15;
+	private static final int OP_DECIMAL = 16;
+	private static final int OP_PERCENT = 17;
+
 	private static final int OP_MAX_OPS = OP_PERCENT + 1;
 
 	private Context context;
 
 	private TextView display;
-	private Button[] numberButtons = new Button[10];
 	private Button[] opButtons = new Button[OP_MAX_OPS];
 
 	public CalculatorWidget(Context context) {
 		this.context = context;
 	}
 
-	private void init(View rootView) {
-		display = (TextView) rootView.findViewById(R.id.calc_display);
+	private void init(View view) {
+		display = (TextView) view.findViewById(R.id.calc_display);
+		display.setText("0"); // TODO initial
 
-		numberButtons[0] = (Button) rootView.findViewById(R.id.calc_button0);
-		numberButtons[1] = (Button) rootView.findViewById(R.id.calc_button1);
-		numberButtons[2] = (Button) rootView.findViewById(R.id.calc_button2);
-		numberButtons[3] = (Button) rootView.findViewById(R.id.calc_button3);
-		numberButtons[4] = (Button) rootView.findViewById(R.id.calc_button4);
-		numberButtons[5] = (Button) rootView.findViewById(R.id.calc_button5);
-		numberButtons[6] = (Button) rootView.findViewById(R.id.calc_button6);
-		numberButtons[7] = (Button) rootView.findViewById(R.id.calc_button7);
-		numberButtons[8] = (Button) rootView.findViewById(R.id.calc_button8);
-		numberButtons[9] = (Button) rootView.findViewById(R.id.calc_button9);
+		bindButton(view, OP_0, R.id.calc_button0);
+		bindButton(view, OP_1, R.id.calc_button1);
+		bindButton(view, OP_2, R.id.calc_button2);
+		bindButton(view, OP_3, R.id.calc_button3);
+		bindButton(view, OP_4, R.id.calc_button4);
+		bindButton(view, OP_5, R.id.calc_button5);
+		bindButton(view, OP_6, R.id.calc_button6);
+		bindButton(view, OP_7, R.id.calc_button7);
+		bindButton(view, OP_8, R.id.calc_button8);
+		bindButton(view, OP_9, R.id.calc_button9);
+		bindButton(view, OP_CLEAR, R.id.calc_button_clear);
+		bindButton(view, OP_DIV, R.id.calc_button_div);
+		bindButton(view, OP_MUL, R.id.calc_button_mul);
+		bindButton(view, OP_MINUS, R.id.calc_button_minus);
+		bindButton(view, OP_PLUS, R.id.calc_button_plus);
+		bindButton(view, OP_EQUAL, R.id.calc_button_eq);
+		bindButton(view, OP_DECIMAL, R.id.calc_button_dec);
+		bindButton(view, OP_PERCENT, R.id.calc_button_percent);
+	}
 
-		opButtons[OP_CLEAR] = (Button) rootView.findViewById(R.id.calc_button_clear);
-		opButtons[OP_DIV] = (Button) rootView.findViewById(R.id.calc_button_div);
-		opButtons[OP_MUL] = (Button) rootView.findViewById(R.id.calc_button_mul);
-		opButtons[OP_MINUS] = (Button) rootView.findViewById(R.id.calc_button_minus);
-		opButtons[OP_PLUS] = (Button) rootView.findViewById(R.id.calc_button_plus);
-		opButtons[OP_EQUAL] = (Button) rootView.findViewById(R.id.calc_button_eq);
-		opButtons[OP_DECIMAL] = (Button) rootView.findViewById(R.id.calc_button_dec);
-		opButtons[OP_PERCENT] = (Button) rootView.findViewById(R.id.calc_button_percent);
-
-		// TODO
+	private void bindButton(View view, int id, int resid) {
+		Button button = (Button) view.findViewById(resid);
+		button.setId(BASE_INDEX + id);
+		button.setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
 		// TODO
-		switch (v.getId()) {
+		switch (v.getId() - BASE_INDEX) {
+		case OP_0:
+			if (display.getText().length() > 1) {
+				display.setText(display.getText() + "0");
+			}
+			break;
+		case OP_1:
+			display.setText(display.getText() + "1");
+			break;
+		case OP_2:
+			display.setText(display.getText() + "2");
+			break;
+		case OP_3:
+			display.setText(display.getText() + "3");
+			break;
 		case OP_CLEAR:
+			display.setText("0");
 			break;
 		}
 	}
