@@ -356,6 +356,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param useRemoteSource
 	 */
 	public void reloadRates(boolean useRemoteSource) {
+
 		if (!useRemoteSource) {
 			DataSource source = null;
 			try {
@@ -363,6 +364,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				source.connect(getActivity());
 
 				List<CurrencyData> ratesList = source.getLastRates();
+
 				if (!ratesList.isEmpty()) {
 					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
 					updateCurrenciesListView(ratesList);
@@ -408,6 +410,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 			try {
 				String iso8601Time = lastUpdate.toString();
+
 				Log.d(Defs.LOG_TAG, "Downloading all rates since " + iso8601Time + " onwards...");
 
 				// format, e.g., "2016-11-09T01:00:06+03:00"

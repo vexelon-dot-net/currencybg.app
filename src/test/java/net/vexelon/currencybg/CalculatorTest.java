@@ -19,7 +19,6 @@ public class CalculatorTest {
 
 		Assert.assertTrue(calculator.add(new BigDecimal(1.3480)).add(new BigDecimal(0.9700)).getNormalizedResult()
 				.equals("2.80"));
-//		System.out.print(calculator.getNormalizedResult());
 	}
 
 	@Test
@@ -28,7 +27,6 @@ public class CalculatorTest {
 
 		Assert.assertTrue(calculator.add(new BigDecimal(1.3480)).div(new BigDecimal(2.1)).getNormalizedResult().equals("0.87"));
 
-//		System.out.println(calculator.getNormalizedResult());
 	}
 
 	@Test
@@ -36,6 +34,5 @@ public class CalculatorTest {
 		Calculator calculator = new Calculator(new BigDecimal(10.568), 2);
 		Assert.assertTrue(calculator.sub(new BigDecimal(2.586)).mul(new BigDecimal(0.555)).getNormalizedResult().equals("4.43"));
 
-//		System.out.println(calculator.getNormalizedResult());
 	}
 }

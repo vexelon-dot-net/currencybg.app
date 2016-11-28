@@ -29,6 +29,7 @@ import net.vexelon.currencybg.app.db.models.CurrencyData;
  */
 public interface DataSource extends Closeable {
 
+
 	/**
 	 * Establishes connection to data source.
 	 *
@@ -78,4 +79,12 @@ public interface DataSource extends Closeable {
 	 * @throws DataSourceException
 	 */
 	public void deleteRates() throws DataSourceException;
+
+	/**
+	 * Delete Rates which are older than X days
+	 *
+	 * @param days
+	 * @throws DataSourceException
+	 */
+	public void deleteOlderRates(int days) throws DataSourceException;
 }
