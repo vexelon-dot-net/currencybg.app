@@ -88,15 +88,10 @@ public class SQLiteDataSource implements DataSource {
 	}
 
 	@Override
-	public void deleteRates() throws DataSourceException {
-		database.delete(Defs.TABLE_CURRENCY, null, null);
-	}
-
-	@Override
-	public void deleteOlderRates(int days) throws DataSourceException {
+	public void deleteRates(int backDays) throws DataSourceException {
+		// '2016-11-19T20:48:29.022+02:00'
 		database.execSQL("DELETE FROM currencies WHERE strftime('%s', curr_date) < strftime('%s', '"
-				+ DateTimeUtils.getOldDate(days) + "' )");// '2016-11-19T20:48:29.022+02:00'
-
+				+ DateTimeUtils.getOldDate(backDays) + "' )");
 	}
 
 	@Override

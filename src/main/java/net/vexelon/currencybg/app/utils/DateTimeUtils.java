@@ -45,46 +45,48 @@ public class DateTimeUtils {
 	protected static DateFormat DT_FORMAT = null;
 	protected static DateFormat DATE_FORMAT = null;
 
-
 	/**
-	 *  Returns OldDate = CurrencyDate - X days. An example format - 2016-11-17T14:49:41+02:00
+	 * 
 	 * @param minusDays
-	 * @return
-     */
-	public static String getOldDate(int minusDays){
+	 * @return OldDate = CurrencyDate - X days. An example format -
+	 *         2016-11-17T14:49:41+02:00
+	 */
+	public static String getOldDate(int minusDays) {
 		DateTime dateTime = new DateTime();
-		return dateTime.withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfDay(0).minusDays(minusDays).withZone(DateTimeZone.forID("Europe/Sofia")).toString();
+		return dateTime.withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfDay(0)
+				.minusDays(minusDays).withZone(DateTimeZone.forID(Defs.DATE_TIMEZONE_SOFIA)).toString();
 	}
 
-
-
-//	public static void main(String[] args) {
-//		DateFormat dateFormat = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
-//		Date date = new Date();
-//		System.out.println("Currect Time: " + dateFormat.format(date)); // 2014/08/06
-//																		// 15:59:48
-//		System.out.println();
-//
-//		SimpleDateFormat sdfAmerica = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
-//		TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-//		sdfAmerica.setTimeZone(tzInAmerica);
-//
-//		String sDateInAmerica = sdfAmerica.format(date);
-//		System.out.println("America String: " + sDateInAmerica);
-//		Date dateObject1 = parseStringToDate(sDateInAmerica);
-//		System.out.println("Bulgaria Date: " + dateFormat.format(dateObject1));
-//		System.out.println();
-//
-//		try {
-//			Date dateInAmerica = sdfAmerica.parse(sDateInAmerica);
-//			System.out.println("America Date: " + sDateInAmerica);
-//			String stringOject = parseDateToString(dateInAmerica, Defs.DATEFORMAT_ISO8601);
-//			System.out.println("Bulgaria String: " + stringOject);
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
+	// public static void main(String[] args) {
+	// DateFormat dateFormat = new SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
+	// Date date = new Date();
+	// System.out.println("Currect Time: " + dateFormat.format(date)); //
+	// 2014/08/06
+	// // 15:59:48
+	// System.out.println();
+	//
+	// SimpleDateFormat sdfAmerica = new
+	// SimpleDateFormat(Defs.DATEFORMAT_ISO8601);
+	// TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
+	// sdfAmerica.setTimeZone(tzInAmerica);
+	//
+	// String sDateInAmerica = sdfAmerica.format(date);
+	// System.out.println("America String: " + sDateInAmerica);
+	// Date dateObject1 = parseStringToDate(sDateInAmerica);
+	// System.out.println("Bulgaria Date: " + dateFormat.format(dateObject1));
+	// System.out.println();
+	//
+	// try {
+	// Date dateInAmerica = sdfAmerica.parse(sDateInAmerica);
+	// System.out.println("America Date: " + sDateInAmerica);
+	// String stringOject = parseDateToString(dateInAmerica,
+	// Defs.DATEFORMAT_ISO8601);
+	// System.out.println("Bulgaria String: " + stringOject);
+	// } catch (ParseException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// }
 
 	/**
 	 *
