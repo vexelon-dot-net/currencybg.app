@@ -19,7 +19,7 @@
             style="@android:style/Widget.Holo.Spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".60"/>
+            android:layout_weight=".50"/>
 
         <TextView
             android:id="@+id/text_source_value2"
@@ -33,22 +33,22 @@
             android:minWidth="140dp"
             android:text="0.00"/>
 
-        <EditText
-            android:id="@+id/text_source_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight=".40"
-            android:digits="0123456789."
-            android:focusable="true"
-            android:gravity="right"
-            android:imeOptions="actionDone"
-            android:inputType="numberDecimal"
-            android:lines="1"
-            android:maxLength="10"
-            android:minWidth="140dp"
-            android:singleLine="true"
-            android:text="0.00"/>
+        <!--<EditText-->
+        <!--android:id="@+id/text_source_value"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_weight=".40"-->
+        <!--android:digits="0123456789."-->
+        <!--android:focusable="true"-->
+        <!--android:gravity="right"-->
+        <!--android:imeOptions="actionDone"-->
+        <!--android:inputType="numberDecimal"-->
+        <!--android:lines="1"-->
+        <!--android:maxLength="10"-->
+        <!--android:minWidth="140dp"-->
+        <!--android:singleLine="true"-->
+        <!--android:text="0.00"/>-->
 
     </LinearLayout>
 

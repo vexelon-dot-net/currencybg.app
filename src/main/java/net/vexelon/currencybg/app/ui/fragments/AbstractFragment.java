@@ -17,26 +17,33 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -94,6 +101,27 @@ public class AbstractFragment extends Fragment {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 
+	 * @return MaterialDialog
+	 */
+	protected MaterialDialog newCalculatorMenu(final CalculatorListener listener) {
+		final AppSettings appSettings = new AppSettings(getActivity());
+		return new MaterialDialog.Builder(getActivity()).customView(R.layout.calculator_layout, false)
+				.positiveText(R.string.text_ok).negativeText(R.string.text_cancel)
+				.onPositive(new MaterialDialog.SingleButtonCallback() {
+					@Override
+					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+						// TODO
+						TextView display = (TextView) dialog.getCustomView().findViewById(R.id.calc_display);
+						Log.d(Defs.LOG_TAG, "CALC: " + display.getText());
+
+						// notify
+						listener.onValue(new BigDecimal(display.getText().toString()));
+					}
+				}).build();
 	}
 
 	protected CurrencyLocales getSelectedCurrenciesLocale() {
@@ -186,5 +214,14 @@ public class AbstractFragment extends Fragment {
 
 	protected void showSnackbar(int resId) {
 		showSnackbar(resId, Snackbar.LENGTH_SHORT, false);
+	}
+
+	/**
+	 * 
+	 */
+	public static interface CalculatorListener {
+
+		void onValue(BigDecimal value);
+
 	}
 }

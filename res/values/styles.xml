@@ -105,8 +105,13 @@
         <item name="android:textColor">@color/infos_value</item>
     </style>
 
-    <style name="FontCalcButton" parent="@android:style/TextAppearance">
+    <style name="FontCalcButton" parent="@android:style/Widget.Holo.Button.Borderless">
         <item name="android:textSize">22sp</item>
+        <item name="android:textColor">#FFF</item>
+    </style>
+
+    <style name="FontCalcDisplay" parent="@android:style/TextAppearance">
+        <item name="android:textSize">26sp</item>
         <item name="android:textColor">#FFF</item>
     </style>
 

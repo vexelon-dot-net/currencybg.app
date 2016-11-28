@@ -7,10 +7,15 @@
 
     <TextView
         android:id="@+id/calc_display"
+        style="@style/FontCalcDisplay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="fill"
-        android:text="01234567890"/>
+        android:layout_gravity="fill_horizontal"
+        android:background="@drawable/calculator_display"
+        android:gravity="right|bottom"
+        android:maxLines="1"
+        android:padding="4sp"
+        android:text="012345678900123456789001234567890"/>
 
     <!-- 7,8,9,C -->
     <LinearLayout
@@ -23,6 +28,7 @@
             style="@style/FontCalcButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="16sp"
             android:text="7"/>
 
         <Button

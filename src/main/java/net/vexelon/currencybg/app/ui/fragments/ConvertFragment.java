@@ -64,7 +64,6 @@ import org.w3c.dom.Text;
 public class ConvertFragment extends AbstractFragment {
 
 	private Spinner spinnerSourceCurrency;
-	private EditText etSourceValue;
 	private TextView tvSourceValue;
 	private ListView lvTargetCurrencies;
 
@@ -125,6 +124,7 @@ public class ConvertFragment extends AbstractFragment {
 			}
 
 			public void onNothingSelected(android.widget.AdapterView<?> parent) {
+				// do nothing
 			}
 		});
 
@@ -133,36 +133,19 @@ public class ConvertFragment extends AbstractFragment {
 		tvSourceValue.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				newCalculatorMenu().show();
-			}
-		});
+				newCalculatorMenu(new CalculatorListener() {
 
-		// setup source value
-		etSourceValue = (EditText) view.findViewById(R.id.text_source_value);
-		etSourceValue.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onValue(BigDecimal value) {
+						// TODO
+						tvSourceValue.setText(value.toPlainString());
+						if (updateTargetCurrenciesCalculations()) {
+							// save if value is valid
+							new AppSettings(getActivity()).setLastConvertValue(tvSourceValue.getText().toString());
+						}
 
-			@Override
-			public void onClick(View v) {
-				etSourceValue.setSelection(etSourceValue.getText().length());
-			}
-		});
-
-		etSourceValue.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				if (updateTargetCurrenciesCalculations()) {
-					// save if value is valid
-					new AppSettings(getActivity()).setLastConvertValue(etSourceValue.getText().toString());
-				}
+					}
+				}).show();
 			}
 		});
 
@@ -199,20 +182,6 @@ public class ConvertFragment extends AbstractFragment {
 		});
 	}
 
-	private MaterialDialog newCalculatorMenu() {
-		final AppSettings appSettings = new AppSettings(getActivity());
-		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sort_title)
-				.customView(R.layout.calculator_layout, true).positiveText(R.string.text_ok)
-				.negativeText(R.string.text_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-					@Override
-					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-						// TODO
-						TextView display = (TextView) dialog.getCustomView().findViewById(R.id.calc_display);
-						Log.d(Defs.LOG_TAG, "CALC: " + display.getText());
-					}
-				}).build();
-	}
-
 	private void refreshUIData() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 
@@ -226,7 +195,7 @@ public class ConvertFragment extends AbstractFragment {
 					.setSelection(adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel()));
 		}
 
-		etSourceValue.setText(appSettings.getLastConvertValue());
+		tvSourceValue.setText(appSettings.getLastConvertValue());
 
 		updateTargetCurrenciesListView();
 	}
@@ -264,7 +233,7 @@ public class ConvertFragment extends AbstractFragment {
 		if (adapter != null && sourceCurrency != null) {
 			MathContext mathContext = new MathContext(Defs.SCALE_CALCULATIONS);
 			try {
-				BigDecimal value = new BigDecimal(etSourceValue.getText().toString(), mathContext);
+				BigDecimal value = new BigDecimal(tvSourceValue.getText().toString(), mathContext);
 				adapter.updateConvert(sourceCurrency, value);
 				adapter.notifyDataSetChanged();
 				return true;
