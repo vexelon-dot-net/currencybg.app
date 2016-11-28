@@ -120,8 +120,6 @@ public class ConvertFragment extends AbstractFragment {
 
 			public void onNothingSelected(android.widget.AdapterView<?> parent) {
 			}
-
-			;
 		});
 
 		// setup source value
@@ -234,7 +232,7 @@ public class ConvertFragment extends AbstractFragment {
 		ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) lvTargetCurrencies.getAdapter();
 
 		CurrencyData sourceCurrency = (CurrencyData) spinnerSourceCurrency.getSelectedItem();
-		if (sourceCurrency != null) {
+		if (adapter != null && sourceCurrency != null) {
 			MathContext mathContext = new MathContext(Defs.SCALE_CALCULATIONS);
 			try {
 				BigDecimal value = new BigDecimal(etSourceValue.getText().toString(), mathContext);
@@ -322,7 +320,7 @@ public class ConvertFragment extends AbstractFragment {
 		currency.setBuy("1");
 		currency.setSell("1");
 		currency.setSource(0);
-//		currency.setDate(new Date());
+		// currency.setDate(new Date());
 		currency.setDate("2016-11-15T13:14:01+02:00");
 
 		currencies.add(currency);
