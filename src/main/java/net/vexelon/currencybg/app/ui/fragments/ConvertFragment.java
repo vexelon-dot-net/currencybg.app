@@ -55,6 +55,7 @@ import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
 import net.vexelon.currencybg.app.utils.IOUtils;
@@ -133,7 +134,7 @@ public class ConvertFragment extends AbstractFragment {
 		tvSourceValue.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				newCalculatorMenu(new CalculatorListener() {
+				new CalculatorWidget(getActivity()).showCalculator(new CalculatorWidget.Listener() {
 
 					@Override
 					public void onValue(BigDecimal value) {
@@ -145,7 +146,7 @@ public class ConvertFragment extends AbstractFragment {
 						}
 
 					}
-				}).show();
+				});
 			}
 		});
 

@@ -32,6 +32,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -53,6 +54,7 @@ import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.common.CurrencyLocales;
 import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 
@@ -101,27 +103,6 @@ public class AbstractFragment extends Fragment {
 				}
 			}
 		}
-	}
-
-	/**
-	 * 
-	 * @return MaterialDialog
-	 */
-	protected MaterialDialog newCalculatorMenu(final CalculatorListener listener) {
-		final AppSettings appSettings = new AppSettings(getActivity());
-		return new MaterialDialog.Builder(getActivity()).customView(R.layout.calculator_layout, false)
-				.positiveText(R.string.text_ok).negativeText(R.string.text_cancel)
-				.onPositive(new MaterialDialog.SingleButtonCallback() {
-					@Override
-					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-						// TODO
-						TextView display = (TextView) dialog.getCustomView().findViewById(R.id.calc_display);
-						Log.d(Defs.LOG_TAG, "CALC: " + display.getText());
-
-						// notify
-						listener.onValue(new BigDecimal(display.getText().toString()));
-					}
-				}).build();
 	}
 
 	protected CurrencyLocales getSelectedCurrenciesLocale() {
@@ -216,12 +197,4 @@ public class AbstractFragment extends Fragment {
 		showSnackbar(resId, Snackbar.LENGTH_SHORT, false);
 	}
 
-	/**
-	 * 
-	 */
-	public static interface CalculatorListener {
-
-		void onValue(BigDecimal value);
-
-	}
 }
