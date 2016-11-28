@@ -52,6 +52,9 @@ import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
 import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.PrefsFragment;
 
+import org.joda.time.Instant;
+import org.joda.time.LocalDateTime;
+
 public class MainActivity extends AppCompatActivity implements NotificationsListener {
 
 	private DrawerLayout drawerLayout;
@@ -76,8 +79,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-		// TODO make sure service is started
-		// startService();
+		startService();
 		startReceivers();
 	}
 
@@ -214,15 +216,10 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		Intent myIntent = new Intent(MainActivity.this, BackgroundService.class);
 		pendingIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, 0);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		calendar.add(Calendar.SECOND, 30);
-		long initialStartTimeout = calendar.getTimeInMillis();
-		// TODO: remove initial update -> not needed!!!
+		long startTimeout = LocalDateTime.now().plusSeconds(Defs.SERVICE_FIRST_RUN_INTERVAL).toDateTime().getMillis();
 
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, initialStartTimeout, Defs.SERVICE_RUN_INTERVAL,
-				pendingIntent);
+		alarmManager.setInexactRepeating(AlarmManager.RTC, startTimeout, AlarmManager.INTERVAL_DAY, pendingIntent);
 	}
 
 	public void cancelService() {

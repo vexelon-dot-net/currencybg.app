@@ -29,7 +29,6 @@ public class Defs {
 	public final static int SCALE_SHOW_LONG = 4;
 	public final static int SCALE_SHOW_SHORT = 2;
 	public final static int SCALE_CALCULATIONS = 10;
-	public final static String BGN_CODE = "BGN";
 	public static final String LONG_DASH = "\u2014";
 	public static final String COLOR_NAVY_BLUE = "#00BFFF";
 	public static final String COLOR_DARK_ORANGE = "#FFB400";
@@ -38,7 +37,8 @@ public class Defs {
 	/**
 	 * How often to wake-up the Android service
 	 */
-	public static final long SERVICE_RUN_INTERVAL = 6 * 3600 * 1000; // 6 hours
+	public static final int SERVICE_FIRST_RUN_INTERVAL = 60; // seconds
+	public static final int SERVICE_DATABASE_CLEAN_INTERVAL = 3; // days
 	public static final String SERVICE_ACTION_NOTIFY_UPDATE = "_CBG_NOTIFY_UPDATE";
 
 	/**

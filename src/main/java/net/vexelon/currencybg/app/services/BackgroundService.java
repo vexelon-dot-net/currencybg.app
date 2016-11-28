@@ -101,6 +101,9 @@ public class BackgroundService extends Service {
 				source.connect(BackgroundService.this);
 				source.addRates(currencies);
 
+				Log.d(Defs.LOG_TAG, "[Service] Cleaning up currency rates older than 3 days ...");
+				source.deleteRates(Defs.SERVICE_DATABASE_CLEAN_INTERVAL);
+
 				updateOK = true;
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "[Service] Error fetching currencies from remote!", e);
