@@ -20,34 +20,47 @@ package net.vexelon.currencybg.app.utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collection;
+
 public class StringUtils {
 
-	public static String emptyIfNull(String value) {
-		return value == null ? "" : value;
-	}
+    public static String emptyIfNull(String value) {
+        return value == null ? "" : value;
+    }
 
-	public static String emptyIfNull(JSONObject json, String key) {
-		try {
-			return json.getString(key);
-		} catch (JSONException e) {
-			return "";
-		}
-	}
+    public static String emptyIfNull(JSONObject json, String key) {
+        try {
+            return json.getString(key);
+        } catch (JSONException e) {
+            return "";
+        }
+    }
 
-	public static boolean isEmpty(String value) {
-		return value == null || value.isEmpty();
-	}
+    public static boolean isEmpty(String value) {
+        return value == null || value.isEmpty();
+    }
 
-	public static String stripHtml(String html, boolean stripWhiteSpace) {
-		html = html.replaceAll("(<.[^>]*>)|(</.[^>]*>)", "");
-		if (stripWhiteSpace)
-			html = html.replaceAll("\\t|\\n|\\r", "");
-		html = html.trim();
-		return html;
-	}
+    public static String stripHtml(String html, boolean stripWhiteSpace) {
+        html = html.replaceAll("(<.[^>]*>)|(</.[^>]*>)", "");
+        if (stripWhiteSpace)
+            html = html.replaceAll("\\t|\\n|\\r", "");
+        html = html.trim();
+        return html;
+    }
 
-	public static String stripHtml(String html) {
-		return stripHtml(html, true);
-	}
+    public static String stripHtml(String html) {
+        return stripHtml(html, true);
+    }
+
+    public static String toCSV(Collection<String> values) {
+        String result = "";
+        for (String value : values) {
+            if (!result.isEmpty()) {
+                result += ", ";
+            }
+            result += value;
+        }
+        return result;
+    }
 
 }

@@ -18,11 +18,16 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -32,14 +37,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import net.vexelon.currencybg.app.AppSettings;
+import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.CurrencyListRow;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
+import net.vexelon.currencybg.app.common.CurrencyLocales;
+import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
+
+import org.jsoup.helper.StringUtil;
 
 public class AbstractFragment extends Fragment {
 
@@ -102,28 +112,79 @@ public class AbstractFragment extends Fragment {
 		return currenciesMap;
 	}
 
-	protected void showSnackbar(String text, int duration) {
+	/**
+	 * Removes currencies that should not be shown to users
+	 * 
+	 * @param currencies
+	 * @return
+	 */
+	protected List<CurrencyData> getVisibleCurrencies(List<CurrencyData> currencies) {
+		Iterator<CurrencyData> iterator = currencies.iterator();
+		while (iterator.hasNext()) {
+			CurrencyData c = iterator.next();
+			if (Defs.HIDDEN_CURRENCY_CODES.contains(c.getCode())) {
+				iterator.remove();
+			}
+		}
+
+		return currencies;
+	}
+
+	/**
+	 * Converts list of currencies from various sources to a table with rows &
+	 * columns
+	 *
+	 * @param currencies
+	 * @return
+	 */
+	protected List<CurrencyListRow> toCurrencyRows(List<CurrencyData> currencies) {
+		Map<String, CurrencyListRow> map = Maps.newHashMap();
+		final Activity activity = getActivity();
+
+		for (CurrencyData c : currencies) {
+			CurrencyListRow row = map.get(c.getCode());
+			if (row == null) {
+				row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(activity.getResources(), c.getCode()));
+				map.put(c.getCode(), row);
+			}
+			row.addColumn(Sources.valueOf(c.getSource()), c);
+		}
+
+		return Lists.newArrayList(map.values());
+	}
+
+	protected void showSnackbar(String text, int duration, boolean isError) {
 		Snackbar snackbar = Snackbar.make(rootView, text, duration);
 		View v = snackbar.getView();
-		v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+		v.setBackgroundColor(
+				ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
 		snackbar.show();
 	}
 
-	protected void showSnackbar(String text) {
-		showSnackbar(text, Snackbar.LENGTH_SHORT);
+	protected void showSnackbar(String text, boolean isError) {
+		showSnackbar(text, Snackbar.LENGTH_SHORT, isError);
 	}
 
-	protected void showSnackbar(int resId, int duration) {
+	protected void showSnackbar(String text) {
+		showSnackbar(text, Snackbar.LENGTH_SHORT, false);
+	}
+
+	protected void showSnackbar(int resId, int duration, boolean isError) {
 		Snackbar snackbar = Snackbar.make(rootView, resId, duration);
 		View v = snackbar.getView();
 		// TextView textView = (TextView)
 		// v.findViewById(android.support.design.R.id.snackbar_text);
 		// textView.setTextColor(getResources().getColor(R.color.colorAccent));
-		v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+		v.setBackgroundColor(
+				ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
 		snackbar.show();
 	}
 
+	protected void showSnackbar(int resId, boolean isError) {
+		showSnackbar(resId, Snackbar.LENGTH_SHORT, isError);
+	}
+
 	protected void showSnackbar(int resId) {
-		showSnackbar(resId, Snackbar.LENGTH_SHORT);
+		showSnackbar(resId, Snackbar.LENGTH_SHORT, false);
 	}
 }

@@ -18,13 +18,10 @@
 package net.vexelon.currencybg.app.db;
 
 import java.io.Closeable;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Context;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 
 /**
  * Encapsulates the available read-write operations to and from an underlying
@@ -42,7 +39,7 @@ public interface DataSource extends Closeable {
 	void connect(Context context) throws DataSourceException;
 
 	/**
-	 * Adds exchange rates data
+	 * Adds exchange rates data.
 	 *
 	 * @param rates
 	 * @throws DataSourceException
@@ -50,35 +47,36 @@ public interface DataSource extends Closeable {
 	public void addRates(List<CurrencyData> rates) throws DataSourceException;
 
 	/**
-	 * TODO - Method description. The method returns all data from DB
+	 * Returns all latest downloaded currencies from all sources.
 	 *
 	 * @return
 	 * @throws DataSourceException
 	 */
-	public List<CurrencyData> getLastRates() throws  DataSourceException;
+	public List<CurrencyData> getLastRates() throws DataSourceException;
 
 	/**
-	 * Returns all currencies for the specific source
+	 * Returns all currencies for the specific source.
 	 *
 	 * @param source
 	 * @return
 	 * @throws DataSourceException
-     */
+	 */
 	public List<CurrencyData> getAllCurrencies(Integer source) throws DataSourceException;
 
 	/**
-	 * Returns all currencies for the specific code
+	 * Returns all currencies for the specific code.
 	 *
 	 * @param code
 	 * @return
 	 * @throws DataSourceException
-     */
-	public List<CurrencyData> getAllRates(String code) throws  DataSourceException;
+	 */
+	public List<CurrencyData> getAllRates(String code) throws DataSourceException;
 
 	/**
-	 * TODO - Method description and functionality
+	 * Delete all rates older than {@code backDays}.
 	 *
+	 * @param backDays
 	 * @throws DataSourceException
 	 */
-	public void deleteRates() throws DataSourceException;
+	public void deleteRates(int backDays) throws DataSourceException;
 }

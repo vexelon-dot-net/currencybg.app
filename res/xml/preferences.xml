@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="app_prefs"
-    android:title="@string/prefs_title" >
-
-    <ListPreference
-        android:defaultValue="@string/pref_display_lang_default"
-        android:dialogTitle="@string/pref_display_lang_title"
-        android:entries="@array/pref_display_names"
-        android:entryValues="@array/pref_display_values"
-        android:key="pref_currencies_language"
-        android:persistent="true"
-        android:title="@string/pref_display_lang_title" android:summary="@string/pref_display_lang_summary"/>
+    android:title="@string/prefs_title">
 
     <ListPreference
         android:defaultValue="@string/pref_precision_default"
@@ -19,11 +10,13 @@
         android:entryValues="@array/pref_precision_values"
         android:key="pref_currencies_precision"
         android:persistent="true"
-        android:title="@string/pref_precision_title" android:summary="@string/pref_precision_summary"/>
+        android:summary="@string/pref_precision_summary"
+        android:title="@string/pref_precision_title" />
 
     <Preference
         android:enabled="true"
         android:key="rateus"
-        android:title="@string/pref_rateus_title" android:summary="@string/pref_rateus_summary"/>
+        android:summary="@string/pref_rateus_summary"
+        android:title="@string/pref_rateus_title" />
 
 </PreferenceScreen>

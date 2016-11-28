@@ -24,10 +24,10 @@ android {
         compile 'com.android.support:design:23.1.1',
                 'com.android.support:preference-v14:23.1.1',
                 'com.melnykov:floatingactionbutton:1.3.0',
-                'com.google.guava:guava:18.+',
+                'com.google.guava:guava:19.+',
                 'org.jsoup:jsoup:1.8.+',
                 'com.squareup.okhttp:okhttp:2.5.+',
-                'com.google.code.gson:gson:2.6.+',
+                'com.google.code.gson:gson:2.8.+',
                 'joda-time:joda-time:2.9.+'
 
         compile('com.github.afollestad.material-dialogs:core:0.8.5.4@aar') {
@@ -47,8 +47,8 @@ android {
         applicationId 'net.vexelon.currencybg.app'
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 1004
-        versionName "1.0.1"
+        versionCode 1900
+        versionName "2.0.0"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_6

@@ -17,28 +17,40 @@
  */
 package net.vexelon.currencybg.app;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Defs {
 
 	public final static String LOG_TAG = "net.vexelon.currencybg";
 
 	public final static int TOAST_INFO_TIME = 4000;
 	public final static int TOAST_ERR_TIME = 3000;
-	public final static int SCALE_SHOW_LONG = 5;
+	public final static int SCALE_SHOW_LONG = 4;
 	public final static int SCALE_SHOW_SHORT = 2;
 	public final static int SCALE_CALCULATIONS = 10;
-	public final static String BGN_CODE = "BGN";
+	public static final String LONG_DASH = "\u2014";
+	public static final String COLOR_NAVY_BLUE = "#00BFFF";
+	public static final String COLOR_DARK_ORANGE = "#FFB400";
+	public static final int MAX_SOURCES_TO_SHOW = 3;
 
-	// //////Tsvetoslav
-	// Time for request to BNB
-	public static final long NOTIFY_INTERVAL = 6 * 3600 * 1000; // 6 hours
-	// Parameters which used into SQLite//
-	// Name of DB
+	/**
+	 * How often to wake-up the Android service
+	 */
+	public static final int SERVICE_FIRST_RUN_INTERVAL = 60; // seconds
+	public static final int SERVICE_DATABASE_CLEAN_INTERVAL = 3; // days
+	public static final String SERVICE_ACTION_NOTIFY_UPDATE = "_CBG_NOTIFY_UPDATE";
+
+	/**
+	 * Parameters which used into SQLite
+	 */
 	public static final String DATABASE_NAME = "currencies.db";
-	// Version of DB
 	public static final int DATABASE_VERSION = 3;
-	// table name
 
 	public static final String TABLE_CURRENCY = "currencies";
+	public static final String TABLE_CURRENCY_DATE = "currenciesdate";
+	public static final String TABLE_FIXED_CURRENCY = "fixedcurrencies";
+
 	// Name of columns in table TABLE_CURRENCY
 	public static final String COLUMN_ID = "id";
 	public static final String COLUMN_CODE = "code";
@@ -48,6 +60,11 @@ public class Defs {
 	public static final String COLUMN_SOURCE = "source";
 	public static final String COLUMN_CURR_DATE = "curr_date";
 
-	public static final String DATEFORMAT_ISO_8601 = "yyyy-MM-dd'T'HH:mmZ";
-	public static final String SERVER_ADDRESS = "http://currencybg-tsvetoslav.rhcloud.com/currencybg.server/api/currencies/";
+	public static final String DATE_TIMEZONE_SOFIA = "Europe/Sofia";
+	public static final String DATEFORMAT_ISO8601 = "yyyy-MM-dd'T'HH:mmZ";
+
+	/**
+	 * Codes of currencies we don't want to show
+	 */
+	public static final List<String> HIDDEN_CURRENCY_CODES = Arrays.asList(new String[] { "SBP" });
 }

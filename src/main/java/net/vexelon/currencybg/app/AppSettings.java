@@ -18,23 +18,35 @@
 package net.vexelon.currencybg.app;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
+
+import net.vexelon.currencybg.app.common.CurrencyLocales;
+import net.vexelon.currencybg.app.common.Sources;
+import net.vexelon.currencybg.app.db.models.CurrencyData;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 public class AppSettings {
 
+	public static final int RATE_BUY = 0;
+	public static final int RATE_SELL = 1;
+
 	public static final int SORTBY_NAME = 0;
 	public static final int SORTBY_CODE = 1;
-
-	public static final int FILTERBY_ALL = 0;
-	public static final int FILTERBY_NONFIXED = 1;
-	public static final int FILTERBY_FIXED = 2;
 
 	public static final int PRECISION_SIMPLE = 0;
 	public static final int PRECISION_ADVANCED = 1;
@@ -48,8 +60,46 @@ public class AppSettings {
 	}
 
 	/**
-	 * Gets currencies sorting
 	 * 
+	 * @return Date and time of the last update in the Europe/Sofia time zone.
+	 *         If this is not available, it returns the date time from 00:00:00
+	 *         (beginning of the current day) in Europe/Sofia.
+	 */
+	public DateTime getLastUpdateDate() {
+		String value = generalPrefs.getString("pref_currencies_lastupdate", "");
+		if (value.isEmpty()) {
+			return DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA))).withTime(0, 0,
+					0, 0);
+		}
+
+		return DateTime.parse(value);
+	}
+
+	/**
+	 * Saves the last update time as ISO8601 formatted text
+	 * 
+	 * @param dateTime
+	 */
+	public void setLastUpdateDate(DateTime dateTime) {
+		generalPrefs.edit().putString("pref_currencies_lastupdate", dateTime.toString()).apply();
+	}
+
+	/**
+	 * Gets what type of rate to show on currencies list fragment
+	 *
+	 * @return
+	 */
+	public int getCurrenciesRateSelection() {
+		return generalPrefs.getInt("pref_currencies_rate", RATE_BUY);
+	}
+
+	public void setCurrenciesRateSelection(int value) {
+		generalPrefs.edit().putInt("pref_currencies_rate", value).apply();
+	}
+
+	/**
+	 * Gets currencies sorting
+	 *
 	 * @return
 	 *         <ul>
 	 *         <li>-1 None (Default)
@@ -60,40 +110,45 @@ public class AppSettings {
 		return generalPrefs.getInt("pref_currencies_sortby", -1);
 	}
 
-	/**
-	 * 
-	 * @param value
-	 */
 	public void setCurrenciesSortSelection(int value) {
 		generalPrefs.edit().putInt("pref_currencies_sortby", value).apply();
 	}
 
 	/**
-	 * Gets currencies filtering
-	 * 
-	 * @return
-	 *         <ul>
-	 *         <li>0 All
-	 *         <li>1 Non-Fixed (Default)
-	 *         <li>2 Fixed
+	 * Gets currencies filtering by sources
+	 *
+	 * @return Sources
 	 */
-	public int getCurrenciesFilterSelection() {
-		return generalPrefs.getInt("pref_currencies_filterby", FILTERBY_NONFIXED);
+	public Set<Sources> getCurrenciesFilter() {
+		Set<String> values = Sets.newHashSet();
+
+		values = generalPrefs.getStringSet("pref_currencies_filter_sources", values);
+		if (values.isEmpty()) {
+			// default
+			return Sets.newHashSet(Sources.TAVEX, Sources.POLANA1, Sources.FIB);
+		}
+
+		Set<Sources> result = Sets.newHashSet();
+		for (String value : values) {
+			result.add(Sources.valueOf(Integer.parseInt(value)));
+		}
+		return result;
 	}
 
-	/**
-	 * 
-	 * @param value
-	 */
-	public void setCurrenciesFilterSelection(int value) {
-		generalPrefs.edit().putInt("pref_currencies_filterby", value).apply();
+	public void setCurrenciesFilter(Set<Sources> sources) {
+		Set<String> values = Sets.newHashSet();
+		for (Sources source : sources) {
+			values.add(Integer.toString(source.getID()));
+		}
+		generalPrefs.edit().putStringSet("pref_currencies_filter_sources", values).apply();
 	}
 
 	/**
 	 * Gets currencies language selection
-	 * 
+	 *
 	 * @return {@link CurrencyLocales}
 	 */
+	@Deprecated
 	public CurrencyLocales getCurrenciesLanguage() {
 		String value = getCurrenciesLanguageRaw();
 		if ("en".equals(value)) {
@@ -104,13 +159,14 @@ public class AppSettings {
 		return CurrencyLocales.getAppLocale(context);
 	}
 
+	@Deprecated
 	public String getCurrenciesLanguageRaw() {
 		return generalPrefs.getString("pref_currencies_language", "default");
 	}
 
 	/**
-	 *
-	 * @return <ul>
+	 * @return
+	 *         <ul>
 	 *         <li>0 - PRECISION_SIMPLE</li>
 	 *         <li>1 - PRECISION_ADVANCED</li>
 	 *         </ul>
@@ -122,39 +178,85 @@ public class AppSettings {
 
 	/**
 	 * 
-	 * @param currencyCodes
-	 *            List of currency codes (case-sensitive)
+	 * @param currencies
 	 */
-	private void setConvertCurrencies(Set<String> currencyCodes) {
-		generalPrefs.edit().putStringSet("pref_convert_currencycodes", currencyCodes).apply();
+	private void setConvertCurrencies(Set<String> currencies) {
+		generalPrefs.edit().putStringSet("pref_convert_currencies", currencies).apply();
 	}
 
 	/**
 	 * Gets saved target convert currencies
-	 * 
+	 *
 	 * @return
 	 */
-	public Set<String> getConvertCurrencies() {
+	public Set<String> getConvertCurrenciesRaw() {
 		Set<String> emptySet = Sets.newHashSet();
 		// Needs a new Set instance - http://stackoverflow.com/a/14034804
-		return Sets.newHashSet(generalPrefs.getStringSet("pref_convert_currencycodes", emptySet));
+		return Sets.newHashSet(generalPrefs.getStringSet("pref_convert_currencies", emptySet));
 	}
 
-	public void addConvertCurrency(String currencyCode) {
-		Set<String> convertCurrencies = getConvertCurrencies();
-		convertCurrencies.add(currencyCode);
+	/**
+	 * 
+	 * @return A list of dummy {@link CurrencyData} objects that have only their
+	 *         code and source id set.
+	 */
+	public List<CurrencyData> getConvertCurrencies() {
+		List<CurrencyData> result = Lists.newArrayList();
+		Set<String> convertCurrencies = getConvertCurrenciesRaw();
+
+		Iterator<String> iterator = convertCurrencies.iterator();
+		while (iterator.hasNext()) {
+			String next = iterator.next();
+
+			// CSV deserialization
+			List<String> tokens = Splitter.on(",").splitToList(next);
+			if (tokens.size() == 2) {
+				CurrencyData c = new CurrencyData();
+				c.setCode(tokens.get(0));
+				c.setSource(Integer.parseInt(tokens.get(1)));
+				result.add(c);
+			}
+		}
+
+		return result;
+	}
+
+	public void addConvertCurrency(CurrencyData currency) {
+		Set<String> convertCurrencies = getConvertCurrenciesRaw();
+		// CSV serialization
+		convertCurrencies.add(currency.getCode() + "," + Integer.toString(currency.getSource()));
 		setConvertCurrencies(convertCurrencies);
 	}
 
-	public void removeConvertCurrency(String currencyCode) {
-		Set<String> convertCurrencies = getConvertCurrencies();
-		convertCurrencies.remove(currencyCode);
+	/**
+	 * Removes a previously stored target convert currency
+	 * 
+	 * @param currency
+	 *            Currency to search by code and source id
+	 */
+	public void removeConvertCurrency(CurrencyData currency) {
+		Set<String> convertCurrencies = getConvertCurrenciesRaw();
+
+		Iterator<String> iterator = convertCurrencies.iterator();
+		while (iterator.hasNext()) {
+			String next = iterator.next();
+
+			// CSV deserialization
+			List<String> tokens = Splitter.on(",").splitToList(next);
+			if (tokens.size() == 2) {
+				if (currency.getCode().equals(tokens.get(0))
+						&& currency.getSource() == Integer.parseInt(tokens.get(1))) {
+					iterator.remove();
+				}
+			}
+		}
+
 		setConvertCurrencies(convertCurrencies);
 	}
 
 	/**
 	 * Sets the last set decimal value for currency convertion
-	 * 
+	 *
 	 * @param value
 	 *            A {@link BigDecimal} converted to {@link String}.
 	 */
@@ -168,7 +270,7 @@ public class AppSettings {
 
 	/**
 	 * Sets the last selected currency (code) to convert from
-	 * 
+	 *
 	 * @param currencyCode
 	 */
 	public void setLastConvertCurrencySel(String currencyCode) {

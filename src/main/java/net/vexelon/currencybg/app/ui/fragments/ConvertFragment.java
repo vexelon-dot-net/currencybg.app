@@ -23,11 +23,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.melnykov.fab.FloatingActionButton;
 
 import android.content.Context;
@@ -46,6 +44,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
@@ -53,7 +52,6 @@ import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.db.models.CurrencyLocales;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
 import net.vexelon.currencybg.app.utils.IOUtils;
@@ -63,8 +61,8 @@ public class ConvertFragment extends AbstractFragment {
 	private Spinner spinnerSourceCurrency;
 	private EditText etSourceValue;
 	private ListView lvTargetCurrencies;
-	private List<CurrencyData> currenciesList = Lists.newArrayList();
-	private Map<String, CurrencyData> currenciesMap = Maps.newHashMap();
+
+	private List<CurrencyData> currencies = Lists.newArrayList();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,8 +85,8 @@ public class ConvertFragment extends AbstractFragment {
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser) {
 			/*
-			 * Back from Currencies fragment view, so we reload all
-			 * currencies. The user might have updated them.
+			 * Back from Currencies fragment view, so we reload all currencies.
+			 * The user might have updated them.
 			 */
 			refreshUIData();
 		}
@@ -121,8 +119,9 @@ public class ConvertFragment extends AbstractFragment {
 			}
 
 			public void onNothingSelected(android.widget.AdapterView<?> parent) {
-			};
+			}
 		});
+
 		// setup source value
 		etSourceValue = (EditText) view.findViewById(R.id.text_source_value);
 		etSourceValue.setOnClickListener(new OnClickListener() {
@@ -132,6 +131,7 @@ public class ConvertFragment extends AbstractFragment {
 				etSourceValue.setSelection(etSourceValue.getText().length());
 			}
 		});
+
 		etSourceValue.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -150,6 +150,7 @@ public class ConvertFragment extends AbstractFragment {
 				}
 			}
 		});
+
 		// setup target currencies list
 		lvTargetCurrencies = (ListView) view.findViewById(R.id.list_target_currencies);
 		lvTargetCurrencies.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -159,7 +160,7 @@ public class ConvertFragment extends AbstractFragment {
 				CurrencyData removed = adapter.remove(position);
 				adapter.notifyDataSetChanged();
 				if (removed != null) {
-					new AppSettings(getActivity()).removeConvertCurrency(removed.getCode());
+					new AppSettings(getActivity()).removeConvertCurrency(removed);
 					showSnackbar(getActivity().getString(R.string.action_currency_removed, removed.getCode()));
 				}
 				return false;
@@ -171,6 +172,7 @@ public class ConvertFragment extends AbstractFragment {
 				showSnackbar(getActivity().getString(R.string.hint_currency_remove));
 			}
 		});
+
 		// add button
 		FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_convert);
 		fab.attachToListView(lvTargetCurrencies);
@@ -184,17 +186,19 @@ public class ConvertFragment extends AbstractFragment {
 
 	private void refreshUIData() {
 		final AppSettings appSettings = new AppSettings(getActivity());
-		currenciesList = getCurrenciesList();
-		if (!currenciesList.isEmpty()) {
-			currenciesMap = getCurreniesMap(currenciesList);
+
+		currencies = getCurrencies();
+		if (!currencies.isEmpty()) {
 			ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(getActivity(),
-					android.R.layout.simple_spinner_item, currenciesList);
+					android.R.layout.simple_spinner_item, currencies);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerSourceCurrency.setAdapter(adapter);
 			spinnerSourceCurrency
 					.setSelection(adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel()));
 		}
+
 		etSourceValue.setText(appSettings.getLastConvertValue());
+
 		updateTargetCurrenciesListView();
 	}
 
@@ -203,14 +207,21 @@ public class ConvertFragment extends AbstractFragment {
 	 */
 	private void updateTargetCurrenciesListView() {
 		final AppSettings appSettings = new AppSettings(getActivity());
+
 		List<CurrencyData> targetCurrencyList = Lists.newArrayList();
-		for (String currencyCode : appSettings.getConvertCurrencies()) {
-			if (currenciesMap.containsKey(currencyCode)) {
-				targetCurrencyList.add(currenciesMap.get(currencyCode));
+
+		// add all previously added target currencies (TODO: optimize this crap)
+		List<CurrencyData> convertCurrencies = appSettings.getConvertCurrencies();
+		for (CurrencyData c1 : currencies) {
+			for (CurrencyData c2 : convertCurrencies) {
+				if (c1.getCode().equals(c2.getCode()) && c1.getSource() == c2.getSource()) {
+					targetCurrencyList.add(c1);
+				}
 			}
 		}
+
 		ConvertTargetListAdapter adapter = new ConvertTargetListAdapter(getActivity(),
-				R.layout.convert_target_row_layout, targetCurrencyList, true, appSettings.getCurrenciesPrecision());
+				R.layout.convert_target_row_layout, targetCurrencyList, appSettings.getCurrenciesPrecision());
 		lvTargetCurrencies.setAdapter(adapter);
 	}
 
@@ -219,41 +230,45 @@ public class ConvertFragment extends AbstractFragment {
 	 */
 	private boolean updateTargetCurrenciesCalculations() {
 		ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) lvTargetCurrencies.getAdapter();
+
 		CurrencyData sourceCurrency = (CurrencyData) spinnerSourceCurrency.getSelectedItem();
-		if (sourceCurrency != null) {
+		if (adapter != null && sourceCurrency != null) {
 			MathContext mathContext = new MathContext(Defs.SCALE_CALCULATIONS);
 			try {
 				BigDecimal value = new BigDecimal(etSourceValue.getText().toString(), mathContext);
-				adapter.updateValues(sourceCurrency, value);
+				adapter.updateConvert(sourceCurrency, value);
 				adapter.notifyDataSetChanged();
 				return true;
 			} catch (Exception e) {
-				Log.w(Defs.LOG_TAG, "Could not parse source currency value! " + e.getMessage());
+				Log.w(Defs.LOG_TAG, "Could not parse source currency value! ", e);
 			}
 		}
+
 		return false;
 	}
 
 	/**
-	 * Displays a currencies selection dialog
+	 * Displays currencies selection dialog
 	 *
 	 * @return
 	 */
 	private MaterialDialog showAddCurrencyMenu() {
 		final Context context = getActivity();
-		ConvertTargetListAdapter adapter = new ConvertTargetListAdapter(context, R.layout.convert_target_row_layout,
-				currenciesList, false, new AppSettings(context).getCurrenciesPrecision());
+		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context, android.R.layout.simple_spinner_item,
+				currencies);
 		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
 				.adapter(adapter, new MaterialDialog.ListCallback() {
 					@Override
 					public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-						CurrencyData currencyData = currenciesList.get(which);
+						CurrencyData currencyData = currencies.get(which);
 						if (currencyData != null) {
-							// TODO: check if already added
-							new AppSettings(context).addConvertCurrency(currencyData.getCode());
-							showSnackbar(context.getString(R.string.action_currency_added, currencyData.getCode()));
+							new AppSettings(context).addConvertCurrency(currencyData);
+
+							// notify UI
 							updateTargetCurrenciesListView();
 							updateTargetCurrenciesCalculations();
+
+							showSnackbar(context.getString(R.string.action_currency_added, currencyData.getCode()));
 						}
 						dialog.dismiss();
 					}
@@ -265,55 +280,51 @@ public class ConvertFragment extends AbstractFragment {
 	 *
 	 * @return
 	 */
-	private List<CurrencyData> getCurrenciesList() {
+	private List<CurrencyData> getCurrencies() {
 		DataSource source = null;
-		List<CurrencyData> currenciesList = Lists.newArrayList();
+		List<CurrencyData> currencies = Lists.newArrayList();
 		try {
 			source = new SQLiteDataSource();
 			source.connect(getActivity());
-			//TODO - temporary commented
-//			currenciesList = source.getLastRates(getSelectedCurrenciesLocale());
-//			currenciesList.addAll(source.getLastFixedRates(getSelectedCurrenciesLocale()));
+			currencies = source.getLastRates();
 		} catch (DataSourceException e) {
-			showSnackbar(R.string.error_db_load_rates, Defs.TOAST_ERR_TIME);
+			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
 			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
 		} finally {
 			IOUtils.closeQuitely(source);
 		}
-		addBGNToCurrencyList(currenciesList);
-		// sort by name
-//		Collections.sort(currenciesList, new Comparator<CurrencyData>() {
-//			@Override
-//			public int compare(CurrencyData lhs, CurrencyData rhs) {
-//				return lhs.getName().compareToIgnoreCase(rhs.getName());
-//			}
-//		});
-		return currenciesList;
+
+		addBGNToCurrencyList(currencies);
+
+		// sort by code
+		Collections.sort(currencies, new Comparator<CurrencyData>() {
+			@Override
+			public int compare(CurrencyData lhs, CurrencyData rhs) {
+				return lhs.getCode().compareToIgnoreCase(rhs.getCode());
+			}
+		});
+
+		return currencies;
 	}
 
 	/**
 	 * Adds fictional BGN currency to the convert list
 	 *
-	 * @param currencyList
+	 * @param currencies
+	 * @return modified {@code currencies} list.
 	 */
-	private void addBGNToCurrencyList(List<CurrencyData> currencyList) {
+	private List<CurrencyData> addBGNToCurrencyList(List<CurrencyData> currencies) {
 		CurrencyData currency = new CurrencyData();
-//		if (getSelectedCurrenciesLocale() == CurrencyLocales.BG) {
-//			currency.setName("Български лев");
-//		} else {
-//			currency.setName("Bulgarian Lev");
-//		}
-//		currency.setGold(1);
 		currency.setCode("BGN");
 		currency.setRatio(1);
 		currency.setBuy("1");
 		currency.setSell("1");
-//		currency.setReverseRate("1");
-//		currency.setRate("1");
-		currency.setDate(new Date());
-//		currency.setCurrDate(new Date());
-		/*currency.setfStar(0);*/
-		currencyList.add(currency);
+		currency.setSource(0);
+		// currency.setDate(new Date());
+		currency.setDate("2016-11-15T13:14:01+02:00");
+
+		currencies.add(currency);
+		return currencies;
 	}
 
 }

@@ -25,15 +25,12 @@ import android.util.Log;
 
 public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 
-
 	// Table Create Statements
 	// TABLE_CURRENCY table create statement
 	private static final String CREATE_TABLE_CURRENCY_BG = String.format(
 			"create table %s(%s integer primary key autoincrement, %s text not null, %s integer not null, %s text, %s text, %s text not null, %s integer not null);",
 			Defs.TABLE_CURRENCY, Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY, Defs.COLUMN_SELL,
 			Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE);
-
-//	private static final String CREATE_TABLE_CURRENCY_BG = String.format("");
 
 	public CurrenciesSQLiteDB(Context context) {
 		super(context, Defs.DATABASE_NAME, null, Defs.DATABASE_VERSION);
@@ -56,13 +53,14 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 			/**
 			 * Upgrade from database v1 or v2 to v3
 			 */
+			// Delete old table, if they are existing
+			database.execSQL("DROP TABLE IF EXISTS " + Defs.TABLE_CURRENCY);
+			database.execSQL("DROP TABLE IF EXISTS " + Defs.TABLE_CURRENCY_DATE);
+			database.execSQL("DROP TABLE IF EXISTS " + Defs.TABLE_FIXED_CURRENCY);
+
+			// Create a new table(with new structure) in which is collected all
+			// data
 			database.execSQL(CREATE_TABLE_CURRENCY_BG);
-			// TODO - drop old tables if exists
-			/*
-			*try{
-			* drop the old tables
-			* catch
-			 */
 			break;
 		default:
 			Log.w(Defs.LOG_TAG, "Unknown old db version=" + oldVersion);

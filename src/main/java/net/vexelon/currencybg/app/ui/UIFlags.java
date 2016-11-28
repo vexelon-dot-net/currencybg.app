@@ -23,7 +23,7 @@ import com.google.common.collect.Maps;
 
 import net.vexelon.currencybg.app.R;
 
-public class UIFlags {
+public final class UIFlags {
 
 	private static final Map<String, Integer> flagsMap = Maps.newHashMap();
 
@@ -65,6 +65,7 @@ public class UIFlags {
 		flagsMap.put("xa", R.drawable.xa);
 		flagsMap.put("za", R.drawable.za);
 		flagsMap.put("eu", R.drawable.eu);
+		flagsMap.put("il", R.drawable.ils);
 	}
 
 	public static int getResourceFromCode(String code) {

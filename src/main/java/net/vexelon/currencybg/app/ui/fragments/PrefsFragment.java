@@ -30,17 +30,14 @@ public class PrefsFragment extends PreferenceFragmentCompat
 
 	public static final String TAG = "preferences";
 	public static final String KEY_SCREEN_APP_PREFS = "app_prefs";
-	public static final String KEY_PREF_CURRENCIES_LANGUAGE = "pref_currencies_language";
 	public static final String KEY_PREF_CURRENCIES_PRECISION = "pref_currencies_precision";
 	public static final String KEY_PREF_RATEUS = "rateus";
 
 	@Override
 	public void onCreatePreferences(Bundle bundle, String s) {
 		addPreferencesFromResource(R.xml.preferences);
-		// final Context ctx = getActivity();
-		// final AppSettings appSettings = new AppSettings(ctx);
+
 		findPreference(KEY_PREF_RATEUS).setOnPreferenceClickListener(this);
-		findPreference(KEY_PREF_CURRENCIES_LANGUAGE).setOnPreferenceChangeListener(this);
 		findPreference(KEY_PREF_CURRENCIES_PRECISION).setOnPreferenceChangeListener(this);
 	}
 
@@ -60,8 +57,7 @@ public class PrefsFragment extends PreferenceFragmentCompat
 
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		if (preference.getKey().equals(KEY_PREF_CURRENCIES_LANGUAGE)
-				|| preference.getKey().equals(KEY_PREF_CURRENCIES_PRECISION)) {
+		if (preference.getKey().equals(KEY_PREF_CURRENCIES_PRECISION)) {
 			Toast.makeText(getActivity(), getString(R.string.pref_value_update, newValue), Toast.LENGTH_SHORT).show();
 		}
 		// update state with new value

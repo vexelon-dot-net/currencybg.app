@@ -12,7 +12,9 @@
     <string name="last_update_updating_text">Сваляне ...</string>
     <string name="error_download_rates">Грешка при сваляне на валути.</string>
     <string name="error_parse_rates">Грешка при четене на файла с обменните курсове!</string>
-    <string name="error_db_load_rates">Грешка при четене на данни!</string>
+    <string name="error_db_load">Грешка при четене на данни!</string>
+    <string name="error_db_save">Грешка при запис на данни!</string>
+    <string name="error_filter_selection">Трябва да бъде избран поне един източник!</string>
     <string name="about_version">Версия</string>
     <string name="about_rates_provider">Обменни курсове</string>
     <string name="about_rates_provider_text">От web сайта на Българска Национална Банка http://www.bnb.bg</string>
@@ -27,10 +29,16 @@
     <string name="tab_title_currencies">Обменни курсове</string>
     <string name="tab_title_convert">Преобразуване</string>
     <string name="hint_currency_remove">Натисни и задръж, за да премахнеш.</string>
+    <string name="buy">Купува</string>
+    <string name="sell">Продава</string>
     <string name="action_refresh">Обновяване</string>
     <string name="action_addcurrency">Добави валута</string>
     <string name="action_currency_added">Добавяне на %1$s</string>
     <string name="action_currency_removed">Премахване на %1$s</string>
+    <string name="action_rate">Курсове</string>
+    <string name="action_rate_title">Покажи курс</string>
+    <string name="action_rate_buy_desc">Курс купува</string>
+    <string name="action_rate_sell_desc">Курс продава</string>
     <string name="action_sort">Сортиране</string>
     <string name="action_sort_title">Сортиране по</string>
     <string name="action_sort_name_asc">По име от А-Я</string>
@@ -41,71 +49,15 @@
         <item>Наименование</item>
         <item>Код</item>
     </string-array>
-    <string-array name="currency_names">
-        <item>Дирхам на ОАЕ (Арабски дирхам)</item>
-        <item>Албански лек</item>
-        <item>Австралийски долар</item>
-        <item>Конвертабилна марка на Босна и Херцеговина</item>
-        <item>Бразилски реал</item>
-        <item>Канадски долар</item>
-        <item>Швейцарски франк</item>
-        <item>Китайски юан</item>
-        <item>Чешка крона</item>
-        <item>Датска крона</item>
-        <item>Доминиканско песо</item>
-        <item>стонска крона</item>
-        <item>Египетска лира</item>
-        <item>Евро</item>
-        <item>Британска лира</item>
-        <item>Хонгконгски долар</item>
-        <item>Хърватска куна</item>
-        <item>Унгарски форинт</item>
-        <item>Индонезийска рупия</item>
-        <item>Израелски шекел</item>
-        <item>Японска йена</item>
-        <item>Кенийски шилинг</item>
-        <item>Южнокорейски вон</item>
-        <item>Литовски литас</item>
-        <item>Латвийски лат</item>
-        <item>Македонски денар</item>
-        <item>Мавританска рупия</item>
-        <item>Мексиканско песо</item>
-        <item>Малайзийски рингит</item>
-        <item>Норвежка крона</item>
-        <item>Новозеландски долар</item>
-        <item>Полска злота</item>
-        <item>Румънска лея</item>
-        <item>Сръбски динар</item>
-        <item>Руска рубла</item>
-        <item>Шведска крона</item>
-        <item>Сингапурски долар</item>
-        <item>Тайландски бат</item>
-        <item>Нова турска лира</item>
-        <item>Украинска гривна</item>
-        <item>Щатски долар</item>
-        <item>Южноафрикански ранд</item>
-    </string-array>
+    <string name="source_tavex">ТАВЕКС</string>
+    <string name="source_polana">ПОЛАНА1</string>
+    <string name="source_fib">ФИБ</string>
     <string name="action_filter">Филтър</string>
-    <string name="action_filter_title">Показване на</string>
-    <string name="action_filter_fixed">Фиксирани курсове</string>
-    <string name="action_filter_nonfixed">Нефиксирани курсове</string>
-    <string name="action_filter_all">Всички курсове</string>
-    <string-array name="action_filter_values">
-        <item>Всички курсове</item>
-        <item>Само нефиксирани курсове</item>
-        <item>Само фиксирани курсове</item>
-    </string-array>
+    <string name="action_filter_title">Показване курсове от</string>
     <string name="action_info">Инфо</string>
     <string name="action_settings">Настройки</string>
     <string name="prefs_title">Currency BG Настройки</string>
-    <string-array name="pref_display_names">
-        <item>По подразбиране</item>
-        <item>Български</item>
-        <item>Английски</item>
-    </string-array>
     <string name="pref_value_update">Сменено на %1$s</string>
-    <string name="pref_display_lang_title">Език на валути</string>
-    <string name="pref_display_lang_summary">Език, на който валутите да се изписват</string>
     <string-array name="pref_precision_names">
         <item>Обикновена</item>
         <item>Разширена</item>
