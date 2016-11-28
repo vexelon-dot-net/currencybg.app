@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
@@ -33,6 +34,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class SQLiteDataSource implements DataSource {
 
@@ -62,26 +64,19 @@ public class SQLiteDataSource implements DataSource {
 		}
 	}
 
-	private Date parseStringToDate(String date, String format) throws ParseException {
-		return new SimpleDateFormat(format).parse(date);
-	}
-
-	private String parseDateToString(Date date, String dateFormat) {
-		return new SimpleDateFormat(dateFormat).format(date);
-	}
-
 	@Override
 	public void addRates(List<CurrencyData> rates) throws DataSourceException {
 
 		ContentValues values = new ContentValues();
 
 		for (CurrencyData rate : rates) {
-
 			values.put(Defs.COLUMN_CODE, rate.getCode());
 			values.put(Defs.COLUMN_RATIO, rate.getRatio());
 			values.put(Defs.COLUMN_BUY, rate.getBuy());
 			values.put(Defs.COLUMN_SELL, rate.getSell());
-//			values.put(Defs.COLUMN_CURR_DATE, DateTimeUtils.parseDateToString(rate.getDate(), Defs.DATEFORMAT_ISO8601));
+			// values.put(Defs.COLUMN_CURR_DATE,
+			// DateTimeUtils.parseDateToString(rate.getDate(),
+			// Defs.DATEFORMAT_ISO8601));
 			values.put(Defs.COLUMN_CURR_DATE, rate.getDate());
 			values.put(Defs.COLUMN_SOURCE, rate.getSource());
 
@@ -98,63 +93,70 @@ public class SQLiteDataSource implements DataSource {
 	}
 
 	@Override
-	public void deleteOlderRates(int days)throws  DataSourceException{
-		database.execSQL("DELETE FROM currencies WHERE strftime('%s', curr_date) < strftime('%s', '"+DateTimeUtils.getOldDate(days)+"' )");//'2016-11-19T20:48:29.022+02:00'
+	public void deleteOlderRates(int days) throws DataSourceException {
+		database.execSQL("DELETE FROM currencies WHERE strftime('%s', curr_date) < strftime('%s', '"
+				+ DateTimeUtils.getOldDate(days) + "' )");// '2016-11-19T20:48:29.022+02:00'
 
 	}
 
 	@Override
 	public List<CurrencyData> getLastRates() throws DataSourceException {
-		List<CurrencyData> resultCurrency = Lists.newArrayList();
+		Map<String, CurrencyData> result = Maps.newHashMap();
 
 		Cursor cursor = database.rawQuery("SELECT * FROM currencies ORDER BY strftime('%s', curr_date)  ASC; ", null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
+			CurrencyData currency = cursorToCurrency(cursor);
+			result.put(currency.getCode() + currency.getSource(), currency);
 
-			CurrencyData comment = cursorToCurrency(cursor);
-			resultCurrency.add(comment);
 			cursor.moveToNext();
 		}
-		// make sure to close the cursor
+
 		cursor.close();
 
-		return resultCurrency;
+		return Lists.newArrayList(result.values());
 	}
 
 	@Override
 	public List<CurrencyData> getAllCurrencies(Integer source) throws DataSourceException {
-		List<CurrencyData> resultCurrencies = Lists.newArrayList();
+		Map<String, CurrencyData> result = Maps.newHashMap();
 
-		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE "+Defs.COLUMN_SOURCE +" = ? ORDER BY strftime('%s', curr_date)  ASC; ", new String [] {String.valueOf(source)});
-
+		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE " + Defs.COLUMN_SOURCE
+				+ " = ? ORDER BY strftime('%s', curr_date)  ASC; ", new String[] { String.valueOf(source) });
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			CurrencyData comment = cursorToCurrency(cursor);
-			resultCurrencies.add(comment);
+			CurrencyData currency = cursorToCurrency(cursor);
+			result.put(currency.getCode(), currency);
+
 			cursor.moveToNext();
 		}
 
 		cursor.close();
-		return resultCurrencies;
+
+		return Lists.newArrayList(result.values());
 	}
 
 	@Override
 	public List<CurrencyData> getAllRates(String code) throws DataSourceException {
-		List<CurrencyData> resultCurrencies = Lists.newArrayList();
+		List<CurrencyData> result = Lists.newArrayList();
 
-		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE "+Defs.COLUMN_CODE +" = ? ORDER BY strftime('%s', curr_date)  ASC; ", new String [] {String.valueOf(code)});
+		Cursor cursor = database.rawQuery(
+				"SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE + " = ? ORDER BY strftime('%s', curr_date)  ASC; ",
+				new String[] { String.valueOf(code) });
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			CurrencyData comment = cursorToCurrency(cursor);
-			resultCurrencies.add(comment);
+			CurrencyData currency = cursorToCurrency(cursor);
+			result.add(currency);
+
 			cursor.moveToNext();
 		}
 
 		cursor.close();
-		return resultCurrencies;
+
+		return result;
 	}
 
 	private CurrencyData cursorToCurrency(Cursor cursor) {
