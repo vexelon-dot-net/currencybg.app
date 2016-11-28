@@ -24,12 +24,14 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 import com.melnykov.fab.FloatingActionButton;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -44,6 +46,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -56,10 +59,13 @@ import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
 import net.vexelon.currencybg.app.utils.IOUtils;
 
+import org.w3c.dom.Text;
+
 public class ConvertFragment extends AbstractFragment {
 
 	private Spinner spinnerSourceCurrency;
 	private EditText etSourceValue;
+	private TextView tvSourceValue;
 	private ListView lvTargetCurrencies;
 
 	private List<CurrencyData> currencies = Lists.newArrayList();
@@ -119,6 +125,15 @@ public class ConvertFragment extends AbstractFragment {
 			}
 
 			public void onNothingSelected(android.widget.AdapterView<?> parent) {
+			}
+		});
+
+		// source value
+		tvSourceValue = (TextView) view.findViewById(R.id.text_source_value2);
+		tvSourceValue.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				newCalculatorMenu().show();
 			}
 		});
 
@@ -182,6 +197,20 @@ public class ConvertFragment extends AbstractFragment {
 				showAddCurrencyMenu().show();
 			}
 		});
+	}
+
+	private MaterialDialog newCalculatorMenu() {
+		final AppSettings appSettings = new AppSettings(getActivity());
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sort_title)
+				.customView(R.layout.calculator_layout, true).positiveText(R.string.text_ok)
+				.negativeText(R.string.text_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+					@Override
+					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+						// TODO
+						TextView display = (TextView) dialog.getCustomView().findViewById(R.id.calc_display);
+						Log.d(Defs.LOG_TAG, "CALC: " + display.getText());
+					}
+				}).build();
 	}
 
 	private void refreshUIData() {

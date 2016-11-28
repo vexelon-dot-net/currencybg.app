@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="net.vexelon.currencybg.MainActivity$PlaceholderFragment">
+              xmlns:fab="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="net.vexelon.currencybg.MainActivity$PlaceholderFragment">
 
     <LinearLayout
         android:id="@+id/layout_source"
@@ -19,7 +19,19 @@
             style="@android:style/Widget.Holo.Spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".60" />
+            android:layout_weight=".60"/>
+
+        <TextView
+            android:id="@+id/text_source_value2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight=".40"
+            android:gravity="right"
+            android:lines="1"
+            android:maxLength="10"
+            android:minWidth="140dp"
+            android:text="0.00"/>
 
         <EditText
             android:id="@+id/text_source_value"
@@ -36,7 +48,7 @@
             android:maxLength="10"
             android:minWidth="140dp"
             android:singleLine="true"
-            android:text="0.00" />
+            android:text="0.00"/>
 
     </LinearLayout>
 
@@ -56,7 +68,7 @@
             android:id="@+id/list_target_currencies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:headerDividersEnabled="false" />
+            android:headerDividersEnabled="false"/>
 
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/fab_convert"
@@ -69,7 +81,7 @@
             fab:fab_colorPressed="@color/float_accent_pressed"
             fab:fab_colorRipple="@color/float_ripple"
             fab:fab_shadow="true"
-            fab:fab_type="normal" />
+            fab:fab_type="normal"/>
 
     </FrameLayout>
 

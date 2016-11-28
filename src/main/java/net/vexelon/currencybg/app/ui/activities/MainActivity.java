@@ -79,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-		startService();
+		// TODO start service
+		// startService();
 		startReceivers();
 	}
 
