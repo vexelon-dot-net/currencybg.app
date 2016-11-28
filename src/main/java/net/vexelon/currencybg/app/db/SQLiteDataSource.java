@@ -64,9 +64,14 @@ public class SQLiteDataSource implements DataSource {
 		}
 	}
 
+	private void closeCursor(Cursor cursor) {
+		if (cursor != null) {
+			cursor.close();
+		}
+	}
+
 	@Override
 	public void addRates(List<CurrencyData> rates) throws DataSourceException {
-
 		ContentValues values = new ContentValues();
 
 		for (CurrencyData rate : rates) {
@@ -84,31 +89,39 @@ public class SQLiteDataSource implements DataSource {
 
 			values = new ContentValues();
 		}
-
 	}
 
 	@Override
 	public void deleteRates(int backDays) throws DataSourceException {
-		// '2016-11-19T20:48:29.022+02:00'
-		database.execSQL("DELETE FROM currencies WHERE strftime('%s', curr_date) < strftime('%s', '"
-				+ DateTimeUtils.getOldDate(backDays) + "' )");
+		try {
+			// '2016-11-19T20:48:29.022+02:00'
+			database.execSQL("DELETE FROM currencies WHERE strftime('%s', curr_date) < strftime('%s', '"
+					+ DateTimeUtils.getOldDate(backDays) + "' )");
+		} catch (SQLException e) {
+			throw new DataSourceException("SQL statement error!", e);
+		}
 	}
 
 	@Override
 	public List<CurrencyData> getLastRates() throws DataSourceException {
 		Map<String, CurrencyData> result = Maps.newHashMap();
+		Cursor cursor = null;
 
-		Cursor cursor = database.rawQuery("SELECT * FROM currencies ORDER BY strftime('%s', curr_date)  ASC; ", null);
+		try {
+			cursor = database.rawQuery("SELECT * FROM currencies ORDER BY strftime('%s', curr_date)  ASC; ", null);
 
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			CurrencyData currency = cursorToCurrency(cursor);
-			result.put(currency.getCode() + currency.getSource(), currency);
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				CurrencyData currency = cursorToCurrency(cursor);
+				result.put(currency.getCode() + currency.getSource(), currency);
 
-			cursor.moveToNext();
+				cursor.moveToNext();
+			}
+		} catch (Throwable t) {
+			throw new DataSourceException("SQL error: Failed fetching last rates!", t);
+		} finally {
+			closeCursor(cursor);
 		}
-
-		cursor.close();
 
 		return Lists.newArrayList(result.values());
 	}
@@ -116,19 +129,26 @@ public class SQLiteDataSource implements DataSource {
 	@Override
 	public List<CurrencyData> getAllCurrencies(Integer source) throws DataSourceException {
 		Map<String, CurrencyData> result = Maps.newHashMap();
+		Cursor cursor = null;
 
-		Cursor cursor = database.rawQuery("SELECT * FROM currencies WHERE " + Defs.COLUMN_SOURCE
-				+ " = ? ORDER BY strftime('%s', curr_date)  ASC; ", new String[] { String.valueOf(source) });
+		try {
+			cursor = database.rawQuery(
+					"SELECT * FROM currencies WHERE " + Defs.COLUMN_SOURCE
+							+ " = ? ORDER BY strftime('%s', curr_date)  ASC; ",
+					new String[] { String.valueOf(source) });
 
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			CurrencyData currency = cursorToCurrency(cursor);
-			result.put(currency.getCode(), currency);
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				CurrencyData currency = cursorToCurrency(cursor);
+				result.put(currency.getCode(), currency);
 
-			cursor.moveToNext();
+				cursor.moveToNext();
+			}
+		} catch (Throwable t) {
+			throw new DataSourceException("SQL error: Failed fetching all currencies for source " + source, t);
+		} finally {
+			closeCursor(cursor);
 		}
-
-		cursor.close();
 
 		return Lists.newArrayList(result.values());
 	}
@@ -136,20 +156,24 @@ public class SQLiteDataSource implements DataSource {
 	@Override
 	public List<CurrencyData> getAllRates(String code) throws DataSourceException {
 		List<CurrencyData> result = Lists.newArrayList();
+		Cursor cursor = null;
 
-		Cursor cursor = database.rawQuery(
-				"SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE + " = ? ORDER BY strftime('%s', curr_date)  ASC; ",
-				new String[] { String.valueOf(code) });
+		try {
+			cursor = database.rawQuery("SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE
+					+ " = ? ORDER BY strftime('%s', curr_date)  ASC; ", new String[] { String.valueOf(code) });
 
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			CurrencyData currency = cursorToCurrency(cursor);
-			result.add(currency);
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				CurrencyData currency = cursorToCurrency(cursor);
+				result.add(currency);
 
-			cursor.moveToNext();
+				cursor.moveToNext();
+			}
+		} catch (Throwable t) {
+			throw new DataSourceException("SQL error: Failed fetching all rates!", t);
+		} finally {
+			closeCursor(cursor);
 		}
-
-		cursor.close();
 
 		return result;
 	}
