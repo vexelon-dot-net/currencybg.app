@@ -11,26 +11,29 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="top"
+        android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
         <Spinner
             android:id="@+id/source_currency"
             style="@android:style/Widget.Holo.Spinner"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".50"/>
+            />
 
         <TextView
             android:id="@+id/text_source_value2"
-            android:layout_width="0dp"
+            style="@style/FontConvertValue"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight=".40"
+            android:background="@drawable/calculator_display"
             android:gravity="right"
             android:lines="1"
-            android:maxLength="10"
-            android:minWidth="140dp"
+            android:padding="4sp"
+            android:paddingBottom="10sp"
+            android:paddingTop="10sp"
             android:text="0.00"/>
 
         <!--<EditText-->
