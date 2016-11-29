@@ -15,8 +15,10 @@ import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.ui.fragments.AbstractFragment;
+import net.vexelon.currencybg.app.utils.Calculator;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 
 /**
  * Encapsulates the behavior of the UI calculator
@@ -26,6 +28,7 @@ public class CalculatorWidget implements View.OnClickListener {
 
 	private static final int BASE_INDEX = 0x80;
 
+	private static final int OP_NOOP = -1;
 	private static final int OP_0 = 0;
 	private static final int OP_1 = 1;
 	private static final int OP_2 = 2;
@@ -48,9 +51,11 @@ public class CalculatorWidget implements View.OnClickListener {
 	private static final int OP_MAX_OPS = OP_PERCENT + 1;
 
 	private Context context;
-
 	private TextView display;
 	private Button[] opButtons = new Button[OP_MAX_OPS];
+	private String lastDisplay = "";
+	private int lastOp = OP_NOOP;
+	private boolean clearDisplay = false;
 
 	public CalculatorWidget(Context context) {
 		this.context = context;
@@ -59,6 +64,7 @@ public class CalculatorWidget implements View.OnClickListener {
 	private void init(View view) {
 		display = (TextView) view.findViewById(R.id.calc_display);
 		display.setText("0"); // TODO initial
+		lastDisplay = "";
 
 		bindButton(view, OP_0, R.id.calc_button0);
 		bindButton(view, OP_1, R.id.calc_button1);
@@ -88,26 +94,122 @@ public class CalculatorWidget implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO
-		switch (v.getId() - BASE_INDEX) {
+		String number = "";
+
+		int opId = v.getId() - BASE_INDEX;
+		switch (opId) {
 		case OP_0:
-			if (display.getText().length() > 1) {
-				display.setText(display.getText() + "0");
-			}
+			number = "0";
 			break;
 		case OP_1:
-			display.setText(display.getText() + "1");
+			number = "1";
 			break;
 		case OP_2:
-			display.setText(display.getText() + "2");
+			number = "2";
 			break;
 		case OP_3:
-			display.setText(display.getText() + "3");
+			number = "3";
+			break;
+		case OP_4:
+			number = "4";
+			break;
+		case OP_5:
+			number = "5";
+			break;
+		case OP_6:
+			number = "6";
+			break;
+		case OP_7:
+			number = "7";
+			break;
+		case OP_8:
+			number = "8";
+			break;
+		case OP_9:
+			number = "9";
 			break;
 		case OP_CLEAR:
+			lastOp = OP_NOOP;
 			display.setText("0");
 			break;
+		case OP_DIV:
+		case OP_MUL:
+		case OP_MINUS:
+		case OP_PLUS:
+			if (lastOp != OP_NOOP) {
+				doCalc();
+			}
+			lastOp = opId;
+			lastDisplay = display.getText().toString();
+			clearDisplay = true;
+			return;
+		case OP_EQUAL:
+			doCalc();
+			return;
+		case OP_DECIMAL:
+			if (display.getText().toString().indexOf(".") == -1) {
+				display.setText(display.getText() + ".");
+			}
+			return;
+		case OP_PERCENT:
+			display.setText(new Calculator(new BigDecimal(display.getText().toString()), Defs.SCALE_SHOW_SHORT)
+					.div(new BigDecimal(100)).getNormalizedResult());
+			return;
 		}
+
+		if ("E".equals(display.getText())) {
+			display.setText("0");
+		}
+
+		if ("0".equals(number) && "0".equals(display.getText())) {
+			return;
+		}
+
+		if (!number.isEmpty()) {
+			if (clearDisplay) {
+				clearDisplay = false;
+				display.setText("0");
+			}
+
+			if ("0".equals(display.getText())) {
+				display.setText(number);
+			} else {
+				display.setText(display.getText() + number);
+			}
+		}
+
+	}
+
+	private void doCalc() {
+		try {
+			Calculator calculator = new Calculator(new BigDecimal(lastDisplay), Defs.SCALE_SHOW_SHORT);
+			BigDecimal value = new BigDecimal(display.getText().toString());
+
+			switch (lastOp) {
+			case OP_DIV:
+				calculator.div(value);
+				break;
+			case OP_MUL:
+				calculator.mul(value);
+				break;
+			case OP_MINUS:
+				calculator.sub(value);
+				break;
+			case OP_PLUS:
+				calculator.add(value);
+				break;
+			}
+
+			display.setText(calculator.getNormalizedResult());
+		} catch (NumberFormatException e) {
+			Log.w(Defs.LOG_TAG, "Invalid calculator display value!", e);
+			display.setText("E");
+		} catch (ArithmeticException e) {
+			Log.w(Defs.LOG_TAG, "Calculator error!", e);
+			display.setText("E");
+		}
+
+		lastOp = OP_NOOP;
 	}
 
 	public void showCalculator(final Listener listener) {
