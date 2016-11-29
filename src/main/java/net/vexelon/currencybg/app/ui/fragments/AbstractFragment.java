@@ -53,10 +53,13 @@ import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.common.CurrencyLocales;
+import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
+import net.vexelon.currencybg.app.utils.NumberUtils;
+import net.vexelon.currencybg.app.utils.StringUtils;
 
 import org.jsoup.helper.StringUtil;
 
@@ -197,4 +200,23 @@ public class AbstractFragment extends Fragment {
 		showSnackbar(resId, Snackbar.LENGTH_SHORT, false);
 	}
 
+	protected String formatCurrency(String value, String code) {
+		if (!StringUtils.isEmpty(value)) {
+			int precisionMode = new AppSettings(getActivity()).getCurrenciesPrecision();
+
+			try {
+				switch (precisionMode) {
+				case AppSettings.PRECISION_ADVANCED:
+					return NumberUtils.getCurrencyFormat(new BigDecimal(value), Defs.SCALE_SHOW_LONG, code);
+				case AppSettings.PRECISION_SIMPLE:
+				default:
+					return NumberUtils.getCurrencyFormat(new BigDecimal(value), code);
+				}
+			} catch (Exception e) {
+				Log.e(Defs.LOG_TAG, "Currency format exception! ", e);
+			}
+		}
+
+		return value;
+	}
 }
