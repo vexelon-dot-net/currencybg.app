@@ -16,6 +16,7 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.ui.fragments.AbstractFragment;
 import net.vexelon.currencybg.app.utils.Calculator;
+import net.vexelon.currencybg.app.utils.StringUtils;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -212,7 +213,7 @@ public class CalculatorWidget implements View.OnClickListener {
 		lastOp = OP_NOOP;
 	}
 
-	public void showCalculator(final Listener listener) {
+	public void showCalculator(final String value, final Listener listener) {
 		final AppSettings appSettings = new AppSettings(context);
 
 		final MaterialDialog dialog = new MaterialDialog.Builder(context).customView(R.layout.calculator_layout, false)
@@ -220,8 +221,6 @@ public class CalculatorWidget implements View.OnClickListener {
 				.onPositive(new MaterialDialog.SingleButtonCallback() {
 					@Override
 					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-						Log.d(Defs.LOG_TAG, "CALC: " + display.getText());
-
 						// notify
 						listener.onValue(new BigDecimal(display.getText().toString()));
 					}
@@ -232,10 +231,17 @@ public class CalculatorWidget implements View.OnClickListener {
 			public void onShow(DialogInterface dlg) {
 				// bind calculator events
 				CalculatorWidget.this.init(dialog.getCustomView());
+				if (!StringUtils.isEmpty(value)) {
+					display.setText(value);
+				}
 			}
 		});
 
 		dialog.show();
+	}
+
+	public void showCalculator(final Listener listener) {
+		showCalculator(null, listener);
 	}
 
 	/**

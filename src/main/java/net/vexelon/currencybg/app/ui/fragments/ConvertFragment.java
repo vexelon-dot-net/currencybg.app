@@ -134,19 +134,20 @@ public class ConvertFragment extends AbstractFragment {
 		tvSourceValue.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new CalculatorWidget(getActivity()).showCalculator(new CalculatorWidget.Listener() {
+				new CalculatorWidget(getActivity()).showCalculator(tvSourceValue.getText().toString(),
+						new CalculatorWidget.Listener() {
 
-					@Override
-					public void onValue(BigDecimal value) {
-						// TODO
-						tvSourceValue.setText(value.toPlainString());
-						if (updateTargetCurrenciesCalculations()) {
-							// save if value is valid
-							new AppSettings(getActivity()).setLastConvertValue(tvSourceValue.getText().toString());
-						}
+							@Override
+							public void onValue(BigDecimal value) {
+								tvSourceValue.setText(value.toPlainString());
+								if (updateTargetCurrenciesCalculations()) {
+									// save if value is valid
+									new AppSettings(getActivity())
+											.setLastConvertValue(tvSourceValue.getText().toString());
+								}
 
-					}
-				});
+							}
+						});
 			}
 		});
 
