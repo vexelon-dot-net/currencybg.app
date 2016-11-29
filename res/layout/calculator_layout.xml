@@ -52,6 +52,17 @@
             android:layout_height="wrap_content"
             android:text="C"/>
 
+        <Button
+            android:id="@+id/calc_button_op_display"
+            style="@style/FontCalcButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:enabled="false"
+            android:gravity="right"
+            android:paddingRight="18sp"
+            android:text=""/>
+
     </LinearLayout>
 
     <!-- 4,5,6,div -->

@@ -51,9 +51,12 @@ public class CalculatorWidget implements View.OnClickListener {
 
 	private static final int OP_MAX_OPS = OP_PERCENT + 1;
 
+	private static final String OP_SYMBOLS[] = { "÷", "×", "-", "+" };
+
 	private Context context;
 	private TextView display;
 	private Button[] opButtons = new Button[OP_MAX_OPS];
+	private Button opIndicatorButton;
 	private String lastDisplay = "";
 	private int lastOp = OP_NOOP;
 	private boolean clearDisplay = false;
@@ -66,6 +69,8 @@ public class CalculatorWidget implements View.OnClickListener {
 		display = (TextView) view.findViewById(R.id.calc_display);
 		display.setText("0"); // TODO initial
 		lastDisplay = "";
+
+		opIndicatorButton = (Button) view.findViewById(R.id.calc_button_op_display);
 
 		bindButton(view, OP_0, R.id.calc_button0);
 		bindButton(view, OP_1, R.id.calc_button1);
@@ -140,6 +145,7 @@ public class CalculatorWidget implements View.OnClickListener {
 			if (lastOp != OP_NOOP) {
 				doCalc();
 			}
+			opIndicatorButton.setText(OP_SYMBOLS[opId - OP_DIV]);
 			lastOp = opId;
 			lastDisplay = display.getText().toString();
 			clearDisplay = true;
@@ -210,6 +216,7 @@ public class CalculatorWidget implements View.OnClickListener {
 			display.setText("E");
 		}
 
+		opIndicatorButton.setText("");
 		lastOp = OP_NOOP;
 	}
 
