@@ -28,6 +28,7 @@ import java.text.NumberFormat;
 public class CalculatorWidget implements View.OnClickListener {
 
 	private static final int BASE_INDEX = 0x80;
+	private static final int MAX_DISPLAY_LENGTH = 20;
 
 	private static final int OP_NOOP = -1;
 	private static final int OP_0 = 0;
@@ -151,7 +152,9 @@ public class CalculatorWidget implements View.OnClickListener {
 			clearDisplay = true;
 			return;
 		case OP_EQUAL:
-			doCalc();
+			if (lastOp != OP_NOOP) {
+				doCalc();
+			}
 			return;
 		case OP_DECIMAL:
 			if (display.getText().toString().indexOf(".") == -1) {
@@ -180,7 +183,7 @@ public class CalculatorWidget implements View.OnClickListener {
 
 			if ("0".equals(display.getText())) {
 				display.setText(number);
-			} else {
+			} else if (display.getText().length() < MAX_DISPLAY_LENGTH) {
 				display.setText(display.getText() + number);
 			}
 		}
@@ -229,7 +232,9 @@ public class CalculatorWidget implements View.OnClickListener {
 					@Override
 					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 						// notify
-						listener.onValue(new BigDecimal(display.getText().toString()));
+						if (display.getText().length() > 0 && !"E".equals(display.getText())) {
+							listener.onValue(new BigDecimal(display.getText().toString()));
+						}
 					}
 				}).build();
 
