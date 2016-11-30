@@ -1,42 +1,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="net.vexelon.currencybg.MainActivity$PlaceholderFragment">
+              xmlns:fab="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="net.vexelon.currencybg.MainActivity$PlaceholderFragment">
 
     <LinearLayout
         android:id="@+id/layout_source"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="top"
+        android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
         <Spinner
             android:id="@+id/source_currency"
             style="@android:style/Widget.Holo.Spinner"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".60" />
+            />
 
-        <EditText
-            android:id="@+id/text_source_value"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/text_source_value2"
+            style="@style/FontConvertValue"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight=".40"
-            android:digits="0123456789."
-            android:focusable="true"
+            android:background="@drawable/calculator_display"
             android:gravity="right"
-            android:imeOptions="actionDone"
-            android:inputType="numberDecimal"
             android:lines="1"
-            android:maxLength="10"
-            android:minWidth="140dp"
-            android:singleLine="true"
-            android:text="0.00" />
+            android:padding="4sp"
+            android:paddingBottom="10sp"
+            android:paddingTop="10sp"
+            android:text="0.00"/>
+
+        <!--<EditText-->
+        <!--android:id="@+id/text_source_value"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_weight=".40"-->
+        <!--android:digits="0123456789."-->
+        <!--android:focusable="true"-->
+        <!--android:gravity="right"-->
+        <!--android:imeOptions="actionDone"-->
+        <!--android:inputType="numberDecimal"-->
+        <!--android:lines="1"-->
+        <!--android:maxLength="10"-->
+        <!--android:minWidth="140dp"-->
+        <!--android:singleLine="true"-->
+        <!--android:text="0.00"/>-->
 
     </LinearLayout>
 
@@ -56,7 +71,7 @@
             android:id="@+id/list_target_currencies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:headerDividersEnabled="false" />
+            android:headerDividersEnabled="false"/>
 
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/fab_convert"
@@ -69,7 +84,7 @@
             fab:fab_colorPressed="@color/float_accent_pressed"
             fab:fab_colorRipple="@color/float_ripple"
             fab:fab_shadow="true"
-            fab:fab_type="normal" />
+            fab:fab_type="normal"/>
 
     </FrameLayout>
 

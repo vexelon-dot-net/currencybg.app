@@ -18,10 +18,8 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,8 +28,6 @@ import com.melnykov.fab.FloatingActionButton;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,9 +37,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -52,14 +48,16 @@ import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
 import net.vexelon.currencybg.app.utils.IOUtils;
+import net.vexelon.currencybg.app.utils.NumberUtils;
 
 public class ConvertFragment extends AbstractFragment {
 
 	private Spinner spinnerSourceCurrency;
-	private EditText etSourceValue;
+	private TextView tvSourceValue;
 	private ListView lvTargetCurrencies;
 
 	private List<CurrencyData> currencies = Lists.newArrayList();
@@ -105,6 +103,8 @@ public class ConvertFragment extends AbstractFragment {
 	}
 
 	private void init(View view) {
+		final AppSettings appSettings = new AppSettings(getActivity());
+
 		// setup source currencies
 		spinnerSourceCurrency = (Spinner) view.findViewById(R.id.source_currency);
 		spinnerSourceCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -113,41 +113,36 @@ public class ConvertFragment extends AbstractFragment {
 				if (updateTargetCurrenciesCalculations()) {
 					// save if value is valid
 					CurrencyData sourceCurrency = (CurrencyData) spinnerSourceCurrency.getSelectedItem();
-					new AppSettings(getActivity()).setLastConvertCurrencySel(sourceCurrency.getCode());
+					appSettings.setLastConvertCurrencySel(sourceCurrency.getCode());
+					setSourceCurrencyValue(appSettings.getLastConvertValue(), sourceCurrency.getCode());
 				}
 
 			}
 
 			public void onNothingSelected(android.widget.AdapterView<?> parent) {
+				// do nothing
 			}
 		});
 
-		// setup source value
-		etSourceValue = (EditText) view.findViewById(R.id.text_source_value);
-		etSourceValue.setOnClickListener(new OnClickListener() {
-
+		// source value
+		tvSourceValue = (TextView) view.findViewById(R.id.text_source_value2);
+		tvSourceValue.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				etSourceValue.setSelection(etSourceValue.getText().length());
-			}
-		});
+				new CalculatorWidget(getActivity()).showCalculator(appSettings.getLastConvertValue(),
+						new CalculatorWidget.Listener() {
 
-		etSourceValue.addTextChangedListener(new TextWatcher() {
+							@Override
+							public void onValue(BigDecimal value) {
+								setSourceCurrencyValue(value.toPlainString(), appSettings.getLastConvertCurrencySel());
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
+								if (updateTargetCurrenciesCalculations()) {
+									// save if value is valid
+									appSettings.setLastConvertValue(value.toPlainString());
+								}
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				if (updateTargetCurrenciesCalculations()) {
-					// save if value is valid
-					new AppSettings(getActivity()).setLastConvertValue(etSourceValue.getText().toString());
-				}
+							}
+						});
 			}
 		});
 
@@ -157,12 +152,15 @@ public class ConvertFragment extends AbstractFragment {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) lvTargetCurrencies.getAdapter();
+
 				CurrencyData removed = adapter.remove(position);
-				adapter.notifyDataSetChanged();
 				if (removed != null) {
-					new AppSettings(getActivity()).removeConvertCurrency(removed);
+					adapter.notifyDataSetChanged();
+
+					appSettings.removeConvertCurrency(removed);
 					showSnackbar(getActivity().getString(R.string.action_currency_removed, removed.getCode()));
 				}
+
 				return false;
 			}
 		});
@@ -174,9 +172,9 @@ public class ConvertFragment extends AbstractFragment {
 		});
 
 		// add button
-		FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_convert);
-		fab.attachToListView(lvTargetCurrencies);
-		fab.setOnClickListener(new OnClickListener() {
+		FloatingActionButton action = (FloatingActionButton) view.findViewById(R.id.fab_convert);
+		action.attachToListView(lvTargetCurrencies);
+		action.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				showAddCurrencyMenu().show();
@@ -197,8 +195,7 @@ public class ConvertFragment extends AbstractFragment {
 					.setSelection(adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel()));
 		}
 
-		etSourceValue.setText(appSettings.getLastConvertValue());
-
+		setSourceCurrencyValue(appSettings.getLastConvertValue(), appSettings.getLastConvertCurrencySel());
 		updateTargetCurrenciesListView();
 	}
 
@@ -230,13 +227,11 @@ public class ConvertFragment extends AbstractFragment {
 	 */
 	private boolean updateTargetCurrenciesCalculations() {
 		ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) lvTargetCurrencies.getAdapter();
+		CurrencyData toCurrency = (CurrencyData) spinnerSourceCurrency.getSelectedItem();
 
-		CurrencyData sourceCurrency = (CurrencyData) spinnerSourceCurrency.getSelectedItem();
-		if (adapter != null && sourceCurrency != null) {
-			MathContext mathContext = new MathContext(Defs.SCALE_CALCULATIONS);
+		if (adapter != null && toCurrency != null) {
 			try {
-				BigDecimal value = new BigDecimal(etSourceValue.getText().toString(), mathContext);
-				adapter.updateConvert(sourceCurrency, value);
+				adapter.updateConvert(toCurrency, getSourceCurrencyValue());
 				adapter.notifyDataSetChanged();
 				return true;
 			} catch (Exception e) {
@@ -245,6 +240,15 @@ public class ConvertFragment extends AbstractFragment {
 		}
 
 		return false;
+	}
+
+	private void setSourceCurrencyValue(String value, String currencyCode) {
+		tvSourceValue.setText(formatCurrency(value, currencyCode));
+	}
+
+	private BigDecimal getSourceCurrencyValue() {
+		return NumberUtils.getCurrencyValue(tvSourceValue.getText().toString(),
+				new AppSettings(getActivity()).getLastConvertCurrencySel());
 	}
 
 	/**

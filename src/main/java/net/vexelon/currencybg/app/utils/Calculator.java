@@ -1,6 +1,7 @@
 package net.vexelon.currencybg.app.utils;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
 /**
@@ -12,15 +13,14 @@ public class Calculator {
 	private BigDecimal result;
 	private int scale;
 
-	public Calculator(int scale){
+	public Calculator(int scale) {
 		this(new BigDecimal(0), scale);
 	}
 
-	public Calculator(BigDecimal a, int scale){
+	public Calculator(BigDecimal a, int scale) {
 		this.result = a;
 		this.scale = scale;
 	}
-
 
 	public Calculator add(BigDecimal b) {
 		this.result = this.result.add(b);
@@ -42,16 +42,17 @@ public class Calculator {
 		return this;
 	}
 
-	public String getNormalizedResult(){
+	public String getNormalizedResult() {
 		return this.result.setScale(this.scale, RoundingMode.HALF_EVEN).toPlainString();
+	}
+
+	public Calculator clear() {
+		result = new BigDecimal(0);
+		return this;
 	}
 
 	public BigDecimal getResult() {
 		return this.result;
-	}
-
-	public   BigDecimal clear(){
-		return result = new BigDecimal(0);
 	}
 
 }

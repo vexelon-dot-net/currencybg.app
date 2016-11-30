@@ -17,26 +17,34 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -45,9 +53,13 @@ import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.common.CurrencyLocales;
+import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
+import net.vexelon.currencybg.app.utils.NumberUtils;
+import net.vexelon.currencybg.app.utils.StringUtils;
 
 import org.jsoup.helper.StringUtil;
 
@@ -186,5 +198,25 @@ public class AbstractFragment extends Fragment {
 
 	protected void showSnackbar(int resId) {
 		showSnackbar(resId, Snackbar.LENGTH_SHORT, false);
+	}
+
+	protected String formatCurrency(String value, String code) {
+		if (!StringUtils.isEmpty(value)) {
+			int precisionMode = new AppSettings(getActivity()).getCurrenciesPrecision();
+
+			try {
+				switch (precisionMode) {
+				case AppSettings.PRECISION_ADVANCED:
+					return NumberUtils.getCurrencyFormat(new BigDecimal(value), Defs.SCALE_SHOW_LONG, code);
+				case AppSettings.PRECISION_SIMPLE:
+				default:
+					return NumberUtils.getCurrencyFormat(new BigDecimal(value), code);
+				}
+			} catch (Exception e) {
+				Log.e(Defs.LOG_TAG, "Currency format exception! ", e);
+			}
+		}
+
+		return value;
 	}
 }

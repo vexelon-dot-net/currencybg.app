@@ -1,0 +1,200 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/calc_display"
+        style="@style/FontCalcDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
+        android:background="@drawable/calculator_display"
+        android:gravity="right|bottom"
+        android:maxLines="1"
+        android:padding="4sp"
+        android:text="012345678900123456789001234567890"/>
+
+    <!-- 7,8,9,C -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/calc_button7"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16sp"
+            android:text="7"/>
+
+        <Button
+            android:id="@+id/calc_button8"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8"/>
+
+        <Button
+            android:id="@+id/calc_button9"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9"/>
+
+        <Button
+            android:id="@+id/calc_button_clear"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="C"/>
+
+        <Button
+            android:id="@+id/calc_button_op_display"
+            style="@style/FontCalcButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:enabled="false"
+            android:gravity="right"
+            android:paddingRight="18sp"
+            android:text=""/>
+
+    </LinearLayout>
+
+    <!-- 4,5,6,div -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/calc_button4"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4"/>
+
+        <Button
+            android:id="@+id/calc_button5"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5"/>
+
+        <Button
+            android:id="@+id/calc_button6"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6"/>
+
+        <Button
+            android:id="@+id/calc_button_div"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="÷"/>
+
+    </LinearLayout>
+
+    <!-- 1,2,3,mul -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/calc_button1"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"/>
+
+        <Button
+            android:id="@+id/calc_button2"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2"/>
+
+        <Button
+            android:id="@+id/calc_button3"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"/>
+
+        <Button
+            android:id="@+id/calc_button_mul"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="×"/>
+
+    </LinearLayout>
+
+    <!-- . 0 % plus -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/calc_button_dec"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="."/>
+
+        <Button
+            android:id="@+id/calc_button0"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"/>
+
+        <Button
+            android:id="@+id/calc_button_percent"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"/>
+
+        <Button
+            android:id="@+id/calc_button_minus"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"/>
+
+    </LinearLayout>
+
+    <!-- = plus -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/calc_button_eq"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="192dp"
+            android:text="="/>
+
+        <Button
+            android:id="@+id/calc_button_plus"
+            style="@style/FontCalcButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"/>
+
+    </LinearLayout>
+
+</LinearLayout>

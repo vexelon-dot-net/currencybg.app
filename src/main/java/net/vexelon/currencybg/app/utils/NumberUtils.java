@@ -22,6 +22,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.security.SecureRandom;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Currency;
 import java.util.Random;
 
@@ -87,6 +88,23 @@ public class NumberUtils {
 
 	public static String getCurrencyFormat(BigDecimal number, String code) {
 		return getCurrencyFormat(number, Defs.SCALE_SHOW_SHORT, code);
+	}
+
+	public static BigDecimal getCurrencyValue(String formattedCurrency, String code) {
+		if (!StringUtils.isEmpty(code) && !StringUtils.isEmpty(formattedCurrency)) {
+			try {
+				Currency currency = Currency.getInstance(code);
+				NumberFormat format = NumberFormat.getCurrencyInstance();
+				format.setCurrency(currency);
+				return new BigDecimal(format.parse(formattedCurrency).toString());
+			} catch (IllegalArgumentException e) {
+				Log.wtf(Defs.LOG_TAG, "Died at currency to bign - " + formattedCurrency, e);
+			} catch (ParseException e) {
+				Log.wtf(Defs.LOG_TAG, "Died at currency to bign parse - " + formattedCurrency, e);
+			}
+		}
+
+		return BigDecimal.ZERO;
 	}
 
 	/**
