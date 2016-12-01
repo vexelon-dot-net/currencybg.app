@@ -1,5 +1,22 @@
 package net.vexelon.currencybg.app.ui.components;
 
+/*
+ * CurrencyBG App
+ * Copyright (C) 2016 Vexelon.NET Services
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
@@ -14,12 +31,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
-import net.vexelon.currencybg.app.ui.fragments.AbstractFragment;
 import net.vexelon.currencybg.app.utils.Calculator;
 import net.vexelon.currencybg.app.utils.StringUtils;
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 
 /**
  * Encapsulates the behavior of the UI calculator
@@ -68,7 +83,7 @@ public class CalculatorWidget implements View.OnClickListener {
 
 	private void init(View view) {
 		display = (TextView) view.findViewById(R.id.calc_display);
-		display.setText("0"); // TODO initial
+		display.setText("0");
 		lastDisplay = "";
 
 		opIndicatorButton = (Button) view.findViewById(R.id.calc_button_op_display);

@@ -24,6 +24,20 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/calc_button_op_display"
+            style="@style/FontCalcButton"
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:paddingLeft="4sp"
+            android:text=""/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
             android:id="@+id/calc_button7"
             style="@style/FontCalcButton"
             android:layout_width="wrap_content"
@@ -52,17 +66,6 @@
             android:layout_height="wrap_content"
             android:text="C"/>
 
-        <Button
-            android:id="@+id/calc_button_op_display"
-            style="@style/FontCalcButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:enabled="false"
-            android:gravity="right"
-            android:paddingRight="18sp"
-            android:text=""/>
-
     </LinearLayout>
 
     <!-- 4,5,6,div -->
@@ -70,6 +73,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/calc_button4"
@@ -107,6 +115,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
         <Button
             android:id="@+id/calc_button1"
             style="@style/FontCalcButton"
@@ -142,6 +155,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/calc_button_dec"
@@ -179,6 +197,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <Button
             android:id="@+id/calc_button_eq"

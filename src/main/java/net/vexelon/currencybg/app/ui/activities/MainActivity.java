@@ -17,8 +17,6 @@
  */
 package net.vexelon.currencybg.app.ui.activities;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -52,7 +50,6 @@ import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
 import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.PrefsFragment;
 
-import org.joda.time.Instant;
 import org.joda.time.LocalDateTime;
 
 public class MainActivity extends AppCompatActivity implements NotificationsListener {
