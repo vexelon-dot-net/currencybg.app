@@ -81,7 +81,17 @@
     java.lang.Object readResolve();
 }
 
+-keep class java.lang.ClassValue { *; }
+-dontwarn   java.lang.ClassValue
+
+-keep class com.google.j2objc.annotations.** { *; }
+-dontwarn   com.google.j2objc.annotations.**
+
+-keep class org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement { *; }
+-dontwarn   org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
 -dontwarn javax.annotation.**
 -dontwarn sun.misc.**
 -dontwarn okio.**
 -dontwarn org.joda.convert.**
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
