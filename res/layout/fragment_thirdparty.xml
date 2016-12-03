@@ -1,63 +1,82 @@
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-	<TextView
-		android:id="@+id/thirdparty_title"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		style="@style/FontStyle3rdTitle"
-		android:layout_marginBottom="14sp"
-		android:text="Third-party libraries" />
+    <TextView
+        android:id="@+id/thirdparty_title"
+        style="@style/FontStyle3rdTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14sp"
+        android:text="Third-party libraries" />
 
-	<!-- Lib 01 -->
-	<TextView
-		android:id="@+id/thirdparty_lib01_title"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		style="@style/FontStyle3rdLibTitle"
-		android:layout_marginBottom="8sp"
-		android:text="FloatingActionButton" />
-	<TextView
-		android:id="@+id/thirdparty_lib01_content"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		style="@style/FontStyle3rdLibContent"
-		android:layout_marginBottom="14sp"
-		android:text="@string/license_lib01" />
+    <!-- Lib 01 -->
+    <TextView
+        android:id="@+id/thirdparty_lib01_title"
+        style="@style/FontStyle3rdLibTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8sp"
+        android:text="FloatingActionButton" />
 
-	<!-- Lib 02 -->
-	<TextView
-		android:id="@+id/thirdparty_lib02_title"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		style="@style/FontStyle3rdLibTitle"
-		android:layout_marginBottom="8sp"
-		android:text="jsoup" />
-	<TextView
-		android:id="@+id/thirdparty_lib02_content"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		style="@style/FontStyle3rdLibContent"
-		android:layout_marginBottom="14sp"
-		android:text="@string/license_lib02" />
+    <TextView
+        android:id="@+id/thirdparty_lib01_content"
+        style="@style/FontStyle3rdLibContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14sp"
+        android:text="@string/license_lib01" />
 
-	<!-- Lib 03 -->
-	<TextView
-		android:id="@+id/thirdparty_lib03_title"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		style="@style/FontStyle3rdLibTitle"
-		android:layout_marginBottom="8sp"
-		android:text="Guava: Google Core Libraries for Java" />
-	<TextView
-		android:id="@+id/thirdparty_lib03_content"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		style="@style/FontStyle3rdLibContent"
-		android:layout_marginBottom="14sp"
-		android:text="@string/license_lib03" />
+    <!-- Lib 02 -->
+    <TextView
+        android:id="@+id/thirdparty_lib02_title"
+        style="@style/FontStyle3rdLibTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8sp"
+        android:text="jsoup" />
+
+    <TextView
+        android:id="@+id/thirdparty_lib02_content"
+        style="@style/FontStyle3rdLibContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14sp"
+        android:text="@string/license_lib02" />
+
+    <!-- Lib 03 -->
+    <TextView
+        android:id="@+id/thirdparty_lib03_title"
+        style="@style/FontStyle3rdLibTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8sp"
+        android:text="Google Guava, Joda-Time" />
+
+    <TextView
+        android:id="@+id/thirdparty_lib03_content"
+        style="@style/FontStyle3rdLibContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14sp"
+        android:text="@string/license_lib03" />
+
+    <!-- Lib 03 -->
+    <TextView
+        android:id="@+id/thirdparty_lib04_title"
+        style="@style/FontStyle3rdLibTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8sp"
+        android:text="OkHttp" />
+
+    <TextView
+        android:id="@+id/thirdparty_lib04_content"
+        style="@style/FontStyle3rdLibContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14sp"
+        android:text="@string/license_lib04" />
 
 </LinearLayout>
