@@ -81,6 +81,11 @@
     java.lang.Object readResolve();
 }
 
+-keep class net.vexelon.currencybg.app.db.models.** {
+  <fields>;
+  <methods>;
+}
+
 -keep class java.lang.ClassValue { *; }
 -dontwarn   java.lang.ClassValue
 
