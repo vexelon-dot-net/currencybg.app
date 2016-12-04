@@ -265,7 +265,7 @@ public class AppSettings {
 	}
 
 	public String getLastConvertValue() {
-		return generalPrefs.getString("pref_convert_value", "0.00");
+		return generalPrefs.getString("pref_convert_value", "0");
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class AppSettings {
 	}
 
 	public String getLastConvertCurrencySel() {
-		return generalPrefs.getString("pref_convert_selcurrencycode", "bg");
+		return generalPrefs.getString("pref_convert_selcurrencycode", "BGN");
 	}
 
 }

@@ -391,6 +391,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		private DateTime lastUpdate;
 		private boolean updateOK = false;
 		private boolean downloadFixed = false;
+		private int msgId = R.string.error_download_rates;
 
 		public UpdateRatesTask() {
 			activity = CurrenciesFragment.this.getActivity();
@@ -415,20 +416,27 @@ public class CurrenciesFragment extends AbstractFragment {
 
 				// format, e.g., "2016-11-09T01:00:06+03:00"
 				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
+                if (!currencies.isEmpty()) {
 
-				source = new SQLiteDataSource();
-				source.connect(activity);
-				source.addRates(currencies);
+                    source = new SQLiteDataSource();
+                    source.connect(activity);
+                    source.addRates(currencies);
 
-				// reload merged currencies
-				currencies = source.getLastRates();
+                    // reload merged currencies
+                    currencies = source.getLastRates();
 
-				updateOK = true;
+                    updateOK = true;
+                } else {
+                    msgId = R.string.error_no_entries;
+                }
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
+				if (e.isMaintenanceError()) {
+					msgId = R.string.error_maintenance;
+				}
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-				showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_TIME, true);
+				msgId = R.string.error_db_save;
 			} finally {
 				IOUtils.closeQuitely(source);
 			}
@@ -440,7 +448,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		protected void onPostExecute(List<CurrencyData> result) {
 			setRefreshActionButtonState(false);
 
-			if (updateOK && !result.isEmpty()) {
+			if (updateOK) {
 				updateCurrenciesListView(result);
 
 				// bump last update
@@ -449,8 +457,10 @@ public class CurrenciesFragment extends AbstractFragment {
 				new AppSettings(activity).setLastUpdateDate(lastUpdate);
 
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
+            } else if (msgId == R.string.error_no_entries) {
+                showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
 			} else {
-				showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME, true);
+				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
 			}
 
 			tvLastUpdate.setText(lastUpdateLastValue);
