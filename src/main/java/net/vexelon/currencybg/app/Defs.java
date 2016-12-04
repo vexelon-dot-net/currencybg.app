@@ -37,7 +37,7 @@ public class Defs {
 	/**
 	 * How often to wake-up the Android service
 	 */
-	public static final int SERVICE_FIRST_RUN_INTERVAL = 60; // seconds
+	public static final int SERVICE_FIRST_RUN_INTERVAL = 5 * 60; // seconds
 	public static final int SERVICE_DATABASE_CLEAN_INTERVAL = 3; // days
 	public static final String SERVICE_ACTION_NOTIFY_UPDATE = "_CBG_NOTIFY_UPDATE";
 

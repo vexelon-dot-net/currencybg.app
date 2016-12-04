@@ -54,205 +54,205 @@ import org.joda.time.LocalDateTime;
 
 public class MainActivity extends AppCompatActivity implements NotificationsListener {
 
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
-    private Toolbar toolbar;
-    private PendingIntent pendingIntent;
-    private BroadcastReceiver receiver;
-    private Fragment currentFragment;
+	private DrawerLayout drawerLayout;
+	private ActionBarDrawerToggle drawerToggle;
+	private Toolbar toolbar;
+	private PendingIntent pendingIntent;
+	private BroadcastReceiver receiver;
+	private Fragment currentFragment;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView drawerNav = (NavigationView) findViewById(R.id.navView);
-        setupDrawerContent(drawerNav);
-        drawerToggle = setupDrawerToggle();
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		NavigationView drawerNav = (NavigationView) findViewById(R.id.navView);
+		setupDrawerContent(drawerNav);
+		drawerToggle = setupDrawerToggle();
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        startService();
-        startReceivers();
-    }
+		startService();
+		startReceivers();
+	}
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-        if (savedInstanceState == null) {
-            try {
-                currentFragment = showFragment(CurrenciesFragment.class);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		drawerToggle.syncState();
+		if (savedInstanceState == null) {
+			try {
+				currentFragment = showFragment(CurrenciesFragment.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    @Override
-    protected void onDestroy() {
-        cancelReceivers();
-        super.onDestroy();
-    }
+	@Override
+	protected void onDestroy() {
+		cancelReceivers();
+		super.onDestroy();
+	}
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		drawerToggle.onConfigurationChanged(newConfig);
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			drawerLayout.openDrawer(GravityCompat.START);
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
-    private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-    }
+	private ActionBarDrawerToggle setupDrawerToggle() {
+		return new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+	}
 
-    private void setupDrawerContent(NavigationView navigationView) {
-        final Context context = this;
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.nav_settings) {
-                    // special case -> settings
-                    PreferenceFragmentCompat fragment = new PrefsFragment();
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit();
-                    menuItem.setChecked(true);
-                    setTitle(menuItem.getTitle());
-                    drawerLayout.closeDrawers();
-                } else {
-                    selectDrawerItem(menuItem, getClassFromMenu(menuItem));
-                }
-                return true;
-            }
-        });
-    }
+	private void setupDrawerContent(NavigationView navigationView) {
+		final Context context = this;
+		navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+			@Override
+			public boolean onNavigationItemSelected(MenuItem menuItem) {
+				if (menuItem.getItemId() == R.id.nav_settings) {
+					// special case -> settings
+					PreferenceFragmentCompat fragment = new PrefsFragment();
+					FragmentManager fragmentManager = getSupportFragmentManager();
+					fragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit();
+					menuItem.setChecked(true);
+					setTitle(menuItem.getTitle());
+					drawerLayout.closeDrawers();
+				} else {
+					selectDrawerItem(menuItem, getClassFromMenu(menuItem));
+				}
+				return true;
+			}
+		});
+	}
 
-    private Class getClassFromMenu(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_convert:
-                return ConvertFragment.class;
-            case R.id.nav_info:
-                return InfoFragment.class;
-            case R.id.nav_settings:
-                return PrefsFragment.class;
-            case R.id.nav_currencies:
-            default:
-                return CurrenciesFragment.class;
-        }
-    }
+	private Class getClassFromMenu(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+		case R.id.nav_convert:
+			return ConvertFragment.class;
+		case R.id.nav_info:
+			return InfoFragment.class;
+		case R.id.nav_settings:
+			return PrefsFragment.class;
+		case R.id.nav_currencies:
+		default:
+			return CurrenciesFragment.class;
+		}
+	}
 
-    /**
-     * Create a new fragment and specify the planet to show based on position.
-     *
-     * @param menuItem
-     * @param clazz
-     */
-    private <T extends AbstractFragment> void selectDrawerItem(MenuItem menuItem, Class<T> clazz) {
-        try {
-            currentFragment = showFragment(clazz);
-            /*
+	/**
+	 * Create a new fragment and specify the planet to show based on position.
+	 *
+	 * @param menuItem
+	 * @param clazz
+	 */
+	private <T extends AbstractFragment> void selectDrawerItem(MenuItem menuItem, Class<T> clazz) {
+		try {
+			currentFragment = showFragment(clazz);
+			/*
 			 * Highlight the selected item, update the title, and close the
 			 * drawer
 			 */
-            menuItem.setChecked(true);
-            setTitle(menuItem.getTitle());
-            drawerLayout.closeDrawers();
-        } catch (Exception e) {
-            Log.e(Defs.LOG_TAG, "Unknown drawer section!", e);
-        }
-    }
+			menuItem.setChecked(true);
+			setTitle(menuItem.getTitle());
+			drawerLayout.closeDrawers();
+		} catch (Exception e) {
+			Log.e(Defs.LOG_TAG, "Unknown drawer section!", e);
+		}
+	}
 
-    private <T extends AbstractFragment> AbstractFragment showFragment(Class<T> clazz) throws Exception {
-        AbstractFragment fragment = clazz.newInstance();
-        // fragment.addListener(MainActivity.this);
-        // Bundle args = new Bundle();
-        // args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        // fragment.setArguments(args);
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit();
-        return fragment;
-    }
+	private <T extends AbstractFragment> AbstractFragment showFragment(Class<T> clazz) throws Exception {
+		AbstractFragment fragment = clazz.newInstance();
+		// fragment.addListener(MainActivity.this);
+		// Bundle args = new Bundle();
+		// args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+		// fragment.setArguments(args);
+		// Insert the fragment by replacing any existing fragment
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit();
+		return fragment;
+	}
 
-    @Override
-    public void onNotification(Notifications event) {
-        switch (event) {
-            case UPDATE_RATES_DONE:
-                // setRefreshActionButtonState(false);
-                break;
-        }
-    }
+	@Override
+	public void onNotification(Notifications event) {
+		switch (event) {
+		case UPDATE_RATES_DONE:
+			// setRefreshActionButtonState(false);
+			break;
+		}
+	}
 
-    /**
-     * Starts background service
-     */
-    public void startService() {
-        Intent myIntent = new Intent(MainActivity.this, BackgroundService.class);
-        pendingIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, 0);
+	/**
+	 * Starts background service
+	 */
+	public void startService() {
+		Intent myIntent = new Intent(MainActivity.this, BackgroundService.class);
+		pendingIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, 0);
 
-        long startTimeout = LocalDateTime.now().plusSeconds(Defs.SERVICE_FIRST_RUN_INTERVAL).toDateTime().getMillis();
+		long startTimeout = LocalDateTime.now().plusSeconds(Defs.SERVICE_FIRST_RUN_INTERVAL).toDateTime().getMillis();
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setInexactRepeating(AlarmManager.RTC, startTimeout, AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.setInexactRepeating(AlarmManager.RTC, startTimeout, AlarmManager.INTERVAL_DAY, pendingIntent);
+	}
 
-    public void cancelService() {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-    }
+	public void cancelService() {
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.cancel(pendingIntent);
+	}
 
-    /**
-     * Registers receivers for service sent intents
-     */
-    public void startReceivers() {
-        receiver = new Receiver();
-        registerReceiver(receiver, new IntentFilter(Defs.SERVICE_ACTION_NOTIFY_UPDATE));
-    }
+	/**
+	 * Registers receivers for service sent intents
+	 */
+	public void startReceivers() {
+		receiver = new Receiver();
+		registerReceiver(receiver, new IntentFilter(Defs.SERVICE_ACTION_NOTIFY_UPDATE));
+	}
 
-    public void cancelReceivers() {
-        if (receiver != null) {
-            unregisterReceiver(receiver);
-        }
-    }
+	public void cancelReceivers() {
+		if (receiver != null) {
+			unregisterReceiver(receiver);
+		}
+	}
 
-    /**
-     * Processes actions sent by the background service
-     */
-    private class Receiver extends BroadcastReceiver {
+	/**
+	 * Processes actions sent by the background service
+	 */
+	private class Receiver extends BroadcastReceiver {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Defs.SERVICE_ACTION_NOTIFY_UPDATE.equals(intent.getAction())) {
-                /**
-                 * Set last update time
-                 */
-                if (currentFragment instanceof CurrenciesFragment) {
-                    ((CurrenciesFragment) currentFragment).setLastUpdate(intent.getStringExtra("LAST_UPDATE"));
-                }
-            }
-        }
-    }
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (Defs.SERVICE_ACTION_NOTIFY_UPDATE.equals(intent.getAction())) {
+				/**
+				 * Set last update time
+				 */
+				if (currentFragment instanceof CurrenciesFragment) {
+					((CurrenciesFragment) currentFragment).setLastUpdate(intent.getStringExtra("LAST_UPDATE"));
+				}
+			}
+		}
+	}
 
 }
