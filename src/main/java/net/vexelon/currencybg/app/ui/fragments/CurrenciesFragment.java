@@ -391,6 +391,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		private DateTime lastUpdate;
 		private boolean updateOK = false;
 		private boolean downloadFixed = false;
+		private int msgId = R.string.error_download_rates;
 
 		public UpdateRatesTask() {
 			activity = CurrenciesFragment.this.getActivity();
@@ -426,9 +427,12 @@ public class CurrenciesFragment extends AbstractFragment {
 				updateOK = true;
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
+				if (e.isMaintenanceError()) {
+					msgId = R.string.error_maintenance;
+				}
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
-				showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_TIME, true);
+				msgId = R.string.error_db_save;
 			} finally {
 				IOUtils.closeQuitely(source);
 			}
@@ -440,7 +444,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		protected void onPostExecute(List<CurrencyData> result) {
 			setRefreshActionButtonState(false);
 
-			if (updateOK && !result.isEmpty()) {
+			if (updateOK) {
 				updateCurrenciesListView(result);
 
 				// bump last update
@@ -450,7 +454,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
 			} else {
-				showSnackbar(R.string.error_download_rates, Defs.TOAST_ERR_TIME, true);
+				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
 			}
 
 			tvLastUpdate.setText(lastUpdateLastValue);

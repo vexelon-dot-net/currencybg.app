@@ -15,6 +15,7 @@
     <string name="error_db_load">Failed reading from db!</string>
     <string name="error_db_save">Failed saving to db!</string>
     <string name="error_filter_selection">A minimum of one source selection is required!</string>
+    <string name="error_maintenance">Server down for maintenance! Try again later.</string>
     <string name="about_version">Version</string>
     <string name="about_rates_provider">Exchange rates</string>
     <string name="about_rates_provider_text">Gathered from the Bulgarian National Bank website http://www.bnb.bg</string>

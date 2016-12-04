@@ -23,15 +23,28 @@ import java.util.List;
  * Created by Tsvetoslav on 27.8.2016 г..
  */
 public class APISource implements Source {
+	private static final int HTTP_CODE_MAINTENANCE = 503;
 
-	private static final String SERVER_ADDRESS = "http://currencybg-tsvetoslav.rhcloud.com/currencybg.server/api/currencies/";
+	private static final String TEST_SERVER_ADDRESS = "http://currencybg-tsvetoslav.rhcloud.com";
+	private static final String PROD_SERVER_ADDRESS = "http://01-currencybg.rhcloud.com";
+	private static final String API_JUNCTION = "/currencybg.server/api/currencies/";
+
 	private static final String HEADER = "APIKey";
 	private static final String TOKEN = "CurrencyBgUser";
 
-	private OkHttpClient client = new OkHttpClient();
-	private Gson gson = new GsonBuilder().setDateFormat(Defs.DATEFORMAT_ISO8601).create();
-	private Type type = new TypeToken<List<CurrencyData>>() {
+	private final String serverUrl;
+	private final Gson gson = new GsonBuilder().setDateFormat(Defs.DATEFORMAT_ISO8601).create();
+	private final Type type = new TypeToken<List<CurrencyData>>() {
 	}.getType();
+	private final OkHttpClient client = new OkHttpClient();
+
+	public APISource() {
+		// test server address
+		this.serverUrl = TEST_SERVER_ADDRESS + API_JUNCTION;
+
+		// production server address
+		// this.serverUrl = PROD_SERVER_ADDRESS + API_JUNCTION;
+	}
 
 	/**
 	 * Debug method
@@ -57,7 +70,7 @@ public class APISource implements Source {
 	@Override
 	public List<CurrencyData> getAllRatesByDate(String initialTime) throws SourceException {
 
-		String address = SERVER_ADDRESS + initialTime;
+		String address = serverUrl + initialTime;
 
 		// TODO - to be set Authentication information
 
@@ -72,7 +85,7 @@ public class APISource implements Source {
 	@Override
 	public List<CurrencyData> getAllRatesByDateSource(String initialTime, Integer sourceId) throws SourceException {
 
-		String address = SERVER_ADDRESS + initialTime + "/" + sourceId;
+		String address = serverUrl + initialTime + "/" + sourceId;
 
 		// TODO - to be set Authentication information
 
@@ -87,7 +100,7 @@ public class APISource implements Source {
 	@Override
 	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime) throws SourceException {
 
-		String address = SERVER_ADDRESS + "today/" + initialTime;
+		String address = serverUrl + "today/" + initialTime;
 
 		// TODO - to be set Authentication information
 
@@ -102,7 +115,7 @@ public class APISource implements Source {
 	@Override
 	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime, Integer sourceId) throws SourceException {
 
-		String address = SERVER_ADDRESS + "today/" + initialTime + "/" + sourceId;
+		String address = serverUrl + "today/" + initialTime + "/" + sourceId;
 
 		// TODO - to be set Authentication information
 
@@ -114,13 +127,17 @@ public class APISource implements Source {
 		}
 	}
 
-	String downloadRates(String url) throws IOException {
+	public String downloadRates(String url) throws IOException, SourceException {
 		try {
 			Request request = new Request.Builder().url(url).header(HEADER, TOKEN).build();
 			Response response = client.newCall(request).execute();
+			if (response.code() == HTTP_CODE_MAINTENANCE) {
+				throw new SourceException(true);
+			}
+
 			return response.body().string();
 		} catch (RuntimeException e) {
-			throw new IOException("API error!", e);
+			throw new IOException("HTTP error!", e);
 		}
 	}
 

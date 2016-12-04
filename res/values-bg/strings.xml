@@ -15,6 +15,7 @@
     <string name="error_db_load">Грешка при четене на данни!</string>
     <string name="error_db_save">Грешка при запис на данни!</string>
     <string name="error_filter_selection">Трябва да бъде избран поне един източник!</string>
+    <string name="error_maintenance">Сървърът се обновява! Опитайте по-късно.</string>
     <string name="about_version">Версия</string>
     <string name="about_rates_provider">Обменни курсове</string>
     <string name="about_rates_provider_text">От web сайта на Българска Национална Банка http://www.bnb.bg</string>
