@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="news_title">Какво ново?</string>
+    <string-array name="news_messages">
+
+        <item><![CDATA[
+<b>2.0.0</b>
+<br><br>
+TODO
+<br><br>
+  * Вече предоставя информация от различни източници.
+<br><br>
+  * БНБ курсовете са премахнати, тъй като не се ползват при директна валутна обмяна.
+<br><br>
+  * Добавен калкулатор при вкарване на обменни стойности.
+        ]]></item>
+
+    </string-array>
+
+</resources>

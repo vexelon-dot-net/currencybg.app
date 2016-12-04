@@ -30,9 +30,12 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -80,6 +83,33 @@ public class CurrenciesFragment extends AbstractFragment {
 		this.rootView = inflater.inflate(R.layout.fragment_main, container, false);
 		init(rootView, inflater);
 		return rootView;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		final AppSettings appSettings = new AppSettings(getActivity());
+		final List<String> messages = Lists
+				.newArrayList(getActivity().getResources().getStringArray(R.array.news_messages));
+
+		if (!messages.isEmpty() && appSettings.getLastReadWhatsNew() < messages.size()) {
+			final TextView tvMessage = new TextView(getActivity());
+			tvMessage.setText(Html.fromHtml(Iterables.getLast(messages)));
+			tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
+			tvMessage.setPadding(24, 24, 24, 12);
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setTitle(R.string.news_title)
+					.setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					}).setCancelable(false).setView(tvMessage).show();
+
+			// TODO
+		}
 	}
 
 	@Override
@@ -416,19 +446,19 @@ public class CurrenciesFragment extends AbstractFragment {
 
 				// format, e.g., "2016-11-09T01:00:06+03:00"
 				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
-                if (!currencies.isEmpty()) {
+				if (!currencies.isEmpty()) {
 
-                    source = new SQLiteDataSource();
-                    source.connect(activity);
-                    source.addRates(currencies);
+					source = new SQLiteDataSource();
+					source.connect(activity);
+					source.addRates(currencies);
 
-                    // reload merged currencies
-                    currencies = source.getLastRates();
+					// reload merged currencies
+					currencies = source.getLastRates();
 
-                    updateOK = true;
-                } else {
-                    msgId = R.string.error_no_entries;
-                }
+					updateOK = true;
+				} else {
+					msgId = R.string.error_no_entries;
+				}
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
 				if (e.isMaintenanceError()) {
@@ -457,8 +487,8 @@ public class CurrenciesFragment extends AbstractFragment {
 				new AppSettings(activity).setLastUpdateDate(lastUpdate);
 
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
-            } else if (msgId == R.string.error_no_entries) {
-                showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
+			} else if (msgId == R.string.error_no_entries) {
+				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
 			} else {
 				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
 			}

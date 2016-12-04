@@ -281,4 +281,16 @@ public class AppSettings {
 		return generalPrefs.getString("pref_convert_selcurrencycode", "BGN");
 	}
 
+	/**
+	 * 
+	 * @return index of last read <i>What's New</i> message.
+	 */
+	public int getLastReadWhatsNew() {
+		return generalPrefs.getInt("pref_last_read_whatsnew", 0);
+	}
+
+	public void setLastReadWhatsNew(int value) {
+		generalPrefs.edit().putInt("pref_last_read_whatsnew", value).apply();
+	}
+
 }
