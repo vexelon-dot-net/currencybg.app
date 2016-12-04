@@ -166,11 +166,15 @@ public class AbstractFragment extends Fragment {
 	}
 
 	protected void showSnackbar(String text, int duration, boolean isError) {
-		Snackbar snackbar = Snackbar.make(rootView, text, duration);
-		View v = snackbar.getView();
-		v.setBackgroundColor(
-				ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
-		snackbar.show();
+		try {
+			Snackbar snackbar = Snackbar.make(rootView, text, duration);
+			View v = snackbar.getView();
+			v.setBackgroundColor(
+					ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
+			snackbar.show();
+		} catch (RuntimeException e) {
+			Log.wtf(Defs.LOG_TAG, "Failed displaying Snackbar! Probably wrong fragment binding.", e);
+		}
 	}
 
 	protected void showSnackbar(String text, boolean isError) {
@@ -182,14 +186,18 @@ public class AbstractFragment extends Fragment {
 	}
 
 	protected void showSnackbar(int resId, int duration, boolean isError) {
-		Snackbar snackbar = Snackbar.make(rootView, resId, duration);
-		View v = snackbar.getView();
-		// TextView textView = (TextView)
-		// v.findViewById(android.support.design.R.id.snackbar_text);
-		// textView.setTextColor(getResources().getColor(R.color.colorAccent));
-		v.setBackgroundColor(
-				ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
-		snackbar.show();
+		try {
+			Snackbar snackbar = Snackbar.make(rootView, resId, duration);
+			View v = snackbar.getView();
+			// TextView textView = (TextView)
+			// v.findViewById(android.support.design.R.id.snackbar_text);
+			// textView.setTextColor(getResources().getColor(R.color.colorAccent));
+			v.setBackgroundColor(
+					ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
+			snackbar.show();
+		} catch (RuntimeException e) {
+			Log.wtf(Defs.LOG_TAG, "Failed displaying Snackbar! Probably wrong fragment binding.", e);
+		}
 	}
 
 	protected void showSnackbar(int resId, boolean isError) {
