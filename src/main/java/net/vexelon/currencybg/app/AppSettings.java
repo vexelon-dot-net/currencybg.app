@@ -20,13 +20,11 @@ package net.vexelon.currencybg.app;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 
 import android.content.Context;
@@ -285,11 +283,11 @@ public class AppSettings {
 	 * 
 	 * @return index of last read <i>What's New</i> message.
 	 */
-	public int getLastReadWhatsNew() {
+	public int getLastReadNewsId() {
 		return generalPrefs.getInt("pref_last_read_whatsnew", 0);
 	}
 
-	public void setLastReadWhatsNew(int value) {
+	public void setLastReadNewsId(int value) {
 		generalPrefs.edit().putInt("pref_last_read_whatsnew", value).apply();
 	}
 

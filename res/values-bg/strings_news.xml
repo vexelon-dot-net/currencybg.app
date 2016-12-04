@@ -2,7 +2,7 @@
 <resources>
 
     <string name="news_title">Какво ново?</string>
-    <string-array name="news_messages">
+    <string name="news_messages">
 
         <item><![CDATA[
 <b>2.0.0</b>
@@ -16,6 +16,6 @@ TODO
   * Добавен калкулатор при вкарване на обменни стойности.
         ]]></item>
 
-    </string-array>
+    </string>
 
 </resources>

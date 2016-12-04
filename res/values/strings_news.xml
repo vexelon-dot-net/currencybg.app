@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Increment when releasing a new version -->
+    <integer name="news_last">200</integer>
+
     <string name="news_title">What\'s new?</string>
-    <string-array name="news_messages">
+    <string name="news_messages">
 
         <item><![CDATA[
 <b>2.0.0</b>
@@ -16,6 +19,6 @@ TODO
 &emsp; - Added a calculator when entering currency values to convert.
         ]]></item>
 
-    </string-array>
+    </string>
 
 </resources>

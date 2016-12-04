@@ -17,14 +17,12 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -32,6 +30,7 @@ import com.google.common.collect.Sets;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -49,7 +48,6 @@ import android.widget.TextView;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
-import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
@@ -58,14 +56,12 @@ import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.remote.APISource;
 import net.vexelon.currencybg.app.remote.SourceException;
 import net.vexelon.currencybg.app.ui.UIUtils;
-import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
 
 public class CurrenciesFragment extends AbstractFragment {
 
@@ -90,12 +86,12 @@ public class CurrenciesFragment extends AbstractFragment {
 		super.onStart();
 
 		final AppSettings appSettings = new AppSettings(getActivity());
-		final List<String> messages = Lists
-				.newArrayList(getActivity().getResources().getStringArray(R.array.news_messages));
+		Resources resources = getActivity().getResources();
 
-		if (!messages.isEmpty() && appSettings.getLastReadWhatsNew() < messages.size()) {
+		Log.d(Defs.LOG_TAG, "OPA: " + appSettings.getLastReadNewsId());
+		if (appSettings.getLastReadNewsId() != resources.getInteger(R.integer.news_last)) {
 			final TextView tvMessage = new TextView(getActivity());
-			tvMessage.setText(Html.fromHtml(Iterables.getLast(messages)));
+			tvMessage.setText(Html.fromHtml(resources.getString(R.string.news_messages)));
 			tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
 			tvMessage.setPadding(24, 24, 24, 12);
 
@@ -108,7 +104,8 @@ public class CurrenciesFragment extends AbstractFragment {
 						}
 					}).setCancelable(false).setView(tvMessage).show();
 
-			// TODO
+			// TODO uncomment
+			// appSettings.setLastReadNewsId(resources.getInteger(R.integer.news_last));
 		}
 	}
 
