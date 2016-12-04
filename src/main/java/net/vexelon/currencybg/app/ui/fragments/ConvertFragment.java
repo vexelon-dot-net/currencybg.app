@@ -54,6 +54,8 @@ import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
+import org.joda.time.LocalDate;
+
 public class ConvertFragment extends AbstractFragment {
 
 	private Spinner spinnerSourceCurrency;
@@ -223,7 +225,7 @@ public class ConvertFragment extends AbstractFragment {
 	}
 
 	/**
-	 * Does convert calculations and displays results
+	 * Performs convert calculations and displays results
 	 */
 	private boolean updateTargetCurrenciesCalculations() {
 		ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) lvTargetCurrencies.getAdapter();
@@ -324,8 +326,7 @@ public class ConvertFragment extends AbstractFragment {
 		currency.setBuy("1");
 		currency.setSell("1");
 		currency.setSource(0);
-		// currency.setDate(new Date());
-		currency.setDate("2016-11-15T13:14:01+02:00");
+		currency.setDate(LocalDate.now().toString());
 
 		currencies.add(currency);
 		return currencies;
