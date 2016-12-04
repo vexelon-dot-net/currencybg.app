@@ -416,15 +416,19 @@ public class CurrenciesFragment extends AbstractFragment {
 
 				// format, e.g., "2016-11-09T01:00:06+03:00"
 				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
+                if (!currencies.isEmpty()) {
 
-				source = new SQLiteDataSource();
-				source.connect(activity);
-				source.addRates(currencies);
+                    source = new SQLiteDataSource();
+                    source.connect(activity);
+                    source.addRates(currencies);
 
-				// reload merged currencies
-				currencies = source.getLastRates();
+                    // reload merged currencies
+                    currencies = source.getLastRates();
 
-				updateOK = true;
+                    updateOK = true;
+                } else {
+                    msgId = R.string.error_no_entries;
+                }
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
 				if (e.isMaintenanceError()) {
@@ -453,6 +457,8 @@ public class CurrenciesFragment extends AbstractFragment {
 				new AppSettings(activity).setLastUpdateDate(lastUpdate);
 
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
+            } else if (msgId == R.string.error_no_entries) {
+                showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
 			} else {
 				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
 			}
