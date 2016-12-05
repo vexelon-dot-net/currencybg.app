@@ -88,7 +88,6 @@ public class CurrenciesFragment extends AbstractFragment {
 		final AppSettings appSettings = new AppSettings(getActivity());
 		Resources resources = getActivity().getResources();
 
-		Log.d(Defs.LOG_TAG, "OPA: " + appSettings.getLastReadNewsId());
 		if (appSettings.getLastReadNewsId() != resources.getInteger(R.integer.news_last)) {
 			final TextView tvMessage = new TextView(getActivity());
 			tvMessage.setText(Html.fromHtml(resources.getString(R.string.news_messages)));

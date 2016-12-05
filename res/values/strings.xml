@@ -31,6 +31,7 @@
     <string name="menu_convert">Convert</string>
     <string name="tab_title_currencies">Currencies</string>
     <string name="tab_title_convert">Convert</string>
+    <string name="tab_title_wallet">My Wallet</string>
     <string name="hint_currency_remove">Tap and hold to remove.</string>
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
