@@ -18,10 +18,10 @@
     <string name="error_maintenance">Server down for maintenance! Try again later.</string>
     <string name="error_no_entries">No new currency entries.</string>
     <string name="about_version">Version</string>
-    <string name="about_rates_provider">Exchange rates</string>
-    <string name="about_rates_provider_text">Gathered from the Bulgarian National Bank website http://www.bnb.bg</string>
-    <string name="about_rates_provider_long">The exchange rates of currencies are calculated on the basis of the fixed exchange rate of the Bulgarian lev to the euro, and the information source is the exchange rates of the euro against these currencies published by the European Central Bank</string>
+    <string name="about_issue_appdev">Report an issue</string>
+    <string name="about_issue_appdev_text">Report an issue you found or send us your feature request</string>
     <string name="about_join_appdev">Join app development</string>
+    <string name="about_join_appdev_text">Are you a coder? Send us your pull requests</string>
     <string name="about_author">Developers</string>
     <string name="about_author_text">List of contributors</string>
     <string name="about_logo">Logo icon</string>

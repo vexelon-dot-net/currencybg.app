@@ -15,12 +15,13 @@
     <string name="error_db_load">Грешка при четене на данни!</string>
     <string name="error_db_save">Грешка при запис на данни!</string>
     <string name="error_filter_selection">Трябва да бъде избран поне един източник!</string>
-    <string name="error_maintenance">Сървърът се обновява! Опитайте по-късно.</string>
+    <string name="error_maintenance">Сървърът се обновява! Опитай по-късно.</string>
     <string name="error_no_entries">Няма нови курсове.</string>
     <string name="about_version">Версия</string>
-    <string name="about_rates_provider">Обменни курсове</string>
-    <string name="about_rates_provider_text">От web сайта на Българска Национална Банка http://www.bnb.bg</string>
-    <string name="about_join_appdev">Присъединете се към разработването</string>
+    <string name="about_issue_appdev">Докладвай бъг</string>
+    <string name="about_issue_appdev_text">Докладвай открит проблем или дай предложение</string>
+    <string name="about_join_appdev">Присъедини се към разработването</string>
+    <string name="about_join_appdev_text">Пишеш код? Прати ни pull request!</string>
     <string name="about_author">Разработчици</string>
     <string name="about_author_text">Списък на допринесли към приложението</string>
     <string name="about_logo">Графично лого</string>
@@ -68,5 +69,5 @@
     <string name="pref_precision_title">Точност на валутните стойности</string>
     <string name="pref_precision_summary">Точност, която да се използва при изобразяване на валутните стойности</string>
     <string name="pref_rateus_title">Гласувайте за Currency BG</string>
-    <string name="pref_rateus_summary">Подкрепете ни и дайте Вашето мнение за приложението</string>
+    <string name="pref_rateus_summary">Подкрепи ни, като дадеш оценка за приложението</string>
 </resources>
