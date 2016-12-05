@@ -41,7 +41,8 @@ import java.util.List;
 
 public class InfoFragment extends AbstractFragment {
 
-	private static final String URL_3RDPARTY = "intr://3rd";
+	private static final String URL_3RDPARTY_LIBS = "intr://3rd";
+	private static final String URL_3RDPARTY_ICONS = "intr://3rd_icons";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,8 +60,11 @@ public class InfoFragment extends AbstractFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				String url = adapter.getUrl(position);
-				if (URL_3RDPARTY.equals(url)) {
-					new MaterialDialog.Builder(getActivity()).customView(R.layout.fragment_thirdparty, true)
+				if (URL_3RDPARTY_LIBS.equals(url)) {
+					new MaterialDialog.Builder(getActivity()).customView(R.layout.fragment_thirdparty_libs, true)
+							.positiveText(R.string.text_ok).build().show();
+				} else if (URL_3RDPARTY_ICONS.equals(url)) {
+					new MaterialDialog.Builder(getActivity()).customView(R.layout.fragment_thirdparty_icons, true)
 							.positiveText(R.string.text_ok).build().show();
 				} else if (url != null) {
 					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -90,12 +94,8 @@ public class InfoFragment extends AbstractFragment {
 				"https://github.com/vexelon-dot-net/currencybg.app/blob/master/CREDITS"));
 		infoList.add(newInfoRow(getString(R.string.about_logo), getString(R.string.about_logo_text),
 				"http://www.stremena.com"));
-		infoList.add(newInfoRow(getString(R.string.about_flag_icons),
-				"Copyright (c) 2013 Aha-Soft. http://www.aha-soft.com/free-icons/free-yellow-button-icons",
-				"http://www.aha-soft.com/free-icons/free-yellow-button-icons"));
-		infoList.add(newInfoRow(getString(R.string.about_flag_icons),
-				"Copyright (CC BY-ND 3.0) Visual Pharm. http://icons8.com", "http://icons8.com"));
-		infoList.add(newInfoRow(getString(R.string.about_3rdparty), "", URL_3RDPARTY));
+		infoList.add(newInfoRow(getString(R.string.about_3rdparty_icons), "", URL_3RDPARTY_ICONS));
+		infoList.add(newInfoRow(getString(R.string.about_3rdparty), "", URL_3RDPARTY_LIBS));
 
 		return infoList;
 	}

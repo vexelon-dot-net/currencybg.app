@@ -26,8 +26,8 @@
     <string name="about_author_text">List of contributors</string>
     <string name="about_logo">Logo icon</string>
     <string name="about_logo_text">Stremena Tuzsuzova  http://stremena.com</string>
+    <string name="about_3rdparty_icons">Third-party icons</string>
     <string name="about_3rdparty">Third-party libraries</string>
-    <string name="about_flag_icons">Flag icons</string>
     <string name="menu_convert">Convert</string>
     <string name="tab_title_currencies">Currencies</string>
     <string name="tab_title_convert">Convert</string>
@@ -79,7 +79,15 @@
     <string name="pref_rateus_title">Rate Currency BG</string>
     <string name="pref_rateus_summary">Support us by rating this app</string>
 
-
+    <string name="license_icons">
+Copyright (c) 2013 Aha-Soft.
+\n\n
+http://www.aha-soft.com/free-icons/free-yellow-button-icons
+\n\n\n
+Copyright (CC BY-ND 3.0) Visual Pharm.
+\n\n
+http://icons8.com
+    </string>
 
     <string name="license_lib01">
 The MIT License (MIT)

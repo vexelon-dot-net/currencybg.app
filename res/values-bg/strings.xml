@@ -26,8 +26,8 @@
     <string name="about_author_text">Списък на допринесли към приложението</string>
     <string name="about_logo">Графично лого</string>
     <string name="about_logo_text">Стремена Тузсузова  http://stremena.com</string>
+    <string name="about_3rdparty_icons">Използвани икони</string>
     <string name="about_3rdparty">Използвани библиотеки</string>
-    <string name="about_flag_icons">Други икони</string>
     <string name="menu_convert">Преобразуване</string>
     <string name="tab_title_currencies">Обменни курсове</string>
     <string name="tab_title_convert">Преобразуване</string>
