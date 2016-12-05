@@ -104,8 +104,7 @@ public class CurrenciesFragment extends AbstractFragment {
 						}
 					}).setCancelable(false).setView(tvMessage).show();
 
-			// TODO uncomment
-			// appSettings.setLastReadNewsId(resources.getInteger(R.integer.news_last));
+			appSettings.setLastReadNewsId(resources.getInteger(R.integer.news_last));
 		}
 	}
 

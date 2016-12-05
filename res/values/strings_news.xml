@@ -8,9 +8,15 @@
     <string name="news_messages">
 
         <item><![CDATA[
-<b>2.0.0</b>
+<b><font color="#ffffff">2.0.0</font></b>
 <br><br>
-TODO
+Version 2.0 brings you currency exchange rates information from various Bulgarian sources.
+The new sources functionality has practical purposes should you want to monitor rates or exchange currencies
+and we\'ll be adding more sources in the upcoming versions of the app.
+<br><br>
+The BNB exchange rates are removed in this version, because we believe they do not bring
+any practical meaning concerning currency exchange. You can still find the BNB exchange rates in the
+<a href="https://play.google.com/store/apps/details?id=net.vexelon.bgrates">BGrates</a> app.
 <br><br>
 &emsp; - Now displays currency rates from various sources.
 <br>
