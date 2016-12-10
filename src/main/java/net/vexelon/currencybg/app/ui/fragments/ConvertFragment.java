@@ -17,15 +17,6 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.common.collect.Lists;
-import com.melnykov.fab.FloatingActionButton;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +32,10 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.Lists;
+import com.melnykov.fab.FloatingActionButton;
+
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
@@ -55,6 +50,11 @@ import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
 import org.joda.time.LocalDate;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class ConvertFragment extends AbstractFragment {
 
@@ -300,7 +300,7 @@ public class ConvertFragment extends AbstractFragment {
 			IOUtils.closeQuitely(source);
 		}
 
-		addBGNToCurrencyList(currencies);
+		currencies.add(getBGNCurrency());
 
 		// sort by code
 		Collections.sort(currencies, new Comparator<CurrencyData>() {
@@ -314,12 +314,11 @@ public class ConvertFragment extends AbstractFragment {
 	}
 
 	/**
-	 * Adds fictional BGN currency to the convert list
+	 * Fetches a fictional BGN currency to the convert list
 	 *
-	 * @param currencies
-	 * @return modified {@code currencies} list.
+	 * @return CurrencyData
 	 */
-	private List<CurrencyData> addBGNToCurrencyList(List<CurrencyData> currencies) {
+	private CurrencyData getBGNCurrency() {
 		CurrencyData currency = new CurrencyData();
 		currency.setCode("BGN");
 		currency.setRatio(1);
@@ -327,9 +326,7 @@ public class ConvertFragment extends AbstractFragment {
 		currency.setSell("1");
 		currency.setSource(0);
 		currency.setDate(LocalDate.now().toString());
-
-		currencies.add(currency);
-		return currencies;
+		return currency;
 	}
 
 }

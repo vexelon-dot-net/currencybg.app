@@ -146,12 +146,12 @@ public class AbstractFragment extends Fragment {
 	 * Converts list of currencies from various sources to a table with rows &
 	 * columns
 	 *
+	 * @param activity
 	 * @param currencies
 	 * @return
 	 */
-	protected List<CurrencyListRow> toCurrencyRows(List<CurrencyData> currencies) {
+	protected List<CurrencyListRow> toCurrencyRows(final Activity activity, List<CurrencyData> currencies) {
 		Map<String, CurrencyListRow> map = Maps.newHashMap();
-		final Activity activity = getActivity();
 
 		for (CurrencyData c : currencies) {
 			CurrencyListRow row = map.get(c.getCode());
