@@ -17,19 +17,13 @@
  */
 package net.vexelon.currencybg.app;
 
-import java.math.BigDecimal;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import net.vexelon.currencybg.app.common.CurrencyLocales;
 import net.vexelon.currencybg.app.common.Sources;
@@ -37,6 +31,12 @@ import net.vexelon.currencybg.app.db.models.CurrencyData;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+
+import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TimeZone;
 
 public class AppSettings {
 
@@ -170,7 +170,7 @@ public class AppSettings {
 	 *         </ul>
 	 */
 	public int getCurrenciesPrecision() {
-		String precision = generalPrefs.getString("pref_currencies_precision", "simple");
+		String precision = generalPrefs.getString("pref_currencies_precision", "advanced");
 		return precision.equals("advanced") ? PRECISION_ADVANCED : PRECISION_SIMPLE;
 	}
 

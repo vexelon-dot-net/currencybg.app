@@ -17,27 +17,13 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
-import java.util.List;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.common.collect.Lists;
-
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
-import net.vexelon.currencybg.app.ui.components.InfoListAdapter;
 
 public class MyWalletFragment extends AbstractFragment {
 
