@@ -17,14 +17,14 @@
  */
 package net.vexelon.currencybg.app.db.models;
 
-public class CurrencyData {
+import java.util.Date;
+
+public class MyWalletEntry {
 
 	private String code;
-	private int ratio = 1; // default
-	private String buy;
-	private String sell;
-	private String date;
-	private int source;
+	private String amount;
+	private String purchaseRate;
+	private Date purchaseTime;
 
 	public String getCode() {
 		return code;
@@ -34,50 +34,27 @@ public class CurrencyData {
 		this.code = code;
 	}
 
-	public int getRatio() {
-		return ratio;
+	public String getAmount() {
+		return amount;
 	}
 
-	public void setRatio(int ratio) {
-		this.ratio = ratio;
+	public void setAmount(String amount) {
+		this.amount = amount;
 	}
 
-	public String getBuy() {
-		return buy;
+	public String getPurchaseRate() {
+		return purchaseRate;
 	}
 
-	public void setBuy(String buy) {
-		this.buy = buy;
+	public void setPurchaseRate(String purchaseRate) {
+		this.purchaseRate = purchaseRate;
 	}
 
-	public String getSell() {
-		return sell;
+	public Date getPurchaseTime() {
+		return purchaseTime;
 	}
 
-	public void setSell(String sell) {
-		this.sell = sell;
+	public void setPurchaseTime(Date purchaseTime) {
+		this.purchaseTime = purchaseTime;
 	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public int getSource() {
-		return source;
-	}
-
-	public void setSource(int source) {
-		this.source = source;
-	}
-
-	@Override
-	public String toString() {
-		return "CurrencyData{" + "code='" + code + '\'' + ", ratio=" + ratio + ", buy='" + buy + '\'' + ", sell='"
-				+ sell + '\'' + ", date=" + date + ", source=" + source + '}';
-	}
-
 }
