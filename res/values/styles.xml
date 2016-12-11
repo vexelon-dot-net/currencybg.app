@@ -34,7 +34,7 @@
     </style>
 
     <style name="FontListHeader" parent="@android:style/TextAppearance">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="FontListHeaderRate" parent="FontListHeader">
