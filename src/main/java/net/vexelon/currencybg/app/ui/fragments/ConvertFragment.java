@@ -187,8 +187,11 @@ public class ConvertFragment extends AbstractFragment {
 	private void updateUI() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 
+		// reload all currencies from database
+		currencies = getCurrencies();
+
 		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(getActivity(),
-				android.R.layout.simple_spinner_item, getCurrencies());
+				android.R.layout.simple_spinner_item, currencies);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerSourceCurrency.setAdapter(adapter);
 
