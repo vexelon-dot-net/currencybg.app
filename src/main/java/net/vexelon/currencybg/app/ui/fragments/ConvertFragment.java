@@ -187,14 +187,14 @@ public class ConvertFragment extends AbstractFragment {
 	private void refreshUIData() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 
-		currencies = getCurrencies();
-		if (!currencies.isEmpty()) {
-			ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(getActivity(),
-					android.R.layout.simple_spinner_item, currencies);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinnerSourceCurrency.setAdapter(adapter);
-			spinnerSourceCurrency
-					.setSelection(adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel()));
+		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(getActivity(),
+				android.R.layout.simple_spinner_item, getCurrencies());
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerSourceCurrency.setAdapter(adapter);
+
+		int position = adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel());
+		if (position > 0) {
+			spinnerSourceCurrency.setSelection(position);
 		}
 
 		setSourceCurrencyValue(appSettings.getLastConvertValue(), appSettings.getLastConvertCurrencySel());

@@ -275,6 +275,11 @@ public class AppSettings {
 		generalPrefs.edit().putString("pref_convert_selcurrencycode", currencyCode).apply();
 	}
 
+	/**
+	 * 
+	 * @return code of last selected source convert currency, or <i>BGN</i> by
+	 *         default
+	 */
 	public String getLastConvertCurrencySel() {
 		return generalPrefs.getString("pref_convert_selcurrencycode", "BGN");
 	}
