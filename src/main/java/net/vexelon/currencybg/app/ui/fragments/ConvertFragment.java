@@ -76,7 +76,7 @@ public class ConvertFragment extends AbstractFragment {
 		/*
 		 * Back from Settings or another activity, so we reload all currencies.
 		 */
-		refreshUIData();
+		updateUI();
 		super.onResume();
 	}
 
@@ -88,7 +88,7 @@ public class ConvertFragment extends AbstractFragment {
 			 * Back from Currencies fragment view, so we reload all currencies.
 			 * The user might have updated them.
 			 */
-			refreshUIData();
+			updateUI();
 		}
 	}
 
@@ -184,7 +184,7 @@ public class ConvertFragment extends AbstractFragment {
 		});
 	}
 
-	private void refreshUIData() {
+	private void updateUI() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 
 		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(getActivity(),

@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:padding="4dp">
+
+    <TextView
+        android:id="@+id/wallet_entry_code"
+        style="@style/FontListHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="@string/code"/>
+
+    <TextView
+        android:id="@+id/wallet_entry_amount"
+        style="@style/FontListHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="@string/amount"/>
+
+    <TextView
+        android:id="@+id/wallet_entry_bought_on"
+        style="@style/FontListHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/wallet_entry_amount"
+        android:gravity="left"
+        android:text="@string/bought_on"/>
+
+    <TextView
+        android:id="@+id/wallet_entry_bought_at"
+        style="@style/FontListHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/wallet_entry_bought_on"
+        android:gravity="left"
+        android:text="@string/bought_at"/>
+
+    <TextView
+        android:id="@+id/wallet_entry_current_value"
+        style="@style/FontListHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/wallet_entry_bought_at"
+        android:gravity="left"
+        android:text="@string/current_value"/>
+
+</LinearLayout>
