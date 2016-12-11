@@ -123,9 +123,16 @@ public final class UIUtils {
 	 * @param isHtml
 	 *            Set to {@code true}, if {@code text} contains html tags.
 	 */
-	public static void setText(View view, int id, CharSequence text, boolean isHtml) {
+	public static void setText(View view, int id, String text, boolean isHtml) {
 		TextView textView = (TextView) view.findViewById(id);
-		textView.setText(isHtml ? Html.fromHtml(text.toString()) : text);
+		textView.setText(isHtml ? Html.fromHtml(text) : text);
+	}
+
+	/**
+	 * @see #setText(View, int, String, boolean)
+	 */
+	public static void setText(View view, int id, CharSequence text, boolean isHtml) {
+		setText(view, id, text.toString(), isHtml);
 	}
 
 	/**
@@ -134,4 +141,12 @@ public final class UIUtils {
 	public static void setText(View view, int id, CharSequence text) {
 		setText(view, id, text, false);
 	}
+
+	/**
+	 * @see #setText(View, int, String, boolean)
+	 */
+	public static void setText(View view, int id, String text) {
+		setText(view, id, text, false);
+	}
+
 }

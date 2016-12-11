@@ -57,4 +57,10 @@ public class MyWalletEntry {
 	public void setPurchaseTime(Date purchaseTime) {
 		this.purchaseTime = purchaseTime;
 	}
+
+	@Override
+	public String toString() {
+		return "MyWalletEntry{" + "code='" + code + '\'' + ", amount='" + amount + '\'' + ", purchaseRate='"
+				+ purchaseRate + '\'' + ", purchaseTime=" + purchaseTime + '}';
+	}
 }

@@ -79,12 +79,11 @@
     <string name="pref_rateus_title">Rate Currency BG</string>
     <string name="pref_rateus_summary">Support us by rating this app</string>
 
-    <string name="code">Code</string>
-    <string name="amount">Amount</string>
-    <string name="bought_on">Bought on</string>
-    <string name="bought_at">Bought at</string>
-    <string name="current_value">Current value</string>
-
+    <string name="wallet_code">code</string>
+    <string name="wallet_amount">amount</string>
+    <string name="wallet_bought_on">date</string>
+    <string name="wallet_bought_at">rate</string>
+    <string name="wallet_profit">profit</string>
 
     <string name="license_icons">
 Copyright (c) 2013 Aha-Soft.

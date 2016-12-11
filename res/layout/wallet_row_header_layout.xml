@@ -4,46 +4,52 @@
               android:padding="4dp">
 
     <TextView
-        android:id="@+id/wallet_entry_code"
+        android:id="@+id/wallet_header_code"
         style="@style/FontListHeader"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="left"
-        android:text="@string/code"/>
+        android:text="@string/wallet_code"/>
 
     <TextView
-        android:id="@+id/wallet_entry_amount"
+        android:id="@+id/wallet_header_amount"
         style="@style/FontListHeader"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="@string/amount"/>
+        android:layout_weight="0.85"
+        android:gravity="right"
+        android:text="@string/wallet_amount"/>
 
     <TextView
-        android:id="@+id/wallet_entry_bought_on"
+        android:id="@+id/wallet_header_bought_on"
         style="@style/FontListHeader"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/wallet_entry_amount"
-        android:gravity="left"
-        android:text="@string/bought_on"/>
+        android:layout_toRightOf="@+id/wallet_header_amount"
+        android:layout_weight="0.75"
+        android:gravity="center_horizontal"
+        android:text="@string/wallet_bought_on"/>
 
     <TextView
-        android:id="@+id/wallet_entry_bought_at"
+        android:id="@+id/wallet_header_bought_at"
         style="@style/FontListHeader"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/wallet_entry_bought_on"
-        android:gravity="left"
-        android:text="@string/bought_at"/>
+        android:layout_toRightOf="@+id/wallet_header_bought_on"
+        android:layout_weight="0.7"
+        android:gravity="right"
+        android:text="@string/wallet_bought_at"/>
 
     <TextView
-        android:id="@+id/wallet_entry_current_value"
+        android:id="@+id/wallet_header_profit"
         style="@style/FontListHeader"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/wallet_entry_bought_at"
-        android:gravity="left"
-        android:text="@string/current_value"/>
+        android:layout_toRightOf="@+id/wallet_header_bought_at"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:paddingRight="2sp"
+        android:text="@string/wallet_profit"/>
 
 </LinearLayout>

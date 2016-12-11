@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2">
+        android:layout_weight="1">
 
         <ImageView
             android:id="@+id/wallet_row_icon"
@@ -20,7 +20,7 @@
             style="@style/FontListCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/icon"
+            android:layout_toRightOf="@+id/wallet_row_icon"
             android:paddingLeft="4sp"/>
 
     </RelativeLayout>
@@ -28,30 +28,34 @@
     <TextView
         android:id="@+id/wallet_row_amount"
         style="@style/FontListRatioRate"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="left"/>
+        android:layout_weight="0.85"
+        android:gravity="right"/>
 
     <TextView
         android:id="@+id/wallet_row_bought_on"
         style="@style/FontListRatioRate"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="left"/>
+        android:layout_weight="0.75"
+        android:gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/wallet_row_bought_at"
         style="@style/FontListRatioRate"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="left"/>
+        android:layout_weight="0.7"
+        android:gravity="right"/>
 
     <TextView
         android:id="@+id/wallet_row_current_value"
         style="@style/FontListRatioRate"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:paddingRight="5sp"/>
+        android:layout_weight="1"
+        android:gravity="right"
+        android:paddingRight="2sp"/>
 
 </LinearLayout>

@@ -17,14 +17,23 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.common.collect.Lists;
+
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.db.models.MyWalletEntry;
+import net.vexelon.currencybg.app.ui.components.MyWalletListAdapter;
+
+import org.joda.time.LocalDateTime;
+
+import java.util.List;
 
 public class MyWalletFragment extends AbstractFragment {
 
@@ -66,5 +75,19 @@ public class MyWalletFragment extends AbstractFragment {
 		final AppSettings appSettings = new AppSettings(getActivity());
 
 		// TODO
+		MyWalletEntry entry = new MyWalletEntry();
+		entry.setCode("USD");
+		entry.setAmount("2500");
+		entry.setPurchaseRate("1.72");
+		entry.setPurchaseTime(LocalDateTime.now().minusDays(1).toDate());
+
+		List<MyWalletEntry> entries = Lists.newArrayList(entry);
+
+		final Activity activity = getActivity();
+		MyWalletListAdapter adapter = new MyWalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
+				AppSettings.PRECISION_ADVANCED);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		walletListView.setAdapter(adapter);
+
 	}
 }
