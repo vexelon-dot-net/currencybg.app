@@ -20,6 +20,8 @@ package net.vexelon.currencybg.app.ui.fragments;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,6 +54,9 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
+import net.vexelon.currencybg.app.db.DataSource;
+import net.vexelon.currencybg.app.db.DataSourceException;
+import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.common.CurrencyLocales;
 import net.vexelon.currencybg.app.ui.UIUtils;
@@ -58,9 +64,11 @@ import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
+import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
 
+import org.joda.time.LocalDate;
 import org.jsoup.helper.StringUtil;
 
 public class AbstractFragment extends Fragment {
@@ -108,20 +116,81 @@ public class AbstractFragment extends Fragment {
 		}
 	}
 
-	protected CurrencyLocales getSelectedCurrenciesLocale() {
-		return new AppSettings(getActivity()).getCurrenciesLanguage();
+	protected CurrencyLocales getSelectedCurrenciesLocale(final Context context) {
+		return new AppSettings(context).getCurrenciesLanguage();
 	}
 
-	protected int dp2px(int dp) {
-		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
-	}
+	/**
+	 * Fetches a sorted list of last downloaded currencies from the database
+	 * 
+	 * @param context
+	 * @param sorted
+	 * @param addBGN
+	 *            If {@code true}, adds a fictional <i>BGN</i> currency to the
+	 *            result list.
+	 * @return
+	 */
+	protected List<CurrencyData> getCurrencies(final Context context, boolean sorted, boolean addBGN) {
+		List<CurrencyData> currencies = Lists.newArrayList();
 
-	protected Map<String, CurrencyData> getCurreniesMap(List<CurrencyData> currenciesList) {
-		Map<String, CurrencyData> currenciesMap = Maps.newHashMap();
-		for (CurrencyData currencyData : currenciesList) {
-			currenciesMap.put(currencyData.getCode(), currencyData);
+		DataSource source = null;
+		try {
+			source = new SQLiteDataSource();
+			source.connect(context);
+			currencies = source.getLastRates();
+		} catch (DataSourceException e) {
+			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
+		} finally {
+			IOUtils.closeQuitely(source);
 		}
-		return currenciesMap;
+
+		if (addBGN) {
+			currencies.add(getBGNCurrency());
+		}
+
+		if (sorted) {
+			// sort by code
+			Collections.sort(currencies, new Comparator<CurrencyData>() {
+				@Override
+				public int compare(CurrencyData lhs, CurrencyData rhs) {
+					return lhs.getCode().compareToIgnoreCase(rhs.getCode());
+				}
+			});
+		}
+
+		return currencies;
+	}
+
+	/**
+	 * @see #getCurrencies(Context, boolean, boolean)
+	 */
+	protected List<CurrencyData> getCurrencies(final Context context, boolean sorted) {
+		return getCurrencies(context, sorted, false);
+	}
+
+	/**
+	 * Generates a fictional BGN currency with 1:1:1 rate
+	 *
+	 * @return CurrencyData
+	 */
+	private CurrencyData getBGNCurrency() {
+		CurrencyData currency = new CurrencyData();
+		currency.setCode("BGN");
+		currency.setRatio(1);
+		currency.setBuy("1");
+		currency.setSell("1");
+		currency.setSource(0);
+		currency.setDate(LocalDate.now().toString());
+		return currency;
+	}
+
+	protected Map<String, CurrencyData> getMappedCurrencies(List<CurrencyData> currencies) {
+		Map<String, CurrencyData> result = Maps.newHashMap();
+		for (CurrencyData currencyData : currencies) {
+			result.put(currencyData.getCode(), currencyData);
+		}
+		return result;
 	}
 
 	/**
@@ -146,23 +215,43 @@ public class AbstractFragment extends Fragment {
 	 * Converts list of currencies from various sources to a table with rows &
 	 * columns
 	 *
-	 * @param activity
+	 * @param context
 	 * @param currencies
 	 * @return
 	 */
-	protected List<CurrencyListRow> toCurrencyRows(final Activity activity, List<CurrencyData> currencies) {
+	protected List<CurrencyListRow> toCurrencyRows(final Context context, List<CurrencyData> currencies) {
 		Map<String, CurrencyListRow> map = Maps.newHashMap();
 
 		for (CurrencyData c : currencies) {
 			CurrencyListRow row = map.get(c.getCode());
 			if (row == null) {
-				row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(activity.getResources(), c.getCode()));
+				row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(context.getResources(), c.getCode()));
 				map.put(c.getCode(), row);
 			}
 			row.addColumn(Sources.valueOf(c.getSource()), c);
 		}
 
 		return Lists.newArrayList(map.values());
+	}
+
+	protected String formatCurrency(final Context context, String value, String code) {
+		if (!StringUtils.isEmpty(value)) {
+			int precisionMode = new AppSettings(context).getCurrenciesPrecision();
+
+			try {
+				switch (precisionMode) {
+				case AppSettings.PRECISION_ADVANCED:
+					return NumberUtils.getCurrencyFormat(new BigDecimal(value), Defs.SCALE_SHOW_LONG, code);
+				case AppSettings.PRECISION_SIMPLE:
+				default:
+					return NumberUtils.getCurrencyFormat(new BigDecimal(value), code);
+				}
+			} catch (Exception e) {
+				Log.e(Defs.LOG_TAG, "Currency format exception! ", e);
+			}
+		}
+
+		return value;
 	}
 
 	protected void showSnackbar(String text, int duration, boolean isError) {
@@ -208,23 +297,8 @@ public class AbstractFragment extends Fragment {
 		showSnackbar(resId, Snackbar.LENGTH_SHORT, false);
 	}
 
-	protected String formatCurrency(String value, String code) {
-		if (!StringUtils.isEmpty(value)) {
-			int precisionMode = new AppSettings(getActivity()).getCurrenciesPrecision();
-
-			try {
-				switch (precisionMode) {
-				case AppSettings.PRECISION_ADVANCED:
-					return NumberUtils.getCurrencyFormat(new BigDecimal(value), Defs.SCALE_SHOW_LONG, code);
-				case AppSettings.PRECISION_SIMPLE:
-				default:
-					return NumberUtils.getCurrencyFormat(new BigDecimal(value), code);
-				}
-			} catch (Exception e) {
-				Log.e(Defs.LOG_TAG, "Currency format exception! ", e);
-			}
-		}
-
-		return value;
+	protected int dp2px(int dp) {
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
 	}
+
 }

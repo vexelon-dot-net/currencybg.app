@@ -17,6 +17,7 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,21 +40,13 @@ import com.melnykov.fab.FloatingActionButton;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
-import net.vexelon.currencybg.app.db.DataSource;
-import net.vexelon.currencybg.app.db.DataSourceException;
-import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
-import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
-import org.joda.time.LocalDate;
-
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class ConvertFragment extends AbstractFragment {
@@ -185,15 +178,17 @@ public class ConvertFragment extends AbstractFragment {
 	}
 
 	private void updateUI() {
-		final AppSettings appSettings = new AppSettings(getActivity());
+		final Activity activity = getActivity();
 
 		// reload all currencies from database
-		currencies = getCurrencies();
+		currencies = getCurrencies(activity, true);
 
-		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(getActivity(),
-				android.R.layout.simple_spinner_item, currencies);
+		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity, android.R.layout.simple_spinner_item,
+				currencies);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerSourceCurrency.setAdapter(adapter);
+
+		final AppSettings appSettings = new AppSettings(activity);
 
 		int position = adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel());
 		if (position > 0) {
@@ -248,7 +243,7 @@ public class ConvertFragment extends AbstractFragment {
 	}
 
 	private void setSourceCurrencyValue(String value, String currencyCode) {
-		tvSourceValue.setText(formatCurrency(value, currencyCode));
+		tvSourceValue.setText(formatCurrency(getActivity(), value, currencyCode));
 	}
 
 	private BigDecimal getSourceCurrencyValue() {
@@ -265,6 +260,7 @@ public class ConvertFragment extends AbstractFragment {
 		final Context context = getActivity();
 		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context, android.R.layout.simple_spinner_item,
 				currencies);
+
 		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
 				.adapter(adapter, new MaterialDialog.ListCallback() {
 					@Override
@@ -282,54 +278,6 @@ public class ConvertFragment extends AbstractFragment {
 						dialog.dismiss();
 					}
 				}).build();
-	}
-
-	/**
-	 * Fetches a sorted list of last downloaded currencies from the database
-	 *
-	 * @return
-	 */
-	private List<CurrencyData> getCurrencies() {
-		DataSource source = null;
-		List<CurrencyData> currencies = Lists.newArrayList();
-		try {
-			source = new SQLiteDataSource();
-			source.connect(getActivity());
-			currencies = source.getLastRates();
-		} catch (DataSourceException e) {
-			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
-			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-		} finally {
-			IOUtils.closeQuitely(source);
-		}
-
-		currencies.add(getBGNCurrency());
-
-		// sort by code
-		Collections.sort(currencies, new Comparator<CurrencyData>() {
-			@Override
-			public int compare(CurrencyData lhs, CurrencyData rhs) {
-				return lhs.getCode().compareToIgnoreCase(rhs.getCode());
-			}
-		});
-
-		return currencies;
-	}
-
-	/**
-	 * Fetches a fictional BGN currency to the convert list
-	 *
-	 * @return CurrencyData
-	 */
-	private CurrencyData getBGNCurrency() {
-		CurrencyData currency = new CurrencyData();
-		currency.setCode("BGN");
-		currency.setRatio(1);
-		currency.setBuy("1");
-		currency.setSell("1");
-		currency.setSource(0);
-		currency.setDate(LocalDate.now().toString());
-		return currency;
 	}
 
 }
