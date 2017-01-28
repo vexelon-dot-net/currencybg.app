@@ -39,6 +39,7 @@
     <string name="action_addcurrency">Добави валута</string>
     <string name="action_currency_added">Добавяне на %1$s</string>
     <string name="action_currency_removed">Премахване на %1$s</string>
+    <string name="action_wallet_removed">Премахване на %1$s</string>
     <string name="action_rate">Курсове</string>
     <string name="action_rate_title">Покажи курс</string>
     <string name="action_rate_buy_desc">Курс купува</string>
@@ -74,4 +75,11 @@
     <string name="pref_precision_summary">Точност, която да се използва при изобразяване на валутните стойности</string>
     <string name="pref_rateus_title">Гласувайте за Currency BG</string>
     <string name="pref_rateus_summary">Подкрепи ни, като дадеш оценка за приложението</string>
+
+    <string name="wallet_code">Валута</string>
+    <string name="wallet_amount">Сума</string>
+    <string name="wallet_bought_on">Дата</string>
+    <string name="wallet_bought_at">Курс</string>
+    <string name="wallet_profit">Печалба</string>
+
 </resources>

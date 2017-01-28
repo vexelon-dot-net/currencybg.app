@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.common.collect.Lists;
@@ -30,9 +31,11 @@ import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.db.models.MyWalletEntry;
 import net.vexelon.currencybg.app.ui.components.MyWalletListAdapter;
+import net.vexelon.currencybg.app.utils.NumberUtils;
 
 import org.joda.time.LocalDateTime;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class MyWalletFragment extends AbstractFragment {
@@ -48,6 +51,31 @@ public class MyWalletFragment extends AbstractFragment {
 
 	private void init(View view, LayoutInflater inflater) {
 		walletListView = (ListView) view.findViewById(R.id.list_wallet_entries);
+
+		walletListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				MyWalletListAdapter adapter = (MyWalletListAdapter) walletListView.getAdapter();
+
+				MyWalletEntry removed = adapter.remove(position);
+				if (removed != null) {
+					adapter.notifyDataSetChanged();
+
+					// TODO remove
+					showSnackbar(getActivity().getString(R.string.action_wallet_removed,
+							NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
+				}
+
+				return false;
+			}
+		});
+		walletListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				showSnackbar(getActivity().getString(R.string.hint_currency_remove));
+			}
+		});
+
 	}
 
 	@Override

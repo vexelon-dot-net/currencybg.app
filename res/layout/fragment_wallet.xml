@@ -13,16 +13,23 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
-        <include
-            android:id="@+id/inc_wallet_row_header_layout"
-            layout="@layout/wallet_row_header_layout"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-        <ListView
-            android:id="@+id/list_wallet_entries"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/inc_wallet_row_header_layout"
-            android:headerDividersEnabled="true"/>
+            <include
+                android:id="@+id/inc_wallet_row_header_layout"
+                layout="@layout/wallet_row_header_layout"/>
+
+            <ListView
+                android:id="@+id/list_wallet_entries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/inc_wallet_row_header_layout"
+                android:headerDividersEnabled="true"/>
+
+        </RelativeLayout>
 
         <com.melnykov.fab.FloatingActionButton
             android:id="@+id/fab_wallet_entry"

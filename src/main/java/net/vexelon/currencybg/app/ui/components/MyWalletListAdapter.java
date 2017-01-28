@@ -90,6 +90,15 @@ public class MyWalletListAdapter extends ArrayAdapter<MyWalletEntry> {
 		return items.size();
 	}
 
+	@Override
+	public void remove(MyWalletEntry object) {
+		items.remove(object);
+	}
+
+	public MyWalletEntry remove(int position) {
+		return items.remove(position);
+	}
+
 	// @Override
 	// public Filter getFilter() {
 	// if (filter == null) {

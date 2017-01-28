@@ -39,6 +39,7 @@
     <string name="action_addcurrency">Add currency</string>
     <string name="action_currency_added">Added: %1$s</string>
     <string name="action_currency_removed">Removed: %1$s</string>
+    <string name="action_wallet_removed">Removed: %1$s</string>
     <string name="action_rate">Rates</string>
     <string name="action_rate_title">Show rates for</string>
     <string name="action_rate_buy_desc">Buy rates</string>
@@ -82,11 +83,11 @@
     <string name="pref_rateus_title">Rate Currency BG</string>
     <string name="pref_rateus_summary">Support us by rating this app</string>
 
-    <string name="wallet_code">code</string>
-    <string name="wallet_amount">amount</string>
-    <string name="wallet_bought_on">date</string>
-    <string name="wallet_bought_at">rate</string>
-    <string name="wallet_profit">profit</string>
+    <string name="wallet_code">Currency</string>
+    <string name="wallet_amount">Amount</string>
+    <string name="wallet_bought_on">Date</string>
+    <string name="wallet_bought_at">Rate</string>
+    <string name="wallet_profit">Profit</string>
 
     <string name="license_icons">
 Copyright (c) 2013 Aha-Soft.
