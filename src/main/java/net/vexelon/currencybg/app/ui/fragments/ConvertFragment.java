@@ -172,7 +172,7 @@ public class ConvertFragment extends AbstractFragment {
 		action.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showAddCurrencyMenu().show();
+				newAddTargetCurrencyDialog().show();
 			}
 		});
 	}
@@ -256,7 +256,7 @@ public class ConvertFragment extends AbstractFragment {
 	 *
 	 * @return
 	 */
-	private MaterialDialog showAddCurrencyMenu() {
+	private MaterialDialog newAddTargetCurrencyDialog() {
 		final Context context = getActivity();
 		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context, android.R.layout.simple_spinner_item,
 				currencies);
