@@ -56,6 +56,10 @@
     <string name="source_tavex">ТАВЕКС</string>
     <string name="source_polana">ПОЛАНА1</string>
     <string name="source_fib">ФИБ</string>
+    <string name="source_tavex_full">Tavex България</string>
+    <string name="source_polana_full">“Полана 1” ООД</string>
+    <string name="source_fib_full">Първа Инвестиционна Банка</string>
+
     <string name="action_filter">Филтър</string>
     <string name="action_filter_title">Показване курсове от</string>
     <string name="action_info">Инфо</string>

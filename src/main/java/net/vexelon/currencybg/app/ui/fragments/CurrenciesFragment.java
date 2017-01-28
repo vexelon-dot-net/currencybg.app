@@ -221,7 +221,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	private MaterialDialog newFilterMenu() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 		return new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
-				.items(R.array.currency_sources)
+				.items(R.array.currency_sources_full)
 				.itemsCallbackMultiChoice(toSourcesFilterIndices(appSettings.getCurrenciesFilter()),
 						new MaterialDialog.ListCallbackMultiChoice() {
 							@Override
@@ -360,8 +360,10 @@ public class CurrenciesFragment extends AbstractFragment {
 	 */
 	private void setCurrenciesSourcesFilter(Set<Sources> sources) {
 		updateCurrenciesSourcesTitles(sources);
-		currencyListAdapter.setFilterBy(sources);
-		currencyListAdapter.notifyDataSetChanged();
+		if (currencyListAdapter != null) {
+			currencyListAdapter.setFilterBy(sources);
+			currencyListAdapter.notifyDataSetChanged();
+		}
 		// currencyListAdapter.getFilter().filter(Integer.toString(filterBy),
 		// new Filter.FilterListener() {
 		// @Override

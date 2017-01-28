@@ -56,6 +56,9 @@
     <string name="source_tavex">TAVEX</string>
     <string name="source_polana">POLANA1</string>
     <string name="source_fib">FIB</string>
+    <string name="source_tavex_full">Tavex Bulgaria</string>
+    <string name="source_polana_full">"POLANA 1" OOD</string>
+    <string name="source_fib_full">First Investment Bank</string>
 
     <string name="action_filter">Filter</string>
     <string name="action_filter_title">Show currency rates for</string>
