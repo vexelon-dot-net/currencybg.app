@@ -31,7 +31,7 @@
     <string name="menu_convert">Преобразуване</string>
     <string name="tab_title_currencies">Обменни курсове</string>
     <string name="tab_title_convert">Преобразуване</string>
-    <string name="tab_title_wallet">Моят портфейл</string>
+    <string name="tab_title_wallet">Портфейл</string>
     <string name="hint_currency_remove">Натисни и задръж, за да премахнеш.</string>
     <string name="buy">Купува</string>
     <string name="sell">Продава</string>
