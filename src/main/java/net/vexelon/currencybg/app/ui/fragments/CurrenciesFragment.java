@@ -135,8 +135,8 @@ public class CurrenciesFragment extends AbstractFragment {
 		case R.id.action_sort:
 			newSortMenu().show();
 			return true;
-		case R.id.action_filter:
-			newFilterMenu().show();
+		case R.id.action_sources:
+			newSourcesMenu().show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -154,6 +154,25 @@ public class CurrenciesFragment extends AbstractFragment {
 			@Override
 			public void onClick(View v) {
 				newRateMenu().show();
+			}
+		});
+
+		view.findViewById(R.id.header_src_1).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				newSourcesMenu().show();
+			}
+		});
+		view.findViewById(R.id.header_src_2).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				newSourcesMenu().show();
+			}
+		});
+		view.findViewById(R.id.header_src_3).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				newSourcesMenu().show();
 			}
 		});
 	}
@@ -218,16 +237,16 @@ public class CurrenciesFragment extends AbstractFragment {
 				.build();
 	}
 
-	private MaterialDialog newFilterMenu() {
+	private MaterialDialog newSourcesMenu() {
 		final AppSettings appSettings = new AppSettings(getActivity());
-		return new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sources_title)
 				.items(R.array.currency_sources_full)
 				.itemsCallbackMultiChoice(toSourcesFilterIndices(appSettings.getCurrenciesFilter()),
 						new MaterialDialog.ListCallbackMultiChoice() {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 								if (which.length == 0) {
-									showSnackbar(R.string.error_filter_selection, Defs.TOAST_ERR_TIME, true);
+									showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_TIME, true);
 									return false;
 								}
 
@@ -243,7 +262,7 @@ public class CurrenciesFragment extends AbstractFragment {
 									}
 									selected += getResources().getStringArray(R.array.currency_sources)[i];
 								}
-								showSnackbar(getResources().getString(R.string.action_filter_desc, selected));
+								showSnackbar(getResources().getString(R.string.action_sources_desc, selected));
 
 								return true;
 							}

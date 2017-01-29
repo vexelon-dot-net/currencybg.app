@@ -14,7 +14,7 @@
     <string name="error_parse_rates">Грешка при четене на файла с обменните курсове!</string>
     <string name="error_db_load">Грешка при четене на данни!</string>
     <string name="error_db_save">Грешка при запис на данни!</string>
-    <string name="error_filter_selection">Трябва да бъде избран поне един източник!</string>
+    <string name="error_sources_selection">Трябва да бъде избран поне един източник!</string>
     <string name="error_maintenance">Сървърът се обновява! Опитай по-късно.</string>
     <string name="error_no_entries">Няма нови курсове.</string>
     <string name="about_version">Версия</string>
@@ -62,8 +62,8 @@
     <string name="source_polana_full">“Полана 1” ООД</string>
     <string name="source_fib_full">Първа Инвестиционна Банка</string>
 
-    <string name="action_filter">Филтър</string>
-    <string name="action_filter_title">Показване курсове от</string>
+    <string name="action_sources">Източници</string>
+    <string name="action_sources_title">Показване курсове от</string>
     <string name="action_info">Инфо</string>
     <string name="action_settings">Настройки</string>
     <string name="prefs_title">Currency BG Настройки</string>
