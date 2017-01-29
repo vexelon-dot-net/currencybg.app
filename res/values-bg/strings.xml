@@ -40,6 +40,7 @@
     <string name="action_currency_added">Добавяне на %1$s</string>
     <string name="action_currency_removed">Премахване на %1$s</string>
     <string name="action_wallet_removed">Премахване на %1$s</string>
+    <string name="action_addwalletentry">Добавяне на ресурс</string>
     <string name="action_rate">Курсове</string>
     <string name="action_rate_title">Покажи курс</string>
     <string name="action_rate_buy_desc">Курс купува</string>

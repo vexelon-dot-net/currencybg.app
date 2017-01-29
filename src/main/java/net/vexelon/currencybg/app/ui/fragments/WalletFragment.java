@@ -18,19 +18,24 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
+import com.melnykov.fab.FloatingActionButton;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.R;
-import net.vexelon.currencybg.app.db.models.MyWalletEntry;
-import net.vexelon.currencybg.app.ui.components.MyWalletListAdapter;
+import net.vexelon.currencybg.app.db.models.WalletEntry;
+import net.vexelon.currencybg.app.ui.components.WalletListAdapter;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
 import org.joda.time.LocalDateTime;
@@ -38,7 +43,7 @@ import org.joda.time.LocalDateTime;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class MyWalletFragment extends AbstractFragment {
+public class WalletFragment extends AbstractFragment {
 
 	private ListView walletListView;
 
@@ -55,9 +60,9 @@ public class MyWalletFragment extends AbstractFragment {
 		walletListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				MyWalletListAdapter adapter = (MyWalletListAdapter) walletListView.getAdapter();
+				WalletListAdapter adapter = (WalletListAdapter) walletListView.getAdapter();
 
-				MyWalletEntry removed = adapter.remove(position);
+				WalletEntry removed = adapter.remove(position);
 				if (removed != null) {
 					adapter.notifyDataSetChanged();
 
@@ -76,6 +81,16 @@ public class MyWalletFragment extends AbstractFragment {
 			}
 		});
 
+		// add button
+		FloatingActionButton action = (FloatingActionButton) view.findViewById(R.id.fab_wallet_entry);
+		action.attachToListView(walletListView);
+		action.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				newAddWalletEntryDialog().show();
+			}
+		});
 	}
 
 	@Override
@@ -99,20 +114,37 @@ public class MyWalletFragment extends AbstractFragment {
 		}
 	}
 
+	/**
+	 * Displays add wallet entry dialog
+	 *
+	 * @return
+	 */
+	private MaterialDialog newAddWalletEntryDialog() {
+		final Context context = getActivity();
+		return new MaterialDialog.Builder(context).title(R.string.action_addwalletentry).cancelable(true)
+				.customView(R.layout.walletentry_layout, true).positiveText(R.string.text_ok)
+				.negativeText(R.string.text_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+					@Override
+					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+						// TODO
+					}
+				}).build();
+	}
+
 	private void updateUI() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 
 		// TODO
-		MyWalletEntry entry = new MyWalletEntry();
+		WalletEntry entry = new WalletEntry();
 		entry.setCode("USD");
 		entry.setAmount("2500");
 		entry.setPurchaseRate("1.72");
 		entry.setPurchaseTime(LocalDateTime.now().minusDays(1).toDate());
 
-		List<MyWalletEntry> entries = Lists.newArrayList(entry);
+		List<WalletEntry> entries = Lists.newArrayList(entry);
 
 		final Activity activity = getActivity();
-		MyWalletListAdapter adapter = new MyWalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
+		WalletListAdapter adapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
 				AppSettings.PRECISION_ADVANCED);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		walletListView.setAdapter(adapter);

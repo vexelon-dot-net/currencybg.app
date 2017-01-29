@@ -31,7 +31,7 @@ import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.Sources;
-import net.vexelon.currencybg.app.db.models.MyWalletEntry;
+import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.ui.UIUtils;
 
 import org.joda.time.LocalDateTime;
@@ -39,10 +39,10 @@ import org.joda.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public class MyWalletListAdapter extends ArrayAdapter<MyWalletEntry> {
+public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 
-	private final List<MyWalletEntry> itemsImmutable;
-	private List<MyWalletEntry> items;
+	private final List<WalletEntry> itemsImmutable;
+	private List<WalletEntry> items;
 	private int precisionMode = AppSettings.PRECISION_SIMPLE;
 	private Set<Sources> sourcesFilter = Sets.newHashSet();
 	// private CurrencyFilter filter = null;
@@ -54,7 +54,7 @@ public class MyWalletListAdapter extends ArrayAdapter<MyWalletEntry> {
 	 *            Currency rows
 	 * @param precisionMode
 	 */
-	public MyWalletListAdapter(Context context, int textViewResId, List<MyWalletEntry> items, int precisionMode) {
+	public WalletListAdapter(Context context, int textViewResId, List<WalletEntry> items, int precisionMode) {
 		super(context, textViewResId, items);
 		this.itemsImmutable = Lists.newArrayList(items.iterator());
 		this.items = items;
@@ -68,7 +68,7 @@ public class MyWalletListAdapter extends ArrayAdapter<MyWalletEntry> {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.wallet_row_layout, parent, false);
 		}
 
-		MyWalletEntry row = items.get(position);
+		WalletEntry row = items.get(position);
 
 		Log.d(Defs.LOG_TAG, "*** " + row.toString());
 		Log.d(Defs.LOG_TAG, "*** " + LocalDateTime.fromDateFields(row.getPurchaseTime()).toString("yyyy-MM-dd"));
@@ -91,11 +91,11 @@ public class MyWalletListAdapter extends ArrayAdapter<MyWalletEntry> {
 	}
 
 	@Override
-	public void remove(MyWalletEntry object) {
+	public void remove(WalletEntry object) {
 		items.remove(object);
 	}
 
-	public MyWalletEntry remove(int position) {
+	public WalletEntry remove(int position) {
 		return items.remove(position);
 	}
 

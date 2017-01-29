@@ -19,7 +19,7 @@ package net.vexelon.currencybg.app.db.models;
 
 import java.util.Date;
 
-public class MyWalletEntry {
+public class WalletEntry {
 
 	private String code;
 	private String amount;
@@ -60,7 +60,7 @@ public class MyWalletEntry {
 
 	@Override
 	public String toString() {
-		return "MyWalletEntry{" + "code='" + code + '\'' + ", amount='" + amount + '\'' + ", purchaseRate='"
+		return "WalletEntry{" + "code='" + code + '\'' + ", amount='" + amount + '\'' + ", purchaseRate='"
 				+ purchaseRate + '\'' + ", purchaseTime=" + purchaseTime + '}';
 	}
 }
