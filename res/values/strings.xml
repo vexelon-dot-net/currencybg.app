@@ -3,6 +3,8 @@
 
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
+    <string name="text_pick_date">Select date</string>
+    <string name="text_pick_time">Select time</string>
 
     <string name="drawer_open">Open navigation</string>
     <string name="drawer_close">Close navigation</string>

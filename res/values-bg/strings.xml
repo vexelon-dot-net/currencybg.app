@@ -3,6 +3,8 @@
 
     <string name="text_ok">OK</string>
     <string name="text_cancel">Отказ</string>
+    <string name="text_pick_date">Изберете дата</string>
+    <string name="text_pick_time">Изберете час</string>
 
     <string name="drawer_open">Отваряне навигация</string>
     <string name="drawer_close">Затваряне навигация</string>

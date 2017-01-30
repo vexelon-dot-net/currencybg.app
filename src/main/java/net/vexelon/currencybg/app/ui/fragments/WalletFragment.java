@@ -19,6 +19,7 @@ package net.vexelon.currencybg.app.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -31,6 +32,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 import com.melnykov.fab.FloatingActionButton;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.R;
@@ -43,7 +46,8 @@ import org.joda.time.LocalDateTime;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class WalletFragment extends AbstractFragment {
+public class WalletFragment extends AbstractFragment
+		implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
 	private ListView walletListView;
 
@@ -114,23 +118,6 @@ public class WalletFragment extends AbstractFragment {
 		}
 	}
 
-	/**
-	 * Displays add wallet entry dialog
-	 *
-	 * @return
-	 */
-	private MaterialDialog newAddWalletEntryDialog() {
-		final Context context = getActivity();
-		return new MaterialDialog.Builder(context).title(R.string.action_addwalletentry).cancelable(true)
-				.customView(R.layout.walletentry_layout, true).positiveText(R.string.text_ok)
-				.negativeText(R.string.text_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-					@Override
-					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-						// TODO
-					}
-				}).build();
-	}
-
 	private void updateUI() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 
@@ -149,5 +136,58 @@ public class WalletFragment extends AbstractFragment {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		walletListView.setAdapter(adapter);
 
+	}
+
+	/**
+	 * Displays add wallet entry dialog
+	 *
+	 * @return
+	 */
+	private MaterialDialog newAddWalletEntryDialog() {
+		final Context context = getActivity();
+		final MaterialDialog dialog = new MaterialDialog.Builder(context).title(R.string.action_addwalletentry)
+				.cancelable(true).customView(R.layout.walletentry_layout, true).positiveText(R.string.text_ok)
+				.negativeText(R.string.text_cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+					@Override
+					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+						// TODO
+
+					}
+				}).build();
+
+		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+			@Override
+			public void onShow(DialogInterface dialogInterface) {
+				View v = dialog.getCustomView();
+				v.findViewById(R.id.wallet_entry_bought_on).setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						LocalDateTime dateTime = LocalDateTime.now();
+						DatePickerDialog datePicker = DatePickerDialog.newInstance(WalletFragment.this,
+								dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfYear());
+						datePicker.setThemeDark(true);
+						datePicker.show(getFragmentManager(),
+								getResources().getText(R.string.text_pick_date).toString());
+					}
+				});
+			}
+		});
+
+		return dialog;
+	}
+
+	@Override
+	public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+		// TODO
+		LocalDateTime dateTime = LocalDateTime.now();
+		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTime.getHourOfDay(),
+				dateTime.getMinuteOfHour(), true);
+		timePicker.setThemeDark(true);
+		timePicker.show(getFragmentManager(), getResources().getText(R.string.text_pick_time).toString());
+	}
+
+	@Override
+	public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+		// TODO
 	}
 }

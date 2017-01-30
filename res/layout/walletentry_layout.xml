@@ -5,17 +5,54 @@
     android:gravity="left"
     android:orientation="vertical">
 
+    <!-- amount -->
     <TextView
-        style="@style/FontCalcButton"
-        android:layout_width="wrap_content"
+        style="@style/FontWalletEntryInput"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Amount"/>
+        android:gravity="left"
+        android:text="@string/wallet_amount"/>
+
+    <EditText
+        android:id="@+id/wallet_entry_amount"
+        style="@style/FontWalletEntryInput"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:hint="2500"
+        android:inputType="numberDecimal"/>
+
+    <!-- bought at/rate -->
+    <TextView
+        style="@style/FontWalletEntryInput"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="@string/wallet_bought_at"/>
+
+    <EditText
+        android:id="@+id/wallet_entry_bought_at"
+        style="@style/FontWalletEntryInput"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:hint="1"
+        android:inputType="numberDecimal"/>
+
+    <!-- bought on/date -->
+    <TextView
+        style="@style/FontWalletEntryInput"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="@string/wallet_bought_on"/>
 
     <TextView
-        style="@style/FontCalcButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/wallet_entry_bought_on"
+        style="@style/FontWalletEntryInput"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="2500"/>
+        android:gravity="left"
+        android:hint="tap to select"/>
 
 </LinearLayout>
