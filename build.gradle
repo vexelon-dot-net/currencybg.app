@@ -31,10 +31,10 @@ android {
                 'com.google.code.gson:gson:2.8.+',
                 'joda-time:joda-time:2.9.+'
 
-        compile('com.github.afollestad.material-dialogs:core:0.8.5.4@aar') {
+        compile('com.github.afollestad.material-dialogs:core:0.8.6.+@aar') {
             transitive = true
         }
-        compile('com.github.afollestad.material-dialogs:commons:0.8.5.4@aar') {
+        compile('com.github.afollestad.material-dialogs:commons:0.8.6.+@aar') {
             transitive = true
         }
 
