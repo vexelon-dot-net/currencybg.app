@@ -19,27 +19,21 @@ package net.vexelon.currencybg.app.ui.fragments;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
+import org.joda.time.LocalDate;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
@@ -47,29 +41,23 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.CurrencyListRow;
+import net.vexelon.currencybg.app.common.CurrencyLocales;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.common.CurrencyLocales;
-import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
-import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
-
-import org.joda.time.LocalDate;
-import org.jsoup.helper.StringUtil;
 
 public class AbstractFragment extends Fragment {
 
@@ -259,7 +247,7 @@ public class AbstractFragment extends Fragment {
 			Snackbar snackbar = Snackbar.make(rootView, text, duration);
 			View v = snackbar.getView();
 			v.setBackgroundColor(
-					ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
+					ContextCompat.getColor(getActivity(), isError ? R.color.colorAccent : R.color.colorPrimary));
 			snackbar.show();
 		} catch (RuntimeException e) {
 			Log.wtf(Defs.LOG_TAG, "Failed displaying Snackbar! Probably wrong fragment binding.", e);
@@ -282,7 +270,7 @@ public class AbstractFragment extends Fragment {
 			// v.findViewById(android.support.design.R.id.snackbar_text);
 			// textView.setTextColor(getResources().getColor(R.color.colorAccent));
 			v.setBackgroundColor(
-					ContextCompat.getColor(getContext(), isError ? R.color.colorAccent : R.color.colorPrimary));
+					ContextCompat.getColor(getActivity(), isError ? R.color.colorAccent : R.color.colorPrimary));
 			snackbar.show();
 		} catch (RuntimeException e) {
 			Log.wtf(Defs.LOG_TAG, "Failed displaying Snackbar! Probably wrong fragment binding.", e);

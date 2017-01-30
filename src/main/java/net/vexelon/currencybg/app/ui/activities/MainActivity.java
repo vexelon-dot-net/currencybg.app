@@ -18,6 +18,8 @@
 package net.vexelon.currencybg.app.ui.activities;
 
 import android.app.AlarmManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,15 +27,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -48,8 +48,8 @@ import net.vexelon.currencybg.app.ui.fragments.AbstractFragment;
 import net.vexelon.currencybg.app.ui.fragments.ConvertFragment;
 import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
 import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
-import net.vexelon.currencybg.app.ui.fragments.WalletFragment;
 import net.vexelon.currencybg.app.ui.fragments.PrefsFragment;
+import net.vexelon.currencybg.app.ui.fragments.WalletFragment;
 
 import org.joda.time.LocalDateTime;
 
@@ -136,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 			public boolean onNavigationItemSelected(MenuItem menuItem) {
 				if (menuItem.getItemId() == R.id.nav_settings) {
 					// special case -> settings
-					PreferenceFragmentCompat fragment = new PrefsFragment();
-					FragmentManager fragmentManager = getSupportFragmentManager();
+					PreferenceFragment fragment = new PrefsFragment();
+					FragmentManager fragmentManager = getFragmentManager();
 					fragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit();
 					menuItem.setChecked(true);
 					setTitle(menuItem.getTitle());
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		// args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		// fragment.setArguments(args);
 		// Insert the fragment by replacing any existing fragment
-		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.frame_layout, fragment).commit();
 		return fragment;
 	}

@@ -20,12 +20,12 @@ package net.vexelon.currencybg.app.ui.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.widget.Toast;
 import net.vexelon.currencybg.app.R;
 
-public class PrefsFragment extends PreferenceFragmentCompat
+public class PrefsFragment extends PreferenceFragment
 		implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
 	public static final String TAG = "preferences";
@@ -34,7 +34,9 @@ public class PrefsFragment extends PreferenceFragmentCompat
 	public static final String KEY_PREF_RATEUS = "rateus";
 
 	@Override
-	public void onCreatePreferences(Bundle bundle, String s) {
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
 		addPreferencesFromResource(R.xml.preferences);
 
 		findPreference(KEY_PREF_RATEUS).setOnPreferenceClickListener(this);
