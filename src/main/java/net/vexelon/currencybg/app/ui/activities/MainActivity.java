@@ -49,7 +49,6 @@ import net.vexelon.currencybg.app.ui.fragments.ConvertFragment;
 import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
 import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.PrefsFragment;
-import net.vexelon.currencybg.app.ui.fragments.WalletFragment;
 
 import org.joda.time.LocalDateTime;
 
@@ -154,8 +153,8 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		switch (menuItem.getItemId()) {
 		case R.id.nav_convert:
 			return ConvertFragment.class;
-		case R.id.nav_wallet:
-			return WalletFragment.class;
+		// case R.id.nav_wallet:
+		// return WalletFragment.class;
 		case R.id.nav_info:
 			return InfoFragment.class;
 		case R.id.nav_settings:
