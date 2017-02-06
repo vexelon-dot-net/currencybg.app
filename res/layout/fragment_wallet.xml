@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:fab="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="net.vexelon.currencybg.MainActivity$PlaceholderFragment">
+
+    <FrameLayout
+        android:id="@+id/layout_wallet_entries"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <include
+                android:id="@+id/inc_wallet_row_header_layout"
+                layout="@layout/wallet_row_header_layout"/>
+
+            <ListView
+                android:id="@+id/list_wallet_entries"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/inc_wallet_row_header_layout"
+                android:headerDividersEnabled="true"/>
+
+        </RelativeLayout>
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/fab_wallet_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add_white"
+            fab:fab_colorNormal="@color/float_accent"
+            fab:fab_colorPressed="@color/float_accent_pressed"
+            fab:fab_colorRipple="@color/float_ripple"
+            fab:fab_shadow="true"
+            fab:fab_type="normal"/>
+
+    </FrameLayout>
+
+</LinearLayout>
+
+

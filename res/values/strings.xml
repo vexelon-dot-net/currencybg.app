@@ -3,6 +3,8 @@
 
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
+    <string name="text_pick_date">Select date</string>
+    <string name="text_pick_time">Select time</string>
 
     <string name="drawer_open">Open navigation</string>
     <string name="drawer_close">Close navigation</string>
@@ -14,23 +16,24 @@
     <string name="error_parse_rates">Failed parsing rates!</string>
     <string name="error_db_load">Failed reading from db!</string>
     <string name="error_db_save">Failed saving to db!</string>
-    <string name="error_filter_selection">A minimum of one source selection is required!</string>
+    <string name="error_sources_selection">A minimum of one source selection is required!</string>
     <string name="error_maintenance">Server down for maintenance! Try again later.</string>
     <string name="error_no_entries">No new currency entries.</string>
     <string name="about_version">Version</string>
-    <string name="about_rates_provider">Exchange rates</string>
-    <string name="about_rates_provider_text">Gathered from the Bulgarian National Bank website http://www.bnb.bg</string>
-    <string name="about_rates_provider_long">The exchange rates of currencies are calculated on the basis of the fixed exchange rate of the Bulgarian lev to the euro, and the information source is the exchange rates of the euro against these currencies published by the European Central Bank</string>
+    <string name="about_issue_appdev">Report an issue</string>
+    <string name="about_issue_appdev_text">Report an issue you found or send us your feature request</string>
     <string name="about_join_appdev">Join app development</string>
+    <string name="about_join_appdev_text">Are you a coder? Send us your pull requests</string>
     <string name="about_author">Developers</string>
     <string name="about_author_text">List of contributors</string>
     <string name="about_logo">Logo icon</string>
     <string name="about_logo_text">Stremena Tuzsuzova  http://stremena.com</string>
+    <string name="about_3rdparty_icons">Third-party icons</string>
     <string name="about_3rdparty">Third-party libraries</string>
-    <string name="about_flag_icons">Flag icons</string>
     <string name="menu_convert">Convert</string>
     <string name="tab_title_currencies">Currencies</string>
     <string name="tab_title_convert">Convert</string>
+    <string name="tab_title_wallet">Wallet</string>
     <string name="hint_currency_remove">Tap and hold to remove.</string>
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
@@ -38,6 +41,8 @@
     <string name="action_addcurrency">Add currency</string>
     <string name="action_currency_added">Added: %1$s</string>
     <string name="action_currency_removed">Removed: %1$s</string>
+    <string name="action_wallet_removed">Removed: %1$s</string>
+    <string name="action_addwalletentry">Add wallet entry</string>
     <string name="action_rate">Rates</string>
     <string name="action_rate_title">Show rates for</string>
     <string name="action_rate_buy_desc">Buy rates</string>
@@ -55,10 +60,13 @@
     <string name="source_tavex">TAVEX</string>
     <string name="source_polana">POLANA1</string>
     <string name="source_fib">FIB</string>
+    <string name="source_tavex_full">Tavex Bulgaria</string>
+    <string name="source_polana_full">"POLANA 1" OOD</string>
+    <string name="source_fib_full">First Investment Bank</string>
 
-    <string name="action_filter">Filter</string>
-    <string name="action_filter_title">Show currency rates for</string>
-    <string name="action_filter_desc">Show currency rates for %1$s</string>
+    <string name="action_sources">Sources</string>
+    <string name="action_sources_title">Show currency rates for</string>
+    <string name="action_sources_desc">Show currency rates for %1$s</string>
     <string name="action_info">Info</string>
     <string name="action_settings">Settings</string>
     <string name="prefs_title">Currency BG Settings</string>
@@ -72,13 +80,27 @@
         <item>simple</item>
         <item>advanced</item>
     </string-array>
-    <string name="pref_precision_default">simple</string>
+    <string name="pref_precision_default">advanced</string>
     <string name="pref_precision_title">Currencies precision</string>
     <string name="pref_precision_summary">Precision to use when displaying currency rates</string>
     <string name="pref_rateus_title">Rate Currency BG</string>
     <string name="pref_rateus_summary">Support us by rating this app</string>
 
+    <string name="wallet_code">Currency</string>
+    <string name="wallet_amount">Amount</string>
+    <string name="wallet_bought_on">Date</string>
+    <string name="wallet_bought_at">Rate</string>
+    <string name="wallet_profit">Profit</string>
 
+    <string name="license_icons">
+Copyright (c) 2013 Aha-Soft.
+\n\n
+http://www.aha-soft.com/free-icons/free-yellow-button-icons
+\n\n\n
+Copyright (CC BY-ND 3.0) Visual Pharm.
+\n\n
+http://icons8.com
+    </string>
 
     <string name="license_lib01">
 The MIT License (MIT)

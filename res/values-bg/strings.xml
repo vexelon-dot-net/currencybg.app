@@ -3,6 +3,8 @@
 
     <string name="text_ok">OK</string>
     <string name="text_cancel">Отказ</string>
+    <string name="text_pick_date">Изберете дата</string>
+    <string name="text_pick_time">Изберете час</string>
 
     <string name="drawer_open">Отваряне навигация</string>
     <string name="drawer_close">Затваряне навигация</string>
@@ -14,22 +16,24 @@
     <string name="error_parse_rates">Грешка при четене на файла с обменните курсове!</string>
     <string name="error_db_load">Грешка при четене на данни!</string>
     <string name="error_db_save">Грешка при запис на данни!</string>
-    <string name="error_filter_selection">Трябва да бъде избран поне един източник!</string>
-    <string name="error_maintenance">Сървърът се обновява! Опитайте по-късно.</string>
+    <string name="error_sources_selection">Трябва да бъде избран поне един източник!</string>
+    <string name="error_maintenance">Сървърът се обновява! Опитай по-късно.</string>
     <string name="error_no_entries">Няма нови курсове.</string>
     <string name="about_version">Версия</string>
-    <string name="about_rates_provider">Обменни курсове</string>
-    <string name="about_rates_provider_text">От web сайта на Българска Национална Банка http://www.bnb.bg</string>
-    <string name="about_join_appdev">Присъединете се към разработването</string>
+    <string name="about_issue_appdev">Докладвай бъг</string>
+    <string name="about_issue_appdev_text">Докладвай открит проблем или дай предложение</string>
+    <string name="about_join_appdev">Присъедини се към разработването</string>
+    <string name="about_join_appdev_text">Пишеш код? Прати ни pull request!</string>
     <string name="about_author">Разработчици</string>
     <string name="about_author_text">Списък на допринесли към приложението</string>
     <string name="about_logo">Графично лого</string>
     <string name="about_logo_text">Стремена Тузсузова  http://stremena.com</string>
+    <string name="about_3rdparty_icons">Използвани икони</string>
     <string name="about_3rdparty">Използвани библиотеки</string>
-    <string name="about_flag_icons">Други икони</string>
     <string name="menu_convert">Преобразуване</string>
     <string name="tab_title_currencies">Обменни курсове</string>
     <string name="tab_title_convert">Преобразуване</string>
+    <string name="tab_title_wallet">Портфейл</string>
     <string name="hint_currency_remove">Натисни и задръж, за да премахнеш.</string>
     <string name="buy">Купува</string>
     <string name="sell">Продава</string>
@@ -37,6 +41,8 @@
     <string name="action_addcurrency">Добави валута</string>
     <string name="action_currency_added">Добавяне на %1$s</string>
     <string name="action_currency_removed">Премахване на %1$s</string>
+    <string name="action_wallet_removed">Премахване на %1$s</string>
+    <string name="action_addwalletentry">Добавяне на ресурс</string>
     <string name="action_rate">Курсове</string>
     <string name="action_rate_title">Покажи курс</string>
     <string name="action_rate_buy_desc">Курс купува</string>
@@ -54,8 +60,12 @@
     <string name="source_tavex">ТАВЕКС</string>
     <string name="source_polana">ПОЛАНА1</string>
     <string name="source_fib">ФИБ</string>
-    <string name="action_filter">Филтър</string>
-    <string name="action_filter_title">Показване курсове от</string>
+    <string name="source_tavex_full">Tavex България</string>
+    <string name="source_polana_full">“Полана 1” ООД</string>
+    <string name="source_fib_full">Първа Инвестиционна Банка</string>
+
+    <string name="action_sources">Източници</string>
+    <string name="action_sources_title">Показване курсове от</string>
     <string name="action_info">Инфо</string>
     <string name="action_settings">Настройки</string>
     <string name="prefs_title">Currency BG Настройки</string>
@@ -67,5 +77,12 @@
     <string name="pref_precision_title">Точност на валутните стойности</string>
     <string name="pref_precision_summary">Точност, която да се използва при изобразяване на валутните стойности</string>
     <string name="pref_rateus_title">Гласувайте за Currency BG</string>
-    <string name="pref_rateus_summary">Подкрепете ни и дайте Вашето мнение за приложението</string>
+    <string name="pref_rateus_summary">Подкрепи ни, като дадеш оценка за приложението</string>
+
+    <string name="wallet_code">Валута</string>
+    <string name="wallet_amount">Сума</string>
+    <string name="wallet_bought_on">Дата</string>
+    <string name="wallet_bought_at">Курс</string>
+    <string name="wallet_profit">Печалба</string>
+
 </resources>

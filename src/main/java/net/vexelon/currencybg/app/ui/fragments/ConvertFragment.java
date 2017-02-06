@@ -17,15 +17,7 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.common.collect.Lists;
-import com.melnykov.fab.FloatingActionButton;
-
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,20 +33,21 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.Lists;
+import com.melnykov.fab.FloatingActionButton;
+
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
-import net.vexelon.currencybg.app.db.DataSource;
-import net.vexelon.currencybg.app.db.DataSourceException;
-import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
-import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
-import org.joda.time.LocalDate;
+import java.math.BigDecimal;
+import java.util.List;
 
 public class ConvertFragment extends AbstractFragment {
 
@@ -76,7 +69,7 @@ public class ConvertFragment extends AbstractFragment {
 		/*
 		 * Back from Settings or another activity, so we reload all currencies.
 		 */
-		refreshUIData();
+		updateUI();
 		super.onResume();
 	}
 
@@ -88,7 +81,7 @@ public class ConvertFragment extends AbstractFragment {
 			 * Back from Currencies fragment view, so we reload all currencies.
 			 * The user might have updated them.
 			 */
-			refreshUIData();
+			updateUI();
 		}
 	}
 
@@ -179,22 +172,27 @@ public class ConvertFragment extends AbstractFragment {
 		action.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showAddCurrencyMenu().show();
+				newAddTargetCurrencyDialog().show();
 			}
 		});
 	}
 
-	private void refreshUIData() {
-		final AppSettings appSettings = new AppSettings(getActivity());
+	private void updateUI() {
+		final Activity activity = getActivity();
 
-		currencies = getCurrencies();
-		if (!currencies.isEmpty()) {
-			ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(getActivity(),
-					android.R.layout.simple_spinner_item, currencies);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinnerSourceCurrency.setAdapter(adapter);
-			spinnerSourceCurrency
-					.setSelection(adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel()));
+		// reload all currencies from database
+		currencies = getCurrencies(activity, true);
+
+		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity, android.R.layout.simple_spinner_item,
+				currencies);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerSourceCurrency.setAdapter(adapter);
+
+		final AppSettings appSettings = new AppSettings(activity);
+
+		int position = adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel());
+		if (position > 0) {
+			spinnerSourceCurrency.setSelection(position);
 		}
 
 		setSourceCurrencyValue(appSettings.getLastConvertValue(), appSettings.getLastConvertCurrencySel());
@@ -245,7 +243,7 @@ public class ConvertFragment extends AbstractFragment {
 	}
 
 	private void setSourceCurrencyValue(String value, String currencyCode) {
-		tvSourceValue.setText(formatCurrency(value, currencyCode));
+		tvSourceValue.setText(formatCurrency(getActivity(), value, currencyCode));
 	}
 
 	private BigDecimal getSourceCurrencyValue() {
@@ -258,10 +256,11 @@ public class ConvertFragment extends AbstractFragment {
 	 *
 	 * @return
 	 */
-	private MaterialDialog showAddCurrencyMenu() {
+	private MaterialDialog newAddTargetCurrencyDialog() {
 		final Context context = getActivity();
 		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context, android.R.layout.simple_spinner_item,
 				currencies);
+
 		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
 				.adapter(adapter, new MaterialDialog.ListCallback() {
 					@Override
@@ -279,57 +278,6 @@ public class ConvertFragment extends AbstractFragment {
 						dialog.dismiss();
 					}
 				}).build();
-	}
-
-	/**
-	 * Fetches a sorted list of last downloaded currencies from the database
-	 *
-	 * @return
-	 */
-	private List<CurrencyData> getCurrencies() {
-		DataSource source = null;
-		List<CurrencyData> currencies = Lists.newArrayList();
-		try {
-			source = new SQLiteDataSource();
-			source.connect(getActivity());
-			currencies = source.getLastRates();
-		} catch (DataSourceException e) {
-			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
-			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-		} finally {
-			IOUtils.closeQuitely(source);
-		}
-
-		addBGNToCurrencyList(currencies);
-
-		// sort by code
-		Collections.sort(currencies, new Comparator<CurrencyData>() {
-			@Override
-			public int compare(CurrencyData lhs, CurrencyData rhs) {
-				return lhs.getCode().compareToIgnoreCase(rhs.getCode());
-			}
-		});
-
-		return currencies;
-	}
-
-	/**
-	 * Adds fictional BGN currency to the convert list
-	 *
-	 * @param currencies
-	 * @return modified {@code currencies} list.
-	 */
-	private List<CurrencyData> addBGNToCurrencyList(List<CurrencyData> currencies) {
-		CurrencyData currency = new CurrencyData();
-		currency.setCode("BGN");
-		currency.setRatio(1);
-		currency.setBuy("1");
-		currency.setSell("1");
-		currency.setSource(0);
-		currency.setDate(LocalDate.now().toString());
-
-		currencies.add(currency);
-		return currencies;
 	}
 
 }

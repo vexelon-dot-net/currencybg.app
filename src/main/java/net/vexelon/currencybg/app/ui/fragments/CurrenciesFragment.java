@@ -17,16 +17,6 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -45,6 +35,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
@@ -62,6 +57,11 @@ import net.vexelon.currencybg.app.utils.IOUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
 
 public class CurrenciesFragment extends AbstractFragment {
 
@@ -88,7 +88,6 @@ public class CurrenciesFragment extends AbstractFragment {
 		final AppSettings appSettings = new AppSettings(getActivity());
 		Resources resources = getActivity().getResources();
 
-		Log.d(Defs.LOG_TAG, "OPA: " + appSettings.getLastReadNewsId());
 		if (appSettings.getLastReadNewsId() != resources.getInteger(R.integer.news_last)) {
 			final TextView tvMessage = new TextView(getActivity());
 			tvMessage.setText(Html.fromHtml(resources.getString(R.string.news_messages)));
@@ -136,8 +135,8 @@ public class CurrenciesFragment extends AbstractFragment {
 		case R.id.action_sort:
 			newSortMenu().show();
 			return true;
-		case R.id.action_filter:
-			newFilterMenu().show();
+		case R.id.action_sources:
+			newSourcesMenu().show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -157,6 +156,25 @@ public class CurrenciesFragment extends AbstractFragment {
 				newRateMenu().show();
 			}
 		});
+
+		view.findViewById(R.id.header_src_1).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				newSourcesMenu().show();
+			}
+		});
+		view.findViewById(R.id.header_src_2).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				newSourcesMenu().show();
+			}
+		});
+		view.findViewById(R.id.header_src_3).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				newSourcesMenu().show();
+			}
+		});
 	}
 
 	public void setLastUpdate(String lastUpdate) {
@@ -164,14 +182,16 @@ public class CurrenciesFragment extends AbstractFragment {
 	}
 
 	private MaterialDialog newRateMenu() {
-		final AppSettings appSettings = new AppSettings(getActivity());
+		final Activity activity = getActivity();
+		final AppSettings appSettings = new AppSettings(activity);
+
 		return new MaterialDialog.Builder(getActivity()).title(R.string.action_rate_title)
 				.items(R.array.action_rate_values).itemsCallbackSingleChoice(appSettings.getCurrenciesRateSelection(),
 						new MaterialDialog.ListCallbackSingleChoice() {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 								appSettings.setCurrenciesRateSelection(which);
-								setCurrenciesRate(which);
+								setCurrenciesRate(activity, which);
 								// notify user
 								switch (appSettings.getCurrenciesRateSelection()) {
 								case AppSettings.RATE_SELL:
@@ -217,16 +237,16 @@ public class CurrenciesFragment extends AbstractFragment {
 				.build();
 	}
 
-	private MaterialDialog newFilterMenu() {
+	private MaterialDialog newSourcesMenu() {
 		final AppSettings appSettings = new AppSettings(getActivity());
-		return new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
-				.items(R.array.currency_sources)
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sources_title)
+				.items(R.array.currency_sources_full)
 				.itemsCallbackMultiChoice(toSourcesFilterIndices(appSettings.getCurrenciesFilter()),
 						new MaterialDialog.ListCallbackMultiChoice() {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 								if (which.length == 0) {
-									showSnackbar(R.string.error_filter_selection, Defs.TOAST_ERR_TIME, true);
+									showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_TIME, true);
 									return false;
 								}
 
@@ -242,7 +262,7 @@ public class CurrenciesFragment extends AbstractFragment {
 									}
 									selected += getResources().getStringArray(R.array.currency_sources)[i];
 								}
-								showSnackbar(getResources().getString(R.string.action_filter_desc, selected));
+								showSnackbar(getResources().getString(R.string.action_sources_desc, selected));
 
 								return true;
 							}
@@ -287,18 +307,18 @@ public class CurrenciesFragment extends AbstractFragment {
 	/**
 	 * Populates the list of currencies
 	 *
+	 * @param activity
 	 * @param currencies
 	 */
-	private void updateCurrenciesListView(List<CurrencyData> currencies) {
-		final Activity activity = getActivity();
+	private void updateCurrenciesListView(final Activity activity, List<CurrencyData> currencies) {
 		AppSettings appSettings = new AppSettings(activity);
 
 		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout,
-				toCurrencyRows(getVisibleCurrencies(currencies)), appSettings.getCurrenciesPrecision(),
+				toCurrencyRows(activity, getVisibleCurrencies(currencies)), appSettings.getCurrenciesPrecision(),
 				appSettings.getCurrenciesRateSelection(), appSettings.getCurrenciesFilter());
 		lvCurrencies.setAdapter(currencyListAdapter);
 
-		updateCurrenciesRateTitle(appSettings.getCurrenciesRateSelection());
+		updateCurrenciesRateTitle(activity, appSettings.getCurrenciesRateSelection());
 		updateCurrenciesSourcesTitles(appSettings.getCurrenciesFilter());
 		setCurrenciesSort(appSettings.getCurrenciesSortSelection());
 
@@ -315,16 +335,16 @@ public class CurrenciesFragment extends AbstractFragment {
 		currencyListAdapter.notifyDataSetChanged();
 	}
 
-	private void updateCurrenciesRateTitle(final int rateBy) {
+	private void updateCurrenciesRateTitle(final Activity activity, final int rateBy) {
 		switch (rateBy) {
 		case AppSettings.RATE_SELL:
-			tvCurrenciesRate.setText(
-					Html.fromHtml(UIUtils.toHtmlColor(getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
+			tvCurrenciesRate.setText(Html.fromHtml(
+					UIUtils.toHtmlColor(activity.getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
 			break;
 		case AppSettings.RATE_BUY:
 		default:
-			tvCurrenciesRate.setText(
-					Html.fromHtml(UIUtils.toHtmlColor(getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
+			tvCurrenciesRate.setText(Html.fromHtml(
+					UIUtils.toHtmlColor(activity.getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
 			break;
 		}
 	}
@@ -332,10 +352,11 @@ public class CurrenciesFragment extends AbstractFragment {
 	/**
 	 * Shows buy/sell currencies rate info
 	 *
+	 * @param activity
 	 * @param rateBy
 	 */
-	private void setCurrenciesRate(final int rateBy) {
-		updateCurrenciesRateTitle(rateBy);
+	private void setCurrenciesRate(final Activity activity, final int rateBy) {
+		updateCurrenciesRateTitle(activity, rateBy);
 		currencyListAdapter.setRateBy(rateBy);
 		currencyListAdapter.notifyDataSetChanged();
 	}
@@ -358,8 +379,10 @@ public class CurrenciesFragment extends AbstractFragment {
 	 */
 	private void setCurrenciesSourcesFilter(Set<Sources> sources) {
 		updateCurrenciesSourcesTitles(sources);
-		currencyListAdapter.setFilterBy(sources);
-		currencyListAdapter.notifyDataSetChanged();
+		if (currencyListAdapter != null) {
+			currencyListAdapter.setFilterBy(sources);
+			currencyListAdapter.notifyDataSetChanged();
+		}
 		// currencyListAdapter.getFilter().filter(Integer.toString(filterBy),
 		// new Filter.FilterListener() {
 		// @Override
@@ -382,18 +405,19 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param useRemoteSource
 	 */
 	public void reloadRates(boolean useRemoteSource) {
+		final Activity activity = getActivity();
 
 		if (!useRemoteSource) {
 			DataSource source = null;
 			try {
 				source = new SQLiteDataSource();
-				source.connect(getActivity());
+				source.connect(activity);
 
 				List<CurrencyData> ratesList = source.getLastRates();
 
 				if (!ratesList.isEmpty()) {
 					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
-					updateCurrenciesListView(ratesList);
+					updateCurrenciesListView(activity, ratesList);
 				} else {
 					useRemoteSource = true;
 				}
@@ -475,7 +499,7 @@ public class CurrenciesFragment extends AbstractFragment {
 			setRefreshActionButtonState(false);
 
 			if (updateOK) {
-				updateCurrenciesListView(result);
+				updateCurrenciesListView(activity, result);
 
 				// bump last update
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));

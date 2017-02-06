@@ -17,16 +17,6 @@
  */
 package net.vexelon.currencybg.app.db;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import net.vexelon.currencybg.app.Defs;
-import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.utils.DateTimeUtils;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -35,6 +25,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import net.vexelon.currencybg.app.Defs;
+import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.utils.DateTimeUtils;
+
+import java.util.List;
+import java.util.Map;
 
 public class SQLiteDataSource implements DataSource {
 

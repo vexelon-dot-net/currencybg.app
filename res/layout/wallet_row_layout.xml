@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:padding="4dp">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/wallet_row_icon"
+            android:layout_width="28sp"
+            android:layout_height="28sp"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitStart"/>
+
+        <TextView
+            android:id="@+id/wallet_row_code"
+            style="@style/FontListCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/wallet_row_icon"
+            android:paddingLeft="4sp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/wallet_row_amount"
+        style="@style/FontListRatioRate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.85"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/wallet_row_bought_on"
+        style="@style/FontListRatioRate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4sp"
+        android:layout_weight="0.8"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/wallet_row_bought_at"
+        style="@style/FontListRatioRate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.65"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/wallet_row_current_value"
+        style="@style/FontListRatioRate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:maxLines="1"
+        android:paddingRight="2sp"/>
+
+</LinearLayout>
