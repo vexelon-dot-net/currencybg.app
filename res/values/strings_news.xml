@@ -23,6 +23,8 @@ any practical meaning concerning currency exchange. You can still find the BNB e
 &emsp; - BNB is now excluded, as it does not provide direct exchange services.
 <br>
 &emsp; - Added a calculator when entering currency values to convert.
+<br>
+&emsp; - Fixed task bar issue on Android 4.4 devices.
         ]]></item>
 
     </string>
