@@ -7,11 +7,13 @@ Currency BG Changes
   * Now displays currency rates from various sources.
   * BNB is now excluded, as it does not provide direct exchange services.
   * Added a calculator when entering currency values to convert.
+  * Fixed task bar issue on Android 4.4 devices.
 
 ## BG
   * Вече предоставя информация от различни източници.
   * БНБ курсовете са премахнати, тъй като не се ползват при директна валутна обмяна.
   * Добавен калкулатор при вкарване на обменни стойности.
+  * Оправен проблем с task лентата при Android 4.4 устройства.
 
 ## 1.0.1
 
