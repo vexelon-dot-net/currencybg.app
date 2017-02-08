@@ -41,6 +41,7 @@ import java.util.List;
 
 public class InfoFragment extends AbstractFragment {
 
+	private static final String URL_VERSION = "intr://verinfo";
 	private static final String URL_3RDPARTY_LIBS = "intr://3rd";
 	private static final String URL_3RDPARTY_ICONS = "intr://3rd_icons";
 
@@ -54,13 +55,18 @@ public class InfoFragment extends AbstractFragment {
 	private void init(View view) {
 		final Activity activity = getActivity();
 		ListView lvInfo = (ListView) view.findViewById(R.id.list_info);
+
 		final InfoListAdapter adapter = new InfoListAdapter(getActivity(), R.layout.info_row, getInfosList());
 		lvInfo.setAdapter(adapter);
+
 		lvInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				String url = adapter.getUrl(position);
-				if (URL_3RDPARTY_LIBS.equals(url)) {
+
+				if (URL_VERSION.equals(url)) {
+					showNewsAlert(getActivity());
+				} else if (URL_3RDPARTY_LIBS.equals(url)) {
 					new MaterialDialog.Builder(getActivity()).customView(R.layout.fragment_thirdparty_libs, true)
 							.positiveText(R.string.text_ok).build().show();
 				} else if (URL_3RDPARTY_ICONS.equals(url)) {
@@ -81,7 +87,7 @@ public class InfoFragment extends AbstractFragment {
 		try {
 			packageInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(),
 					PackageManager.GET_GIDS);
-			infoList.add(newInfoRow(getString(R.string.about_version), packageInfo.versionName));
+			infoList.add(newInfoRow(getString(R.string.about_version), packageInfo.versionName, URL_VERSION));
 		} catch (Exception e) {
 			Log.e(Defs.LOG_TAG, "", e);
 		}

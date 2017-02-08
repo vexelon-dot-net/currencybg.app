@@ -30,17 +30,23 @@ import org.joda.time.LocalDate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -75,6 +81,29 @@ public class AbstractFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		mMenu = menu;
 		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	/**
+	 * Shows a dialog with "What's New" information
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public AlertDialog showNewsAlert(final Context context) {
+		Resources resources = context.getResources();
+
+		final TextView tvMessage = new TextView(context);
+		tvMessage.setText(Html.fromHtml(resources.getString(R.string.news_messages)));
+		tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
+		tvMessage.setPadding(24, 24, 24, 12);
+
+		return new AlertDialog.Builder(context).setTitle(R.string.news_title)
+				.setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).setCancelable(false).setView(tvMessage).show();
 	}
 
 	// public void addListener(NotificationsListener listner) {

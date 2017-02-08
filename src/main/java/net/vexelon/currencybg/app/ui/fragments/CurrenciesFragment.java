@@ -18,13 +18,10 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -89,20 +86,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		Resources resources = getActivity().getResources();
 
 		if (appSettings.getLastReadNewsId() != resources.getInteger(R.integer.news_last)) {
-			final TextView tvMessage = new TextView(getActivity());
-			tvMessage.setText(Html.fromHtml(resources.getString(R.string.news_messages)));
-			tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
-			tvMessage.setPadding(24, 24, 24, 12);
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle(R.string.news_title)
-					.setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					}).setCancelable(false).setView(tvMessage).show();
-
+			showNewsAlert(getActivity());
 			appSettings.setLastReadNewsId(resources.getInteger(R.integer.news_last));
 		}
 	}
