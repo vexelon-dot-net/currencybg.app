@@ -20,7 +20,7 @@ package net.vexelon.currencybg.app;
 import java.util.Arrays;
 import java.util.List;
 
-public class Defs {
+public final class Defs {
 
 	public final static String LOG_TAG = "net.vexelon.currencybg";
 

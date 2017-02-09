@@ -19,12 +19,11 @@ Please log feature requests or bug reports using the [Issues Board](https://gith
 
 ## Development
 
-Create an empty `gradle.properties` file.
+Create a `gradle.properties` file and fill in the signing-certificate properties.
+Use `tools/gradle.properties.tpl` as template.
 
-    KS=dummy
-    KSPWD=dummy
-    KALIAS=dummy
-    KPWD=dummy
+Create an `api.properties` file and fill in the remote server connection parameters.
+Use `tools/api.properties.tpl` as template.
 
 To build the project run:
 

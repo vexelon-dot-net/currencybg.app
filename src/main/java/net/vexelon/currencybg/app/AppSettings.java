@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-public class AppSettings {
+public final class AppSettings {
 
 	public static final int RATE_BUY = 0;
 	public static final int RATE_SELL = 1;

@@ -39,6 +39,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import net.vexelon.currencybg.app.AppAssets;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.services.BackgroundService;
@@ -51,6 +52,8 @@ import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.PrefsFragment;
 
 import org.joda.time.LocalDateTime;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements NotificationsListener {
 
@@ -75,6 +78,12 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		drawerToggle = setupDrawerToggle();
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+		try {
+			AppAssets.init(this);
+		} catch (IOException e) {
+			Log.w(Defs.LOG_TAG, "Failed opening assets! Error: " + e.getMessage());
+		}
 
 		startService();
 		startReceivers();

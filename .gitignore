@@ -6,8 +6,10 @@ gradle.properties
 # Others
 libs/
 local.properties
+api.properties
 *.orig
 *.keystore
+src/main/assets/*
 
 # a-studio
 .idea

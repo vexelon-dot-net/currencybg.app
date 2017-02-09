@@ -1,7 +1,5 @@
 package net.vexelon.currencybg.app.remote;
 
-import android.util.Log;
-
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,6 +8,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import net.vexelon.currencybg.app.AppAssets;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
@@ -25,25 +24,26 @@ import java.util.List;
 public class APISource implements Source {
 	private static final int HTTP_CODE_MAINTENANCE = 503;
 
-	private static final String TEST_SERVER_ADDRESS = "http://currencybg-tsvetoslav.rhcloud.com";
-	private static final String PROD_SERVER_ADDRESS = "http://01-currencybg.rhcloud.com";
 	private static final String API_JUNCTION = "/currencybg.server/api/currencies/";
-
 	private static final String HEADER = "APIKey";
-	private static final String TOKEN = "CurrencyBgUser";
 
 	private final String serverUrl;
+	private final String token;
 	private final Gson gson = new GsonBuilder().setDateFormat(Defs.DATEFORMAT_ISO8601).create();
 	private final Type type = new TypeToken<List<CurrencyData>>() {
 	}.getType();
 	private final OkHttpClient client = new OkHttpClient();
 
 	public APISource() {
-		// test server address
-		this.serverUrl = TEST_SERVER_ADDRESS + API_JUNCTION;
-
-		// production server address
-		// this.serverUrl = PROD_SERVER_ADDRESS + API_JUNCTION;
+		if ("prod".equals(AppAssets.getDeployType())) {
+			// production server address
+			this.serverUrl = AppAssets.getProdServer() + API_JUNCTION;
+			this.token = AppAssets.getProdServerApiKey();
+		} else {
+			// test server address
+			this.serverUrl = AppAssets.getTestServer() + API_JUNCTION;
+			this.token = AppAssets.getTestServerApiKey();
+		}
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class APISource implements Source {
 
 	public String downloadRates(String url) throws IOException, SourceException {
 		try {
-			Request request = new Request.Builder().url(url).header(HEADER, TOKEN).build();
+			Request request = new Request.Builder().url(url).header(HEADER, token).build();
 			Response response = client.newCall(request).execute();
 			if (response.code() == HTTP_CODE_MAINTENANCE) {
 				throw new SourceException(true);
