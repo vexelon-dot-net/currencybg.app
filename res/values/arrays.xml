@@ -22,10 +22,13 @@
     <string-array name="currency_codes">
         <item>AED</item>
         <item>ALL</item>
+        <item>ARS</item>
         <item>AUD</item>
         <item>BAM</item>
         <item>BGN</item>
         <item>BRL</item>
+        <item>BYN</item>
+        <item>BYR</item>
         <item>CAD</item>
         <item>CHF</item>
         <item>CNY</item>
@@ -41,6 +44,7 @@
         <item>HUF</item>
         <item>IDR</item>
         <item>ILS</item>
+        <item>ISK</item>
         <item>JPY</item>
         <item>KES</item>
         <item>KRW</item>
@@ -52,6 +56,7 @@
         <item>MYR</item>
         <item>NOK</item>
         <item>NZD</item>
+        <item>PHP</item>
         <item>PLN</item>
         <item>RON</item>
         <item>RSD</item>
@@ -67,10 +72,13 @@
     <string-array name="currency_names">
         <item>United Arab Emirates dirham</item>
         <item>Albanian lek</item>
+        <item>Argentine peso</item>
         <item>Australian dollar</item>
         <item>Bosnia and Herzegovina convertible mark</item>
         <item>Bulgarian lev</item>
         <item>Brazilian real</item>
+        <item>Belarusian ruble</item>
+        <item>Belarusian ruble</item>
         <item>Canadian dollar</item>
         <item>Swiss franc</item>
         <item>Chinese yuan</item>
@@ -86,6 +94,7 @@
         <item>Hungarian forint</item>
         <item>Indonesian rupiah</item>
         <item>Israeli new shekel</item>
+        <item>Icelandic krona</item>
         <item>Japanese yen</item>
         <item>Kenyan shilling</item>
         <item>South Korean won</item>
@@ -97,6 +106,7 @@
         <item>Malaysian ringgit</item>
         <item>Norwegian krone</item>
         <item>New Zealand dollar</item>
+        <item>Philippine peso</item>
         <item>Polish złoty</item>
         <item>Romanian leu</item>
         <item>Serbian dinar</item>

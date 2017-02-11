@@ -183,7 +183,7 @@ public class ConvertFragment extends AbstractFragment {
 		// add dummy BGN for convert purposes
 		currencies.add(getBGNCurrency());
 		// load all currencies from database
-		currencies.addAll(getCurrencies(activity, true));
+		currencies.addAll(getVisibleCurrencies(getCurrencies(activity, true)));
 
 		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity, android.R.layout.simple_spinner_item,
 				currencies);
