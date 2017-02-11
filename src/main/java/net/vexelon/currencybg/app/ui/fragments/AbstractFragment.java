@@ -191,7 +191,7 @@ public class AbstractFragment extends Fragment {
 	 *
 	 * @return CurrencyData
 	 */
-	private CurrencyData getBGNCurrency() {
+	protected CurrencyData getBGNCurrency() {
 		CurrencyData currency = new CurrencyData();
 		currency.setCode("BGN");
 		currency.setRatio(1);
