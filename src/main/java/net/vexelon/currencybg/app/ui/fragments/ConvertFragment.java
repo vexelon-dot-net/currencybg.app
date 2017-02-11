@@ -180,8 +180,10 @@ public class ConvertFragment extends AbstractFragment {
 	private void updateUI() {
 		final Activity activity = getActivity();
 
-		// reload all currencies from database
-		currencies = getCurrencies(activity, true);
+		// add dummy BGN for convert purposes
+		currencies.add(getBGNCurrency());
+		// load all currencies from database
+		currencies.addAll(getVisibleCurrencies(getCurrencies(activity, true)));
 
 		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity, android.R.layout.simple_spinner_item,
 				currencies);
