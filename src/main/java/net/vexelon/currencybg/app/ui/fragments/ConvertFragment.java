@@ -180,6 +180,7 @@ public class ConvertFragment extends AbstractFragment {
 	private void updateUI() {
 		final Activity activity = getActivity();
 
+		currencies.clear();
 		// add dummy BGN for convert purposes
 		currencies.add(getBGNCurrency());
 		// load all currencies from database
