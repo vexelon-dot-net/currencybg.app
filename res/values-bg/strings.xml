@@ -69,6 +69,7 @@
 
     <string name="action_sources">Източници</string>
     <string name="action_sources_title">Показване курсове от</string>
+    <string name="action_sources_desc">Показване на курсове от %1$s</string>
     <string name="action_info">Инфо</string>
     <string name="action_settings">Настройки</string>
     <string name="prefs_title">Currency BG Настройки</string>
