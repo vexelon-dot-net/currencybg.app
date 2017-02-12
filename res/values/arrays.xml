@@ -6,16 +6,19 @@
     </string-array>
     <string-array name="currency_sources">
         <item>@string/source_tavex</item>
+        <item>@string/source_factorin</item>
         <item>@string/source_polana</item>
         <item>@string/source_fib</item>
     </string-array>
     <string-array name="currency_sources_full">
         <item>@string/source_tavex_full</item>
+        <item>@string/source_factorin_full</item>
         <item>@string/source_polana_full</item>
         <item>@string/source_fib_full</item>
     </string-array>
     <integer-array name="currency_sources_ids">
         <item>200</item>
+        <item>400</item>
         <item>300</item>
         <item>100</item>
     </integer-array>

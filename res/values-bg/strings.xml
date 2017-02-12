@@ -17,6 +17,7 @@
     <string name="error_db_load">Грешка при четене на данни!</string>
     <string name="error_db_save">Грешка при запис на данни!</string>
     <string name="error_sources_selection">Трябва да бъде избран поне един източник!</string>
+    <string name="error_sources_selection_max">Само 3 източника могат да бъдат показани едновременно!</string>
     <string name="error_maintenance">Сървърът се обновява! Опитай по-късно.</string>
     <string name="error_no_entries">Няма нови курсове.</string>
     <string name="about_version">Версия</string>
@@ -57,12 +58,14 @@
         <item>Наименование</item>
         <item>Код</item>
     </string-array>
-    <string name="source_tavex">ТАВЕКС</string>
-    <string name="source_polana">ПОЛАНА1</string>
-    <string name="source_fib">ФИБ</string>
+    <string name="source_tavex">Тавекс</string>
+    <string name="source_polana">Полана1</string>
+    <string name="source_fib">ПИБ</string>
+    <string name="source_factorin">Фактор И.Н.</string>
     <string name="source_tavex_full">Tavex България</string>
     <string name="source_polana_full">“Полана 1” ООД</string>
     <string name="source_fib_full">Първа Инвестиционна Банка</string>
+    <string name="source_factorin_full">ФАКТОР И.Н. АД</string>
 
     <string name="action_sources">Източници</string>
     <string name="action_sources_title">Показване курсове от</string>

@@ -17,6 +17,7 @@
     <string name="error_db_load">Failed reading from db!</string>
     <string name="error_db_save">Failed saving to db!</string>
     <string name="error_sources_selection">A minimum of one source selection is required!</string>
+    <string name="error_sources_selection_max">Only 3 sources can be selected at a time!</string>
     <string name="error_maintenance">Server down for maintenance! Try again later.</string>
     <string name="error_no_entries">No new currency entries.</string>
     <string name="about_version">Version</string>
@@ -57,12 +58,14 @@
         <item>Name</item>
         <item>Code</item>
     </string-array>
-    <string name="source_tavex">TAVEX</string>
-    <string name="source_polana">POLANA1</string>
+    <string name="source_tavex">Tavex</string>
+    <string name="source_polana">Polana1</string>
     <string name="source_fib">FIB</string>
+    <string name="source_factorin">Factor I.N.</string>
     <string name="source_tavex_full">Tavex Bulgaria</string>
     <string name="source_polana_full">"POLANA 1" OOD</string>
     <string name="source_fib_full">First Investment Bank</string>
+    <string name="source_factorin_full">FACTOR I.N.</string>
 
     <string name="action_sources">Sources</string>
     <string name="action_sources_title">Show currency rates for</string>

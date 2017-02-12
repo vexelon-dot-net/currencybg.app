@@ -19,11 +19,7 @@ package net.vexelon.currencybg.app.common;
 
 import android.content.Context;
 
-import com.google.common.collect.Sets;
-
 import net.vexelon.currencybg.app.R;
-
-import java.util.Set;
 
 /**
  * Available currency sources
@@ -40,7 +36,8 @@ public enum Sources {
 
 	FIB(100),
 	TAVEX(200),
-	POLANA1(300);
+	POLANA1(300),
+	FACTORIN(400);
 
 	private int id;
 

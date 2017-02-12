@@ -105,12 +105,16 @@ public class SQLiteDataSource implements DataSource {
 		Cursor cursor = null;
 
 		try {
-			cursor = database.rawQuery("SELECT * FROM currencies ORDER BY strftime('%s', curr_date)  ASC; ", null);
+			cursor = database.rawQuery("SELECT * FROM currencies ORDER BY strftime('%s', curr_date) DESC; ", null);
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
 				CurrencyData currency = cursorToCurrency(cursor);
-				result.put(currency.getCode() + currency.getSource(), currency);
+
+				String id = currency.getCode() + currency.getSource();
+				if (!result.containsKey(id)) {
+					result.put(id, currency);
+				}
 
 				cursor.moveToNext();
 			}
@@ -131,13 +135,16 @@ public class SQLiteDataSource implements DataSource {
 		try {
 			cursor = database.rawQuery(
 					"SELECT * FROM currencies WHERE " + Defs.COLUMN_SOURCE
-							+ " = ? ORDER BY strftime('%s', curr_date)  ASC; ",
+							+ " = ? ORDER BY strftime('%s', curr_date) DESC; ",
 					new String[] { String.valueOf(source) });
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
 				CurrencyData currency = cursorToCurrency(cursor);
-				result.put(currency.getCode(), currency);
+
+				if (!result.containsKey(currency.getCode())) {
+					result.put(currency.getCode(), currency);
+				}
 
 				cursor.moveToNext();
 			}
@@ -157,7 +164,7 @@ public class SQLiteDataSource implements DataSource {
 
 		try {
 			cursor = database.rawQuery("SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE
-					+ " = ? ORDER BY strftime('%s', curr_date)  ASC; ", new String[] { String.valueOf(code) });
+					+ " = ? ORDER BY strftime('%s', curr_date) DESC; ", new String[] { String.valueOf(code) });
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -167,7 +174,7 @@ public class SQLiteDataSource implements DataSource {
 				cursor.moveToNext();
 			}
 		} catch (Throwable t) {
-			throw new DataSourceException("SQL error: Failed fetching all rates!", t);
+			throw new DataSourceException("SQL error: Failed fetching all rates for - " + code, t);
 		} finally {
 			closeCursor(cursor);
 		}

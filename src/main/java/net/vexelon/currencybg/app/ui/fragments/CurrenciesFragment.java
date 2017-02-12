@@ -34,7 +34,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import net.vexelon.currencybg.app.AppSettings;
@@ -56,7 +55,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -69,7 +67,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	private TextView tvCurrenciesRate;
 	private String lastUpdateLastValue;
 	private CurrencyListAdapter currencyListAdapter;
-	private Map<Sources, TextView> tvSources = Maps.newHashMap();
+	private List<TextView> tvSources = Lists.newArrayList();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,21 +105,21 @@ public class CurrenciesFragment extends AbstractFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_refresh:
-			reloadRates(true);
-			lastUpdateLastValue = tvLastUpdate.getText().toString();
-			tvLastUpdate.setText(R.string.last_update_updating_text);
-			setRefreshActionButtonState(true);
-			return true;
-		case R.id.action_rate:
-			newRateMenu().show();
-			return true;
-		case R.id.action_sort:
-			newSortMenu().show();
-			return true;
-		case R.id.action_sources:
-			newSourcesMenu().show();
-			return true;
+			case R.id.action_refresh:
+				reloadRates(true);
+				lastUpdateLastValue = tvLastUpdate.getText().toString();
+				tvLastUpdate.setText(R.string.last_update_updating_text);
+				setRefreshActionButtonState(true);
+				return true;
+			case R.id.action_rate:
+				newRateMenu().show();
+				return true;
+			case R.id.action_sort:
+				newSortMenu().show();
+				return true;
+			case R.id.action_sources:
+				newSourcesMenu().show();
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -129,9 +127,10 @@ public class CurrenciesFragment extends AbstractFragment {
 	private void init(View view, LayoutInflater inflater) {
 		lvCurrencies = (ListView) view.findViewById(R.id.list_currencies);
 		tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
-		tvSources.put(Sources.TAVEX, (TextView) view.findViewById(R.id.header_src_1));
-		tvSources.put(Sources.POLANA1, (TextView) view.findViewById(R.id.header_src_2));
-		tvSources.put(Sources.FIB, (TextView) view.findViewById(R.id.header_src_3));
+
+		tvSources.add((TextView) view.findViewById(R.id.header_src_1));
+		tvSources.add((TextView) view.findViewById(R.id.header_src_2));
+		tvSources.add((TextView) view.findViewById(R.id.header_src_3));
 
 		tvCurrenciesRate = (TextView) view.findViewById(R.id.header_currencies_rate);
 		tvCurrenciesRate.setOnClickListener(new View.OnClickListener() {
@@ -178,13 +177,13 @@ public class CurrenciesFragment extends AbstractFragment {
 								setCurrenciesRate(activity, which);
 								// notify user
 								switch (appSettings.getCurrenciesRateSelection()) {
-								case AppSettings.RATE_SELL:
-									showSnackbar(R.string.action_rate_sell_desc);
-									break;
-								case AppSettings.RATE_BUY:
-								default:
-									showSnackbar(R.string.action_rate_buy_desc);
-									break;
+									case AppSettings.RATE_SELL:
+										showSnackbar(R.string.action_rate_sell_desc);
+										break;
+									case AppSettings.RATE_BUY:
+									default:
+										showSnackbar(R.string.action_rate_buy_desc);
+										break;
 								}
 								return true;
 							}
@@ -205,15 +204,15 @@ public class CurrenciesFragment extends AbstractFragment {
 								setCurrenciesSort(which);
 								// notify user
 								switch (appSettings.getCurrenciesSortSelection()) {
-								case AppSettings.SORTBY_CODE:
-									showSnackbar(sortByAscending ? R.string.action_sort_code_asc
-											: R.string.action_sort_code_desc);
-									break;
-								case AppSettings.SORTBY_NAME:
-								default:
-									showSnackbar(sortByAscending ? R.string.action_sort_name_asc
-											: R.string.action_sort_name_desc);
-									break;
+									case AppSettings.SORTBY_CODE:
+										showSnackbar(sortByAscending ? R.string.action_sort_code_asc
+												: R.string.action_sort_code_desc);
+										break;
+									case AppSettings.SORTBY_NAME:
+									default:
+										showSnackbar(sortByAscending ? R.string.action_sort_name_asc
+												: R.string.action_sort_name_desc);
+										break;
 								}
 								return true;
 							}
@@ -231,6 +230,9 @@ public class CurrenciesFragment extends AbstractFragment {
 							public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 								if (which.length == 0) {
 									showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_TIME, true);
+									return false;
+								} else if (which.length > 3) {
+									showSnackbar(R.string.error_sources_selection_max, Defs.TOAST_ERR_TIME, true);
 									return false;
 								}
 
@@ -257,8 +259,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	/**
 	 * Converts checkbox sources selection to a {@link Sources} set.
 	 *
-	 * @param indices
-	 *            {@code 0..n}
+	 * @param indices {@code 0..n}
 	 * @return
 	 */
 	private Set<Sources> getSourcesFilterIndices(Integer[] indices) {
@@ -321,15 +322,15 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	private void updateCurrenciesRateTitle(final Activity activity, final int rateBy) {
 		switch (rateBy) {
-		case AppSettings.RATE_SELL:
-			tvCurrenciesRate.setText(Html.fromHtml(
-					UIUtils.toHtmlColor(activity.getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
-			break;
-		case AppSettings.RATE_BUY:
-		default:
-			tvCurrenciesRate.setText(Html.fromHtml(
-					UIUtils.toHtmlColor(activity.getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
-			break;
+			case AppSettings.RATE_SELL:
+				tvCurrenciesRate.setText(Html.fromHtml(
+						UIUtils.toHtmlColor(activity.getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
+				break;
+			case AppSettings.RATE_BUY:
+			default:
+				tvCurrenciesRate.setText(Html.fromHtml(
+						UIUtils.toHtmlColor(activity.getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
+				break;
 		}
 	}
 
@@ -345,14 +346,21 @@ public class CurrenciesFragment extends AbstractFragment {
 		currencyListAdapter.notifyDataSetChanged();
 	}
 
+	/**
+	 * Toggles header visibility
+	 *
+	 * @param sources
+	 */
 	private void updateCurrenciesSourcesTitles(Set<Sources> sources) {
-		// toggle header visibility
-		for (TextView tv : tvSources.values()) {
-			tv.setVisibility(View.INVISIBLE);
+		for (TextView v : tvSources) {
+			v.setVisibility(View.INVISIBLE);
 		}
 
+		int i = 0;
 		for (Sources source : sources) {
-			tvSources.get(source).setVisibility(View.VISIBLE);
+			tvSources.get(i).setVisibility(View.VISIBLE);
+			tvSources.get(i).setText(Sources.getName(source.getID(), getActivity()));
+			i += 1;
 		}
 	}
 
@@ -367,6 +375,7 @@ public class CurrenciesFragment extends AbstractFragment {
 			currencyListAdapter.setFilterBy(sources);
 			currencyListAdapter.notifyDataSetChanged();
 		}
+
 		// currencyListAdapter.getFilter().filter(Integer.toString(filterBy),
 		// new Filter.FilterListener() {
 		// @Override
