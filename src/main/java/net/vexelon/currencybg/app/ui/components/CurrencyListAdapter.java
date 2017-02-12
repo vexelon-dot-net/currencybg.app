@@ -17,12 +17,6 @@
  */
 package net.vexelon.currencybg.app.ui.components;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +35,12 @@ import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 
@@ -85,12 +85,18 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		UIUtils.setText(v, R.id.name, row.getName());
 		UIUtils.setText(v, R.id.code, row.getCode());
 
-		UIUtils.setText(v, R.id.rate_src_1,
-				sourcesFilter.contains(Sources.TAVEX) ? getColumnValue(row, Sources.TAVEX) : "", true);
-		UIUtils.setText(v, R.id.rate_src_2,
-				sourcesFilter.contains(Sources.POLANA1) ? getColumnValue(row, Sources.POLANA1) : "", true);
-		UIUtils.setText(v, R.id.rate_src_3, sourcesFilter.contains(Sources.FIB) ? getColumnValue(row, Sources.FIB) : "",
-				true);
+		int[] ids = { R.id.rate_src_1, R.id.rate_src_2, R.id.rate_src_3 };
+
+		int i = 0;
+		for (Sources source : sourcesFilter) {
+			UIUtils.setText(v, ids[i], getColumnValue(row, source), true);
+			i += 1;
+		}
+
+		// clear unused columns
+		for (int j = i; j < Defs.MAX_SOURCES_TO_SHOW; j++) {
+			UIUtils.setText(v, ids[j], "", true);
+		}
 
 		return v;
 	}

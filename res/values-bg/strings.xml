@@ -17,6 +17,7 @@
     <string name="error_db_load">Грешка при четене на данни!</string>
     <string name="error_db_save">Грешка при запис на данни!</string>
     <string name="error_sources_selection">Трябва да бъде избран поне един източник!</string>
+    <string name="error_sources_selection_max">Само 3 източника могат да бъдат показани едновременно!</string>
     <string name="error_maintenance">Сървърът се обновява! Опитай по-късно.</string>
     <string name="error_no_entries">Няма нови курсове.</string>
     <string name="about_version">Версия</string>
