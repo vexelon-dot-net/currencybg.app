@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <TextView
         android:id="@+id/thirdparty_title"
@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14sp"
-        android:text="Third-party libraries" />
+        android:text="Third-party libraries"/>
 
     <!-- Lib 01 -->
     <TextView
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8sp"
-        android:text="FloatingActionButton" />
+        android:text="FloatingActionButton"/>
 
     <TextView
         android:id="@+id/thirdparty_lib01_content"
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14sp"
-        android:text="@string/license_lib01" />
+        android:text="@string/license_lib01"/>
 
     <!-- Lib 02 -->
     <TextView
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8sp"
-        android:text="jsoup" />
+        android:text="jsoup"/>
 
     <TextView
         android:id="@+id/thirdparty_lib02_content"
@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14sp"
-        android:text="@string/license_lib02" />
+        android:text="@string/license_lib02"/>
 
     <!-- Lib 03 -->
     <TextView
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8sp"
-        android:text="Google Guava, Joda-Time" />
+        android:text="Google Guava, Joda-Time"/>
 
     <TextView
         android:id="@+id/thirdparty_lib03_content"
@@ -60,16 +60,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14sp"
-        android:text="@string/license_lib03" />
+        android:text="@string/license_lib03"/>
 
-    <!-- Lib 03 -->
+    <!-- Lib 04 -->
     <TextView
         android:id="@+id/thirdparty_lib04_title"
         style="@style/FontStyle3rdLibTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8sp"
-        android:text="OkHttp" />
+        android:text="OkHttp"/>
 
     <TextView
         android:id="@+id/thirdparty_lib04_content"
@@ -77,6 +77,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14sp"
-        android:text="@string/license_lib04" />
+        android:text="@string/license_lib04"/>
+
+    <!-- Lib 05 -->
+    <TextView
+        android:id="@+id/thirdparty_lib05_title"
+        style="@style/FontStyle3rdLibTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8sp"
+        android:text="Material DateTime Picker"/>
+
+    <TextView
+        android:id="@+id/thirdparty_lib05_content"
+        style="@style/FontStyle3rdLibContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14sp"
+        android:text="@string/license_lib03"/>
 
 </LinearLayout>
