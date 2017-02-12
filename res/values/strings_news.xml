@@ -18,7 +18,7 @@ The BNB exchange rates are removed in this version, because we believe they do n
 any practical meaning concerning currency exchange. You can still find the BNB exchange rates in the
 <a href="https://play.google.com/store/apps/details?id=net.vexelon.bgrates">BGrates</a> app.
 <br><br>
-&emsp; - Now displays currency rates from various sources.
+&emsp; -  Now displays currency rates from several currency exchange sources.
 <br>
 &emsp; - BNB is now excluded, as it does not provide direct exchange services.
 <br>
