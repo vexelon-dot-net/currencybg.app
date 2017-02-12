@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:padding="4dp">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
 
     <TextView
         android:id="@+id/header_currencies_rate"
@@ -11,7 +11,7 @@
         android:layout_marginLeft="8sp"
         android:layout_toRightOf="@id/icon"
         android:layout_weight="2"
-        android:text="@string/buy"/>
+        android:text="" />
 
     <TextView
         android:id="@+id/header_src_1"
@@ -22,7 +22,7 @@
         android:ellipsize="end"
         android:gravity="right"
         android:maxLines="1"
-        android:text=""/>
+        android:text="" />
 
     <TextView
         android:id="@+id/header_src_2"
@@ -35,7 +35,7 @@
         android:gravity="right"
         android:maxLines="1"
         android:paddingLeft="6sp"
-        android:text=""/>
+        android:text="" />
 
     <TextView
         android:id="@+id/header_src_3"
@@ -48,6 +48,6 @@
         android:gravity="right"
         android:maxLines="1"
         android:paddingLeft="6sp"
-        android:text=""/>
+        android:text="" />
 
 </LinearLayout>
