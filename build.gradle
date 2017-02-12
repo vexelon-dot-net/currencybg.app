@@ -54,7 +54,7 @@ android {
         applicationId 'net.vexelon.currencybg.app'
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 2000
+        versionCode 2001
         versionName "2.0.0"
     }
     compileOptions {
