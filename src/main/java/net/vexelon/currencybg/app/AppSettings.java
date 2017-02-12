@@ -123,7 +123,7 @@ public final class AppSettings {
 		values = generalPrefs.getStringSet("pref_currencies_filter_sources", values);
 		if (values.isEmpty()) {
 			// default
-			return Sets.newHashSet(Sources.TAVEX, Sources.POLANA1, Sources.FIB);
+			return Sets.newHashSet(Sources.TAVEX, Sources.FACTORIN, Sources.POLANA1);
 		}
 
 		Set<Sources> result = Sets.newHashSet();
