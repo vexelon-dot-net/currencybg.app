@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.melnykov.fab.FloatingActionButton;
 
 import net.vexelon.currencybg.app.AppSettings;
@@ -69,7 +70,7 @@ public class ConvertFragment extends AbstractFragment {
 		/*
 		 * Back from Settings or another activity, so we reload all currencies.
 		 */
-		updateUI();
+		updateUI(true);
 		super.onResume();
 	}
 
@@ -81,7 +82,7 @@ public class ConvertFragment extends AbstractFragment {
 			 * Back from Currencies fragment view, so we reload all currencies.
 			 * The user might have updated them.
 			 */
-			updateUI();
+			updateUI(true);
 		}
 	}
 
@@ -94,6 +95,15 @@ public class ConvertFragment extends AbstractFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_clear:
+			final AppSettings appSettings = new AppSettings(getActivity());
+			appSettings.setLastConvertValue("0");
+			appSettings.setLastConvertCurrencySel("BGN");
+			appSettings.setConvertCurrencies(Sets.<String> newHashSet());
+			updateUI(false);
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -177,14 +187,16 @@ public class ConvertFragment extends AbstractFragment {
 		});
 	}
 
-	private void updateUI() {
+	private void updateUI(boolean reload) {
 		final Activity activity = getActivity();
 
-		currencies.clear();
-		// add dummy BGN for convert purposes
-		currencies.add(getBGNCurrency());
-		// load all currencies from database
-		currencies.addAll(getVisibleCurrencies(getCurrencies(activity, true)));
+		if (reload) {
+			currencies.clear();
+			// add dummy BGN for convert purposes
+			currencies.add(getBGNCurrency());
+			// load all currencies from database
+			currencies.addAll(getVisibleCurrencies(getCurrencies(activity, true)));
+		}
 
 		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity, android.R.layout.simple_spinner_item,
 				currencies);

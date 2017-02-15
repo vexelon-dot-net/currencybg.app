@@ -38,6 +38,7 @@
     <string name="hint_currency_remove">Натисни и задръж, за да премахнеш.</string>
     <string name="buy">Купува</string>
     <string name="sell">Продава</string>
+    <string name="action_clear">Изчистване</string>
     <string name="action_refresh">Обновяване</string>
     <string name="action_addcurrency">Добави валута</string>
     <string name="action_currency_added">Добавяне на %1$s</string>
