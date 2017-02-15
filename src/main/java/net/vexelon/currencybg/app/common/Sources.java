@@ -64,12 +64,14 @@ public enum Sources {
 	}
 
 	public static String getName(int id, Context context) {
-		int[] sourceIds = context.getResources().getIntArray(R.array.currency_sources_ids);
-		String[] sourceNames = context.getResources().getStringArray(R.array.currency_sources);
+		if (context != null) {
+			int[] sourceIds = context.getResources().getIntArray(R.array.currency_sources_ids);
+			String[] sourceNames = context.getResources().getStringArray(R.array.currency_sources);
 
-		for (int i = 0; i < sourceIds.length; i++) {
-			if (sourceIds[i] == id) {
-				return sourceNames[i];
+			for (int i = 0; i < sourceIds.length; i++) {
+				if (sourceIds[i] == id) {
+					return sourceNames[i];
+				}
 			}
 		}
 

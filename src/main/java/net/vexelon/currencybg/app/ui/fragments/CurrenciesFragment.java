@@ -105,21 +105,21 @@ public class CurrenciesFragment extends AbstractFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_refresh:
-				reloadRates(true);
-				lastUpdateLastValue = tvLastUpdate.getText().toString();
-				tvLastUpdate.setText(R.string.last_update_updating_text);
-				setRefreshActionButtonState(true);
-				return true;
-			case R.id.action_rate:
-				newRateMenu().show();
-				return true;
-			case R.id.action_sort:
-				newSortMenu().show();
-				return true;
-			case R.id.action_sources:
-				newSourcesMenu().show();
-				return true;
+		case R.id.action_refresh:
+			reloadRates(true);
+			lastUpdateLastValue = tvLastUpdate.getText().toString();
+			tvLastUpdate.setText(R.string.last_update_updating_text);
+			setRefreshActionButtonState(true);
+			return true;
+		case R.id.action_rate:
+			newRateMenu().show();
+			return true;
+		case R.id.action_sort:
+			newSortMenu().show();
+			return true;
+		case R.id.action_sources:
+			newSourcesMenu().show();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -177,13 +177,13 @@ public class CurrenciesFragment extends AbstractFragment {
 								setCurrenciesRate(activity, which);
 								// notify user
 								switch (appSettings.getCurrenciesRateSelection()) {
-									case AppSettings.RATE_SELL:
-										showSnackbar(R.string.action_rate_sell_desc);
-										break;
-									case AppSettings.RATE_BUY:
-									default:
-										showSnackbar(R.string.action_rate_buy_desc);
-										break;
+								case AppSettings.RATE_SELL:
+									showSnackbar(R.string.action_rate_sell_desc);
+									break;
+								case AppSettings.RATE_BUY:
+								default:
+									showSnackbar(R.string.action_rate_buy_desc);
+									break;
 								}
 								return true;
 							}
@@ -204,15 +204,15 @@ public class CurrenciesFragment extends AbstractFragment {
 								setCurrenciesSort(which);
 								// notify user
 								switch (appSettings.getCurrenciesSortSelection()) {
-									case AppSettings.SORTBY_CODE:
-										showSnackbar(sortByAscending ? R.string.action_sort_code_asc
-												: R.string.action_sort_code_desc);
-										break;
-									case AppSettings.SORTBY_NAME:
-									default:
-										showSnackbar(sortByAscending ? R.string.action_sort_name_asc
-												: R.string.action_sort_name_desc);
-										break;
+								case AppSettings.SORTBY_CODE:
+									showSnackbar(sortByAscending ? R.string.action_sort_code_asc
+											: R.string.action_sort_code_desc);
+									break;
+								case AppSettings.SORTBY_NAME:
+								default:
+									showSnackbar(sortByAscending ? R.string.action_sort_name_asc
+											: R.string.action_sort_name_desc);
+									break;
 								}
 								return true;
 							}
@@ -259,7 +259,8 @@ public class CurrenciesFragment extends AbstractFragment {
 	/**
 	 * Converts checkbox sources selection to a {@link Sources} set.
 	 *
-	 * @param indices {@code 0..n}
+	 * @param indices
+	 *            {@code 0..n}
 	 * @return
 	 */
 	private Set<Sources> getSourcesFilterIndices(Integer[] indices) {
@@ -322,15 +323,15 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	private void updateCurrenciesRateTitle(final Activity activity, final int rateBy) {
 		switch (rateBy) {
-			case AppSettings.RATE_SELL:
-				tvCurrenciesRate.setText(Html.fromHtml(
-						UIUtils.toHtmlColor(activity.getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
-				break;
-			case AppSettings.RATE_BUY:
-			default:
-				tvCurrenciesRate.setText(Html.fromHtml(
-						UIUtils.toHtmlColor(activity.getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
-				break;
+		case AppSettings.RATE_SELL:
+			tvCurrenciesRate.setText(Html.fromHtml(
+					UIUtils.toHtmlColor(activity.getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
+			break;
+		case AppSettings.RATE_BUY:
+		default:
+			tvCurrenciesRate.setText(Html.fromHtml(
+					UIUtils.toHtmlColor(activity.getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
+			break;
 		}
 	}
 
