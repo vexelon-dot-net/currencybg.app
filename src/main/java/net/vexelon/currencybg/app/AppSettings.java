@@ -178,7 +178,7 @@ public final class AppSettings {
 	 * 
 	 * @param currencies
 	 */
-	private void setConvertCurrencies(Set<String> currencies) {
+	public void setConvertCurrencies(Set<String> currencies) {
 		generalPrefs.edit().putStringSet("pref_convert_currencies", currencies).apply();
 	}
 

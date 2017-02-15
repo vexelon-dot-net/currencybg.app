@@ -38,6 +38,7 @@
     <string name="hint_currency_remove">Tap and hold to remove.</string>
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
+    <string name="action_clear">Clear</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_addcurrency">Add currency</string>
     <string name="action_currency_added">Added: %1$s</string>
