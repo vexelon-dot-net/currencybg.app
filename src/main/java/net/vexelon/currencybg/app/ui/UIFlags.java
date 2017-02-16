@@ -31,9 +31,9 @@ public final class UIFlags {
 		flagsMap.put("ar", R.drawable.ar);
 		flagsMap.put("au", R.drawable.au);
 		flagsMap.put("ba", R.drawable.ba);
-		flagsMap.put("be", R.drawable.be);
 		flagsMap.put("bg", R.drawable.bg);
 		flagsMap.put("br", R.drawable.br);
+		flagsMap.put("by", R.drawable.by);
 		flagsMap.put("ca", R.drawable.ca);
 		flagsMap.put("ch", R.drawable.ch);
 		flagsMap.put("ca", R.drawable.ca);
