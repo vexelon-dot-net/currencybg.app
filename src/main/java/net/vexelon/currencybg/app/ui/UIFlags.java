@@ -28,6 +28,8 @@ public final class UIFlags {
 	private static final Map<String, Integer> flagsMap = Maps.newHashMap();
 
 	static {
+		flagsMap.put("ae", R.drawable.ae);
+		flagsMap.put("al", R.drawable.al);
 		flagsMap.put("ar", R.drawable.ar);
 		flagsMap.put("au", R.drawable.au);
 		flagsMap.put("ba", R.drawable.ba);
@@ -51,10 +53,12 @@ public final class UIFlags {
 		flagsMap.put("in", R.drawable.in);
 		flagsMap.put("is", R.drawable.is);
 		flagsMap.put("jp", R.drawable.jp);
+		flagsMap.put("ke", R.drawable.ke);
 		flagsMap.put("kr", R.drawable.kr);
 		flagsMap.put("lt", R.drawable.lt);
 		flagsMap.put("lv", R.drawable.lv);
 		flagsMap.put("mk", R.drawable.mk);
+		flagsMap.put("mu", R.drawable.mu);
 		flagsMap.put("mx", R.drawable.mx);
 		flagsMap.put("my", R.drawable.my);
 		flagsMap.put("no", R.drawable.no);
