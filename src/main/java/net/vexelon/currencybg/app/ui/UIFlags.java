@@ -17,18 +17,21 @@
  */
 package net.vexelon.currencybg.app.ui;
 
-import java.util.Map;
-
 import com.google.common.collect.Maps;
 
 import net.vexelon.currencybg.app.R;
+
+import java.util.Map;
 
 public final class UIFlags {
 
 	private static final Map<String, Integer> flagsMap = Maps.newHashMap();
 
 	static {
+		flagsMap.put("ar", R.drawable.ar);
 		flagsMap.put("au", R.drawable.au);
+		flagsMap.put("ba", R.drawable.ba);
+		flagsMap.put("be", R.drawable.be);
 		flagsMap.put("bg", R.drawable.bg);
 		flagsMap.put("br", R.drawable.br);
 		flagsMap.put("ca", R.drawable.ca);
@@ -36,7 +39,9 @@ public final class UIFlags {
 		flagsMap.put("ca", R.drawable.ca);
 		flagsMap.put("cn", R.drawable.cn);
 		flagsMap.put("cz", R.drawable.cz);
+		flagsMap.put("do", R.drawable.dop);
 		flagsMap.put("dk", R.drawable.dk);
+		flagsMap.put("eg", R.drawable.eg);
 		flagsMap.put("ee", R.drawable.ee);
 		flagsMap.put("gb", R.drawable.gb);
 		flagsMap.put("hk", R.drawable.hk);
@@ -49,6 +54,7 @@ public final class UIFlags {
 		flagsMap.put("kr", R.drawable.kr);
 		flagsMap.put("lt", R.drawable.lt);
 		flagsMap.put("lv", R.drawable.lv);
+		flagsMap.put("mk", R.drawable.mk);
 		flagsMap.put("mx", R.drawable.mx);
 		flagsMap.put("my", R.drawable.my);
 		flagsMap.put("no", R.drawable.no);
@@ -56,11 +62,13 @@ public final class UIFlags {
 		flagsMap.put("ph", R.drawable.ph);
 		flagsMap.put("pl", R.drawable.pl);
 		flagsMap.put("ro", R.drawable.ro);
+		flagsMap.put("rs", R.drawable.rs);
 		flagsMap.put("ru", R.drawable.ru);
 		flagsMap.put("se", R.drawable.se);
 		flagsMap.put("sg", R.drawable.sg);
 		flagsMap.put("th", R.drawable.th);
 		flagsMap.put("tr", R.drawable.tr);
+		flagsMap.put("ua", R.drawable.ua);
 		flagsMap.put("us", R.drawable.us);
 		flagsMap.put("xa", R.drawable.xa);
 		flagsMap.put("za", R.drawable.za);
@@ -69,13 +77,13 @@ public final class UIFlags {
 	}
 
 	public static int getResourceFromCode(String code) {
-		Integer resId = R.drawable.unknown;
 		if (!code.isEmpty()) {
 			String lower = code.substring(0, 2).toLowerCase();
-			if (flagsMap.containsKey(lower)) {
-				resId = flagsMap.get(lower);
+			Integer resId = flagsMap.get(lower);
+			if (resId != null) {
+				return resId;
 			}
 		}
-		return resId;
+		return R.drawable.unknown;
 	}
 }
