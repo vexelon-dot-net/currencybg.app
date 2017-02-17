@@ -18,6 +18,8 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,6 +42,7 @@ import com.google.common.collect.Sets;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
@@ -126,6 +130,13 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	private void init(View view, LayoutInflater inflater) {
 		lvCurrencies = (ListView) view.findViewById(R.id.list_currencies);
+		lvCurrencies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				newDetailsDialog(currencyListAdapter.getItem(position)).show();
+			}
+		});
+
 		tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
 
 		tvSources.add((TextView) view.findViewById(R.id.header_src_1));
@@ -254,6 +265,29 @@ public class CurrenciesFragment extends AbstractFragment {
 							}
 						})
 				.positiveText(R.string.text_ok).build();
+	}
+
+	/**
+	 * Displays a comparison of currencies from a single row
+	 *
+	 * @param row
+	 * @return
+	 */
+	private MaterialDialog newDetailsDialog(final CurrencyListRow row) {
+		final Context context = getActivity();
+		final MaterialDialog dialog = new MaterialDialog.Builder(context)
+				.title(getResources().getString(R.string.action_currency_details, row.getCode())).cancelable(true)
+				.customView(R.layout.currency_details, true).build();
+
+		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+			@Override
+			public void onShow(DialogInterface dialogInterface) {
+				View v = dialog.getCustomView();
+				// TODO
+			}
+		});
+
+		return dialog;
 	}
 
 	/**
