@@ -128,7 +128,35 @@ public class SQLiteDataSource implements DataSource {
 	}
 
 	@Override
-	public List<CurrencyData> getAllCurrencies(Integer source) throws DataSourceException {
+	public List<CurrencyData> getAllRates(String code, Integer source) throws DataSourceException {
+		List<CurrencyData> result = Lists.newArrayList();
+		Cursor cursor = null;
+
+		try {
+			cursor = database.rawQuery(
+					"SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE + " = ? AND " + Defs.COLUMN_SOURCE
+							+ " = ? ORDER BY strftime('%s', curr_date) DESC; ",
+					new String[] { code, Integer.toString(source) });
+
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				CurrencyData currency = cursorToCurrency(cursor);
+				result.add(currency);
+
+				cursor.moveToNext();
+			}
+		} catch (Throwable t) {
+			throw new DataSourceException("SQL error: Failed fetching all source - " + source + " rates for - " + code,
+					t);
+		} finally {
+			closeCursor(cursor);
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<CurrencyData> getAllRates(Integer source) throws DataSourceException {
 		Map<String, CurrencyData> result = Maps.newHashMap();
 		Cursor cursor = null;
 
@@ -164,7 +192,7 @@ public class SQLiteDataSource implements DataSource {
 
 		try {
 			cursor = database.rawQuery("SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE
-					+ " = ? ORDER BY strftime('%s', curr_date) DESC; ", new String[] { String.valueOf(code) });
+					+ " = ? ORDER BY strftime('%s', curr_date) DESC; ", new String[] { code });
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
