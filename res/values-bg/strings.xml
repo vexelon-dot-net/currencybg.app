@@ -45,7 +45,7 @@
     <string name="action_currency_removed">Премахване на %1$s</string>
     <string name="action_wallet_removed">Премахване на %1$s</string>
     <string name="action_addwalletentry">Добавяне на ресурс</string>
-    <string name="action_currency_details">Детайли - %1$s</string>
+    <string name="action_currency_details">%1$s при %2$s</string>
     <string name="action_rate">Курсове</string>
     <string name="action_rate_title">Покажи курс</string>
     <string name="action_rate_buy_desc">Курс купува</string>
@@ -60,6 +60,9 @@
         <item>Наименование</item>
         <item>Код</item>
     </string-array>
+    <string name="text_rates_details"><![CDATA[
+    Изтеглени обменни курсове за <b>%1$s</b> през изминалите 3 дни.]]></string>
+
     <string name="source_tavex">Тавекс</string>
     <string name="source_polana">Полана1</string>
     <string name="source_fib">ПИБ</string>
