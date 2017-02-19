@@ -321,7 +321,8 @@ public class CurrenciesFragment extends AbstractFragment {
 						// TODO
 
 					} catch (DataSourceException e) {
-						Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
+						Log.e(Defs.LOG_TAG, "Error fetching currencies from database!", e);
+						showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
 					} finally {
 						IOUtils.closeQuitely(dataSource);
 					}
