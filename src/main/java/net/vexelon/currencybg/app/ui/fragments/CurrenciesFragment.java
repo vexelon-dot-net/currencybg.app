@@ -517,7 +517,6 @@ public class CurrenciesFragment extends AbstractFragment {
 		private Activity activity;
 		private DateTime lastUpdate;
 		private boolean updateOK = false;
-		private boolean downloadFixed = false;
 		private int msgId = R.string.error_download_rates;
 
 		public UpdateRatesTask() {
@@ -575,19 +574,40 @@ public class CurrenciesFragment extends AbstractFragment {
 		protected void onPostExecute(List<CurrencyData> result) {
 			setRefreshActionButtonState(false);
 
+			boolean updateTime = false;
+
 			if (updateOK) {
 				updateCurrenciesListView(activity, result);
+				updateTime = true;
+			} else if (msgId == R.string.error_no_entries) {
+				/**
+				 * No currencies will be fetched on Sundays. This may introduce
+				 * a bug, if users initially updated on Sunday, they may never
+				 * be able to update again, because the server only fetches
+				 * currencies for the remainder of the day of the last update
+				 * date. The solution is to update the 'last update date'
+				 * whenever today and that last update date differ.
+				 */
+				DateTime today = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
+				DateTime then = DateTime.parse(lastUpdate.toString());
+				updateTime = !today.toLocalDate().isEqual(then.toLocalDate());
 
+				// Log.d(Defs.LOG_TAG, "TODAY: " +
+				// today.toLocalDate().toString());
+				// Log.d(Defs.LOG_TAG, "THEN : " +
+				// then.toLocalDate().toString());
+				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
+			} else {
+				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
+			}
+
+			if (updateTime) {
 				// bump last update
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
 				Log.d(Defs.LOG_TAG, "Last rate download on " + lastUpdate.toString());
 				new AppSettings(activity).setLastUpdateDate(lastUpdate);
 
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
-			} else if (msgId == R.string.error_no_entries) {
-				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
-			} else {
-				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
 			}
 
 			tvLastUpdate.setText(lastUpdateLastValue);
