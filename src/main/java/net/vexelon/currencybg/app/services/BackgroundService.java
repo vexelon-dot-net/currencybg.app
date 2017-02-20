@@ -17,16 +17,14 @@
  */
 package net.vexelon.currencybg.app.services;
 
-import java.util.List;
-import java.util.TimeZone;
-
-import com.google.common.collect.Lists;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.google.common.collect.Lists;
+
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.db.DataSource;
@@ -40,6 +38,9 @@ import net.vexelon.currencybg.app.utils.IOUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+
+import java.util.List;
+import java.util.TimeZone;
 
 public class BackgroundService extends Service {
 
@@ -73,7 +74,7 @@ public class BackgroundService extends Service {
 		return super.onUnbind(intent);
 	}
 
-	private class DownloadTask extends AsyncTask<Void, Void, Void> {
+	private class DownloadTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
 		private DateTime lastUpdate;
 		private boolean updateOK = false;
@@ -84,7 +85,7 @@ public class BackgroundService extends Service {
 		}
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected List<CurrencyData> doInBackground(Void... params) {
 			Log.v(Defs.LOG_TAG, "[Service] Downloading rates from remote source...");
 
 			DataSource source = null;
@@ -101,10 +102,11 @@ public class BackgroundService extends Service {
 				source.connect(BackgroundService.this);
 				source.addRates(currencies);
 
+				updateOK = true;
+
 				Log.d(Defs.LOG_TAG, "[Service] Cleaning up currency rates older than 3 days ...");
 				source.deleteRates(Defs.SERVICE_DATABASE_CLEAN_INTERVAL);
 
-				updateOK = true;
 			} catch (SourceException e) {
 				Log.e(Defs.LOG_TAG, "[Service] Error fetching currencies from remote!", e);
 			} catch (DataSourceException e) {
@@ -113,11 +115,11 @@ public class BackgroundService extends Service {
 				IOUtils.closeQuitely(source);
 			}
 
-			return null;
+			return currencies;
 		}
 
 		@Override
-		protected void onPostExecute(Void aVoid) {
+		protected void onPostExecute(List<CurrencyData> currencies) {
 			if (updateOK) {
 				// bump last update
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
