@@ -1,6 +1,20 @@
 Currency BG Changes
 ===================
 
+## 2.1.0
+
+## EN
+  * Added a list of all downloaded currency rates in the past 3 days. Tap on a currency from a given source to view the data.
+  * Added a clear function to convert screen.
+  * Added missing currency country flags.
+  * Fixed an issue with fetching latest currency rates after weekends.
+
+## BG
+  * Добавена функционалност за преглед на всички изтеглени курсове за дадена валута за последните 3 дни. Новата функционалност е видима при tap върху дадена валута.
+  * Добавена меню функционалност 'Изчистване' на екрана за преобразуване на валути.
+  * Добавени липсващи знамена на валути.
+  * Отстранен проблем с извличането на нови валутни стойности след неделнични дни.
+
 ## 2.0.0
 
 ## EN

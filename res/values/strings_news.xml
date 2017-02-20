@@ -8,8 +8,6 @@
     <string name="news_messages">
 
         <item><![CDATA[
-<b><font color="#ffffff">2.0.0</font></b>
-<br><br>
 Version 2.0 brings you currency exchange rates information from various Bulgarian sources.
 The new sources functionality has practical purposes should you want to monitor rates or exchange currencies
 and we\'ll be adding more sources in the upcoming versions of the app.
@@ -17,6 +15,18 @@ and we\'ll be adding more sources in the upcoming versions of the app.
 The BNB exchange rates are removed in this version, because we believe they do not bring
 any practical meaning concerning currency exchange. You can still find the BNB exchange rates in the
 <a href="https://play.google.com/store/apps/details?id=net.vexelon.bgrates">BGrates</a> app.
+<br><br>
+<b><font color="#ffffff">2.1.0</font></b>
+<br><br>
+&emsp; - Added a list of all downloaded currency rates in the past 3 days. Tap on a currency from a given source to view the data.
+<br>
+&emsp; - Added a menu \'Clear\' function to convert screen.
+<br>
+&emsp; - Added missing currency country flags.
+<br>
+&emsp; - Fixed an issue with fetching latest currency rates after weekends.
+<br><br>
+<b><font color="#ffffff">2.0.0</font></b>
 <br><br>
 &emsp; -  Now displays currency rates from several currency exchange sources.
 <br>
