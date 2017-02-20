@@ -1,0 +1,23 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="left"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/currency_details_source"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12sp"
+        android:gravity="left"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/currency_details_rates"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text=""/>
+
+</LinearLayout>

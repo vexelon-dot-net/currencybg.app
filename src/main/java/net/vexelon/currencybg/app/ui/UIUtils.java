@@ -149,4 +149,7 @@ public final class UIUtils {
 		setText(view, id, text, false);
 	}
 
+	public static void setTag(View view, int id, Object tag) {
+		view.findViewById(id).setTag(tag);
+	}
 }

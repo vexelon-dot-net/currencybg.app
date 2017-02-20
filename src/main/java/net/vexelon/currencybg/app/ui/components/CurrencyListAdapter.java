@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -73,7 +74,7 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, final ViewGroup parent) {
 		View v = convertView;
 		if (v == null) {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.currency_row_layout, parent, false);
@@ -88,8 +89,20 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		int[] ids = { R.id.rate_src_1, R.id.rate_src_2, R.id.rate_src_3 };
 
 		int i = 0;
-		for (Sources source : sourcesFilter) {
+		for (final Sources source : sourcesFilter) {
 			UIUtils.setText(v, ids[i], getColumnValue(row, source), true);
+			/*
+			 * Propagates tap event to parent
+			 * 
+			 * @see http://stackoverflow.com/a/27595251
+			 */
+			v.findViewById(ids[i]).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					((ListView) parent).performItemClick(v, position, source.getID());
+				}
+			});
+
 			i += 1;
 		}
 
@@ -101,15 +114,10 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		return v;
 	}
 
-	private String getColumnValue(CurrencyListRow row, Sources source) {
-		if (!row.getColumn(source).isPresent()) {
-			return Defs.LONG_DASH;
-		}
-
-		CurrencyData currencyData = row.getColumn(source).get();
-
+	public static String getColumnValue(CurrencyData currencyData, int rateBy, int precisionMode) {
 		String value;
 		String color;
+
 		if (rateBy == AppSettings.RATE_SELL) {
 			value = NumberUtils.cleanValue(currencyData.getSell());
 			color = Defs.COLOR_DARK_ORANGE;
@@ -138,6 +146,14 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 		}
 
 		return Defs.LONG_DASH;
+	}
+
+	private String getColumnValue(CurrencyListRow row, Sources source) {
+		if (!row.getColumn(source).isPresent()) {
+			return Defs.LONG_DASH;
+		}
+
+		return getColumnValue(row.getColumn(source).get(), rateBy, precisionMode);
 	}
 
 	@Override

@@ -17,11 +17,12 @@
  */
 package net.vexelon.currencybg.app.db;
 
+import android.content.Context;
+
+import net.vexelon.currencybg.app.db.models.CurrencyData;
+
 import java.io.Closeable;
 import java.util.List;
-
-import android.content.Context;
-import net.vexelon.currencybg.app.db.models.CurrencyData;
 
 /**
  * Encapsulates the available read-write operations to and from an underlying
@@ -55,16 +56,28 @@ public interface DataSource extends Closeable {
 	public List<CurrencyData> getLastRates() throws DataSourceException;
 
 	/**
-	 * Returns all currencies for the specific source.
+	 * Returns all rates for the specified currency {@code code} and
+	 * {@code source}.
+	 * 
+	 * @param code
+	 * @param source
+	 * @return
+	 * @throws DataSourceException
+	 */
+	public List<CurrencyData> getAllRates(String code, Integer source) throws DataSourceException;
+
+	/**
+	 * Returns all currency rates for the specific source.
 	 *
 	 * @param source
 	 * @return
 	 * @throws DataSourceException
 	 */
-	public List<CurrencyData> getAllCurrencies(Integer source) throws DataSourceException;
+	public List<CurrencyData> getAllRates(Integer source) throws DataSourceException;
 
 	/**
-	 * Returns all currencies for the specific code.
+	 * Returns all currency rates for the specific code, regardless of the
+	 * source.
 	 *
 	 * @param code
 	 * @return

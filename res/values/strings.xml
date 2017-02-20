@@ -45,6 +45,7 @@
     <string name="action_currency_removed">Removed: %1$s</string>
     <string name="action_wallet_removed">Removed: %1$s</string>
     <string name="action_addwalletentry">Add wallet entry</string>
+    <string name="action_currency_details">%1$s at %2$s</string>
     <string name="action_rate">Rates</string>
     <string name="action_rate_title">Show rates for</string>
     <string name="action_rate_buy_desc">Buy rates</string>
@@ -59,6 +60,9 @@
         <item>Name</item>
         <item>Code</item>
     </string-array>
+    <string name="text_rates_details"><![CDATA[
+    Downloaded <b>%1$s</b> exchange rates for the past 3 days.]]></string>
+
     <string name="source_tavex">Tavex</string>
     <string name="source_polana">Polana1</string>
     <string name="source_fib">FIB</string>

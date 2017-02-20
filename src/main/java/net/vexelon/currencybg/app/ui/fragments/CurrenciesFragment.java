@@ -18,6 +18,8 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,6 +42,7 @@ import com.google.common.collect.Sets;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
@@ -126,6 +130,16 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	private void init(View view, LayoutInflater inflater) {
 		lvCurrencies = (ListView) view.findViewById(R.id.list_currencies);
+		lvCurrencies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Sources source = Sources.valueOf((int) id);
+				if (source != null) {
+					newDetailsDialog(currencyListAdapter.getItem(position), source).show();
+				}
+			}
+		});
+
 		tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
 
 		tvSources.add((TextView) view.findViewById(R.id.header_src_1));
@@ -254,6 +268,75 @@ public class CurrenciesFragment extends AbstractFragment {
 							}
 						})
 				.positiveText(R.string.text_ok).build();
+	}
+
+	/**
+	 * Displays a comparison of currencies from a single row
+	 *
+	 * @param row
+	 * @param source
+	 * @return
+	 */
+	private MaterialDialog newDetailsDialog(final CurrencyListRow row, final Sources source) {
+		final Context context = getActivity();
+		final AppSettings appSettings = new AppSettings(context);
+
+		final MaterialDialog dialog = new MaterialDialog.Builder(context)
+				.title(getResources().getString(R.string.action_currency_details, row.getCode(),
+						Sources.getFullName(source.getID(), context)))
+				.cancelable(true).customView(R.layout.currency_details, true).build();
+
+		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+			@Override
+			public void onShow(DialogInterface dialogInterface) {
+				View v = dialog.getCustomView();
+				UIUtils.setText(v, R.id.currency_details_source,
+						getResources().getString(R.string.text_rates_details, row.getName()), true);
+
+				if (row.getColumn(source).isPresent()) {
+					DataSource dataSource = null;
+					try {
+						dataSource = new SQLiteDataSource();
+						dataSource.connect(context);
+
+						StringBuilder buffer = new StringBuilder();
+						String buyText = UIUtils.toHtmlColor(getResources().getString(R.string.buy),
+								Defs.COLOR_NAVY_BLUE);
+						String sellText = UIUtils.toHtmlColor(getResources().getString(R.string.sell),
+								Defs.COLOR_DARK_ORANGE);
+
+						List<CurrencyData> rates = dataSource.getAllRates(row.getCode(), source.getID());
+						for (CurrencyData next : rates) {
+							buffer.append(DateTimeUtils.toDateTimeText(context,
+									DateTimeUtils.parseStringToDate(next.getDate())));
+							buffer.append("<br>");
+
+							buffer.append("&emsp;").append(buyText).append(" - ");
+							buffer.append(CurrencyListAdapter.getColumnValue(next, AppSettings.RATE_BUY,
+									appSettings.getCurrenciesPrecision()));
+							buffer.append("<br>");
+
+							buffer.append("&emsp;").append(sellText).append(" - ");
+							buffer.append(CurrencyListAdapter.getColumnValue(next, AppSettings.RATE_SELL,
+									appSettings.getCurrenciesPrecision()));
+							buffer.append("<br>");
+						}
+
+						UIUtils.setText(v, R.id.currency_details_rates, buffer.toString(), true);
+
+					} catch (DataSourceException e) {
+						Log.e(Defs.LOG_TAG, "Error fetching currencies from database!", e);
+						showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+					} finally {
+						IOUtils.closeQuitely(dataSource);
+					}
+				} else {
+					UIUtils.setText(v, R.id.currency_details_rates, Defs.LONG_DASH);
+				}
+			}
+		});
+
+		return dialog;
 	}
 
 	/**
@@ -407,11 +490,11 @@ public class CurrenciesFragment extends AbstractFragment {
 				source = new SQLiteDataSource();
 				source.connect(activity);
 
-				List<CurrencyData> ratesList = source.getLastRates();
+				List<CurrencyData> rates = source.getLastRates();
 
-				if (!ratesList.isEmpty()) {
+				if (!rates.isEmpty()) {
 					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
-					updateCurrenciesListView(activity, ratesList);
+					updateCurrenciesListView(activity, rates);
 				} else {
 					useRemoteSource = true;
 				}
@@ -434,7 +517,6 @@ public class CurrenciesFragment extends AbstractFragment {
 		private Activity activity;
 		private DateTime lastUpdate;
 		private boolean updateOK = false;
-		private boolean downloadFixed = false;
 		private int msgId = R.string.error_download_rates;
 
 		public UpdateRatesTask() {
@@ -492,19 +574,40 @@ public class CurrenciesFragment extends AbstractFragment {
 		protected void onPostExecute(List<CurrencyData> result) {
 			setRefreshActionButtonState(false);
 
+			boolean updateTime = false;
+
 			if (updateOK) {
 				updateCurrenciesListView(activity, result);
+				updateTime = true;
+			} else if (msgId == R.string.error_no_entries) {
+				/**
+				 * No currencies will be fetched on Sundays. This may introduce
+				 * a bug, if users initially updated on Sunday, they may never
+				 * be able to update again, because the server only fetches
+				 * currencies for the remainder of the day of the last update
+				 * date. The solution is to update the 'last update date'
+				 * whenever today and that last update date differ.
+				 */
+				DateTime today = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
+				DateTime then = DateTime.parse(lastUpdate.toString());
+				updateTime = !today.toLocalDate().isEqual(then.toLocalDate());
 
+				// Log.d(Defs.LOG_TAG, "TODAY: " +
+				// today.toLocalDate().toString());
+				// Log.d(Defs.LOG_TAG, "THEN : " +
+				// then.toLocalDate().toString());
+				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
+			} else {
+				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
+			}
+
+			if (updateTime) {
 				// bump last update
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
 				Log.d(Defs.LOG_TAG, "Last rate download on " + lastUpdate.toString());
 				new AppSettings(activity).setLastUpdateDate(lastUpdate);
 
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
-			} else if (msgId == R.string.error_no_entries) {
-				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
-			} else {
-				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
 			}
 
 			tvLastUpdate.setText(lastUpdateLastValue);
