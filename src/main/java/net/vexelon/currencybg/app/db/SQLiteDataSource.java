@@ -134,7 +134,8 @@ public class SQLiteDataSource implements DataSource {
 
 		try {
 			cursor = database.rawQuery(
-					"SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE + " = ? AND " + Defs.COLUMN_SOURCE
+					"SELECT DISTINCT code, ratio, buy, sell, curr_date, source FROM currencies WHERE "
+							+ Defs.COLUMN_CODE + " = ? AND " + Defs.COLUMN_SOURCE
 							+ " = ? ORDER BY strftime('%s', curr_date) DESC; ",
 					new String[] { code, Integer.toString(source) });
 
