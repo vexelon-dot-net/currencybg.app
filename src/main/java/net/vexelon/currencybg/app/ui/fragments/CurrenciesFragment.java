@@ -404,7 +404,10 @@ public class CurrenciesFragment extends AbstractFragment {
 		currencyListAdapter.notifyDataSetChanged();
 	}
 
-	private void updateCurrenciesRateTitle(final Activity activity, final int rateBy) {
+	private void updateCurrenciesRateTitle(Activity activity, int rateBy) {
+		if (activity == null)
+			return;
+
 		switch (rateBy) {
 		case AppSettings.RATE_SELL:
 			tvCurrenciesRate.setText(Html.fromHtml(
@@ -424,7 +427,10 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param activity
 	 * @param rateBy
 	 */
-	private void setCurrenciesRate(final Activity activity, final int rateBy) {
+	private void setCurrenciesRate(Activity activity, int rateBy) {
+		if (activity == null)
+			return;
+
 		updateCurrenciesRateTitle(activity, rateBy);
 		currencyListAdapter.setRateBy(rateBy);
 		currencyListAdapter.notifyDataSetChanged();
