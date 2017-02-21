@@ -26,6 +26,10 @@
 -verbose
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
+# will keep line numbers and file name obfuscation
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
+
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
