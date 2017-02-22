@@ -116,7 +116,9 @@ public class CurrenciesFragment extends AbstractFragment {
 			setRefreshActionButtonState(true);
 			return true;
 		case R.id.action_rate:
-			newRateMenu().show();
+			if (currencyListAdapter != null) {
+				newRateMenu().show();
+			}
 			return true;
 		case R.id.action_sort:
 			newSortMenu().show();
@@ -150,7 +152,9 @@ public class CurrenciesFragment extends AbstractFragment {
 		tvCurrenciesRate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				newRateMenu().show();
+				if (currencyListAdapter != null) {
+					newRateMenu().show();
+				}
 			}
 		});
 
@@ -400,14 +404,13 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param sortBy
 	 */
 	private void setCurrenciesSort(final int sortBy) {
-		currencyListAdapter.setSortBy(sortBy, sortByAscending);
-		currencyListAdapter.notifyDataSetChanged();
+		if (currencyListAdapter != null) {
+			currencyListAdapter.setSortBy(sortBy, sortByAscending);
+			currencyListAdapter.notifyDataSetChanged();
+		}
 	}
 
 	private void updateCurrenciesRateTitle(Activity activity, int rateBy) {
-		if (activity == null)
-			return;
-
 		switch (rateBy) {
 		case AppSettings.RATE_SELL:
 			tvCurrenciesRate.setText(Html.fromHtml(
@@ -428,9 +431,6 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param rateBy
 	 */
 	private void setCurrenciesRate(Activity activity, int rateBy) {
-		if (activity == null)
-			return;
-
 		updateCurrenciesRateTitle(activity, rateBy);
 		currencyListAdapter.setRateBy(rateBy);
 		currencyListAdapter.notifyDataSetChanged();
