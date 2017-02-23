@@ -542,21 +542,38 @@ public class CurrenciesFragment extends AbstractFragment {
 			List<CurrencyData> currencies = Lists.newArrayList();
 
 			try {
-				String iso8601Time = lastUpdate.toString();
+				source = new SQLiteDataSource();
+				source.connect(activity);
 
-				Log.d(Defs.LOG_TAG, "Downloading all rates since " + iso8601Time + " onwards...");
+				// latest currency update regardless of the source
+				// format, e.g., "2016-11-09T01:00:06+02:00"
+				DateTime from = source.getLastRatesDownloadTime().or(lastUpdate);
 
-				// format, e.g., "2016-11-09T01:00:06+03:00"
+				/**
+				 * Manual updates only fetch the currencies since the
+				 * last/latest currency update date time found in the database
+				 * (regardless of the source). This might introduce a bug should
+				 * users try to manually update on the next day after the last
+				 * fetch, because the server fetches currencies from a given
+				 * date at that specific day only. It does not fetch currencies
+				 * for the next day of the given date. To counter this we force
+				 * an update from the beginning of the day (00:00), if the last
+				 * update was one day ago (we count from midnight on and not a
+				 * 24h period).
+				 */
+				DateTime today = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
+				if (today.toLocalDate().isAfter(from.toLocalDate())) {
+					from = today;
+				}
+
+				String iso8601Time = from.toString();
+				Log.d(Defs.LOG_TAG, "Downloading all rates since " + iso8601Time + " ...");
+
 				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
 				if (!currencies.isEmpty()) {
-
-					source = new SQLiteDataSource();
-					source.connect(activity);
 					source.addRates(currencies);
-
 					// reload merged currencies
 					currencies = source.getLastRates();
-
 					updateOK = true;
 				} else {
 					msgId = R.string.error_no_entries;
@@ -580,43 +597,20 @@ public class CurrenciesFragment extends AbstractFragment {
 		protected void onPostExecute(List<CurrencyData> result) {
 			setRefreshActionButtonState(false);
 
-			boolean updateTime = false;
-
 			if (updateOK) {
 				updateCurrenciesListView(activity, result);
-				updateTime = true;
-			} else if (msgId == R.string.error_no_entries) {
-				/**
-				 * No currencies will be fetched on Sundays. This may introduce
-				 * a bug, if users initially updated on Sunday, they may never
-				 * be able to update again, because the server only fetches
-				 * currencies for the remainder of the day of the last update
-				 * date. The solution is to update the 'last update date'
-				 * whenever today and that last update date differ.
-				 */
-				DateTime today = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
-				DateTime then = DateTime.parse(lastUpdate.toString());
-				updateTime = !today.toLocalDate().isEqual(then.toLocalDate());
-
-				// Log.d(Defs.LOG_TAG, "TODAY: " +
-				// today.toLocalDate().toString());
-				// Log.d(Defs.LOG_TAG, "THEN : " +
-				// then.toLocalDate().toString());
-				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
-			} else {
-				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
-			}
-
-			if (updateTime) {
 				// bump last update
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
 				Log.d(Defs.LOG_TAG, "Last rate download on " + lastUpdate.toString());
 				new AppSettings(activity).setLastUpdateDate(lastUpdate);
-
+				// visualise update date time
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
+				tvLastUpdate.setText(lastUpdateLastValue);
+			} else if (msgId == R.string.error_no_entries) {
+				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
+			} else {
+				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
 			}
-
-			tvLastUpdate.setText(lastUpdateLastValue);
 		}
 
 	}

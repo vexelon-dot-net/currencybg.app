@@ -92,16 +92,19 @@ public class BackgroundService extends Service {
 			List<CurrencyData> currencies = Lists.newArrayList();
 
 			try {
-				String iso8601Time = lastUpdate.toString();
-				Log.d(Defs.LOG_TAG, "[Service] Downloading all rates since " + iso8601Time + " onwards...");
-
-				// format, e.g., "2016-11-09T01:00:06+03:00"
-				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
-
 				source = new SQLiteDataSource();
 				source.connect(BackgroundService.this);
-				source.addRates(currencies);
 
+				// the service always fetches all currencies for the current day
+				// format, e.g., "2016-11-09T00:00:00+02:00"
+				DateTime from = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)))
+						.withTime(0, 0, 0, 0);
+				String iso8601Time = from.toString();
+
+				Log.d(Defs.LOG_TAG, "[Service] Downloading all rates since " + iso8601Time + " ...");
+
+				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
+				source.addRates(currencies);
 				updateOK = true;
 
 				Log.d(Defs.LOG_TAG, "[Service] Cleaning up currency rates older than 3 days ...");

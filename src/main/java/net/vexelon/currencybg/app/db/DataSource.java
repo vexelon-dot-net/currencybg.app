@@ -19,7 +19,11 @@ package net.vexelon.currencybg.app.db;
 
 import android.content.Context;
 
+import com.google.common.base.Optional;
+
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+
+import org.joda.time.DateTime;
 
 import java.io.Closeable;
 import java.util.List;
@@ -86,10 +90,18 @@ public interface DataSource extends Closeable {
 	public List<CurrencyData> getAllRates(String code) throws DataSourceException;
 
 	/**
-	 * Delete all rates older than {@code backDays}.
+	 * Deletes all rates older than {@code backDays}.
 	 *
 	 * @param backDays
 	 * @throws DataSourceException
 	 */
 	public void deleteRates(int backDays) throws DataSourceException;
+
+	/**
+	 * Finds the latest download time among all currencies that currently exist
+	 * in the database.
+	 * 
+	 * @return
+	 */
+	public Optional<DateTime> getLastRatesDownloadTime() throws DataSourceException;
 }
