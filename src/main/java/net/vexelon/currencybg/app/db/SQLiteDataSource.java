@@ -23,12 +23,15 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
+
+import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.Map;
@@ -224,4 +227,26 @@ public class SQLiteDataSource implements DataSource {
 		return currency;
 	}
 
+	@Override
+	public Optional<DateTime> getLastRatesDownloadTime() throws DataSourceException {
+		DateTime result = null;
+		Cursor cursor = null;
+
+		try {
+			cursor = database
+					.rawQuery("SELECT curr_date FROM currencies ORDER BY strftime('%s', curr_date) DESC LIMIT 1", null);
+
+			if (cursor.getCount() > 0) {
+				cursor.moveToFirst();
+				String rawDate = cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE));
+				result = DateTime.parse(rawDate);
+			}
+		} catch (Throwable t) {
+			throw new DataSourceException("SQL error: Failed fetching latest currency date!", t);
+		} finally {
+			closeCursor(cursor);
+		}
+
+		return Optional.fromNullable(result);
+	}
 }
