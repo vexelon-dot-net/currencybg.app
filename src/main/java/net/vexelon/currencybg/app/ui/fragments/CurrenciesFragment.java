@@ -563,7 +563,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				 */
 				DateTime today = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
 				if (today.toLocalDate().isAfter(from.toLocalDate())) {
-					from = today;
+					from = today.withTime(0, 0, 0, 0);
 				}
 
 				String iso8601Time = from.toString();
@@ -605,12 +605,13 @@ public class CurrenciesFragment extends AbstractFragment {
 				new AppSettings(activity).setLastUpdateDate(lastUpdate);
 				// visualise update date time
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
-				tvLastUpdate.setText(lastUpdateLastValue);
 			} else if (msgId == R.string.error_no_entries) {
 				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
 			} else {
 				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
 			}
+
+			tvLastUpdate.setText(lastUpdateLastValue);
 		}
 
 	}
