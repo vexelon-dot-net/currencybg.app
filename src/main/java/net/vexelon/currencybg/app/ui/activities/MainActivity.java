@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		long startTimeout = LocalDateTime.now().plusSeconds(Defs.SERVICE_FIRST_RUN_INTERVAL).toDateTime().getMillis();
 
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.setInexactRepeating(AlarmManager.RTC, startTimeout, AlarmManager.INTERVAL_DAY, pendingIntent);
+		alarmManager.setInexactRepeating(AlarmManager.RTC, startTimeout, AlarmManager.INTERVAL_HOUR * 6, pendingIntent);
 	}
 
 	public void cancelService() {
