@@ -29,6 +29,7 @@ import org.joda.time.LocalDate;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -70,11 +71,15 @@ public class AbstractFragment extends Fragment {
 	protected View rootView;
 	protected Menu mMenu;
 	protected List<NotificationsListener> listeners = new ArrayList<NotificationsListener>();
+	protected FirebaseAnalytics firebaseAnalytics;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+
+		firebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+		firebaseAnalytics.setAnalyticsCollectionEnabled(new AppSettings(getActivity()).getAnalyticsEnabled());
 	}
 
 	@Override

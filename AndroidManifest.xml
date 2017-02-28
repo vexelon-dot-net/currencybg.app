@@ -3,6 +3,10 @@
           package="net.vexelon.currencybg.app"
           android:installLocation="auto">
 
+    <meta-data
+        android:name="firebase_analytics_collection_enabled"
+        android:value="false"/>
+
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

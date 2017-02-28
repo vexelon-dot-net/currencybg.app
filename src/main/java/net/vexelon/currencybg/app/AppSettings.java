@@ -296,4 +296,29 @@ public final class AppSettings {
 		generalPrefs.edit().putInt("pref_last_read_whatsnew", value).apply();
 	}
 
+	/**
+	 * Sets whether analytics, i.e., data collection is enabled.
+	 * 
+	 * @param enabled
+	 */
+	public void setAnalyticsEnabled(boolean enabled) {
+		generalPrefs.edit().putBoolean("pref_analytics_enabled", enabled).apply();
+	}
+
+	public boolean getAnalyticsEnabled() {
+		return generalPrefs.getBoolean("pref_analytics_enabled", false);
+	}
+
+	/**
+	 * Sets whether app privacy policy has been accepted.
+	 *
+	 * @param accepted
+	 */
+	public void setPrivacyPolicyAccepted(boolean accepted) {
+		generalPrefs.edit().putBoolean("pref_privacypolicy_accepted", accepted).apply();
+	}
+
+	public boolean getPrivacyPolicyAccepted() {
+		return generalPrefs.getBoolean("pref_privacypolicy_accepted", false);
+	}
 }
