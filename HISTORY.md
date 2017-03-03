@@ -1,6 +1,15 @@
 Currency BG Changes
 ===================
 
+## 2.3.0
+
+### EN
+  * Fixed a date time localization issue.
+
+### BG
+  TODO
+
+
 ## 2.2.0
 
 ### EN
