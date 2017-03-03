@@ -17,7 +17,16 @@
  */
 package net.vexelon.currencybg.app.utils;
 
-import java.sql.Timestamp;
+import android.content.Context;
+
+import net.vexelon.currencybg.app.Defs;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,24 +35,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import android.content.Context;
-
-import net.vexelon.currencybg.app.Defs;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
 public class DateTimeUtils {
 
 	public static final long MS_PER_DAY = (24 * 60 * 60 * 1000);
 
 	protected static final Calendar CALENDAR = Calendar.getInstance();
-	protected static DateFormat DT_FORMAT = null;
-	protected static DateFormat DATE_FORMAT = null;
 
 	/**
 	 * 
@@ -132,15 +128,13 @@ public class DateTimeUtils {
 		return currentYear;
 	}
 
-	private static void initDateFormat(Context context) {
-		if (DT_FORMAT == null) {
-			DT_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT,
-					context.getResources().getConfiguration().locale);
-		}
-		if (DATE_FORMAT == null) {
-			DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM,
-					context.getResources().getConfiguration().locale);
-		}
+	private static DateFormat getDateTimeFormatter(Context context) {
+		return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT,
+				context.getResources().getConfiguration().locale);
+	}
+
+	private static DateFormat getDateFormatter(Context context) {
+		return DateFormat.getDateInstance(DateFormat.MEDIUM, context.getResources().getConfiguration().locale);
 	}
 
 	/**
@@ -272,13 +266,11 @@ public class DateTimeUtils {
 	}
 
 	public static String toDateTimeText(Context context, Date date) {
-		initDateFormat(context);
-		return DT_FORMAT.format(date);
+		return getDateTimeFormatter(context).format(date);
 	}
 
 	public static String toDateText(Context context, Date date) {
-		initDateFormat(context);
-		return DATE_FORMAT.format(date);
+		return getDateFormatter(context).format(date);
 	}
 
 }
