@@ -276,23 +276,27 @@ public class ConvertFragment extends AbstractFragment {
 		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context, android.R.layout.simple_spinner_item,
 				currencies);
 
-		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
-				.adapter(adapter, new MaterialDialog.ListCallback() {
-					@Override
-					public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-						CurrencyData currencyData = currencies.get(which);
-						if (currencyData != null) {
-							new AppSettings(context).addConvertCurrency(currencyData);
-
-							// notify UI
-							updateTargetCurrenciesListView();
-							updateTargetCurrenciesCalculations();
-
-							showSnackbar(context.getString(R.string.action_currency_added, currencyData.getCode()));
-						}
-						dialog.dismiss();
-					}
-				}).build();
+		// return new
+		// MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
+		// .adapter(adapter, new MaterialDialog.ListCallback() {
+		// @Override
+		// public void onSelection(MaterialDialog dialog, View itemView, int
+		// which, CharSequence text) {
+		// CurrencyData currencyData = currencies.get(which);
+		// if (currencyData != null) {
+		// new AppSettings(context).addConvertCurrency(currencyData);
+		//
+		// // notify UI
+		// updateTargetCurrenciesListView();
+		// updateTargetCurrenciesCalculations();
+		//
+		// showSnackbar(context.getString(R.string.action_currency_added,
+		// currencyData.getCode()));
+		// }
+		// dialog.dismiss();
+		// }
+		// }).build();
+		return null;
 	}
 
 }

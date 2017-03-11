@@ -31,18 +31,19 @@ android {
                 'com.android.support:preference-v14:23.1.1',
                 'com.melnykov:floatingactionbutton:1.3.0',
                 'com.wdullaer:materialdatetimepicker:3.1.1',
+                'com.afollestad.material-dialogs:core:0.9.4.1',
                 'com.google.guava:guava:19.0',
                 'org.jsoup:jsoup:1.10.2',
                 'com.squareup.okhttp:okhttp:2.5.0',
                 'com.google.code.gson:gson:2.8.0',
                 'joda-time:joda-time:2.9.7'
 
-        compile('com.github.afollestad.material-dialogs:core:0.8.6.+@aar') {
-            transitive = true
-        }
-        compile('com.github.afollestad.material-dialogs:commons:0.8.6.+@aar') {
-            transitive = true
-        }
+//        compile('com.github.afollestad.material-dialogs:core:0.8.6.+@aar') {
+//            transitive = true
+//        }
+//        compile('com.github.afollestad.material-dialogs:commons:0.8.6.+@aar') {
+//            transitive = true
+//        }
 
         testCompile 'junit:junit:4.+'
     }
