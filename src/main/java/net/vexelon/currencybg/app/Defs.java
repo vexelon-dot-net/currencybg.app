@@ -45,11 +45,12 @@ public final class Defs {
 	 * Parameters which used into SQLite
 	 */
 	public static final String DATABASE_NAME = "currencies.db";
-	public static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 4;
 
 	public static final String TABLE_CURRENCY = "currencies";
 	public static final String TABLE_CURRENCY_DATE = "currenciesdate";
 	public static final String TABLE_FIXED_CURRENCY = "fixedcurrencies";
+	public static final String TABLE_WALLET = "wallet";
 
 	// Name of columns in table TABLE_CURRENCY
 	public static final String COLUMN_ID = "id";
@@ -59,6 +60,13 @@ public final class Defs {
 	public static final String COLUMN_SELL = "sell";
 	public static final String COLUMN_SOURCE = "source";
 	public static final String COLUMN_CURR_DATE = "curr_date";
+
+	// Name of columns in table TABLE_WALLET
+	public static final String COLUMN_WALLET_ID = "id";
+	public static final String COLUMN_WALLET_CODE = "code";
+	public static final String COLUMN_WALLET_AMOUNT = "amount";
+	public static final String COLUMN_WALLET_PURCHASE_TIME = "purchaseTime";
+	public static final String COLUMN_WALLET_PURCHASE_RATE = "purchaseRate";
 
 	public static final String DATE_TIMEZONE_SOFIA = "Europe/Sofia";
 	public static final String DATEFORMAT_ISO8601 = "yyyy-MM-dd'T'HH:mmZ";

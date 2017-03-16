@@ -32,6 +32,12 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 			Defs.TABLE_CURRENCY, Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY, Defs.COLUMN_SELL,
 			Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE);
 
+	// TABLE_WALLET table create statement
+	private static final String CREATE_TABLE_WALLET = String.format(
+			"create table %s(%s integer primary key autoincrement, %s text not null, %s integer not null, %s text not null, %s integer not null);",
+			Defs.TABLE_WALLET, Defs.COLUMN_ID, Defs.COLUMN_WALLET_CODE, Defs.COLUMN_WALLET_AMOUNT,
+			Defs.COLUMN_WALLET_PURCHASE_TIME, Defs.COLUMN_WALLET_PURCHASE_RATE);
+
 	public CurrenciesSQLiteDB(Context context) {
 		super(context, Defs.DATABASE_NAME, null, Defs.DATABASE_VERSION);
 	}
@@ -41,6 +47,7 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 		// creating required tables
 
 		database.execSQL(CREATE_TABLE_CURRENCY_BG);
+		database.execSQL(CREATE_TABLE_WALLET);
 	}
 
 	@Override
@@ -61,6 +68,12 @@ public class CurrenciesSQLiteDB extends SQLiteOpenHelper {
 			// Create a new table(with new structure) in which is collected all
 			// data
 			database.execSQL(CREATE_TABLE_CURRENCY_BG);
+			// break;
+		case 3:
+			/*
+			 * Upgrade from database v3 to v4
+			 */
+			database.execSQL(CREATE_TABLE_WALLET);
 			break;
 		default:
 			Log.w(Defs.LOG_TAG, "Unknown old db version=" + oldVersion);

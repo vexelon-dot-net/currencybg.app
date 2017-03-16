@@ -22,6 +22,7 @@ import android.content.Context;
 import com.google.common.base.Optional;
 
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.db.models.WalletEntry;
 
 import org.joda.time.DateTime;
 
@@ -104,4 +105,36 @@ public interface DataSource extends Closeable {
 	 * @return
 	 */
 	public Optional<DateTime> getLastRatesDownloadTime() throws DataSourceException;
+
+	/**
+	 * Adds wallet data
+	 *
+	 * @param walletEntry
+	 * @throws DataSourceException
+	 */
+	public void addWalletEntry(WalletEntry walletEntry) throws DataSourceException;
+
+	/**
+	 * Delete Wallet Entry based on id
+	 * @param id
+	 * @throws DataSourceException
+	 */
+	public void deleteWalletEntry(int id) throws DataSourceException;
+
+	/**
+	 * Update Wallet Entry based on id
+	 *
+	 * @param id
+	 * @param walletEntry
+	 * @throws DataSourceException
+	 */
+	public void  updateWalletEntry(int id, WalletEntry walletEntry) throws DataSourceException;
+
+	/**
+	 * Returns all Wallet Entries
+	 *
+	 * @return
+	 * @throws DataSourceException
+	 */
+	public List<WalletEntry> getWalletEntries() throws  DataSourceException;
 }

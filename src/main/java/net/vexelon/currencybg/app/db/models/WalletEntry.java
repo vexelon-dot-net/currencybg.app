@@ -21,10 +21,15 @@ import java.util.Date;
 
 public class WalletEntry {
 
+	private int id;
 	private String code;
 	private String amount;
 	private String purchaseRate;
 	private Date purchaseTime;
+
+	public int getId() {	return id;	}
+
+	public void setId(int id) {	this.id = id;	}
 
 	public String getCode() {
 		return code;
@@ -60,7 +65,7 @@ public class WalletEntry {
 
 	@Override
 	public String toString() {
-		return "WalletEntry{" + "code='" + code + '\'' + ", amount='" + amount + '\'' + ", purchaseRate='"
-				+ purchaseRate + '\'' + ", purchaseTime=" + purchaseTime + '}';
+		return "WalletEntry{" + "id=" + id + ", code='" + code + '\'' + ", amount='" + amount + '\''
+				+ ", purchaseRate='" + purchaseRate + '\'' + ", purchaseTime=" + purchaseTime + '}';
 	}
 }
