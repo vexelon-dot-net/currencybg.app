@@ -71,6 +71,7 @@
         <item>TRY</item>
         <item>UAH</item>
         <item>USD</item>
+        <item>VND</item>
         <item>ZAR</item>
     </string-array>
     <string-array name="currency_names">
@@ -122,6 +123,7 @@
         <item>Turkish lira</item>
         <item>Ukrainian hryvnia</item>
         <item>United States dollar</item>
+        <item>Vietnamese Dong</item>
         <item>South African rand</item>
     </string-array>
 </resources>
