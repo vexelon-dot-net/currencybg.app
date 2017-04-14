@@ -33,6 +33,7 @@ import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.remote.APISource;
 import net.vexelon.currencybg.app.remote.SourceException;
+import net.vexelon.currencybg.app.utils.Connectivity;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 
@@ -63,7 +64,15 @@ public class BackgroundService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		new DownloadTask().execute();
+		if (new AppSettings(this).isWiFiOnlyDownloads()) {
+			if (Connectivity.isWifi(this)) {
+				new DownloadTask().execute();
+			} else {
+				Log.i(Defs.LOG_TAG, "Skipped currency rates update over non-WiFi network!");
+			}
+		} else {
+			new DownloadTask().execute();
+		}
 
 		// allow service to be killed under high load
 		return START_NOT_STICKY;
