@@ -17,6 +17,10 @@
  */
 package net.vexelon.currencybg.app.utils;
 
+import android.util.Log;
+
+import net.vexelon.currencybg.app.Defs;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -26,10 +30,7 @@ import java.text.ParseException;
 import java.util.Currency;
 import java.util.Random;
 
-import android.util.Log;
-import net.vexelon.currencybg.app.Defs;
-
-public class NumberUtils {
+public final class NumberUtils {
 
 	private static Random _random = null;
 
