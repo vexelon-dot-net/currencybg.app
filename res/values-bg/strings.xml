@@ -5,6 +5,8 @@
     <string name="text_cancel">Отказ</string>
     <string name="text_pick_date">Изберете дата</string>
     <string name="text_pick_time">Изберете час</string>
+    <string name="text_enabled">Включено</string>
+    <string name="text_disabled">Изключено</string>
 
     <string name="drawer_open">Отваряне навигация</string>
     <string name="drawer_close">Затваряне навигация</string>
@@ -87,6 +89,8 @@
     <string name="pref_precision_summary">Точност, която да се използва при изобразяване на валутните стойности</string>
     <string name="pref_rateus_title">Гласувайте за Currency BG</string>
     <string name="pref_rateus_summary">Подкрепи ни, като дадеш оценка за приложението</string>
+    <string name="pref_wifi_only_title">Сваляне на валути само през Wi-Fi</string>
+    <string name="pref_wifi_only_summary">Принуждава фоновият режим да сваля валутни курсове само при налична Wi-Fi връзка.</string>
 
     <string name="wallet_code">Валута</string>
     <string name="wallet_amount">Сума</string>
