@@ -1,23 +1,15 @@
 Currency BG Changes
 ===================
 
-## 2.3.0
-
-### EN
-  * Fixed a date time localization issue.
-
-### BG
-  TODO
-
-
 ## 2.2.0
 
 ### EN
   * Fixed a problem with currency updates via the background app service.
+  * Added 'Wi-Fi' only background service currency rates downloads. Requires the 'ACCESS_NETWORK_STATE' permission.
 
 ### BG
   * Отстранен проблем с автоматично обновяване на валутите в приложението.
-
+  * Добавена функция 'Сваляне на валути само през Wi-Fi'. Изисква 'ACCESS_NETWORK_STATE' разрешение.
 
 ## 2.1.0
 
