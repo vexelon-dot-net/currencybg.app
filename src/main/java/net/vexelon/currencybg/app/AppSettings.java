@@ -296,4 +296,17 @@ public final class AppSettings {
 		generalPrefs.edit().putInt("pref_last_read_whatsnew", value).apply();
 	}
 
+	/**
+	 * 
+	 * @return {@code true}, if background service should download rates only
+	 *         via WiFi.
+	 */
+	public boolean isWiFiOnlyDownloads() {
+		return generalPrefs.getBoolean("pref_wifi_only_downloads", true);
+	}
+
+	public void setWiFiOnlyDownloads(boolean value) {
+		generalPrefs.edit().putBoolean("pref_wifi_only_downloads", value).apply();
+	}
+
 }

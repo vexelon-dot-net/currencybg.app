@@ -31,6 +31,7 @@ public class PrefsFragment extends PreferenceFragment
 	public static final String TAG = "preferences";
 	public static final String KEY_SCREEN_APP_PREFS = "app_prefs";
 	public static final String KEY_PREF_CURRENCIES_PRECISION = "pref_currencies_precision";
+	public static final String KEY_PREF_WIFI_ONLY_DOWNLOADS = "pref_wifi_only_downloads";
 	public static final String KEY_PREF_RATEUS = "rateus";
 
 	@Override
@@ -41,12 +42,14 @@ public class PrefsFragment extends PreferenceFragment
 
 		findPreference(KEY_PREF_RATEUS).setOnPreferenceClickListener(this);
 		findPreference(KEY_PREF_CURRENCIES_PRECISION).setOnPreferenceChangeListener(this);
+		findPreference(KEY_PREF_WIFI_ONLY_DOWNLOADS).setOnPreferenceChangeListener(this);
 	}
 
 	@Override
 	public boolean onPreferenceClick(Preference preference) {
 		if (preference.getKey().equals(KEY_PREF_RATEUS)) {
 			final String appPackageName = getActivity().getPackageName();
+
 			try {
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
 			} catch (android.content.ActivityNotFoundException e) {
@@ -61,6 +64,11 @@ public class PrefsFragment extends PreferenceFragment
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		if (preference.getKey().equals(KEY_PREF_CURRENCIES_PRECISION)) {
 			Toast.makeText(getActivity(), getString(R.string.pref_value_update, newValue), Toast.LENGTH_SHORT).show();
+		} else if (preference.getKey().equals(KEY_PREF_WIFI_ONLY_DOWNLOADS)) {
+			Toast.makeText(getActivity(),
+					getString(R.string.pref_value_update,
+							getString((Boolean) newValue ? R.string.text_enabled : R.string.text_disabled)),
+					Toast.LENGTH_SHORT).show();
 		}
 		// update state with new value
 		return true;

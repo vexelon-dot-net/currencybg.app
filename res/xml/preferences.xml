@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="app_prefs"
-    android:title="@string/prefs_title">
+                  android:key="app_prefs"
+                  android:title="@string/prefs_title">
 
     <ListPreference
         android:defaultValue="@string/pref_precision_default"
@@ -11,12 +11,21 @@
         android:key="pref_currencies_precision"
         android:persistent="true"
         android:summary="@string/pref_precision_summary"
-        android:title="@string/pref_precision_title" />
+        android:title="@string/pref_precision_title"/>
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:dialogTitle="@string/pref_wifi_only_title"
+        android:key="pref_wifi_only_downloads"
+        android:persistent="true"
+        android:summary="@string/pref_wifi_only_summary"
+        android:title="@string/pref_wifi_only_title"
+        />
 
     <Preference
         android:enabled="true"
         android:key="rateus"
         android:summary="@string/pref_rateus_summary"
-        android:title="@string/pref_rateus_title" />
+        android:title="@string/pref_rateus_title"/>
 
 </PreferenceScreen>

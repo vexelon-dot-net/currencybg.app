@@ -20,7 +20,7 @@ package net.vexelon.currencybg.app.utils;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-public class UserAgentHelper {
+public final class UserAgentHelper {
 
 	private static String userAgents[] = {
 			// IE
