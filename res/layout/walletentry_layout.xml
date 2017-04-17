@@ -19,7 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:hint="2500"
+        android:hint="@string/wallet_amount_hint"
         android:inputType="numberDecimal"/>
 
     <!-- bought at/rate -->
@@ -36,7 +36,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:hint="1"
+        android:hint="@string/wallet_bought_at_hint"
         android:inputType="numberDecimal"/>
 
     <!-- bought on/date -->
@@ -53,6 +53,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:hint="tap to select"/>
+        android:hint="@string/wallet_bought_on_hint"/>
 
 </LinearLayout>

@@ -17,19 +17,6 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.joda.time.LocalDate;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -48,6 +35,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
@@ -64,6 +54,16 @@ import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
+
+import org.joda.time.LocalDate;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class AbstractFragment extends Fragment {
 
@@ -291,9 +291,9 @@ public class AbstractFragment extends Fragment {
 		showSnackbar(text, Snackbar.LENGTH_SHORT, false);
 	}
 
-	protected void showSnackbar(int resId, int duration, boolean isError) {
+	protected void showSnackbar(View view, int resId, int duration, boolean isError) {
 		try {
-			Snackbar snackbar = Snackbar.make(rootView, resId, duration);
+			Snackbar snackbar = Snackbar.make(view, resId, duration);
 			View v = snackbar.getView();
 			// TextView textView = (TextView)
 			// v.findViewById(android.support.design.R.id.snackbar_text);
@@ -306,12 +306,16 @@ public class AbstractFragment extends Fragment {
 		}
 	}
 
+	protected void showSnackbar(int resId, int duration, boolean isError) {
+		showSnackbar(rootView, resId, duration, isError);
+	}
+
 	protected void showSnackbar(int resId, boolean isError) {
-		showSnackbar(resId, Snackbar.LENGTH_SHORT, isError);
+		showSnackbar(rootView, resId, Snackbar.LENGTH_SHORT, isError);
 	}
 
 	protected void showSnackbar(int resId) {
-		showSnackbar(resId, Snackbar.LENGTH_SHORT, false);
+		showSnackbar(rootView, resId, Snackbar.LENGTH_SHORT, false);
 	}
 
 	protected int dp2px(int dp) {

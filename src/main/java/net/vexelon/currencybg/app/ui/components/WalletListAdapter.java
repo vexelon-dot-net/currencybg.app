@@ -79,7 +79,7 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 		UIUtils.setText(v, R.id.wallet_row_amount, row.getAmount());
 		UIUtils.setText(v, R.id.wallet_row_bought_on,
 				LocalDateTime.fromDateFields(row.getPurchaseTime()).toString("yy/MM/dd"));
-		UIUtils.setText(v, R.id.wallet_row_bought_at, "2.56");
+		UIUtils.setText(v, R.id.wallet_row_bought_at, row.getPurchaseRate());
 		UIUtils.setText(v, R.id.wallet_row_current_value, "10000");
 
 		return v;

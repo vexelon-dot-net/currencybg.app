@@ -14,6 +14,7 @@
     <string name="app_name">Currency BG</string>
     <string name="last_update">Last update</string>
     <string name="last_update_updating_text">Downloading ...</string>
+
     <string name="error_download_rates">Failed downloading rates.</string>
     <string name="error_parse_rates">Failed parsing rates!</string>
     <string name="error_db_load">Failed reading from db!</string>
@@ -22,6 +23,8 @@
     <string name="error_sources_selection_max">Only 3 sources can be selected at a time!</string>
     <string name="error_maintenance">Server down for maintenance! Try again later.</string>
     <string name="error_no_entries">No new currency entries.</string>
+    <string name="error_add_wallet_entry">Missing or incorrect field data!</string>
+
     <string name="about_version">Version</string>
     <string name="about_issue_appdev">Report an issue</string>
     <string name="about_issue_appdev_text">Report an issue you found or send us your feature request</string>
@@ -100,8 +103,11 @@
 
     <string name="wallet_code">Currency</string>
     <string name="wallet_amount">Amount</string>
+    <string name="wallet_amount_hint">Amount of currency bought</string>
     <string name="wallet_bought_on">Date</string>
+    <string name="wallet_bought_on_hint">Date of purchase</string>
     <string name="wallet_bought_at">Rate</string>
+    <string name="wallet_bought_at_hint">Rate of purchase, e.g., 1, 10, 100, etc.</string>
     <string name="wallet_profit">Profit</string>
 
     <string name="license_icons">

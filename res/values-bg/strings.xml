@@ -14,6 +14,7 @@
     <string name="app_name">Currency BG</string>
     <string name="last_update">Последно обновено</string>
     <string name="last_update_updating_text">Сваляне ...</string>
+
     <string name="error_download_rates">Грешка при сваляне на валути.</string>
     <string name="error_parse_rates">Грешка при четене на файла с обменните курсове!</string>
     <string name="error_db_load">Грешка при четене на данни!</string>
@@ -22,6 +23,8 @@
     <string name="error_sources_selection_max">Само 3 източника могат да бъдат показани едновременно!</string>
     <string name="error_maintenance">Сървърът се обновява! Опитай по-късно.</string>
     <string name="error_no_entries">Няма нови курсове.</string>
+    <string name="error_add_wallet_entry">Липсващо или грешно поле при попълване.</string>
+
     <string name="about_version">Версия</string>
     <string name="about_issue_appdev">Докладвай бъг</string>
     <string name="about_issue_appdev_text">Докладвай открит проблем или дай предложение</string>
@@ -94,8 +97,11 @@
 
     <string name="wallet_code">Валута</string>
     <string name="wallet_amount">Сума</string>
+    <string name="wallet_amount_hint">Закупена сума</string>
     <string name="wallet_bought_on">Дата</string>
+    <string name="wallet_bought_on_hint">Дата на покупката</string>
     <string name="wallet_bought_at">Курс</string>
+    <string name="wallet_bought_at_hint">Курс за единица, пр., 1, 10, 100, т.н.</string>
     <string name="wallet_profit">Печалба</string>
 
 </resources>
