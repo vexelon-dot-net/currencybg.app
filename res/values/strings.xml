@@ -70,12 +70,17 @@
 
     <string name="source_tavex">Tavex</string>
     <string name="source_polana">Polana1</string>
-    <string name="source_fib">FIB</string>
+    <string name="source_fib">FIBank</string>
     <string name="source_factorin">Factor I.N.</string>
+    <string name="source_unicredit">UniCredit</string>
+    <string name="source_sgeb">SG Expressbank</string>
     <string name="source_tavex_full">Tavex Bulgaria</string>
     <string name="source_polana_full">"POLANA 1" OOD</string>
     <string name="source_fib_full">First Investment Bank</string>
     <string name="source_factorin_full">FACTOR I.N.</string>
+    <string name="source_unicredit_full">UniCredit Bulbank AD</string>
+    <string name="source_sgeb_full">Societe Generale Expressbank</string>
+
 
     <string name="action_sources">Sources</string>
     <string name="action_sources_title">Show currency rates for</string>

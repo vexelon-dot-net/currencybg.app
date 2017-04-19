@@ -72,10 +72,14 @@
     <string name="source_polana">Полана1</string>
     <string name="source_fib">ПИБ</string>
     <string name="source_factorin">Фактор И.Н.</string>
+    <string name="source_unicredit">УниКредит</string>
+    <string name="source_sgeb">СГ Експресбанк</string>
     <string name="source_tavex_full">Tavex България</string>
     <string name="source_polana_full">“Полана 1” ООД</string>
     <string name="source_fib_full">Първа Инвестиционна Банка</string>
     <string name="source_factorin_full">ФАКТОР И.Н. АД</string>
+    <string name="source_unicredit_full">УниКредит Булбанк АД</string>
+    <string name="source_sgeb_full">Societe Generale Експресбанк</string>
 
     <string name="action_sources">Източници</string>
     <string name="action_sources_title">Показване курсове от</string>
