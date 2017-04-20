@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -44,7 +45,10 @@ import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
+import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.WalletEntry;
+import net.vexelon.currencybg.app.ui.UIUtils;
+import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.WalletListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
@@ -61,6 +65,7 @@ public class WalletFragment extends AbstractFragment
 	private ListView walletListView;
 	private TextView dateTimeView;
 	private LocalDateTime dateTimeSelected;
+	private String codeSelected = "";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -184,6 +189,7 @@ public class WalletFragment extends AbstractFragment
 
 						WalletEntry entry = new WalletEntry();
 						try {
+							entry.setCode(codeSelected);
 							entry.setAmount(new BigDecimal(amount).toPlainString());
 							entry.setPurchaseRate(new BigDecimal(boughtAt).toPlainString());
 							entry.setPurchaseTime(dateTimeSelected.toDate());
@@ -209,6 +215,15 @@ public class WalletFragment extends AbstractFragment
 						} finally {
 							IOUtils.closeQuitely(source);
 						}
+
+						// reload currencies
+						dialog.getView().post(new Runnable() {
+
+							@Override
+							public void run() {
+								updateUI();
+							}
+						});
 					}
 				}).negativeText(R.string.text_cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
 					@Override
@@ -220,7 +235,27 @@ public class WalletFragment extends AbstractFragment
 		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 			@Override
 			public void onShow(DialogInterface dialogInterface) {
-				View v = dialog.getCustomView();
+				final View v = dialog.getCustomView();
+
+				// setup source currencies
+				final Spinner spinner = (Spinner) v.findViewById(R.id.wallet_entry_currency);
+				spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+						CurrencyData currency = (CurrencyData) parent.getSelectedItem();
+						codeSelected = currency.getCode();
+						UIUtils.setText(v, R.id.wallet_entry_bought_at, currency.getBuy());
+					}
+
+					public void onNothingSelected(android.widget.AdapterView<?> parent) {
+						// do nothing
+					}
+				});
+
+				ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context,
+						android.R.layout.simple_spinner_item, getVisibleCurrencies(getCurrencies(context, true)));
+				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				spinner.setAdapter(adapter);
 
 				dateTimeSelected = LocalDateTime.now();
 				dateTimeView = (TextView) v.findViewById(R.id.wallet_entry_bought_on);

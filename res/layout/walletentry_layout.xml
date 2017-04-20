@@ -5,6 +5,14 @@
     android:gravity="left"
     android:orientation="vertical">
 
+    <!-- currency type -->
+    <Spinner
+        android:id="@+id/wallet_entry_currency"
+        style="@android:style/Widget.Holo.Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
     <!-- amount -->
     <TextView
         style="@style/FontWalletEntryInput"
