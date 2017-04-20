@@ -86,9 +86,20 @@ public class WalletFragment extends AbstractFragment
 				if (removed != null) {
 					adapter.notifyDataSetChanged();
 
-					// TODO remove
-					showSnackbar(getActivity().getString(R.string.action_wallet_removed,
-							NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
+					DataSource source = null;
+					try {
+						source = new SQLiteDataSource();
+						source.connect(getActivity());
+						source.deleteWalletEntry(removed.getId());
+
+						showSnackbar(getActivity().getString(R.string.action_wallet_removed,
+								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
+					} catch (DataSourceException e) {
+						Log.e(Defs.LOG_TAG, "Could not remove wallet entries from database!", e);
+						showSnackbar(R.string.error_db_remove, Defs.TOAST_ERR_TIME, true);
+					} finally {
+						IOUtils.closeQuitely(source);
+					}
 				}
 
 				return false;

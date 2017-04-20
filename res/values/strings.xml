@@ -19,6 +19,7 @@
     <string name="error_parse_rates">Failed parsing rates!</string>
     <string name="error_db_load">Failed reading from db!</string>
     <string name="error_db_save">Failed saving to db!</string>
+    <string name="error_db_remove">Failed removing from db!</string>
     <string name="error_sources_selection">A minimum of one source selection is required!</string>
     <string name="error_sources_selection_max">Only 3 sources can be selected at a time!</string>
     <string name="error_maintenance">Server down for maintenance! Try again later.</string>
