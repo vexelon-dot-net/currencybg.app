@@ -179,7 +179,7 @@ public class WalletFragment extends AbstractFragment
 	private MaterialDialog newAddWalletEntryDialog() {
 		final Context context = getActivity();
 		final MaterialDialog dialog = new MaterialDialog.Builder(context).title(R.string.action_addwalletentry)
-				.cancelable(true).customView(R.layout.walletentry_layout, true).autoDismiss(false)
+				.cancelable(false).customView(R.layout.walletentry_layout, true).autoDismiss(false)
 				.positiveText(R.string.text_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
 					@Override
 					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
