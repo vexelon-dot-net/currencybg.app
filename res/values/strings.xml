@@ -105,7 +105,7 @@
     <string name="pref_rateus_title">Rate Currency BG</string>
     <string name="pref_rateus_summary">Support us by rating this app</string>
     <string name="pref_wifi_only_title">Wi-Fi only background downloads</string>
-    <string name="pref_wifi_only_summary">Forces background service to download currency rates only via Wi-Fi</string>
+    <string name="pref_wifi_only_summary">Background currency downloads only over Wi-Fi connections</string>
 
     <string name="wallet_code">Currency</string>
     <string name="wallet_amount">Amount</string>
@@ -115,6 +115,9 @@
     <string name="wallet_bought_at">Rate</string>
     <string name="wallet_bought_at_hint">Rate of purchase, e.g., 1, 10, 100, etc.</string>
     <string name="wallet_profit">Profit</string>
+    <string name="wallet_profit_details">%1$s asset</string>
+    <string name="wallet_text_rates_details"><![CDATA[
+    Profit approximations for <b>%1$s</b> asset for the past 3 days.]]></string>
     <string name="wallet_message_reloaded">Profit recalculations completed.</string>
 
     <string name="license_icons">

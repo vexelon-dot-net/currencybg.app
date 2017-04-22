@@ -51,6 +51,7 @@ import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.ui.UIUtils;
+import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.WalletListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
@@ -67,6 +68,7 @@ public class WalletFragment extends AbstractFragment
 
 	private ListView walletListView;
 	private TextView dateTimeView;
+	private WalletListAdapter walletListAdapter;
 	private LocalDateTime dateTimeSelected;
 	private String codeSelected = "";
 
@@ -111,7 +113,11 @@ public class WalletFragment extends AbstractFragment
 		walletListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// if (R.id.wallet_row_current_value == id) {
+				newProfitsDialog(walletListAdapter.getItem(position)).show();
+				// } else {
 				showSnackbar(getActivity().getString(R.string.hint_currency_remove));
+				// }
 			}
 		});
 
@@ -178,11 +184,11 @@ public class WalletFragment extends AbstractFragment
 
 			final AppSettings appSettings = new AppSettings(activity);
 
-			WalletListAdapter adapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
+			walletListAdapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
 					getCurrenciesMapped(getVisibleCurrencies(getCurrencies(activity, true))),
 					appSettings.getCurrenciesPrecision());
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			walletListView.setAdapter(adapter);
+			walletListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			walletListView.setAdapter(walletListAdapter);
 
 		} catch (DataSourceException e) {
 			Log.e(Defs.LOG_TAG, "Could not load wallet entries from database!", e);
@@ -190,6 +196,36 @@ public class WalletFragment extends AbstractFragment
 		} finally {
 			IOUtils.closeQuitely(source);
 		}
+	}
+
+	/**
+	 * Displays wallet asset profit margins
+	 * 
+	 * @param entry
+	 * @return
+	 */
+	private MaterialDialog newProfitsDialog(final WalletEntry entry) {
+		final Context context = getActivity();
+		final AppSettings appSettings = new AppSettings(context);
+
+		final MaterialDialog dialog = new MaterialDialog.Builder(context)
+				.title(getResources().getString(R.string.wallet_profit_details, entry.getCode())).cancelable(true)
+				.customView(R.layout.dialog_details, true).build();
+
+		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+			@Override
+			public void onShow(DialogInterface dialogInterface) {
+				View v = dialog.getCustomView();
+				UIUtils.setText(v, R.id.details_header,
+						getResources().getString(R.string.wallet_text_rates_details,
+								UiCodes.getCurrencyName(context.getResources(), entry.getCode())),
+						true);
+
+				// TODO
+			}
+		});
+
+		return dialog;
 	}
 
 	/**

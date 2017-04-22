@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
@@ -54,12 +55,14 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 	/**
 	 * @param context
 	 * @param textViewResId
-	 * @param items         Wallet entries
-	 * @param currencies    Currencies
+	 * @param items
+	 *            Wallet entries
+	 * @param currencies
+	 *            Currencies
 	 * @param precisionMode
 	 */
 	public WalletListAdapter(Context context, int textViewResId, List<WalletEntry> items,
-	                         Multimap<String, CurrencyData> currencies, int precisionMode) {
+			Multimap<String, CurrencyData> currencies, int precisionMode) {
 		super(context, textViewResId, items);
 		this.itemsImmutable = Lists.newArrayList(items.iterator());
 		this.items = items;
@@ -68,7 +71,7 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, final ViewGroup parent) {
 		View v = convertView;
 		if (v == null) {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.wallet_row_layout, parent, false);
@@ -84,11 +87,19 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 				LocalDateTime.fromDateFields(entry.getPurchaseTime()).toString(Defs.DATEFORMAT_YYMMDD));
 		UIUtils.setText(v, R.id.wallet_row_current_value, getProfit(entry), true);
 
+		v.findViewById(R.id.wallet_row_current_value).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				((ListView) parent).performItemClick(v, position, R.id.wallet_row_current_value);
+			}
+		});
+
 		return v;
 	}
 
 	/**
-	 * Calculates profit for given wallet {@code entry} based on the latest known currency rates and sources.
+	 * Calculates profit for given wallet {@code entry} based on the latest
+	 * known currency rates and sources.
 	 *
 	 * @param entry
 	 * @return
@@ -105,25 +116,25 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 			}
 		}
 
-		BigDecimal result = NumberUtils.buyCurrency(entry.getAmount(), entry.getPurchaseRate(), 1); // TODO 1?
+		BigDecimal result = NumberUtils.buyCurrency(entry.getAmount(), entry.getPurchaseRate(), 1); // TODO
+																									// 1?
 		result = bestRate.subtract(result);
 
 		String textResult;
 
 		switch (precisionMode) {
-			case AppSettings.PRECISION_ADVANCED:
-				textResult = NumberUtils.getCurrencyFormat(result, Defs
-						.SCALE_SHOW_LONG, Defs.CURRENCY_CODE_BGN);
-				break;
+		case AppSettings.PRECISION_ADVANCED:
+			textResult = NumberUtils.getCurrencyFormat(result, Defs.SCALE_SHOW_LONG, Defs.CURRENCY_CODE_BGN);
+			break;
 
-			case AppSettings.PRECISION_SIMPLE:
-			default:
-				textResult = NumberUtils.getCurrencyFormat(result, Defs.CURRENCY_CODE_BGN);
-				break;
+		case AppSettings.PRECISION_SIMPLE:
+		default:
+			textResult = NumberUtils.getCurrencyFormat(result, Defs.CURRENCY_CODE_BGN);
+			break;
 		}
 
-		return UIUtils.toHtmlColor(textResult, result.compareTo(BigDecimal.ZERO) > 0 ? Defs.COLOR_OK_GREEN : Defs
-				.COLOR_DANGER_RED);
+		return UIUtils.toHtmlColor(textResult,
+				result.compareTo(BigDecimal.ZERO) > 0 ? Defs.COLOR_OK_GREEN : Defs.COLOR_DANGER_RED);
 	}
 
 	@Override

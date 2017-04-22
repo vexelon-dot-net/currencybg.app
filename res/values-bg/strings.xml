@@ -104,10 +104,13 @@
     <string name="wallet_amount">Сума</string>
     <string name="wallet_amount_hint">Закупена сума</string>
     <string name="wallet_bought_on">Дата</string>
-    <string name="wallet_bought_on_hint">Дата на покупката</string>
+    <string name="wallet_bought_on_hint">Дата за актив</string>
     <string name="wallet_bought_at">Курс</string>
     <string name="wallet_bought_at_hint">Курс за единица, пр., 1, 10, 100, т.н.</string>
     <string name="wallet_profit">Печалба</string>
+    <string name="wallet_profit_details">Актив - %1$s</string>
+    <string name="wallet_text_rates_details"><![CDATA[
+    Движение на приблизителна печалба/загуба за актив - <b>%1$s</b> през изминалите 3 дни.]]></string>
     <string name="wallet_message_reloaded">Преизчисляване на печалбите завършено.</string>
 
 </resources>

@@ -289,13 +289,13 @@ public class CurrenciesFragment extends AbstractFragment {
 		final MaterialDialog dialog = new MaterialDialog.Builder(context)
 				.title(getResources().getString(R.string.action_currency_details, row.getCode(),
 						Sources.getFullName(source.getID(), context)))
-				.cancelable(true).customView(R.layout.currency_details, true).build();
+				.cancelable(true).customView(R.layout.dialog_details, true).build();
 
 		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 			@Override
 			public void onShow(DialogInterface dialogInterface) {
 				View v = dialog.getCustomView();
-				UIUtils.setText(v, R.id.currency_details_source,
+				UIUtils.setText(v, R.id.details_header,
 						getResources().getString(R.string.text_rates_details, row.getName()), true);
 
 				if (row.getColumn(source).isPresent()) {
@@ -304,11 +304,12 @@ public class CurrenciesFragment extends AbstractFragment {
 						dataSource = new SQLiteDataSource();
 						dataSource.connect(context);
 
-						StringBuilder buffer = new StringBuilder();
 						String buyText = UIUtils.toHtmlColor(getResources().getString(R.string.buy),
 								Defs.COLOR_NAVY_BLUE);
 						String sellText = UIUtils.toHtmlColor(getResources().getString(R.string.sell),
 								Defs.COLOR_DARK_ORANGE);
+
+						StringBuilder buffer = new StringBuilder();
 
 						List<CurrencyData> rates = dataSource.getAllRates(row.getCode(), source.getID());
 						for (CurrencyData next : rates) {
@@ -327,8 +328,7 @@ public class CurrenciesFragment extends AbstractFragment {
 							buffer.append("<br>");
 						}
 
-						UIUtils.setText(v, R.id.currency_details_rates, buffer.toString(), true);
-
+						UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
 					} catch (DataSourceException e) {
 						Log.e(Defs.LOG_TAG, "Error fetching currencies from database!", e);
 						showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
@@ -336,7 +336,7 @@ public class CurrenciesFragment extends AbstractFragment {
 						IOUtils.closeQuitely(dataSource);
 					}
 				} else {
-					UIUtils.setText(v, R.id.currency_details_rates, Defs.LONG_DASH);
+					UIUtils.setText(v, R.id.details_content, Defs.LONG_DASH);
 				}
 			}
 		});
