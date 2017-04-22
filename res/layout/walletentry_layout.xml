@@ -15,7 +15,7 @@
 
     <!-- amount -->
     <TextView
-        style="@style/FontWalletEntryInput"
+        style="@style/FontWalletEntryInputText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
@@ -32,7 +32,7 @@
 
     <!-- bought at/rate -->
     <TextView
-        style="@style/FontWalletEntryInput"
+        style="@style/FontWalletEntryInputText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
@@ -49,7 +49,7 @@
 
     <!-- bought on/date -->
     <TextView
-        style="@style/FontWalletEntryInput"
+        style="@style/FontWalletEntryInputText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
