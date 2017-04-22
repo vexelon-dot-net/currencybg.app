@@ -105,7 +105,7 @@
     <string name="pref_rateus_title">Rate Currency BG</string>
     <string name="pref_rateus_summary">Support us by rating this app</string>
     <string name="pref_wifi_only_title">Wi-Fi only background downloads</string>
-    <string name="pref_wifi_only_summary">Forces background service to download currency rates only via Wi-Fi.</string>
+    <string name="pref_wifi_only_summary">Forces background service to download currency rates only via Wi-Fi</string>
 
     <string name="wallet_code">Currency</string>
     <string name="wallet_amount">Amount</string>

@@ -98,7 +98,7 @@
     <string name="pref_rateus_title">Гласувайте за Currency BG</string>
     <string name="pref_rateus_summary">Подкрепи ни, като дадеш оценка за приложението</string>
     <string name="pref_wifi_only_title">Сваляне на валути само през Wi-Fi</string>
-    <string name="pref_wifi_only_summary">Принуждава фоновият режим да сваля валутни курсове само при налична Wi-Fi връзка.</string>
+    <string name="pref_wifi_only_summary">Принуждава фоновият режим да сваля валутни курсове само при налична Wi-Fi връзка</string>
 
     <string name="wallet_code">Валута</string>
     <string name="wallet_amount">Сума</string>
