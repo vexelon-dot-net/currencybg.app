@@ -115,6 +115,7 @@
     <string name="wallet_bought_at">Rate</string>
     <string name="wallet_bought_at_hint">Rate of purchase, e.g., 1, 10, 100, etc.</string>
     <string name="wallet_profit">Profit</string>
+    <string name="wallet_message_reloaded">Profit recalculations completed.</string>
 
     <string name="license_icons">
  - Icons by Icons8 LLC. Copyright (CC BY-ND 3.0) Icons8 LLC (https://icons8.com)

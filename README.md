@@ -13,9 +13,9 @@ Currency BG
 
 # Contributing
 
-Докладвайте бъгове или добавете своите предложения и идеи на дъската с [Issues](https://github.com/vexelon-dot-net/currencybg.app/issues). Ако сте кодер, просто форкнете репото и директно отворите [pull requests](https://github.com/vexelon-dot-net/currencybg.app/pulls).
+Докладвайте бъгове или добавете своите предложения и идеи на дъската с [Issues](https://github.com/vexelon-dot-net/currencybg.app/issues). Ако сте кодер, просто направете fork на репото и отворете [pull requests](https://github.com/vexelon-dot-net/currencybg.app/pulls).
 
-Please log feature requests or bug reports using the [Issues Board](https://github.com/vexelon-dot-net/currencybg.app/issues) or fork this repository and contribute back using [pull requests](https://github.com/vexelon-dot-net/currencybg.app/pulls).
+Please log feature requests or bug reports using the [Issues Board](https://github.com/vexelon-dot-net/currencybg.app/issues) or fork this repository and contribute back by sending [pull requests](https://github.com/vexelon-dot-net/currencybg.app/pulls).
 
 ## Development
 

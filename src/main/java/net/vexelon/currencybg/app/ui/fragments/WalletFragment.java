@@ -24,6 +24,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -134,6 +137,23 @@ public class WalletFragment extends AbstractFragment
 	}
 
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.wallet, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_refresh:
+			updateUI();
+			showSnackbar(R.string.wallet_message_reloaded);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser) {
@@ -155,20 +175,21 @@ public class WalletFragment extends AbstractFragment
 			source = new SQLiteDataSource();
 			source.connect(activity);
 			entries.addAll(source.getWalletEntries());
+
+			final AppSettings appSettings = new AppSettings(activity);
+
+			WalletListAdapter adapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
+					getCurrenciesMapped(getVisibleCurrencies(getCurrencies(activity, true))),
+					appSettings.getCurrenciesPrecision());
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			walletListView.setAdapter(adapter);
+
 		} catch (DataSourceException e) {
 			Log.e(Defs.LOG_TAG, "Could not load wallet entries from database!", e);
 			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
 		} finally {
 			IOUtils.closeQuitely(source);
 		}
-
-		final AppSettings appSettings = new AppSettings(activity);
-
-		WalletListAdapter adapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
-				getCurrenciesMapped(getVisibleCurrencies(getCurrencies(activity, true))),
-				appSettings.getCurrenciesPrecision());
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		walletListView.setAdapter(adapter);
 	}
 
 	/**

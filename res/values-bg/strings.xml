@@ -108,5 +108,6 @@
     <string name="wallet_bought_at">Курс</string>
     <string name="wallet_bought_at_hint">Курс за единица, пр., 1, 10, 100, т.н.</string>
     <string name="wallet_profit">Печалба</string>
+    <string name="wallet_message_reloaded">Преизчисляване на печалбите завършено.</string>
 
 </resources>
