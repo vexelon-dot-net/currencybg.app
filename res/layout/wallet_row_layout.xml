@@ -35,16 +35,6 @@
         android:gravity="right"
         android:maxLines="1"/>
 
-    <TextView
-        android:id="@+id/wallet_row_bought_on"
-        style="@style/FontListRatioRate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4sp"
-        android:layout_weight="0.8"
-        android:ellipsize="end"
-        android:gravity="center_horizontal"
-        android:maxLines="1"/>
 
     <TextView
         android:id="@+id/wallet_row_bought_at"
@@ -52,6 +42,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.65"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/wallet_row_bought_on"
+        style="@style/FontListRatioRate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4sp"
+        android:layout_weight="0.8"
         android:ellipsize="end"
         android:gravity="right"
         android:maxLines="1"/>
