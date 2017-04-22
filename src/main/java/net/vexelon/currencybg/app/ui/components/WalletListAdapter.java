@@ -18,24 +18,28 @@
 package net.vexelon.currencybg.app.ui.components;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.Sources;
+import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.ui.UIUtils;
+import net.vexelon.currencybg.app.utils.NumberUtils;
 
 import org.joda.time.LocalDateTime;
 
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -45,19 +49,21 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 	private List<WalletEntry> items;
 	private int precisionMode = AppSettings.PRECISION_SIMPLE;
 	private Set<Sources> sourcesFilter = Sets.newHashSet();
-	// private CurrencyFilter filter = null;
+	private Multimap<String, CurrencyData> currencies;
 
 	/**
 	 * @param context
 	 * @param textViewResId
-	 * @param items
-	 *            Currency rows
+	 * @param items         Wallet entries
+	 * @param currencies    Currencies
 	 * @param precisionMode
 	 */
-	public WalletListAdapter(Context context, int textViewResId, List<WalletEntry> items, int precisionMode) {
+	public WalletListAdapter(Context context, int textViewResId, List<WalletEntry> items,
+	                         Multimap<String, CurrencyData> currencies, int precisionMode) {
 		super(context, textViewResId, items);
 		this.itemsImmutable = Lists.newArrayList(items.iterator());
 		this.items = items;
+		this.currencies = currencies;
 		this.precisionMode = precisionMode;
 	}
 
@@ -68,21 +74,56 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.wallet_row_layout, parent, false);
 		}
 
-		WalletEntry row = items.get(position);
+		WalletEntry entry = items.get(position);
 
-		Log.d(Defs.LOG_TAG, "*** " + row.toString());
-		Log.d(Defs.LOG_TAG, "*** " + LocalDateTime.fromDateFields(row.getPurchaseTime()).toString("yyyy-MM-dd"));
-
-		// TODO
-		UIUtils.setFlagIcon(v, R.id.wallet_row_icon, row.getCode());
-		UIUtils.setText(v, R.id.wallet_row_code, row.getCode());
-		UIUtils.setText(v, R.id.wallet_row_amount, row.getAmount());
+		UIUtils.setFlagIcon(v, R.id.wallet_row_icon, entry.getCode());
+		UIUtils.setText(v, R.id.wallet_row_code, entry.getCode());
+		UIUtils.setText(v, R.id.wallet_row_amount, entry.getAmount());
+		UIUtils.setText(v, R.id.wallet_row_bought_at, entry.getPurchaseRate());
 		UIUtils.setText(v, R.id.wallet_row_bought_on,
-				LocalDateTime.fromDateFields(row.getPurchaseTime()).toString("yy/MM/dd"));
-		UIUtils.setText(v, R.id.wallet_row_bought_at, row.getPurchaseRate());
-		UIUtils.setText(v, R.id.wallet_row_current_value, "10000");
+				LocalDateTime.fromDateFields(entry.getPurchaseTime()).toString(Defs.DATEFORMAT_YYMMDD));
+		UIUtils.setText(v, R.id.wallet_row_current_value, getProfit(entry), true);
 
 		return v;
+	}
+
+	/**
+	 * Calculates profit for given wallet {@code entry} based on the latest known currency rates and sources.
+	 *
+	 * @param entry
+	 * @return
+	 */
+	private String getProfit(WalletEntry entry) {
+		BigDecimal bestRate = BigDecimal.ZERO;
+		BigDecimal amount = new BigDecimal(entry.getAmount(), NumberUtils.getCurrencyMathContext());
+
+		Collection<CurrencyData> currencyDatas = currencies.get(entry.getCode());
+		for (CurrencyData currency : currencyDatas) {
+			BigDecimal thisRate = NumberUtils.buyCurrency(amount, currency.getSell(), currency.getRatio());
+			if (thisRate.compareTo(bestRate) > 0) {
+				bestRate = thisRate;
+			}
+		}
+
+		BigDecimal result = NumberUtils.buyCurrency(entry.getAmount(), entry.getPurchaseRate(), 1); // TODO 1?
+		result = bestRate.subtract(result);
+
+		String textResult;
+
+		switch (precisionMode) {
+			case AppSettings.PRECISION_ADVANCED:
+				textResult = NumberUtils.getCurrencyFormat(result, Defs
+						.SCALE_SHOW_LONG, Defs.CURRENCY_CODE_BGN);
+				break;
+
+			case AppSettings.PRECISION_SIMPLE:
+			default:
+				textResult = NumberUtils.getCurrencyFormat(result, Defs.CURRENCY_CODE_BGN);
+				break;
+		}
+
+		return UIUtils.toHtmlColor(textResult, result.compareTo(BigDecimal.ZERO) > 0 ? Defs.COLOR_OK_GREEN : Defs
+				.COLOR_DANGER_RED);
 	}
 
 	@Override
@@ -97,6 +138,10 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 
 	public WalletEntry remove(int position) {
 		return items.remove(position);
+	}
+
+	public void setCurrencies(Multimap<String, CurrencyData> currencies) {
+		this.currencies = currencies;
 	}
 
 	// @Override

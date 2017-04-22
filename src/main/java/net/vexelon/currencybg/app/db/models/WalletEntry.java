@@ -25,11 +25,16 @@ public class WalletEntry {
 	private String code;
 	private String amount;
 	private String purchaseRate;
+	private int purchaseRatio = 1; // default
 	private Date purchaseTime;
 
-	public int getId() {	return id;	}
+	public int getId() {
+		return id;
+	}
 
-	public void setId(int id) {	this.id = id;	}
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getCode() {
 		return code;
@@ -63,9 +68,18 @@ public class WalletEntry {
 		this.purchaseTime = purchaseTime;
 	}
 
+	public int getPurchaseRatio() {
+		return purchaseRatio;
+	}
+
+	public void setPurchaseRatio(int purchaseRatio) {
+		this.purchaseRatio = purchaseRatio;
+	}
+
 	@Override
 	public String toString() {
 		return "WalletEntry{" + "id=" + id + ", code='" + code + '\'' + ", amount='" + amount + '\''
-				+ ", purchaseRate='" + purchaseRate + '\'' + ", purchaseTime=" + purchaseTime + '}';
+				+ ", purchaseRate='" + purchaseRate + '\'' + ", purchaseRatio='" + purchaseRatio + '\''
+				+ ", purchaseTime=" + purchaseTime + '}';
 	}
 }

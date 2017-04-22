@@ -165,10 +165,10 @@ public class WalletFragment extends AbstractFragment
 		final AppSettings appSettings = new AppSettings(activity);
 
 		WalletListAdapter adapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
-				AppSettings.PRECISION_ADVANCED);
+				getCurrenciesMapped(getVisibleCurrencies(getCurrencies(activity, true))),
+				appSettings.getCurrenciesPrecision());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		walletListView.setAdapter(adapter);
-
 	}
 
 	/**
@@ -203,6 +203,7 @@ public class WalletFragment extends AbstractFragment
 							entry.setCode(codeSelected);
 							entry.setAmount(new BigDecimal(amount).toPlainString());
 							entry.setPurchaseRate(new BigDecimal(boughtAt).toPlainString());
+							entry.setPurchaseRatio(1);
 							entry.setPurchaseTime(dateTimeSelected.toDate());
 						} catch (NumberFormatException e) {
 							Log.w(Defs.LOG_TAG, "Error reading amount of rate!", e);

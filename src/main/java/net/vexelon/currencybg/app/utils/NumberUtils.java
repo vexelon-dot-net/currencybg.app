@@ -48,8 +48,8 @@ public final class NumberUtils {
 	}
 
 	public static BigDecimal zeroIfNull(String value) {
-		BigDecimal result = new BigDecimal("0.00");
-		if (value != null) {
+		BigDecimal result = BigDecimal.ZERO;
+		if (value != null && !value.isEmpty()) {
 			try {
 				result = new BigDecimal(value);
 			} catch (NumberFormatException e) {
@@ -116,5 +116,90 @@ public final class NumberUtils {
 	 */
 	public static String cleanValue(String value) {
 		return value.replace(",", "");
+	}
+
+	/**
+	 * Gets an applicable currency operations math context.
+	 * 
+	 * @return
+	 */
+	public static MathContext getCurrencyMathContext() {
+		return new MathContext(Defs.SCALE_CALCULATIONS, RoundingMode.HALF_EVEN);
+	}
+
+	/**
+	 * 
+	 * @param amount
+	 *            Amount of currency to buy.
+	 * @param rate
+	 *            Buying rate.
+	 * @param ratio
+	 *            Buying ratio for one amount unit.
+	 * @return
+	 */
+	public static BigDecimal buyCurrency(BigDecimal amount, String rate, int ratio) {
+		BigDecimal bought = BigDecimal.ZERO;
+
+		try {
+			MathContext mathContext = getCurrencyMathContext();
+
+			BigDecimal buyRate = BigDecimal.ZERO;
+			if (!rate.isEmpty()) {
+				buyRate = new BigDecimal(rate, mathContext);
+			}
+
+			BigDecimal buyRatio = new BigDecimal(ratio, mathContext);
+			bought = amount.multiply(buyRate.divide(buyRatio, mathContext), mathContext);
+
+		} catch (Exception e) {
+			Log.e(Defs.LOG_TAG, "Failed to buy currency!", e);
+		}
+
+		return bought;
+	}
+
+	/**
+	 * @see #buyCurrency(BigDecimal, String, int)
+	 */
+	public static BigDecimal buyCurrency(String amount, String rate, int ratio) {
+		return buyCurrency(new BigDecimal(amount, getCurrencyMathContext()), rate, ratio);
+	}
+
+	/**
+	 * 
+	 * @param amount
+	 *            Amount of currency to sell.
+	 * @param rate
+	 *            Selling rate.
+	 * @param ratio
+	 *            Selling ratio for one amount unit.
+	 * @return
+	 */
+	public static BigDecimal sellCurrency(BigDecimal amount, String rate, int ratio) {
+		BigDecimal sold = BigDecimal.ZERO;
+
+		try {
+			MathContext mathContext = getCurrencyMathContext();
+
+			BigDecimal sellRate = BigDecimal.ZERO;
+			if (!rate.isEmpty()) {
+				sellRate = new BigDecimal(rate, mathContext);
+			}
+
+			BigDecimal sellRatio = new BigDecimal(ratio, mathContext);
+			sold = amount.divide(sellRate, mathContext).multiply(sellRatio, mathContext);
+
+		} catch (Exception e) {
+			Log.e(Defs.LOG_TAG, "Failed to sell currency!", e);
+		}
+
+		return sold;
+	}
+
+	/**
+	 * @see #sellCurrency(BigDecimal, String, int)
+	 */
+	public static BigDecimal sellCurrency(String amount, String rate, int ratio) {
+		return sellCurrency(new BigDecimal(amount, getCurrencyMathContext()), rate, ratio);
 	}
 }

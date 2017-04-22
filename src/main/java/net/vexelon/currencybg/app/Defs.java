@@ -26,13 +26,17 @@ public final class Defs {
 
 	public final static int TOAST_INFO_TIME = 4000;
 	public final static int TOAST_ERR_TIME = 3000;
-	public final static int SCALE_SHOW_LONG = 4;
-	public final static int SCALE_SHOW_SHORT = 2;
-	public final static int SCALE_CALCULATIONS = 10;
 	public static final String LONG_DASH = "\u2014";
 	public static final String COLOR_NAVY_BLUE = "#00BFFF";
 	public static final String COLOR_DARK_ORANGE = "#FFB400";
-	public static final int MAX_SOURCES_TO_SHOW = 3;
+	public static final String COLOR_DANGER_RED = "#e8392f";
+	public static final String COLOR_OK_GREEN = "#2fe857";
+
+	public final static int SCALE_SHOW_LONG = 4;
+	public final static int SCALE_SHOW_SHORT = 2;
+	public final static int SCALE_CALCULATIONS = 10;
+
+	public final static String CURRENCY_CODE_BGN = "BGN";
 
 	/**
 	 * How often to wake-up the Android service
@@ -70,6 +74,12 @@ public final class Defs {
 
 	public static final String DATE_TIMEZONE_SOFIA = "Europe/Sofia";
 	public static final String DATEFORMAT_ISO8601 = "yyyy-MM-dd'T'HH:mmZ";
+	public static final String DATEFORMAT_YYMMDD = "yy/MM/dd";
+
+	/**
+	 * Max amount of currency sources to show/select on the main fragment
+	 */
+	public static final int MAX_SOURCES_TO_SHOW = 3;
 
 	/**
 	 * Codes of currencies we don't want to show

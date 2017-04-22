@@ -17,19 +17,13 @@
  */
 package net.vexelon.currencybg.app.ui.components;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
+import com.google.common.collect.Lists;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -39,6 +33,11 @@ import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.utils.NumberUtils;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.util.List;
 
 public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 
@@ -116,20 +115,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		/*
 		 * Converts source currency to BGN value (Buy Lev)
 		 */
-		BigDecimal amountOfBGN;
-		try {
-			BigDecimal buy = BigDecimal.ZERO;
-			if (!source.getBuy().isEmpty()) {
-				buy = new BigDecimal(source.getBuy(), mathContext);
-			}
-
-			BigDecimal ratio = new BigDecimal(source.getRatio(), mathContext);
-			amountOfBGN = amount.multiply(buy.divide(ratio, mathContext), mathContext);
-
-		} catch (Exception e) {
-			Log.e(Defs.LOG_TAG, "Failed to convert source currency to BGN!", e);
-			return;
-		}
+		BigDecimal amountOfBGN = NumberUtils.buyCurrency(amount, source.getBuy(), source.getRatio());
 
 		/*
 		 * Convert each destination currency from BGN (Sell Lev for target
@@ -137,20 +123,24 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		 */
 		for (int i = 0; i < items.size(); i++) {
 			CurrencyData targetCurrency = items.get(i);
-			BigDecimal result = BigDecimal.ZERO;
 
-			try {
-				BigDecimal sell = BigDecimal.ZERO;
-				if (!targetCurrency.getSell().isEmpty()) {
-					sell = new BigDecimal(targetCurrency.getSell(), mathContext);
-				}
+			BigDecimal result = NumberUtils.sellCurrency(amountOfBGN, targetCurrency.getSell(),
+					targetCurrency.getRatio());
 
-				BigDecimal ratio = new BigDecimal(targetCurrency.getRatio(), mathContext);
-				result = amountOfBGN.divide(sell, mathContext).multiply(ratio, mathContext);
-
-			} catch (Exception e) {
-				Log.e(Defs.LOG_TAG, "Failed to convert currency " + targetCurrency.getCode() + "!", e);
-			}
+//			BigDecimal result = BigDecimal.ZERO;
+//
+//			try {
+//				BigDecimal sell = BigDecimal.ZERO;
+//				if (!targetCurrency.getSell().isEmpty()) {
+//					sell = new BigDecimal(targetCurrency.getSell(), mathContext);
+//				}
+//
+//				BigDecimal ratio = new BigDecimal(targetCurrency.getRatio(), mathContext);
+//				result = amountOfBGN.divide(sell, mathContext).multiply(ratio, mathContext);
+//
+//			} catch (Exception e) {
+//				Log.e(Defs.LOG_TAG, "Failed to convert currency " + targetCurrency.getCode() + "!", e);
+//			}
 
 			values.set(i, result);
 		}

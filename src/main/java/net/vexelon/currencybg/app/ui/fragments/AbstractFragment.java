@@ -35,8 +35,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Table;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -85,7 +89,7 @@ public class AbstractFragment extends Fragment {
 
 	/**
 	 * Shows a dialog with "What's New" information
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */
@@ -139,7 +143,7 @@ public class AbstractFragment extends Fragment {
 
 	/**
 	 * Fetches a sorted list of last downloaded currencies from the database
-	 * 
+	 *
 	 * @param context
 	 * @param sorted
 	 * @param addBGN
@@ -202,17 +206,38 @@ public class AbstractFragment extends Fragment {
 		return currency;
 	}
 
-	protected Map<String, CurrencyData> getMappedCurrencies(List<CurrencyData> currencies) {
-		Map<String, CurrencyData> result = Maps.newHashMap();
+	/**
+	 * Fetches a mapping of currency codes and currencies for every source found
+	 * 
+	 * @param currencies
+	 * @return
+	 */
+	protected Multimap<String, CurrencyData> getCurrenciesMapped(List<CurrencyData> currencies) {
+		ImmutableListMultimap.Builder<String, CurrencyData> builder = ImmutableListMultimap.builder();
 		for (CurrencyData currencyData : currencies) {
-			result.put(currencyData.getCode(), currencyData);
+			builder.put(currencyData.getCode(), currencyData);
 		}
-		return result;
+		return builder.build();
+	}
+
+	/**
+	 * Fetches a table-alike mapping of currency codes and currencies for every
+	 * source found
+	 * 
+	 * @param currencies
+	 * @return
+	 */
+	protected Table<String, Sources, CurrencyData> getCurrenciesTable(List<CurrencyData> currencies) {
+		ImmutableTable.Builder<String, Sources, CurrencyData> builder = ImmutableTable.builder();
+		for (CurrencyData currencyData : currencies) {
+			builder.put(currencyData.getCode(), Sources.valueOf(currencyData.getSource()), currencyData);
+		}
+		return builder.build();
 	}
 
 	/**
 	 * Removes currencies that should not be shown to users
-	 * 
+	 *
 	 * @param currencies
 	 * @return
 	 */
