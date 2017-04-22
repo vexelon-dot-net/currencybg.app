@@ -41,13 +41,13 @@ android {
         testCompile 'junit:junit:4.+'
     }
 
-    compileSdkVersion 24
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId 'net.vexelon.currencybg.app'
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 2200
         versionName "2.2.0"
     }
