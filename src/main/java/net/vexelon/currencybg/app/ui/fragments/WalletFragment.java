@@ -38,6 +38,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 import com.melnykov.fab.FloatingActionButton;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -61,6 +62,7 @@ import net.vexelon.currencybg.app.utils.NumberUtils;
 import org.joda.time.LocalDateTime;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 public class WalletFragment extends AbstractFragment
@@ -71,6 +73,7 @@ public class WalletFragment extends AbstractFragment
 	private WalletListAdapter walletListAdapter;
 	private LocalDateTime dateTimeSelected;
 	private String codeSelected = "";
+	private Multimap<String, CurrencyData> currenciesMapped;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,7 +101,8 @@ public class WalletFragment extends AbstractFragment
 						source.deleteWalletEntry(removed.getId());
 
 						showSnackbar(getActivity().getString(R.string.action_wallet_removed,
-								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
+								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode()
+								)));
 					} catch (DataSourceException e) {
 						Log.e(Defs.LOG_TAG, "Could not remove wallet entries from database!", e);
 						showSnackbar(R.string.error_db_remove, Defs.TOAST_ERR_TIME, true);
@@ -151,10 +155,10 @@ public class WalletFragment extends AbstractFragment
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_refresh:
-			updateUI();
-			showSnackbar(R.string.wallet_message_reloaded);
-			return true;
+			case R.id.action_refresh:
+				updateUI();
+				showSnackbar(R.string.wallet_message_reloaded);
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -184,9 +188,11 @@ public class WalletFragment extends AbstractFragment
 
 			final AppSettings appSettings = new AppSettings(activity);
 
+			currenciesMapped = getCurrenciesMapped(getVisibleCurrencies(getCurrencies
+					(activity, true)));
+
 			walletListAdapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
-					getCurrenciesMapped(getVisibleCurrencies(getCurrencies(activity, true))),
-					appSettings.getCurrenciesPrecision());
+					currenciesMapped, appSettings.getCurrenciesPrecision());
 			walletListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			walletListView.setAdapter(walletListAdapter);
 
@@ -200,7 +206,7 @@ public class WalletFragment extends AbstractFragment
 
 	/**
 	 * Displays wallet asset profit margins
-	 * 
+	 *
 	 * @param entry
 	 * @return
 	 */
@@ -220,6 +226,10 @@ public class WalletFragment extends AbstractFragment
 						getResources().getString(R.string.wallet_text_rates_details,
 								UiCodes.getCurrencyName(context.getResources(), entry.getCode())),
 						true);
+
+				Collection<CurrencyData> currencyDatas = currenciesMapped.get(entry.getCode());
+
+
 
 				// TODO
 			}
@@ -351,7 +361,8 @@ public class WalletFragment extends AbstractFragment
 	public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 		dateTimeSelected = dateTimeSelected.withYear(year).withMonthOfYear(monthOfYear).withDayOfMonth(dayOfMonth);
 		// show time picker
-		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTimeSelected.getHourOfDay(),
+		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTimeSelected
+						.getHourOfDay(),
 				dateTimeSelected.getMinuteOfHour(), true);
 		timePicker.setThemeDark(true);
 		timePicker.show(getFragmentManager(), getResources().getText(R.string.text_pick_time).toString());

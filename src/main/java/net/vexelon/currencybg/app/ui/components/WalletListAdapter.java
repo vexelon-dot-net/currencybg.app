@@ -137,6 +137,29 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 				result.compareTo(BigDecimal.ZERO) > 0 ? Defs.COLOR_OK_GREEN : Defs.COLOR_DANGER_RED);
 	}
 
+	public static String getProfit(WalletEntry entry, CurrencyData currencyData, int precisionMode) {
+		BigDecimal bought = NumberUtils.buyCurrency(entry.getAmount(), entry.getPurchaseRate(), 1);
+		BigDecimal todaysRate = NumberUtils.buyCurrency(entry.getAmount(), currencyData.getSell(),
+				currencyData.getRatio());
+		BigDecimal result = bought.subtract(todaysRate);
+
+		String textResult;
+
+		switch (precisionMode) {
+		case AppSettings.PRECISION_ADVANCED:
+			textResult = NumberUtils.getCurrencyFormat(result, Defs.SCALE_SHOW_LONG, Defs.CURRENCY_CODE_BGN);
+			break;
+
+		case AppSettings.PRECISION_SIMPLE:
+		default:
+			textResult = NumberUtils.getCurrencyFormat(result, Defs.CURRENCY_CODE_BGN);
+			break;
+		}
+
+		return UIUtils.toHtmlColor(textResult,
+				result.compareTo(BigDecimal.ZERO) > 0 ? Defs.COLOR_OK_GREEN : Defs.COLOR_DANGER_RED);
+	}
+
 	@Override
 	public int getCount() {
 		return items.size();
