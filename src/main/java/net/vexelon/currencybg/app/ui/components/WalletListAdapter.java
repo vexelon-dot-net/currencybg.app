@@ -141,7 +141,7 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 		BigDecimal bought = NumberUtils.buyCurrency(entry.getAmount(), entry.getPurchaseRate(), 1);
 		BigDecimal todaysRate = NumberUtils.buyCurrency(entry.getAmount(), currencyData.getSell(),
 				currencyData.getRatio());
-		BigDecimal result = bought.subtract(todaysRate);
+		BigDecimal result = todaysRate.subtract(bought);
 
 		String textResult;
 

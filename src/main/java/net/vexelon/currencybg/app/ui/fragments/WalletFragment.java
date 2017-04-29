@@ -63,6 +63,8 @@ import org.joda.time.LocalDateTime;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class WalletFragment extends AbstractFragment
@@ -227,11 +229,36 @@ public class WalletFragment extends AbstractFragment
 								UiCodes.getCurrencyName(context.getResources(), entry.getCode())),
 						true);
 
+				int precisionMode = appSettings.getCurrenciesPrecision();
+
 				Collection<CurrencyData> currencyDatas = currenciesMapped.get(entry.getCode());
+				List<BigDecimal> profits = Lists.newArrayListWithCapacity(currencyDatas.size());
 
+				for (CurrencyData currencyData : currencyDatas) {
+					profits.add(NumberUtils.getProfit(entry.getAmount(), entry.getPurchaseRate(), 1, currencyData
+							.getSell(), currencyData.getRatio()));
+				}
 
+				// sort profits
+				Collections.sort(profits, new Comparator<BigDecimal>() {
 
-				// TODO
+					@Override
+					public int compare(BigDecimal p1, BigDecimal p2) {
+						return p1.subtract(p2).compareTo(BigDecimal.ZERO) > 0 ? -1 : 1;
+					}
+				});
+
+				// prepare display results
+				StringBuilder buffer = new StringBuilder();
+
+				for (BigDecimal profit : profits) {
+					buffer.append(profit.toPlainString());
+					buffer.append(" - ");
+					//buffer.append(Sources.getFullName(currencyData.getSource(), context));
+					buffer.append("<br>");
+				}
+
+				UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
 			}
 		});
 

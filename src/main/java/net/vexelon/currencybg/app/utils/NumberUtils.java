@@ -202,4 +202,21 @@ public final class NumberUtils {
 	public static BigDecimal sellCurrency(String amount, String rate, int ratio) {
 		return sellCurrency(new BigDecimal(amount, getCurrencyMathContext()), rate, ratio);
 	}
+
+	/**
+	 * Calculates profit given purchase info and current sell info
+	 * 
+	 * @param amount
+	 * @param purchaseRate
+	 * @param purchaseRatio
+	 * @param sellRate
+	 * @param sellRatio
+	 * @return
+	 */
+	public static BigDecimal getProfit(String amount, String purchaseRate, int purchaseRatio, String sellRate,
+			int sellRatio) {
+		BigDecimal bought = NumberUtils.buyCurrency(amount, purchaseRate, purchaseRatio);
+		BigDecimal todaysRate = NumberUtils.buyCurrency(amount, sellRate, sellRatio);
+		return todaysRate.subtract(bought);
+	}
 }
