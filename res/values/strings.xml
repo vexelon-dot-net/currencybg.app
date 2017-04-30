@@ -119,6 +119,8 @@
     <string name="wallet_text_rates_details"><![CDATA[
     Profit approximations for <b>%1$s</b> asset for the past 3 days.]]></string>
     <string name="wallet_message_reloaded">Profit recalculations completed.</string>
+    <string name="wallet_at_source">at %1$s</string>
+    <string name="wallet_on_date">on %1$s</string>
 
     <string name="license_icons">
  - Icons by Icons8 LLC. Copyright (CC BY-ND 3.0) Icons8 LLC (https://icons8.com)

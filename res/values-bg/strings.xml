@@ -112,5 +112,7 @@
     <string name="wallet_text_rates_details"><![CDATA[
     Движение на приблизителна печалба/загуба за актив - <b>%1$s</b> през изминалите 3 дни.]]></string>
     <string name="wallet_message_reloaded">Преизчисляване на печалбите завършено.</string>
+    <string name="wallet_at_source">при %1$s</string>
+    <string name="wallet_on_date">към %1$s</string>
 
 </resources>

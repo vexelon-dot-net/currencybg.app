@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +38,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.melnykov.fab.FloatingActionButton;
@@ -46,6 +48,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
@@ -103,8 +106,7 @@ public class WalletFragment extends AbstractFragment
 						source.deleteWalletEntry(removed.getId());
 
 						showSnackbar(getActivity().getString(R.string.action_wallet_removed,
-								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode()
-								)));
+								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
 					} catch (DataSourceException e) {
 						Log.e(Defs.LOG_TAG, "Could not remove wallet entries from database!", e);
 						showSnackbar(R.string.error_db_remove, Defs.TOAST_ERR_TIME, true);
@@ -119,11 +121,11 @@ public class WalletFragment extends AbstractFragment
 		walletListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// if (R.id.wallet_row_current_value == id) {
-				newProfitsDialog(walletListAdapter.getItem(position)).show();
-				// } else {
-				showSnackbar(getActivity().getString(R.string.hint_currency_remove));
-				// }
+				if (R.id.wallet_row_icon == id || R.id.wallet_row_code == id) {
+					showSnackbar(getActivity().getString(R.string.hint_currency_remove));
+				} else {
+					newProfitsDialog(walletListAdapter.getItem(position)).show();
+				}
 			}
 		});
 
@@ -157,10 +159,10 @@ public class WalletFragment extends AbstractFragment
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_refresh:
-				updateUI();
-				showSnackbar(R.string.wallet_message_reloaded);
-				return true;
+		case R.id.action_refresh:
+			updateUI();
+			showSnackbar(R.string.wallet_message_reloaded);
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -190,8 +192,7 @@ public class WalletFragment extends AbstractFragment
 
 			final AppSettings appSettings = new AppSettings(activity);
 
-			currenciesMapped = getCurrenciesMapped(getVisibleCurrencies(getCurrencies
-					(activity, true)));
+			currenciesMapped = getCurrenciesMapped(getVisibleCurrencies(getCurrencies(activity, true)));
 
 			walletListAdapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
 					currenciesMapped, appSettings.getCurrenciesPrecision());
@@ -224,45 +225,87 @@ public class WalletFragment extends AbstractFragment
 			@Override
 			public void onShow(DialogInterface dialogInterface) {
 				View v = dialog.getCustomView();
-				UIUtils.setText(v, R.id.details_header,
-						getResources().getString(R.string.wallet_text_rates_details,
-								UiCodes.getCurrencyName(context.getResources(), entry.getCode())),
-						true);
+				UIUtils.setText(v, R.id.details_header, getResources().getString(R.string.wallet_text_rates_details,
+						UiCodes.getCurrencyName(context.getResources(), entry.getCode())), true);
 
 				int precisionMode = appSettings.getCurrenciesPrecision();
 
 				Collection<CurrencyData> currencyDatas = currenciesMapped.get(entry.getCode());
-				List<BigDecimal> profits = Lists.newArrayListWithCapacity(currencyDatas.size());
+				List<Pair<CurrencyData, BigDecimal>> profits = Lists.newArrayListWithCapacity(currencyDatas.size());
 
+				// calculate profits for each source found
 				for (CurrencyData currencyData : currencyDatas) {
-					profits.add(NumberUtils.getProfit(entry.getAmount(), entry.getPurchaseRate(), 1, currencyData
-							.getSell(), currencyData.getRatio()));
+					profits.add(
+							new Pair<CurrencyData, BigDecimal>(currencyData, NumberUtils.getProfit(entry.getAmount(),
+									entry.getPurchaseRate(), 1, currencyData.getSell(), currencyData.getRatio())));
 				}
 
 				// sort profits
-				Collections.sort(profits, new Comparator<BigDecimal>() {
+				Collections.sort(profits, new Comparator<Pair<CurrencyData, BigDecimal>>() {
 
 					@Override
-					public int compare(BigDecimal p1, BigDecimal p2) {
-						return p1.subtract(p2).compareTo(BigDecimal.ZERO) > 0 ? -1 : 1;
+					public int compare(Pair<CurrencyData, BigDecimal> p1, Pair<CurrencyData, BigDecimal> p2) {
+						return p1.second.subtract(p2.second).compareTo(BigDecimal.ZERO) > 0 ? -1 : 1;
 					}
 				});
 
-				// prepare display results
-				StringBuilder buffer = new StringBuilder();
+				if (!profits.isEmpty()) {
+					// prepare display results
+					StringBuilder buffer = new StringBuilder();
 
-				for (BigDecimal profit : profits) {
-					buffer.append(profit.toPlainString());
-					buffer.append(" - ");
-					//buffer.append(Sources.getFullName(currencyData.getSource(), context));
-					buffer.append("<br>");
+					Pair<CurrencyData, BigDecimal> top = Iterables.getFirst(profits, null);
+					buffer.append("<b>").append(colorfyProfit(top.second, precisionMode)).append("</b><br>");
+					buffer.append("&emsp;").append(getResources().getString(R.string.wallet_at_source,
+							Sources.getFullName(top.first.getSource(), context))).append("<br>");
+					buffer.append("&emsp;")
+							.append(getResources()
+									.getString(R.string.wallet_on_date,
+											DateTimeUtils.toDateTimeText(context,
+													DateTimeUtils.parseStringToDate(top.first.getDate()))))
+							.append("<br>");
+					profits.remove(top);
+
+					for (Pair<CurrencyData, BigDecimal> next : profits) {
+						buffer.append("<b>").append(colorfyLoss(next.second, precisionMode)).append("</b><br>");
+						buffer.append("&emsp;").append(getResources().getString(R.string.wallet_at_source,
+								Sources.getFullName(next.first.getSource(), context))).append("<br>");
+						buffer.append("&emsp;")
+								.append(getResources()
+										.getString(R.string.wallet_on_date,
+												DateTimeUtils.toDateTimeText(context,
+														DateTimeUtils.parseStringToDate(next.first.getDate()))))
+								.append("<br>");
+					}
+
+					UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
 				}
-
-				UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
 			}
 		});
 
 		return dialog;
+	}
+
+	private String colorfyProfit(BigDecimal amount, int precisionMode) {
+		int result = amount.compareTo(BigDecimal.ZERO);
+		if (result > 0) {
+			return UIUtils.toHtmlColor(formatCurrency(amount, Defs.CURRENCY_CODE_BGN, precisionMode),
+					Defs.COLOR_OK_GREEN);
+		} else if (result < 0) {
+			return UIUtils.toHtmlColor(formatCurrency(amount, Defs.CURRENCY_CODE_BGN, precisionMode),
+					Defs.COLOR_DANGER_RED);
+		}
+
+		return formatCurrency(amount, Defs.CURRENCY_CODE_BGN, precisionMode);
+	}
+
+	private String colorfyLoss(BigDecimal amount, int precisionMode) {
+		int result = amount.compareTo(BigDecimal.ZERO);
+		if (result < 0) {
+			return UIUtils.toHtmlColor(formatCurrency(amount, Defs.CURRENCY_CODE_BGN, precisionMode),
+					Defs.COLOR_DANGER_RED);
+		}
+
+		return formatCurrency(amount, Defs.CURRENCY_CODE_BGN, precisionMode);
 	}
 
 	/**
@@ -388,8 +431,7 @@ public class WalletFragment extends AbstractFragment
 	public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 		dateTimeSelected = dateTimeSelected.withYear(year).withMonthOfYear(monthOfYear).withDayOfMonth(dayOfMonth);
 		// show time picker
-		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTimeSelected
-						.getHourOfDay(),
+		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTimeSelected.getHourOfDay(),
 				dateTimeSelected.getMinuteOfHour(), true);
 		timePicker.setThemeDark(true);
 		timePicker.show(getFragmentManager(), getResources().getText(R.string.text_pick_time).toString());

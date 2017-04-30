@@ -281,19 +281,24 @@ public class AbstractFragment extends Fragment {
 			int precisionMode = new AppSettings(context).getCurrenciesPrecision();
 
 			try {
-				switch (precisionMode) {
-				case AppSettings.PRECISION_ADVANCED:
-					return NumberUtils.getCurrencyFormat(new BigDecimal(value), Defs.SCALE_SHOW_LONG, code);
-				case AppSettings.PRECISION_SIMPLE:
-				default:
-					return NumberUtils.getCurrencyFormat(new BigDecimal(value), code);
-				}
+				return formatCurrency(new BigDecimal(value), code, precisionMode);
 			} catch (Exception e) {
 				Log.e(Defs.LOG_TAG, "Currency format exception! ", e);
 			}
 		}
 
 		return value;
+	}
+
+	protected String formatCurrency(BigDecimal amount, String code, int precisionMode) {
+		switch (precisionMode) {
+		case AppSettings.PRECISION_ADVANCED:
+			return NumberUtils.getCurrencyFormat(amount, Defs.SCALE_SHOW_LONG, code);
+
+		case AppSettings.PRECISION_SIMPLE:
+		default:
+			return NumberUtils.getCurrencyFormat(amount, code);
+		}
 	}
 
 	protected void showSnackbar(String text, int duration, boolean isError) {
@@ -346,5 +351,4 @@ public class AbstractFragment extends Fragment {
 	protected int dp2px(int dp) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
 	}
-
 }

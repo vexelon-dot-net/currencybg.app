@@ -87,10 +87,17 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 				LocalDateTime.fromDateFields(entry.getPurchaseTime()).toString(Defs.DATEFORMAT_YYMMDD));
 		UIUtils.setText(v, R.id.wallet_row_current_value, getProfit(entry), true);
 
-		v.findViewById(R.id.wallet_row_current_value).setOnClickListener(new View.OnClickListener() {
+		// propagte icon and code view taps
+		v.findViewById(R.id.wallet_row_icon).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				((ListView) parent).performItemClick(v, position, R.id.wallet_row_current_value);
+				((ListView) parent).performItemClick(v, position, R.id.wallet_row_icon);
+			}
+		});
+		v.findViewById(R.id.wallet_row_code).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				((ListView) parent).performItemClick(v, position, R.id.wallet_row_code);
 			}
 		});
 
@@ -119,29 +126,6 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 		BigDecimal result = NumberUtils.buyCurrency(entry.getAmount(), entry.getPurchaseRate(), 1); // TODO
 																									// 1?
 		result = bestRate.subtract(result);
-
-		String textResult;
-
-		switch (precisionMode) {
-		case AppSettings.PRECISION_ADVANCED:
-			textResult = NumberUtils.getCurrencyFormat(result, Defs.SCALE_SHOW_LONG, Defs.CURRENCY_CODE_BGN);
-			break;
-
-		case AppSettings.PRECISION_SIMPLE:
-		default:
-			textResult = NumberUtils.getCurrencyFormat(result, Defs.CURRENCY_CODE_BGN);
-			break;
-		}
-
-		return UIUtils.toHtmlColor(textResult,
-				result.compareTo(BigDecimal.ZERO) > 0 ? Defs.COLOR_OK_GREEN : Defs.COLOR_DANGER_RED);
-	}
-
-	public static String getProfit(WalletEntry entry, CurrencyData currencyData, int precisionMode) {
-		BigDecimal bought = NumberUtils.buyCurrency(entry.getAmount(), entry.getPurchaseRate(), 1);
-		BigDecimal todaysRate = NumberUtils.buyCurrency(entry.getAmount(), currencyData.getSell(),
-				currencyData.getRatio());
-		BigDecimal result = todaysRate.subtract(bought);
 
 		String textResult;
 
