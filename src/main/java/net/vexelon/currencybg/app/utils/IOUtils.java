@@ -17,6 +17,8 @@
  */
 package net.vexelon.currencybg.app.utils;
 
+import android.content.Context;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -32,9 +34,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
-import android.content.Context;
-
-public class IOUtils {
+public final class IOUtils {
 
 	public static final int BUFFER_PAGE_SIZE = 4096; // 4k
 

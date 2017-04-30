@@ -5,6 +5,9 @@
     <string name="text_cancel">Отказ</string>
     <string name="text_pick_date">Изберете дата</string>
     <string name="text_pick_time">Изберете час</string>
+    <string name="text_enabled">Включено</string>
+    <string name="text_disabled">Изключено</string>
+    <string name="text_n_days">%1$s дни</string>
 
     <string name="drawer_open">Отваряне навигация</string>
     <string name="drawer_close">Затваряне навигация</string>
@@ -12,14 +15,18 @@
     <string name="app_name">Currency BG</string>
     <string name="last_update">Последно обновено</string>
     <string name="last_update_updating_text">Сваляне ...</string>
+
     <string name="error_download_rates">Грешка при сваляне на валути.</string>
     <string name="error_parse_rates">Грешка при четене на файла с обменните курсове!</string>
     <string name="error_db_load">Грешка при четене на данни!</string>
     <string name="error_db_save">Грешка при запис на данни!</string>
+    <string name="error_db_remove">Грешка при изтриване на данни!</string>
     <string name="error_sources_selection">Трябва да бъде избран поне един източник!</string>
     <string name="error_sources_selection_max">Само 3 източника могат да бъдат показани едновременно!</string>
     <string name="error_maintenance">Сървърът се обновява! Опитай по-късно.</string>
     <string name="error_no_entries">Няма нови курсове.</string>
+    <string name="error_add_wallet_entry">Липсващо или грешно поле при попълване.</string>
+
     <string name="about_version">Версия</string>
     <string name="about_issue_appdev">Докладвай бъг</string>
     <string name="about_issue_appdev_text">Докладвай открит проблем или дай предложение</string>
@@ -67,10 +74,14 @@
     <string name="source_polana">Полана1</string>
     <string name="source_fib">ПИБ</string>
     <string name="source_factorin">Фактор И.Н.</string>
+    <string name="source_unicredit">УниКредит</string>
+    <string name="source_sgeb">СГ Експресбанк</string>
     <string name="source_tavex_full">Tavex България</string>
     <string name="source_polana_full">“Полана 1” ООД</string>
     <string name="source_fib_full">Първа Инвестиционна Банка</string>
     <string name="source_factorin_full">ФАКТОР И.Н. АД</string>
+    <string name="source_unicredit_full">УниКредит Булбанк АД</string>
+    <string name="source_sgeb_full">Societe Generale Експресбанк</string>
 
     <string name="action_sources">Източници</string>
     <string name="action_sources_title">Показване курсове от</string>
@@ -87,11 +98,36 @@
     <string name="pref_precision_summary">Точност, която да се използва при изобразяване на валутните стойности</string>
     <string name="pref_rateus_title">Гласувайте за Currency BG</string>
     <string name="pref_rateus_summary">Подкрепи ни, като дадеш оценка за приложението</string>
+    <string name="pref_wifi_only_title">Сваляне на валути само през Wi-Fi</string>
+    <string name="pref_wifi_only_summary">Принуждава фоновият режим да сваля валутни курсове само при налична Wi-Fi връзка</string>
 
     <string name="wallet_code">Валута</string>
     <string name="wallet_amount">Сума</string>
+    <string name="wallet_amount_hint">Закупена сума</string>
     <string name="wallet_bought_on">Дата</string>
+    <string name="wallet_bought_on_hint">Дата за актив</string>
     <string name="wallet_bought_at">Курс</string>
+    <string name="wallet_bought_at_hint">Курс за единица, пр., 1, 10, 100, т.н.</string>
     <string name="wallet_profit">Печалба</string>
+    <string name="wallet_profit_details">Актив - %1$s</string>
+    <string name="wallet_text_rates_details"><![CDATA[
+    Движение на приблизителна печалба/загуба за актив - <b>%1$s</b> през изминалите 3 дни.]]></string>
+    <string name="wallet_message_reloaded">Преизчисляване на печалбите завършено.</string>
+    <string name="wallet_text_at_source"><![CDATA[
+    при <b>%1$s</b>]]></string>
+    <string name="wallet_text_on_date"><![CDATA[
+    към %1$s]]></string>
+    <string name="wallet_text_initial_price"><![CDATA[
+    Закупено за: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_current_price"><![CDATA[
+    Текуща цена: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_profit_margin"><![CDATA[
+    Печалба (&#37;): <b>%1$s</b> ]]></string>
+    <string name="wallet_text_duration"><![CDATA[
+    Изминал период: <b>%1$s дни</b> ]]></string>
+    <string name="wallet_text_daily_change"><![CDATA[
+    Средна промяна: <b>%1$s</b> на ден]]></string>
+    <string name="wallet_text_daily_change_perc"><![CDATA[
+    Средна промяна (&#37;): <b>%1$s</b> на ден]]></string>
 
 </resources>

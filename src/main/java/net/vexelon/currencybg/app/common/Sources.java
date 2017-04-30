@@ -37,7 +37,9 @@ public enum Sources {
 	FIB(100),
 	TAVEX(200),
 	POLANA1(300),
-	FACTORIN(400);
+	FACTORIN(400),
+	UNICREDIT(500),
+	SGEB(600);
 
 	private int id;
 

@@ -5,6 +5,9 @@
     <string name="text_cancel">Cancel</string>
     <string name="text_pick_date">Select date</string>
     <string name="text_pick_time">Select time</string>
+    <string name="text_enabled">Enabled</string>
+    <string name="text_disabled">Disabled</string>
+    <string name="text_n_days">%1$s days</string>
 
     <string name="drawer_open">Open navigation</string>
     <string name="drawer_close">Close navigation</string>
@@ -12,14 +15,18 @@
     <string name="app_name">Currency BG</string>
     <string name="last_update">Last update</string>
     <string name="last_update_updating_text">Downloading ...</string>
+
     <string name="error_download_rates">Failed downloading rates.</string>
     <string name="error_parse_rates">Failed parsing rates!</string>
     <string name="error_db_load">Failed reading from db!</string>
     <string name="error_db_save">Failed saving to db!</string>
+    <string name="error_db_remove">Failed removing from db!</string>
     <string name="error_sources_selection">A minimum of one source selection is required!</string>
     <string name="error_sources_selection_max">Only 3 sources can be selected at a time!</string>
     <string name="error_maintenance">Server down for maintenance! Try again later.</string>
     <string name="error_no_entries">No new currency entries.</string>
+    <string name="error_add_wallet_entry">Missing or incorrect field data!</string>
+
     <string name="about_version">Version</string>
     <string name="about_issue_appdev">Report an issue</string>
     <string name="about_issue_appdev_text">Report an issue you found or send us your feature request</string>
@@ -65,12 +72,17 @@
 
     <string name="source_tavex">Tavex</string>
     <string name="source_polana">Polana1</string>
-    <string name="source_fib">FIB</string>
+    <string name="source_fib">FIBank</string>
     <string name="source_factorin">Factor I.N.</string>
+    <string name="source_unicredit">UniCredit</string>
+    <string name="source_sgeb">SG Expressbank</string>
     <string name="source_tavex_full">Tavex Bulgaria</string>
     <string name="source_polana_full">"POLANA 1" OOD</string>
     <string name="source_fib_full">First Investment Bank</string>
     <string name="source_factorin_full">FACTOR I.N.</string>
+    <string name="source_unicredit_full">UniCredit Bulbank AD</string>
+    <string name="source_sgeb_full">Societe Generale Expressbank</string>
+
 
     <string name="action_sources">Sources</string>
     <string name="action_sources_title">Show currency rates for</string>
@@ -93,12 +105,37 @@
     <string name="pref_precision_summary">Precision to use when displaying currency rates</string>
     <string name="pref_rateus_title">Rate Currency BG</string>
     <string name="pref_rateus_summary">Support us by rating this app</string>
+    <string name="pref_wifi_only_title">Wi-Fi only background downloads</string>
+    <string name="pref_wifi_only_summary">Background currency downloads only over Wi-Fi connections</string>
 
     <string name="wallet_code">Currency</string>
     <string name="wallet_amount">Amount</string>
+    <string name="wallet_amount_hint">Amount of currency bought</string>
     <string name="wallet_bought_on">Date</string>
+    <string name="wallet_bought_on_hint">Date of purchase</string>
     <string name="wallet_bought_at">Rate</string>
+    <string name="wallet_bought_at_hint">Rate of purchase, e.g., 1, 10, 100, etc.</string>
     <string name="wallet_profit">Profit</string>
+    <string name="wallet_profit_details">%1$s asset</string>
+    <string name="wallet_text_rates_details"><![CDATA[
+    Profit approximations for <b>%1$s</b> asset in the past 3 days.]]></string>
+    <string name="wallet_message_reloaded">Profit recalculations completed.</string>
+    <string name="wallet_text_at_source"><![CDATA[
+    at <b>%1$s</b>]]></string>
+    <string name="wallet_text_on_date"><![CDATA[
+    on %1$s]]></string>
+    <string name="wallet_text_initial_price"><![CDATA[
+    Bought at: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_current_price"><![CDATA[
+    Current price: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_profit_margin"><![CDATA[
+    Profit margin (&#37;): <b>%1$s</b> ]]></string>
+    <string name="wallet_text_duration"><![CDATA[
+    Duration: <b>%1$s days</b> ]]></string>
+    <string name="wallet_text_daily_change"><![CDATA[
+    Daily change: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_daily_change_perc"><![CDATA[
+    Daily change (&#37;): <b>%1$s</b> ]]></string>
 
     <string name="license_icons">
  - Icons by Icons8 LLC. Copyright (CC BY-ND 3.0) Icons8 LLC (https://icons8.com)

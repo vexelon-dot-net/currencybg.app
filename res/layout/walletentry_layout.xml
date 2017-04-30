@@ -5,9 +5,17 @@
     android:gravity="left"
     android:orientation="vertical">
 
+    <!-- currency type -->
+    <Spinner
+        android:id="@+id/wallet_entry_currency"
+        style="@android:style/Widget.Holo.Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
     <!-- amount -->
     <TextView
-        style="@style/FontWalletEntryInput"
+        style="@style/FontWalletEntryInputText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
@@ -19,12 +27,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:hint="2500"
+        android:hint="@string/wallet_amount_hint"
         android:inputType="numberDecimal"/>
 
     <!-- bought at/rate -->
     <TextView
-        style="@style/FontWalletEntryInput"
+        style="@style/FontWalletEntryInputText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
@@ -36,12 +44,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:hint="1"
+        android:hint="@string/wallet_bought_at_hint"
         android:inputType="numberDecimal"/>
 
     <!-- bought on/date -->
     <TextView
-        style="@style/FontWalletEntryInput"
+        style="@style/FontWalletEntryInputText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
@@ -53,6 +61,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:hint="tap to select"/>
+        android:hint="@string/wallet_bought_on_hint"/>
 
 </LinearLayout>

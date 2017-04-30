@@ -8,7 +8,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.1'
     }
 }
 
@@ -31,31 +31,25 @@ android {
                 'com.android.support:preference-v14:23.1.1',
                 'com.melnykov:floatingactionbutton:1.3.0',
                 'com.wdullaer:materialdatetimepicker:3.1.1',
+                'com.afollestad.material-dialogs:core:0.8.6.2',
                 'com.google.guava:guava:19.0',
                 'org.jsoup:jsoup:1.10.2',
                 'com.squareup.okhttp:okhttp:2.5.0',
                 'com.google.code.gson:gson:2.8.0',
                 'joda-time:joda-time:2.9.7'
 
-        compile('com.github.afollestad.material-dialogs:core:0.8.6.+@aar') {
-            transitive = true
-        }
-        compile('com.github.afollestad.material-dialogs:commons:0.8.6.+@aar') {
-            transitive = true
-        }
-
         testCompile 'junit:junit:4.+'
     }
 
-    compileSdkVersion 24
-    buildToolsVersion '24.0.3'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId 'net.vexelon.currencybg.app'
         minSdkVersion 15
-        targetSdkVersion 24
-        versionCode 2102
-        versionName "2.1.0"
+        targetSdkVersion 25
+        versionCode 2200
+        versionName "2.2.0"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_6

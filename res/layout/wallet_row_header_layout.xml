@@ -22,17 +22,6 @@
         android:text="@string/wallet_amount"/>
 
     <TextView
-        android:id="@+id/wallet_header_bought_on"
-        style="@style/FontListHeader"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/wallet_header_amount"
-        android:layout_weight="0.8"
-        android:gravity="center_horizontal"
-        android:layout_marginLeft="4sp"
-        android:text="@string/wallet_bought_on"/>
-
-    <TextView
         android:id="@+id/wallet_header_bought_at"
         style="@style/FontListHeader"
         android:layout_width="0dp"
@@ -41,6 +30,17 @@
         android:layout_weight="0.65"
         android:gravity="right"
         android:text="@string/wallet_bought_at"/>
+
+    <TextView
+        android:id="@+id/wallet_header_bought_on"
+        style="@style/FontListHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4sp"
+        android:layout_toRightOf="@+id/wallet_header_amount"
+        android:layout_weight="0.8"
+        android:gravity="right"
+        android:text="@string/wallet_bought_on"/>
 
     <TextView
         android:id="@+id/wallet_header_profit"

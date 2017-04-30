@@ -66,12 +66,12 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	private static boolean sortByAscending = true;
 
-	private ListView lvCurrencies;
-	private TextView tvLastUpdate;
-	private TextView tvCurrenciesRate;
+	private ListView currenciesView;
+	private TextView lastUpdateView;
+	private TextView currenciesRateView;
 	private String lastUpdateLastValue;
 	private CurrencyListAdapter currencyListAdapter;
-	private List<TextView> tvSources = Lists.newArrayList();
+	private List<TextView> sourceViews = Lists.newArrayList();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,6 +87,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		final AppSettings appSettings = new AppSettings(getActivity());
 		Resources resources = getActivity().getResources();
 
+		// check against latest known version
 		if (appSettings.getLastReadNewsId() != resources.getInteger(R.integer.news_last)) {
 			showNewsAlert(getActivity());
 			appSettings.setLastReadNewsId(resources.getInteger(R.integer.news_last));
@@ -111,8 +112,8 @@ public class CurrenciesFragment extends AbstractFragment {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
 			reloadRates(true);
-			lastUpdateLastValue = tvLastUpdate.getText().toString();
-			tvLastUpdate.setText(R.string.last_update_updating_text);
+			lastUpdateLastValue = lastUpdateView.getText().toString();
+			lastUpdateView.setText(R.string.last_update_updating_text);
 			setRefreshActionButtonState(true);
 			return true;
 		case R.id.action_rate:
@@ -131,8 +132,8 @@ public class CurrenciesFragment extends AbstractFragment {
 	}
 
 	private void init(View view, LayoutInflater inflater) {
-		lvCurrencies = (ListView) view.findViewById(R.id.list_currencies);
-		lvCurrencies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		currenciesView = (ListView) view.findViewById(R.id.list_currencies);
+		currenciesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Sources source = Sources.valueOf((int) id);
@@ -142,14 +143,14 @@ public class CurrenciesFragment extends AbstractFragment {
 			}
 		});
 
-		tvLastUpdate = (TextView) view.findViewById(R.id.text_last_update);
+		lastUpdateView = (TextView) view.findViewById(R.id.text_last_update);
 
-		tvSources.add((TextView) view.findViewById(R.id.header_src_1));
-		tvSources.add((TextView) view.findViewById(R.id.header_src_2));
-		tvSources.add((TextView) view.findViewById(R.id.header_src_3));
+		sourceViews.add((TextView) view.findViewById(R.id.header_src_1));
+		sourceViews.add((TextView) view.findViewById(R.id.header_src_2));
+		sourceViews.add((TextView) view.findViewById(R.id.header_src_3));
 
-		tvCurrenciesRate = (TextView) view.findViewById(R.id.header_currencies_rate);
-		tvCurrenciesRate.setOnClickListener(new View.OnClickListener() {
+		currenciesRateView = (TextView) view.findViewById(R.id.header_currencies_rate);
+		currenciesRateView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (currencyListAdapter != null) {
@@ -179,7 +180,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	}
 
 	public void setLastUpdate(String lastUpdate) {
-		tvLastUpdate.setText(lastUpdate);
+		lastUpdateView.setText(lastUpdate);
 	}
 
 	private MaterialDialog newRateMenu() {
@@ -247,10 +248,10 @@ public class CurrenciesFragment extends AbstractFragment {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 								if (which.length == 0) {
-									showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_TIME, true);
+									showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_DURATION, true);
 									return false;
 								} else if (which.length > 3) {
-									showSnackbar(R.string.error_sources_selection_max, Defs.TOAST_ERR_TIME, true);
+									showSnackbar(R.string.error_sources_selection_max, Defs.TOAST_ERR_DURATION, true);
 									return false;
 								}
 
@@ -288,13 +289,13 @@ public class CurrenciesFragment extends AbstractFragment {
 		final MaterialDialog dialog = new MaterialDialog.Builder(context)
 				.title(getResources().getString(R.string.action_currency_details, row.getCode(),
 						Sources.getFullName(source.getID(), context)))
-				.cancelable(true).customView(R.layout.currency_details, true).build();
+				.cancelable(true).customView(R.layout.dialog_details, true).build();
 
 		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 			@Override
 			public void onShow(DialogInterface dialogInterface) {
 				View v = dialog.getCustomView();
-				UIUtils.setText(v, R.id.currency_details_source,
+				UIUtils.setText(v, R.id.details_header,
 						getResources().getString(R.string.text_rates_details, row.getName()), true);
 
 				if (row.getColumn(source).isPresent()) {
@@ -303,11 +304,12 @@ public class CurrenciesFragment extends AbstractFragment {
 						dataSource = new SQLiteDataSource();
 						dataSource.connect(context);
 
-						StringBuilder buffer = new StringBuilder();
 						String buyText = UIUtils.toHtmlColor(getResources().getString(R.string.buy),
 								Defs.COLOR_NAVY_BLUE);
 						String sellText = UIUtils.toHtmlColor(getResources().getString(R.string.sell),
 								Defs.COLOR_DARK_ORANGE);
+
+						StringBuilder buffer = new StringBuilder();
 
 						List<CurrencyData> rates = dataSource.getAllRates(row.getCode(), source.getID());
 						for (CurrencyData next : rates) {
@@ -326,16 +328,15 @@ public class CurrenciesFragment extends AbstractFragment {
 							buffer.append("<br>");
 						}
 
-						UIUtils.setText(v, R.id.currency_details_rates, buffer.toString(), true);
-
+						UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
 					} catch (DataSourceException e) {
 						Log.e(Defs.LOG_TAG, "Error fetching currencies from database!", e);
-						showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+						showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
 					} finally {
 						IOUtils.closeQuitely(dataSource);
 					}
 				} else {
-					UIUtils.setText(v, R.id.currency_details_rates, Defs.LONG_DASH);
+					UIUtils.setText(v, R.id.details_content, Defs.LONG_DASH);
 				}
 			}
 		});
@@ -389,13 +390,13 @@ public class CurrenciesFragment extends AbstractFragment {
 		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout,
 				toCurrencyRows(activity, getVisibleCurrencies(currencies)), appSettings.getCurrenciesPrecision(),
 				appSettings.getCurrenciesRateSelection(), appSettings.getCurrenciesFilter());
-		lvCurrencies.setAdapter(currencyListAdapter);
+		currenciesView.setAdapter(currencyListAdapter);
 
 		updateCurrenciesRateTitle(activity, appSettings.getCurrenciesRateSelection());
 		updateCurrenciesSourcesTitles(appSettings.getCurrenciesFilter());
 		setCurrenciesSort(appSettings.getCurrenciesSortSelection());
 
-		tvLastUpdate.setText(DateTimeUtils.toDateText(activity, appSettings.getLastUpdateDate().toDate()));
+		lastUpdateView.setText(DateTimeUtils.toDateText(activity, appSettings.getLastUpdateDate().toDate()));
 	}
 
 	/**
@@ -413,12 +414,12 @@ public class CurrenciesFragment extends AbstractFragment {
 	private void updateCurrenciesRateTitle(Activity activity, int rateBy) {
 		switch (rateBy) {
 		case AppSettings.RATE_SELL:
-			tvCurrenciesRate.setText(Html.fromHtml(
+			currenciesRateView.setText(Html.fromHtml(
 					UIUtils.toHtmlColor(activity.getString(R.string.sell).toUpperCase(), Defs.COLOR_DARK_ORANGE)));
 			break;
 		case AppSettings.RATE_BUY:
 		default:
-			tvCurrenciesRate.setText(Html.fromHtml(
+			currenciesRateView.setText(Html.fromHtml(
 					UIUtils.toHtmlColor(activity.getString(R.string.buy).toUpperCase(), Defs.COLOR_NAVY_BLUE)));
 			break;
 		}
@@ -442,14 +443,14 @@ public class CurrenciesFragment extends AbstractFragment {
 	 * @param sources
 	 */
 	private void updateCurrenciesSourcesTitles(Set<Sources> sources) {
-		for (TextView v : tvSources) {
+		for (TextView v : sourceViews) {
 			v.setVisibility(View.INVISIBLE);
 		}
 
 		int i = 0;
 		for (Sources source : sources) {
-			tvSources.get(i).setVisibility(View.VISIBLE);
-			tvSources.get(i).setText(Sources.getName(source.getID(), getActivity()));
+			sourceViews.get(i).setVisibility(View.VISIBLE);
+			sourceViews.get(i).setText(Sources.getName(source.getID(), getActivity()));
 			i += 1;
 		}
 	}
@@ -506,7 +507,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				}
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-				showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+				showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
 			} finally {
 				IOUtils.closeQuitely(source);
 			}
@@ -606,12 +607,12 @@ public class CurrenciesFragment extends AbstractFragment {
 				// visualise update date time
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
 			} else if (msgId == R.string.error_no_entries) {
-				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
+				showSnackbar(msgId, Defs.TOAST_INFO_DURATION, false);
 			} else {
-				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
+				showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
 			}
 
-			tvLastUpdate.setText(lastUpdateLastValue);
+			lastUpdateView.setText(lastUpdateLastValue);
 		}
 
 	}

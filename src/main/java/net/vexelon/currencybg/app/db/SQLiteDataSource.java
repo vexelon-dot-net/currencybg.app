@@ -29,6 +29,7 @@ import com.google.common.collect.Maps;
 
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
+import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 
 import org.joda.time.DateTime;
@@ -38,8 +39,8 @@ import java.util.Map;
 
 public class SQLiteDataSource implements DataSource {
 
-	private static final String[] ALL_COLUMNS = { Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY,
-			Defs.COLUMN_SELL, Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE };
+	private static final String[] ALL_COLUMNS = {Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY,
+			Defs.COLUMN_SELL, Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE};
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	// private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mmZ";
@@ -140,7 +141,7 @@ public class SQLiteDataSource implements DataSource {
 					"SELECT DISTINCT code, ratio, buy, sell, curr_date, source FROM currencies WHERE "
 							+ Defs.COLUMN_CODE + " = ? AND " + Defs.COLUMN_SOURCE
 							+ " = ? ORDER BY strftime('%s', curr_date) DESC; ",
-					new String[] { code, Integer.toString(source) });
+					new String[]{code, Integer.toString(source)});
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -168,7 +169,7 @@ public class SQLiteDataSource implements DataSource {
 			cursor = database.rawQuery(
 					"SELECT * FROM currencies WHERE " + Defs.COLUMN_SOURCE
 							+ " = ? ORDER BY strftime('%s', curr_date) DESC; ",
-					new String[] { String.valueOf(source) });
+					new String[]{String.valueOf(source)});
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -196,7 +197,7 @@ public class SQLiteDataSource implements DataSource {
 
 		try {
 			cursor = database.rawQuery("SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE
-					+ " = ? ORDER BY strftime('%s', curr_date) DESC; ", new String[] { code });
+					+ " = ? ORDER BY strftime('%s', curr_date) DESC; ", new String[]{code});
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -249,4 +250,86 @@ public class SQLiteDataSource implements DataSource {
 
 		return Optional.fromNullable(result);
 	}
+
+	@Override
+	public void addWalletEntry(WalletEntry walletEntry) throws DataSourceException {
+		ContentValues values = new ContentValues();
+
+		if (walletEntry != null) {
+			values.put(Defs.COLUMN_WALLET_CODE, walletEntry.getCode());
+			values.put(Defs.COLUMN_WALLET_AMOUNT, walletEntry.getAmount());
+			values.put(Defs.COLUMN_WALLET_PURCHASE_TIME,
+					DateTimeUtils.parseDateToString(walletEntry.getPurchaseTime(), Defs.DATEFORMAT_ISO8601));
+			values.put(Defs.COLUMN_WALLET_PURCHASE_RATE, walletEntry.getPurchaseRate());
+
+			database.insert(Defs.TABLE_WALLET, null, values);
+		}
+	}
+
+	@Override
+	public void deleteWalletEntry(int id) throws DataSourceException {
+		try {
+			database.execSQL("DELETE FROM wallet WHERE id = " + id + ";");
+		} catch (SQLException e) {
+			throw new DataSourceException("SQL statement error!", e);
+		}
+	}
+
+	@Override
+	public void updateWalletEntry(int id, WalletEntry walletEntry) throws DataSourceException {
+		ContentValues newValues = new ContentValues();
+
+		if (walletEntry.getCode() != null) {
+			newValues.put(Defs.COLUMN_WALLET_CODE, walletEntry.getCode());
+		}
+		if (walletEntry.getAmount() != null) {
+			newValues.put(Defs.COLUMN_WALLET_AMOUNT, walletEntry.getAmount());
+		}
+		if (walletEntry.getPurchaseTime() != null) {
+			newValues.put(Defs.COLUMN_WALLET_PURCHASE_TIME,
+					DateTimeUtils.parseDateToString(walletEntry.getPurchaseTime(), Defs.DATEFORMAT_ISO8601));
+		}
+		if (walletEntry.getPurchaseRate() != null) {
+			newValues.put(Defs.COLUMN_WALLET_PURCHASE_RATE, walletEntry.getPurchaseRate());
+		}
+
+		database.update(Defs.TABLE_WALLET, newValues, "id=?", new String[]{Integer.toString(id)});
+	}
+
+	@Override
+	public List<WalletEntry> getWalletEntries() throws DataSourceException {
+		List<WalletEntry> result = Lists.newArrayList();
+		Cursor cursor = null;
+
+		try {
+			cursor = database.rawQuery("SELECT * FROM wallet;", null);
+
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				WalletEntry walletEntry = cursorToWallet(cursor);
+				result.add(walletEntry);
+
+				cursor.moveToNext();
+			}
+		} catch (Throwable t) {
+			throw new DataSourceException("SQL error: Failed fetching wallet entries", t);
+		} finally {
+			closeCursor(cursor);
+		}
+
+		return result;
+	}
+
+	private WalletEntry cursorToWallet(Cursor cursor) {
+		WalletEntry walletEntry = new WalletEntry();
+
+		walletEntry.setId(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_WALLET_ID)));
+		walletEntry.setCode(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_CODE)));
+		walletEntry.setAmount(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_AMOUNT)));
+		walletEntry.setPurchaseTime(DateTimeUtils.parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_PURCHASE_TIME))));
+		walletEntry.setPurchaseRate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_PURCHASE_RATE)));
+
+		return walletEntry;
+	}
+
 }

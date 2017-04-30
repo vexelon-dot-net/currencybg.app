@@ -53,8 +53,8 @@ import java.util.List;
 public class ConvertFragment extends AbstractFragment {
 
 	private Spinner spinnerSourceCurrency;
-	private TextView tvSourceValue;
-	private ListView lvTargetCurrencies;
+	private TextView sourceValueView;
+	private ListView targetCurrenciesView;
 
 	private List<CurrencyData> currencies = Lists.newArrayList();
 
@@ -113,6 +113,7 @@ public class ConvertFragment extends AbstractFragment {
 		// setup source currencies
 		spinnerSourceCurrency = (Spinner) view.findViewById(R.id.source_currency);
 		spinnerSourceCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				if (updateTargetCurrenciesCalculations()) {
@@ -130,8 +131,8 @@ public class ConvertFragment extends AbstractFragment {
 		});
 
 		// source value
-		tvSourceValue = (TextView) view.findViewById(R.id.text_source_value2);
-		tvSourceValue.setOnClickListener(new OnClickListener() {
+		sourceValueView = (TextView) view.findViewById(R.id.text_source_value2);
+		sourceValueView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				new CalculatorWidget(getActivity()).showCalculator(appSettings.getLastConvertValue(),
@@ -152,11 +153,11 @@ public class ConvertFragment extends AbstractFragment {
 		});
 
 		// setup target currencies list
-		lvTargetCurrencies = (ListView) view.findViewById(R.id.list_target_currencies);
-		lvTargetCurrencies.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+		targetCurrenciesView = (ListView) view.findViewById(R.id.list_target_currencies);
+		targetCurrenciesView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) lvTargetCurrencies.getAdapter();
+				ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) targetCurrenciesView.getAdapter();
 
 				CurrencyData removed = adapter.remove(position);
 				if (removed != null) {
@@ -164,12 +165,14 @@ public class ConvertFragment extends AbstractFragment {
 
 					appSettings.removeConvertCurrency(removed);
 					showSnackbar(getActivity().getString(R.string.action_currency_removed, removed.getCode()));
+
+					vibrate(Defs.VIBRATE_DEL_DURATION);
 				}
 
 				return false;
 			}
 		});
-		lvTargetCurrencies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		targetCurrenciesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				showSnackbar(getActivity().getString(R.string.hint_currency_remove));
@@ -178,7 +181,7 @@ public class ConvertFragment extends AbstractFragment {
 
 		// add button
 		FloatingActionButton action = (FloatingActionButton) view.findViewById(R.id.fab_convert);
-		action.attachToListView(lvTargetCurrencies);
+		action.attachToListView(targetCurrenciesView);
 		action.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -234,14 +237,14 @@ public class ConvertFragment extends AbstractFragment {
 
 		ConvertTargetListAdapter adapter = new ConvertTargetListAdapter(getActivity(),
 				R.layout.convert_target_row_layout, targetCurrencyList, appSettings.getCurrenciesPrecision());
-		lvTargetCurrencies.setAdapter(adapter);
+		targetCurrenciesView.setAdapter(adapter);
 	}
 
 	/**
 	 * Performs convert calculations and displays results
 	 */
 	private boolean updateTargetCurrenciesCalculations() {
-		ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) lvTargetCurrencies.getAdapter();
+		ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) targetCurrenciesView.getAdapter();
 		CurrencyData toCurrency = (CurrencyData) spinnerSourceCurrency.getSelectedItem();
 
 		if (adapter != null && toCurrency != null) {
@@ -258,11 +261,11 @@ public class ConvertFragment extends AbstractFragment {
 	}
 
 	private void setSourceCurrencyValue(String value, String currencyCode) {
-		tvSourceValue.setText(formatCurrency(getActivity(), value, currencyCode));
+		sourceValueView.setText(formatCurrency(getActivity(), value, currencyCode));
 	}
 
 	private BigDecimal getSourceCurrencyValue() {
-		return NumberUtils.getCurrencyValue(tvSourceValue.getText().toString(),
+		return NumberUtils.getCurrencyValue(sourceValueView.getText().toString(),
 				new AppSettings(getActivity()).getLastConvertCurrencySel());
 	}
 

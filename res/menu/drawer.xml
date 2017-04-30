@@ -11,10 +11,10 @@
             android:id="@+id/nav_convert"
             android:icon="@drawable/ic_swap_vertical_circle"
             android:title="@string/tab_title_convert"/>
-        <!--<item-->
-            <!--android:id="@+id/nav_wallet"-->
-            <!--android:icon="@drawable/ic_wallet"-->
-            <!--android:title="@string/tab_title_wallet"/>-->
+        <item
+            android:id="@+id/nav_wallet"
+            android:icon="@drawable/ic_wallet"
+            android:title="@string/tab_title_wallet"/>
     </group>
     <group
         android:id="@+id/group_settings"

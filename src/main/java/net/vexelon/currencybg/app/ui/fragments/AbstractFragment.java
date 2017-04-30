@@ -17,25 +17,13 @@
  */
 package net.vexelon.currencybg.app.ui.fragments;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.joda.time.LocalDate;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
@@ -47,6 +35,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Table;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -64,6 +59,16 @@ import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
+
+import org.joda.time.LocalDate;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class AbstractFragment extends Fragment {
 
@@ -85,7 +90,7 @@ public class AbstractFragment extends Fragment {
 
 	/**
 	 * Shows a dialog with "What's New" information
-	 * 
+	 *
 	 * @param context
 	 * @return
 	 */
@@ -139,7 +144,7 @@ public class AbstractFragment extends Fragment {
 
 	/**
 	 * Fetches a sorted list of last downloaded currencies from the database
-	 * 
+	 *
 	 * @param context
 	 * @param sorted
 	 * @param addBGN
@@ -156,7 +161,7 @@ public class AbstractFragment extends Fragment {
 			source.connect(context);
 			currencies = source.getLastRates();
 		} catch (DataSourceException e) {
-			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
 			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
 		} finally {
 			IOUtils.closeQuitely(source);
@@ -202,17 +207,38 @@ public class AbstractFragment extends Fragment {
 		return currency;
 	}
 
-	protected Map<String, CurrencyData> getMappedCurrencies(List<CurrencyData> currencies) {
-		Map<String, CurrencyData> result = Maps.newHashMap();
+	/**
+	 * Fetches a mapping of currency codes and currencies for every source found
+	 * 
+	 * @param currencies
+	 * @return
+	 */
+	protected Multimap<String, CurrencyData> getCurrenciesMapped(List<CurrencyData> currencies) {
+		ImmutableListMultimap.Builder<String, CurrencyData> builder = ImmutableListMultimap.builder();
 		for (CurrencyData currencyData : currencies) {
-			result.put(currencyData.getCode(), currencyData);
+			builder.put(currencyData.getCode(), currencyData);
 		}
-		return result;
+		return builder.build();
+	}
+
+	/**
+	 * Fetches a table-alike mapping of currency codes and currencies for every
+	 * source found
+	 * 
+	 * @param currencies
+	 * @return
+	 */
+	protected Table<String, Sources, CurrencyData> getCurrenciesTable(List<CurrencyData> currencies) {
+		ImmutableTable.Builder<String, Sources, CurrencyData> builder = ImmutableTable.builder();
+		for (CurrencyData currencyData : currencies) {
+			builder.put(currencyData.getCode(), Sources.valueOf(currencyData.getSource()), currencyData);
+		}
+		return builder.build();
 	}
 
 	/**
 	 * Removes currencies that should not be shown to users
-	 * 
+	 *
 	 * @param currencies
 	 * @return
 	 */
@@ -256,19 +282,24 @@ public class AbstractFragment extends Fragment {
 			int precisionMode = new AppSettings(context).getCurrenciesPrecision();
 
 			try {
-				switch (precisionMode) {
-				case AppSettings.PRECISION_ADVANCED:
-					return NumberUtils.getCurrencyFormat(new BigDecimal(value), Defs.SCALE_SHOW_LONG, code);
-				case AppSettings.PRECISION_SIMPLE:
-				default:
-					return NumberUtils.getCurrencyFormat(new BigDecimal(value), code);
-				}
+				return formatCurrency(new BigDecimal(value), code, precisionMode);
 			} catch (Exception e) {
 				Log.e(Defs.LOG_TAG, "Currency format exception! ", e);
 			}
 		}
 
 		return value;
+	}
+
+	protected String formatCurrency(BigDecimal amount, String code, int precisionMode) {
+		switch (precisionMode) {
+		case AppSettings.PRECISION_ADVANCED:
+			return NumberUtils.getCurrencyFormat(amount, Defs.SCALE_SHOW_LONG, code);
+
+		case AppSettings.PRECISION_SIMPLE:
+		default:
+			return NumberUtils.getCurrencyFormat(amount, code);
+		}
 	}
 
 	protected void showSnackbar(String text, int duration, boolean isError) {
@@ -291,9 +322,9 @@ public class AbstractFragment extends Fragment {
 		showSnackbar(text, Snackbar.LENGTH_SHORT, false);
 	}
 
-	protected void showSnackbar(int resId, int duration, boolean isError) {
+	protected void showSnackbar(View view, int resId, int duration, boolean isError) {
 		try {
-			Snackbar snackbar = Snackbar.make(rootView, resId, duration);
+			Snackbar snackbar = Snackbar.make(view, resId, duration);
 			View v = snackbar.getView();
 			// TextView textView = (TextView)
 			// v.findViewById(android.support.design.R.id.snackbar_text);
@@ -306,16 +337,26 @@ public class AbstractFragment extends Fragment {
 		}
 	}
 
+	protected void showSnackbar(int resId, int duration, boolean isError) {
+		showSnackbar(rootView, resId, duration, isError);
+	}
+
 	protected void showSnackbar(int resId, boolean isError) {
-		showSnackbar(resId, Snackbar.LENGTH_SHORT, isError);
+		showSnackbar(rootView, resId, Snackbar.LENGTH_SHORT, isError);
 	}
 
 	protected void showSnackbar(int resId) {
-		showSnackbar(resId, Snackbar.LENGTH_SHORT, false);
+		showSnackbar(rootView, resId, Snackbar.LENGTH_SHORT, false);
 	}
 
 	protected int dp2px(int dp) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
 	}
 
+	protected void vibrate(int duration) {
+		Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+		if (v != null) {
+			v.vibrate(duration);
+		}
+	}
 }

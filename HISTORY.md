@@ -1,23 +1,19 @@
 Currency BG Changes
 ===================
 
-## 2.3.0
-
-### EN
-  * Fixed a date time localization issue.
-
-### BG
-  TODO
-
-
 ## 2.2.0
 
 ### EN
   * Fixed a problem with currency updates via the background app service.
+  * Added 'Wallet' function. You may now get a calculation of profits and losses for all currencies in your possession.
+  * Added 'Wi-Fi' only background service downloads option. Requires the 'ACCESS_NETWORK_STATE' permission.
+  * Added short vibration when removing convert or wallet entries. Requires the 'VIBRATE' permission.
 
 ### BG
   * Отстранен проблем с автоматично обновяване на валутите в приложението.
-
+  * Добавена функция 'Портфейл'. Сега може да получите реална информация за печалби загуби при даден обменен източник на закупени от вас валути.
+  * Добавена функция 'Сваляне на валути само през Wi-Fi'. Изисква 'ACCESS_NETWORK_STATE' разрешение.
+  * Добавена кратка вибрация при премахване на валути за обмяна или валути от портфейла. Изисква 'VIBRATE' разрешение.
 
 ## 2.1.0
 

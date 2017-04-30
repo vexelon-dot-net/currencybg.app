@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">210</integer>
+    <integer name="news_last">220</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
@@ -12,15 +12,21 @@ Version 2.0 brings you currency exchange rates information from various Bulgaria
 The new sources functionality has practical purposes should you want to monitor rates or exchange currencies
 and we\'ll be adding more sources in the upcoming versions of the app.
 <br><br>
-The BNB exchange rates are removed in this version, because we believe they do not bring
-any practical meaning concerning currency exchange. You can still find the BNB exchange rates in the
-<a href="https://play.google.com/store/apps/details?id=net.vexelon.bgrates">BGrates</a> app.
+<b><font color="#ffffff">2.2.0</font></b>
+<br><br>
+&emsp; - Fixed a problem with currency updates via the background app service.
+<br>
+&emsp; - Added <b>Wallet</b> function. You may now get a calculation of profits and losses for all currencies in your possession.
+<br>
+&emsp; - Added short vibration when removing convert or wallet entries. Requires the <b>VIBRATE</b> permission.
+<br>
+&emsp; - Added <b>Wi-Fi</b> only background service downloads option. Requires the <b>ACCESS_NETWORK_STATE</b> permission.
 <br><br>
 <b><font color="#ffffff">2.1.0</font></b>
 <br><br>
 &emsp; - Added a list of all downloaded currency rates in the past 3 days. Tap on a currency from a given source to view the data.
 <br>
-&emsp; - Added a menu \'Clear\' function to convert screen.
+&emsp; - Added a menu <b>Clear</b> function to convert screen.
 <br>
 &emsp; - Added missing currency country flags.
 <br>

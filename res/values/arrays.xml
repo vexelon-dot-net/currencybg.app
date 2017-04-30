@@ -9,18 +9,24 @@
         <item>@string/source_factorin</item>
         <item>@string/source_polana</item>
         <item>@string/source_fib</item>
+        <item>@string/source_unicredit</item>
+        <item>@string/source_sgeb</item>
     </string-array>
     <string-array name="currency_sources_full">
         <item>@string/source_tavex_full</item>
         <item>@string/source_factorin_full</item>
         <item>@string/source_polana_full</item>
         <item>@string/source_fib_full</item>
+        <item>@string/source_unicredit_full</item>
+        <item>@string/source_sgeb_full</item>
     </string-array>
     <integer-array name="currency_sources_ids">
         <item>200</item>
         <item>400</item>
         <item>300</item>
         <item>100</item>
+        <item>500</item>
+        <item>600</item>
     </integer-array>
     <string-array name="currency_codes">
         <item>AED</item>
@@ -46,6 +52,7 @@
         <item>HRK</item>
         <item>HUF</item>
         <item>IDR</item>
+        <item>INR</item>
         <item>ILS</item>
         <item>ISK</item>
         <item>JPY</item>
@@ -70,6 +77,7 @@
         <item>TRY</item>
         <item>UAH</item>
         <item>USD</item>
+        <item>VND</item>
         <item>ZAR</item>
     </string-array>
     <string-array name="currency_names">
@@ -96,6 +104,7 @@
         <item>Croatian kuna</item>
         <item>Hungarian forint</item>
         <item>Indonesian rupiah</item>
+        <item>Indian rupee</item>
         <item>Israeli new shekel</item>
         <item>Icelandic krona</item>
         <item>Japanese yen</item>
@@ -120,6 +129,7 @@
         <item>Turkish lira</item>
         <item>Ukrainian hryvnia</item>
         <item>United States dollar</item>
+        <item>Vietnamese Dong</item>
         <item>South African rand</item>
     </string-array>
 </resources>

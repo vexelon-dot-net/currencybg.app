@@ -17,10 +17,7 @@
  */
 package net.vexelon.currencybg.app.utils;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
+import android.util.Xml;
 
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -31,9 +28,12 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlSerializer;
 
-import android.util.Xml;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 
-public class XmlUtils {
+public final class XmlUtils {
 
 	/**
 	 * Serialize an XML element recursively

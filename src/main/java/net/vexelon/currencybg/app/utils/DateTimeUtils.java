@@ -35,7 +35,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-public class DateTimeUtils {
+public final class DateTimeUtils {
 
 	public static final long MS_PER_DAY = (24 * 60 * 60 * 1000);
 

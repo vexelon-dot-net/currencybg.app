@@ -139,6 +139,7 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			// v.length());
 			// return UIUtils.toHtmlColor(first, color) + "<small>" + second +
 			// "</small>";
+
 			case AppSettings.PRECISION_SIMPLE:
 			default:
 				return UIUtils.toHtmlColor(NumberUtils.getCurrencyFormat(rate, Defs.SCALE_SHOW_SHORT, null), color);
