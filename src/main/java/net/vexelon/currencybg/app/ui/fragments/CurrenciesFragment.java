@@ -248,10 +248,10 @@ public class CurrenciesFragment extends AbstractFragment {
 							@Override
 							public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
 								if (which.length == 0) {
-									showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_TIME, true);
+									showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_DURATION, true);
 									return false;
 								} else if (which.length > 3) {
-									showSnackbar(R.string.error_sources_selection_max, Defs.TOAST_ERR_TIME, true);
+									showSnackbar(R.string.error_sources_selection_max, Defs.TOAST_ERR_DURATION, true);
 									return false;
 								}
 
@@ -331,7 +331,7 @@ public class CurrenciesFragment extends AbstractFragment {
 						UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
 					} catch (DataSourceException e) {
 						Log.e(Defs.LOG_TAG, "Error fetching currencies from database!", e);
-						showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+						showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
 					} finally {
 						IOUtils.closeQuitely(dataSource);
 					}
@@ -507,7 +507,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				}
 			} catch (DataSourceException e) {
 				Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-				showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+				showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
 			} finally {
 				IOUtils.closeQuitely(source);
 			}
@@ -607,9 +607,9 @@ public class CurrenciesFragment extends AbstractFragment {
 				// visualise update date time
 				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
 			} else if (msgId == R.string.error_no_entries) {
-				showSnackbar(msgId, Defs.TOAST_INFO_TIME, false);
+				showSnackbar(msgId, Defs.TOAST_INFO_DURATION, false);
 			} else {
-				showSnackbar(msgId, Defs.TOAST_ERR_TIME, true);
+				showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
 			}
 
 			lastUpdateView.setText(lastUpdateLastValue);

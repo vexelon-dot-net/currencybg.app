@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
@@ -160,7 +161,7 @@ public class AbstractFragment extends Fragment {
 			source.connect(context);
 			currencies = source.getLastRates();
 		} catch (DataSourceException e) {
-			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
 			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
 		} finally {
 			IOUtils.closeQuitely(source);
@@ -350,5 +351,12 @@ public class AbstractFragment extends Fragment {
 
 	protected int dp2px(int dp) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+	}
+
+	protected void vibrate(int duration) {
+		Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+		if (v != null) {
+			v.vibrate(duration);
+		}
 	}
 }

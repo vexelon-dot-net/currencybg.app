@@ -113,6 +113,7 @@ public class ConvertFragment extends AbstractFragment {
 		// setup source currencies
 		spinnerSourceCurrency = (Spinner) view.findViewById(R.id.source_currency);
 		spinnerSourceCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				if (updateTargetCurrenciesCalculations()) {
@@ -164,6 +165,8 @@ public class ConvertFragment extends AbstractFragment {
 
 					appSettings.removeConvertCurrency(removed);
 					showSnackbar(getActivity().getString(R.string.action_currency_removed, removed.getCode()));
+
+					vibrate(Defs.VIBRATE_DEL_DURATION);
 				}
 
 				return false;

@@ -24,8 +24,10 @@ public final class Defs {
 
 	public final static String LOG_TAG = "net.vexelon.currencybg";
 
-	public final static int TOAST_INFO_TIME = 4000;
-	public final static int TOAST_ERR_TIME = 3000;
+	public final static int TOAST_INFO_DURATION = 4000;
+	public final static int TOAST_ERR_DURATION = 3000;
+	public final static int VIBRATE_DEL_DURATION = 50;
+
 	public static final String LONG_DASH = "\u2014";
 	public static final String COLOR_NAVY_BLUE = "#00BFFF";
 	public static final String COLOR_DARK_ORANGE = "#FFB400";

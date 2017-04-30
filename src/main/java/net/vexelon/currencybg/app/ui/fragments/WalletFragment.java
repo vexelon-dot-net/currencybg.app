@@ -110,9 +110,11 @@ public class WalletFragment extends AbstractFragment
 
 						showSnackbar(getActivity().getString(R.string.action_wallet_removed,
 								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
+
+						vibrate(Defs.VIBRATE_DEL_DURATION);
 					} catch (DataSourceException e) {
 						Log.e(Defs.LOG_TAG, "Could not remove wallet entries from database!", e);
-						showSnackbar(R.string.error_db_remove, Defs.TOAST_ERR_TIME, true);
+						showSnackbar(R.string.error_db_remove, Defs.TOAST_ERR_DURATION, true);
 					} finally {
 						IOUtils.closeQuitely(source);
 					}
@@ -204,7 +206,7 @@ public class WalletFragment extends AbstractFragment
 
 		} catch (DataSourceException e) {
 			Log.e(Defs.LOG_TAG, "Could not load wallet entries from database!", e);
-			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_TIME, true);
+			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
 		} finally {
 			IOUtils.closeQuitely(source);
 		}
@@ -398,7 +400,8 @@ public class WalletFragment extends AbstractFragment
 
 						// validation
 						if (amount.isEmpty() || boughtAt.isEmpty() || boughtOn.isEmpty()) {
-							showSnackbar(dialog.getView(), R.string.error_add_wallet_entry, Defs.TOAST_ERR_TIME, true);
+							showSnackbar(dialog.getView(), R.string.error_add_wallet_entry, Defs.TOAST_ERR_DURATION,
+									true);
 							return;
 						}
 
@@ -411,7 +414,8 @@ public class WalletFragment extends AbstractFragment
 							entry.setPurchaseTime(dateTimeSelected.toDate());
 						} catch (NumberFormatException e) {
 							Log.w(Defs.LOG_TAG, "Error reading amount of rate!", e);
-							showSnackbar(dialog.getView(), R.string.error_add_wallet_entry, Defs.TOAST_ERR_TIME, true);
+							showSnackbar(dialog.getView(), R.string.error_add_wallet_entry, Defs.TOAST_ERR_DURATION,
+									true);
 							return;
 						}
 
@@ -427,7 +431,7 @@ public class WalletFragment extends AbstractFragment
 							source.addWalletEntry(entry);
 						} catch (DataSourceException e) {
 							Log.e(Defs.LOG_TAG, "Could not save wallet entry to database!", e);
-							showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_TIME, true);
+							showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_DURATION, true);
 						} finally {
 							IOUtils.closeQuitely(source);
 						}
