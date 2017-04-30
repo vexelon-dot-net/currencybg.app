@@ -26,7 +26,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -51,8 +53,6 @@ import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
 import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.PrefsFragment;
 import net.vexelon.currencybg.app.ui.fragments.WalletFragment;
-
-import org.joda.time.LocalDateTime;
 
 import java.io.IOException;
 
@@ -224,10 +224,15 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		Intent myIntent = new Intent(MainActivity.this, BackgroundService.class);
 		pendingIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, 0);
 
-		long startTimeout = LocalDateTime.now().plusSeconds(Defs.SERVICE_FIRST_RUN_INTERVAL).toDateTime().getMillis();
+		long startTimeout = SystemClock.elapsedRealtime() + Defs.SERVICE_FIRST_RUN_INTERVAL;
+		/**
+		 * Align service interval to 1/2 a day for devices with API < 19
+		 */
+		long period = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ? AlarmManager.INTERVAL_HALF_DAY
+				: Defs.SERVICE_PERIODIC_INTERVAL;
 
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.setInexactRepeating(AlarmManager.RTC, startTimeout, AlarmManager.INTERVAL_HOUR * 6, pendingIntent);
+		alarmManager.setInexactRepeating(AlarmManager.RTC, startTimeout, period, pendingIntent);
 	}
 
 	public void cancelService() {
