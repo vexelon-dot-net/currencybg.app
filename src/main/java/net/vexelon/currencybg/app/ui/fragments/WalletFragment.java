@@ -487,7 +487,7 @@ public class WalletFragment extends AbstractFragment
 					public void onClick(View view) {
 						LocalDateTime dateTime = LocalDateTime.now();
 						DatePickerDialog datePicker = DatePickerDialog.newInstance(WalletFragment.this,
-								dateTime.getYear(), dateTime.getMonthOfYear(), dateTime.getDayOfYear());
+								dateTime.getYear(), dateTime.getMonthOfYear() - 1, dateTime.getDayOfMonth());
 						datePicker.setThemeDark(true);
 						datePicker.show(getFragmentManager(),
 								getResources().getText(R.string.text_pick_date).toString());
@@ -501,7 +501,7 @@ public class WalletFragment extends AbstractFragment
 
 	@Override
 	public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-		dateTimeSelected = dateTimeSelected.withYear(year).withMonthOfYear(monthOfYear).withDayOfMonth(dayOfMonth);
+		dateTimeSelected = dateTimeSelected.withYear(year).withMonthOfYear(monthOfYear + 1).withDayOfMonth(dayOfMonth);
 		// show time picker
 		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTimeSelected.getHourOfDay(),
 				dateTimeSelected.getMinuteOfHour(), true);
@@ -511,7 +511,8 @@ public class WalletFragment extends AbstractFragment
 
 	@Override
 	public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-		dateTimeSelected.withHourOfDay(hourOfDay).withMinuteOfHour(minute).withSecondOfMinute(second);
+		dateTimeSelected = dateTimeSelected.withHourOfDay(hourOfDay).withMinuteOfHour(minute)
+				.withSecondOfMinute(second);
 		// set field
 		dateTimeView.setText(DateTimeUtils.toDateTimeText(view.getActivity(), dateTimeSelected.toDate()));
 	}
