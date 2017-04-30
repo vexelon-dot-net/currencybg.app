@@ -7,6 +7,7 @@
     <string name="text_pick_time">Select time</string>
     <string name="text_enabled">Enabled</string>
     <string name="text_disabled">Disabled</string>
+    <string name="text_n_days">%1$s days</string>
 
     <string name="drawer_open">Open navigation</string>
     <string name="drawer_close">Close navigation</string>
@@ -117,10 +118,24 @@
     <string name="wallet_profit">Profit</string>
     <string name="wallet_profit_details">%1$s asset</string>
     <string name="wallet_text_rates_details"><![CDATA[
-    Profit approximations for <b>%1$s</b> asset for the past 3 days.]]></string>
+    Profit approximations for <b>%1$s</b> asset in the past 3 days.]]></string>
     <string name="wallet_message_reloaded">Profit recalculations completed.</string>
-    <string name="wallet_at_source">at %1$s</string>
-    <string name="wallet_on_date">on %1$s</string>
+    <string name="wallet_text_at_source"><![CDATA[
+    at <b>%1$s</b>]]></string>
+    <string name="wallet_text_on_date"><![CDATA[
+    on %1$s]]></string>
+    <string name="wallet_text_initial_price"><![CDATA[
+    Bought at: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_current_price"><![CDATA[
+    Current price: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_profit_margin"><![CDATA[
+    Profit margin (&#37;): <b>%1$s</b> ]]></string>
+    <string name="wallet_text_duration"><![CDATA[
+    Duration: <b>%1$s days</b> ]]></string>
+    <string name="wallet_text_daily_change"><![CDATA[
+    Daily change: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_daily_change_perc"><![CDATA[
+    Daily change (&#37;): <b>%1$s</b> ]]></string>
 
     <string name="license_icons">
  - Icons by Icons8 LLC. Copyright (CC BY-ND 3.0) Icons8 LLC (https://icons8.com)

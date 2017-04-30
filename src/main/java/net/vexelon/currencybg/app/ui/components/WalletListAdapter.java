@@ -84,7 +84,7 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 		UIUtils.setText(v, R.id.wallet_row_amount, entry.getAmount());
 		UIUtils.setText(v, R.id.wallet_row_bought_at, entry.getPurchaseRate());
 		UIUtils.setText(v, R.id.wallet_row_bought_on,
-				LocalDateTime.fromDateFields(entry.getPurchaseTime()).toString(Defs.DATEFORMAT_YYMMDD));
+				LocalDateTime.fromDateFields(entry.getPurchaseTime()).toString(Defs.DATEFORMAT_DDMMMMYY));
 		UIUtils.setText(v, R.id.wallet_row_current_value, getProfit(entry), true);
 
 		// propagte icon and code view taps
@@ -116,31 +116,29 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 		BigDecimal amount = new BigDecimal(entry.getAmount(), NumberUtils.getCurrencyMathContext());
 
 		Collection<CurrencyData> currencyDatas = currencies.get(entry.getCode());
-		for (CurrencyData currency : currencyDatas) {
-			BigDecimal thisRate = NumberUtils.buyCurrency(amount, currency.getSell(), currency.getRatio());
+		for (CurrencyData currencyData : currencyDatas) {
+			// simulate BGN buying
+			BigDecimal thisRate = NumberUtils.buyCurrency(amount, currencyData.getBuy(), currencyData.getRatio());
 			if (thisRate.compareTo(bestRate) > 0) {
 				bestRate = thisRate;
 			}
 		}
 
-		BigDecimal result = NumberUtils.buyCurrency(entry.getAmount(), entry.getPurchaseRate(), 1); // TODO
-																									// 1?
-		result = bestRate.subtract(result);
-
-		String textResult;
+		BigDecimal result = bestRate.subtract(NumberUtils.buyCurrency(entry.getAmount(), entry.getPurchaseRate(), 1));
+		String formatted;
 
 		switch (precisionMode) {
 		case AppSettings.PRECISION_ADVANCED:
-			textResult = NumberUtils.getCurrencyFormat(result, Defs.SCALE_SHOW_LONG, Defs.CURRENCY_CODE_BGN);
+			formatted = NumberUtils.getCurrencyFormat(result, Defs.SCALE_SHOW_LONG, Defs.CURRENCY_CODE_BGN);
 			break;
 
 		case AppSettings.PRECISION_SIMPLE:
 		default:
-			textResult = NumberUtils.getCurrencyFormat(result, Defs.CURRENCY_CODE_BGN);
+			formatted = NumberUtils.getCurrencyFormat(result, Defs.CURRENCY_CODE_BGN);
 			break;
 		}
 
-		return UIUtils.toHtmlColor(textResult,
+		return UIUtils.toHtmlColor(formatted,
 				result.compareTo(BigDecimal.ZERO) > 0 ? Defs.COLOR_OK_GREEN : Defs.COLOR_DANGER_RED);
 	}
 

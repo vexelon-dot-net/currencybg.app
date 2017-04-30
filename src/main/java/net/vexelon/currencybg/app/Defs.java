@@ -75,6 +75,7 @@ public final class Defs {
 	public static final String DATE_TIMEZONE_SOFIA = "Europe/Sofia";
 	public static final String DATEFORMAT_ISO8601 = "yyyy-MM-dd'T'HH:mmZ";
 	public static final String DATEFORMAT_YYMMDD = "yy/MM/dd";
+	public static final String DATEFORMAT_DDMMMMYY = "dd-MMMM-yy";
 
 	/**
 	 * Max amount of currency sources to show/select on the main fragment

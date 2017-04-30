@@ -7,6 +7,7 @@
     <string name="text_pick_time">Изберете час</string>
     <string name="text_enabled">Включено</string>
     <string name="text_disabled">Изключено</string>
+    <string name="text_n_days">%1$s дни</string>
 
     <string name="drawer_open">Отваряне навигация</string>
     <string name="drawer_close">Затваряне навигация</string>
@@ -112,7 +113,21 @@
     <string name="wallet_text_rates_details"><![CDATA[
     Движение на приблизителна печалба/загуба за актив - <b>%1$s</b> през изминалите 3 дни.]]></string>
     <string name="wallet_message_reloaded">Преизчисляване на печалбите завършено.</string>
-    <string name="wallet_at_source">при %1$s</string>
-    <string name="wallet_on_date">към %1$s</string>
+    <string name="wallet_text_at_source"><![CDATA[
+    при <b>%1$s</b>]]></string>
+    <string name="wallet_text_on_date"><![CDATA[
+    към %1$s]]></string>
+    <string name="wallet_text_initial_price"><![CDATA[
+    Закупено за: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_current_price"><![CDATA[
+    Текуща цена: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_profit_margin"><![CDATA[
+    Печалба (&#37;): <b>%1$s</b> ]]></string>
+    <string name="wallet_text_duration"><![CDATA[
+    Изминал период: <b>%1$s дни</b> ]]></string>
+    <string name="wallet_text_daily_change"><![CDATA[
+    Средна промяна: <b>%1$s</b> на ден]]></string>
+    <string name="wallet_text_daily_change_perc"><![CDATA[
+    Средна промяна (&#37;): <b>%1$s</b> на ден]]></string>
 
 </resources>

@@ -215,8 +215,8 @@ public final class NumberUtils {
 	 */
 	public static BigDecimal getProfit(String amount, String purchaseRate, int purchaseRatio, String sellRate,
 			int sellRatio) {
-		BigDecimal bought = NumberUtils.buyCurrency(amount, purchaseRate, purchaseRatio);
-		BigDecimal todaysRate = NumberUtils.buyCurrency(amount, sellRate, sellRatio);
-		return todaysRate.subtract(bought);
+		BigDecimal spent = NumberUtils.buyCurrency(amount, purchaseRate, purchaseRatio);
+		BigDecimal gained = NumberUtils.buyCurrency(amount, sellRate, sellRatio);
+		return gained.subtract(spent);
 	}
 }
