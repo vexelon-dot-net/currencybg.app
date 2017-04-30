@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -38,18 +39,20 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Map;
 
 public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 
 	private List<CurrencyData> items;
 	private List<BigDecimal> values;
+	Map<String, BigDecimal> bestValues = Maps.newHashMap();
 	// private boolean showValues = false;
 	private int precisionMode = AppSettings.PRECISION_SIMPLE;
 
 	public ConvertTargetListAdapter(Context context, int textViewResId, List<CurrencyData> items, int precisionMode) {
 		super(context, textViewResId, items);
 		this.items = items;
-		this.values = Lists.newArrayList();
+		this.values = Lists.newArrayListWithCapacity(items.size());
 		for (int i = 0; i < items.size(); i++) {
 			values.add(BigDecimal.ZERO);
 		}
@@ -74,15 +77,25 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 			value = BigDecimal.ZERO;
 		}
 
+		String formatted;
+
 		switch (precisionMode) {
 		case AppSettings.PRECISION_ADVANCED:
-			UIUtils.setText(v, R.id.target_rate,
-					NumberUtils.getCurrencyFormat(value, Defs.SCALE_SHOW_LONG, row.getCode()));
+			formatted = NumberUtils.getCurrencyFormat(value, Defs.SCALE_SHOW_LONG, row.getCode());
 			break;
+
 		case AppSettings.PRECISION_SIMPLE:
 		default:
-			UIUtils.setText(v, R.id.target_rate, NumberUtils.getCurrencyFormat(value, row.getCode()));
+			formatted = NumberUtils.getCurrencyFormat(value, row.getCode());
 			break;
+		}
+
+		boolean isBest = value.equals(bestValues.get(row.getCode()));
+		if (isBest) {
+			formatted = UIUtils.toHtmlColor(formatted, Defs.COLOR_OK_GREEN);
+			UIUtils.setText(v, R.id.target_rate, formatted, true);
+		} else {
+			UIUtils.setText(v, R.id.target_rate, formatted);
 		}
 
 		return v;
@@ -121,29 +134,23 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		 * Convert each destination currency from BGN (Sell Lev for target
 		 * currency)
 		 */
+		bestValues.clear();
+
 		for (int i = 0; i < items.size(); i++) {
 			CurrencyData targetCurrency = items.get(i);
 
 			BigDecimal result = NumberUtils.sellCurrency(amountOfBGN, targetCurrency.getSell(),
 					targetCurrency.getRatio());
 
-//			BigDecimal result = BigDecimal.ZERO;
-//
-//			try {
-//				BigDecimal sell = BigDecimal.ZERO;
-//				if (!targetCurrency.getSell().isEmpty()) {
-//					sell = new BigDecimal(targetCurrency.getSell(), mathContext);
-//				}
-//
-//				BigDecimal ratio = new BigDecimal(targetCurrency.getRatio(), mathContext);
-//				result = amountOfBGN.divide(sell, mathContext).multiply(ratio, mathContext);
-//
-//			} catch (Exception e) {
-//				Log.e(Defs.LOG_TAG, "Failed to convert currency " + targetCurrency.getCode() + "!", e);
-//			}
-
 			values.set(i, result);
+
+			// best rate per currency type?
+			BigDecimal bestRate = bestValues.get(targetCurrency.getCode());
+			if (bestRate == null || bestRate.compareTo(result) < 0) {
+				bestValues.put(targetCurrency.getCode(), result);
+			}
 		}
+
 	}
 
 }

@@ -81,55 +81,55 @@
         <item>ZAR</item>
     </string-array>
     <string-array name="currency_names">
-        <item>United Arab Emirates dirham</item>
-        <item>Albanian lek</item>
-        <item>Argentine peso</item>
-        <item>Australian dollar</item>
-        <item>Bosnia and Herzegovina convertible mark</item>
-        <item>Bulgarian lev</item>
-        <item>Brazilian real</item>
-        <item>Belarusian ruble</item>
-        <item>Belarusian ruble</item>
-        <item>Canadian dollar</item>
-        <item>Swiss franc</item>
-        <item>Chinese yuan</item>
-        <item>Czech koruna</item>
-        <item>Danish krone</item>
-        <item>Dominican peso</item>
-        <item>Estonian kroon</item>
-        <item>Egyptian pound</item>
+        <item>United Arab Emirates Dirham</item>
+        <item>Albanian Lek</item>
+        <item>Argentine Peso</item>
+        <item>Australian Dollar</item>
+        <item>Bosnia and Herzegovina Convertible Mark</item>
+        <item>Bulgarian Lev</item>
+        <item>Brazilian Real</item>
+        <item>Belarusian Ruble</item>
+        <item>Belarusian Ruble</item>
+        <item>Canadian Dollar</item>
+        <item>Swiss Franc</item>
+        <item>Chinese Yuan</item>
+        <item>Czech Koruna</item>
+        <item>Danish Krone</item>
+        <item>Dominican Peso</item>
+        <item>Estonian Kroon</item>
+        <item>Egyptian Pound</item>
         <item>Euro</item>
-        <item>Pound sterling</item>
-        <item>Hong Kong dollar</item>
-        <item>Croatian kuna</item>
-        <item>Hungarian forint</item>
-        <item>Indonesian rupiah</item>
-        <item>Indian rupee</item>
-        <item>Israeli new shekel</item>
-        <item>Icelandic krona</item>
-        <item>Japanese yen</item>
-        <item>Kenyan shilling</item>
-        <item>South Korean won</item>
-        <item>Lithuanian litas</item>
-        <item>Latvian lats</item>
-        <item>Macedonian denar</item>
-        <item>Mauritian rupee</item>
-        <item>Mexican peso</item>
-        <item>Malaysian ringgit</item>
-        <item>Norwegian krone</item>
-        <item>New Zealand dollar</item>
-        <item>Philippine peso</item>
-        <item>Polish złoty</item>
-        <item>Romanian leu</item>
-        <item>Serbian dinar</item>
-        <item>Russian ruble</item>
-        <item>Swedish krona/kronor</item>
-        <item>Singapore dollar</item>
-        <item>Thai baht</item>
-        <item>Turkish lira</item>
-        <item>Ukrainian hryvnia</item>
-        <item>United States dollar</item>
+        <item>Pound Sterling</item>
+        <item>Hong Kong Dollar</item>
+        <item>Croatian Kuna</item>
+        <item>Hungarian Forint</item>
+        <item>Indonesian Rupiah</item>
+        <item>Indian Rupee</item>
+        <item>Israeli New Shekel</item>
+        <item>Icelandic Krona</item>
+        <item>Japanese Yen</item>
+        <item>Kenyan Shilling</item>
+        <item>South Korean Won</item>
+        <item>Lithuanian Litas</item>
+        <item>Latvian Lats</item>
+        <item>Macedonian Denar</item>
+        <item>Mauritian Rupee</item>
+        <item>Mexican Peso</item>
+        <item>Malaysian Ringgit</item>
+        <item>Norwegian Krone</item>
+        <item>New Zealand Dollar</item>
+        <item>Philippine Peso</item>
+        <item>Polish Złoty</item>
+        <item>Romanian Leu</item>
+        <item>Serbian Dinar</item>
+        <item>Russian Ruble</item>
+        <item>Swedish Krona/Kronor</item>
+        <item>Singapore Dollar</item>
+        <item>Thai Baht</item>
+        <item>Turkish Lira</item>
+        <item>Ukrainian Hryvnia</item>
+        <item>United States Dollar</item>
         <item>Vietnamese Dong</item>
-        <item>South African rand</item>
+        <item>South African Rand</item>
     </string-array>
 </resources>
