@@ -28,7 +28,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -224,7 +223,11 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		Intent myIntent = new Intent(MainActivity.this, BackgroundService.class);
 		pendingIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, 0);
 
-		long startTimeout = SystemClock.elapsedRealtime() + Defs.SERVICE_FIRST_RUN_INTERVAL;
+		/*
+		 * First run timeout
+		 */
+		long startTimeout = System.currentTimeMillis() + Defs.SERVICE_FIRST_RUN_INTERVAL;
+
 		/**
 		 * Align service interval to 1/2 a day for devices with API < 19
 		 */

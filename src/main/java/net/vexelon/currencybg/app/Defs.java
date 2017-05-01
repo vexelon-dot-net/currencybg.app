@@ -43,9 +43,8 @@ public final class Defs {
 	/**
 	 * How often to wake-up the Android service
 	 */
-	public static final long SERVICE_FIRST_RUN_INTERVAL = 1000L * 60L * 5L; // millis
-	// millis x mins x hours x days
-	public static final long SERVICE_PERIODIC_INTERVAL = 1000L * 60L * 4L;
+	public static final long SERVICE_FIRST_RUN_INTERVAL = 1000L * 60L * 5L; // 5m
+	public static final long SERVICE_PERIODIC_INTERVAL = 1000L * 60L * 60L * 4L; // 4h
 	public static final int SERVICE_DATABASE_CLEAN_INTERVAL = 3; // days
 	public static final String SERVICE_ACTION_NOTIFY_UPDATE = "_CBG_NOTIFY_UPDATE";
 
