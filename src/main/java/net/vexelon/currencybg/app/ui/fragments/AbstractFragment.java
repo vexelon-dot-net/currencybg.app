@@ -34,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.common.collect.ImmutableListMultimap;
@@ -97,10 +98,15 @@ public class AbstractFragment extends Fragment {
 	public AlertDialog showNewsAlert(final Context context) {
 		Resources resources = context.getResources();
 
-		final TextView tvMessage = new TextView(context);
-		tvMessage.setText(Html.fromHtml(resources.getString(R.string.news_messages)));
-		tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
-		tvMessage.setPadding(24, 24, 24, 12);
+		final TextView messagesView = new TextView(context);
+		messagesView.setText(Html.fromHtml(resources.getString(R.string.news_messages)));
+		messagesView.setMovementMethod(LinkMovementMethod.getInstance());
+		// messagesView.setMovementMethod(ScrollingMovementMethod.getInstance());
+		messagesView.setPadding(24, 24, 24, 12);
+
+		ScrollView scrollView = new ScrollView(context);
+		scrollView.setFillViewport(true);
+		scrollView.addView(messagesView);
 
 		return new AlertDialog.Builder(context).setTitle(R.string.news_title)
 				.setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
@@ -108,7 +114,7 @@ public class AbstractFragment extends Fragment {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 					}
-				}).setCancelable(false).setView(tvMessage).show();
+				}).setCancelable(false).setView(scrollView).show();
 	}
 
 	// public void addListener(NotificationsListener listner) {
