@@ -27,17 +27,19 @@
     <string name="error_no_entries">Няма нови курсове.</string>
     <string name="error_add_wallet_entry">Липсващо или грешно поле при попълване.</string>
 
-    <string name="about_version">Версия</string>
+    <string name="about_version">Версия %1$s</string>
+    <string name="about_license">Общ публичен лиценз на ГНУ (GNU v3.0)</string>
     <string name="about_issue_appdev">Докладвай бъг</string>
     <string name="about_issue_appdev_text">Докладвай открит проблем или дай предложение</string>
-    <string name="about_join_appdev">Присъедини се към разработването</string>
-    <string name="about_join_appdev_text">Пишеш код? Прати ни pull request!</string>
-    <string name="about_author">Разработчици</string>
-    <string name="about_author_text">Списък на допринесли към приложението</string>
+    <string name="about_join_appdev_authors">Разработчици</string>
+    <string name="about_join_appdev">Пишеш код? Прати ни pull request!</string>
     <string name="about_logo">Графично лого</string>
-    <string name="about_logo_text">Стремена Тузсузова  http://stremena.com</string>
+    <string name="about_logo_text">Стремена Тузсузова - http://stremena.com</string>
     <string name="about_3rdparty_icons">Използвани икони</string>
     <string name="about_3rdparty">Използвани библиотеки</string>
+    <string name="about_twitter">Намерете ни в Twitter</string>
+    <string name="about_contact">Контакт</string>
+    <string name="about_contact_email">Изпращане на Email</string>
     <string name="menu_convert">Преобразуване</string>
     <string name="tab_title_currencies">Обменни курсове</string>
     <string name="tab_title_convert">Преобразуване</string>

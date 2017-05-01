@@ -17,17 +17,17 @@
  */
 package net.vexelon.currencybg.app.ui.components;
 
-import java.util.List;
-import java.util.Map;
-
-import net.vexelon.currencybg.app.R;
-
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import net.vexelon.currencybg.app.R;
+
+import java.util.List;
 
 public class InfoListAdapter extends ArrayAdapter<InfoListAdapter.InfoItem> {
 
@@ -59,7 +59,13 @@ public class InfoListAdapter extends ArrayAdapter<InfoListAdapter.InfoItem> {
 	private void setResText(View v, int id, CharSequence text) {
 		TextView tx = (TextView) v.findViewById(id);
 		if (tx != null) {
-			tx.setText(text);
+			// XXX an ugly "special" case for entities
+			String toString = text.toString();
+			if (toString.indexOf("&") > -1 && toString.indexOf(";") > -1) {
+				tx.setText(Html.fromHtml(toString));
+			} else {
+				tx.setText(text);
+			}
 		}
 	}
 

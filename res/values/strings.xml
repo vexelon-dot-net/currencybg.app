@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <string name="copyright"><![CDATA[
+    Copyright &copy; 2017 Vexelon Microservices]]></string>
+
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_pick_date">Select date</string>
@@ -27,17 +30,20 @@
     <string name="error_no_entries">No new currency entries.</string>
     <string name="error_add_wallet_entry">Missing or incorrect field data!</string>
 
-    <string name="about_version">Version</string>
+    <string name="about_changelog">Changelog</string>
+    <string name="about_license">GNU License v3.0</string>
+    <string name="about_version">Version %1$s</string>
     <string name="about_issue_appdev">Report an issue</string>
     <string name="about_issue_appdev_text">Report an issue you found or send us your feature request</string>
-    <string name="about_join_appdev">Join app development</string>
-    <string name="about_join_appdev_text">Are you a coder? Send us your pull requests</string>
-    <string name="about_author">Developers</string>
-    <string name="about_author_text">List of contributors</string>
+    <string name="about_join_appdev_authors">Developers</string>
+    <string name="about_join_appdev">Are you a coder? Send us your pull requests</string>
     <string name="about_logo">Logo icon</string>
-    <string name="about_logo_text">Stremena Tuzsuzova  http://stremena.com</string>
+    <string name="about_logo_text">Stremena Tuzsuzova - http://stremena.com</string>
     <string name="about_3rdparty_icons">Third-party icons</string>
     <string name="about_3rdparty">Third-party libraries</string>
+    <string name="about_twitter">We are on Twitter</string>
+    <string name="about_contact">Contact</string>
+    <string name="about_contact_email">Email us</string>
     <string name="menu_convert">Convert</string>
     <string name="tab_title_currencies">Currencies</string>
     <string name="tab_title_convert">Convert</string>
