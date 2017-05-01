@@ -304,6 +304,7 @@ public class WalletFragment extends AbstractFragment
 		MathContext mathContext = NumberUtils.getCurrencyMathContext();
 		BigDecimal hundred = new BigDecimal("100.0", mathContext);
 
+		// bug BGN and get up-to-date values
 		investment.setInitialValue(NumberUtils.buyCurrency(walletEntry.getAmount(), walletEntry.getPurchaseRate(), 1));
 		investment.setCurrentValue(
 				NumberUtils.buyCurrency(walletEntry.getAmount(), currencyData.getBuy(), currencyData.getRatio()));

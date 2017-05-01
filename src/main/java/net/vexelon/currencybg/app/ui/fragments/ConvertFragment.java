@@ -223,20 +223,20 @@ public class ConvertFragment extends AbstractFragment {
 	private void updateTargetCurrenciesListView() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 
-		List<CurrencyData> targetCurrencyList = Lists.newArrayList();
+		List<CurrencyData> targetCurrencies = Lists.newArrayList();
 
 		// add all previously added target currencies (TODO: optimize this crap)
 		List<CurrencyData> convertCurrencies = appSettings.getConvertCurrencies();
 		for (CurrencyData c1 : currencies) {
 			for (CurrencyData c2 : convertCurrencies) {
 				if (c1.getCode().equals(c2.getCode()) && c1.getSource() == c2.getSource()) {
-					targetCurrencyList.add(c1);
+					targetCurrencies.add(c1);
 				}
 			}
 		}
 
 		ConvertTargetListAdapter adapter = new ConvertTargetListAdapter(getActivity(),
-				R.layout.convert_target_row_layout, targetCurrencyList, appSettings.getCurrenciesPrecision());
+				R.layout.convert_target_row_layout, targetCurrencies, appSettings.getCurrenciesPrecision());
 		targetCurrenciesView.setAdapter(adapter);
 	}
 
