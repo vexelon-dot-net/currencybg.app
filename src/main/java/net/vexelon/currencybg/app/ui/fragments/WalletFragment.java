@@ -20,6 +20,7 @@ package net.vexelon.currencybg.app.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -166,7 +167,6 @@ public class WalletFragment extends AbstractFragment
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
 			updateUI();
-			showSnackbar(R.string.wallet_message_reloaded);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -185,31 +185,7 @@ public class WalletFragment extends AbstractFragment
 	}
 
 	private void updateUI() {
-		final Activity activity = getActivity();
-
-		List<WalletEntry> entries = Lists.newArrayList();
-
-		DataSource source = null;
-		try {
-			source = new SQLiteDataSource();
-			source.connect(activity);
-			entries.addAll(source.getWalletEntries());
-
-			final AppSettings appSettings = new AppSettings(activity);
-
-			currenciesMapped = getCurrenciesMapped(getVisibleCurrencies(getCurrencies(activity, true)));
-
-			walletListAdapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
-					currenciesMapped, appSettings.getCurrenciesPrecision());
-			walletListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			walletListView.setAdapter(walletListAdapter);
-
-		} catch (DataSourceException e) {
-			Log.e(Defs.LOG_TAG, "Could not load wallet entries from database!", e);
-			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
-		} finally {
-			IOUtils.closeQuitely(source);
-		}
+		new ReloadEntriesTask().execute();
 	}
 
 	/**
@@ -427,8 +403,6 @@ public class WalletFragment extends AbstractFragment
 						try {
 							source = new SQLiteDataSource();
 							source.connect(dialog.getContext());
-
-							Log.v(Defs.LOG_TAG, "Adding new wallet entry: " + entry.toString());
 							source.addWalletEntry(entry);
 						} catch (DataSourceException e) {
 							Log.e(Defs.LOG_TAG, "Could not save wallet entry to database!", e);
@@ -438,13 +412,7 @@ public class WalletFragment extends AbstractFragment
 						}
 
 						// reload currencies
-						dialog.getView().post(new Runnable() {
-
-							@Override
-							public void run() {
-								updateUI();
-							}
-						});
+						updateUI();
 					}
 				}).negativeText(R.string.text_cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
 					@Override
@@ -515,5 +483,66 @@ public class WalletFragment extends AbstractFragment
 				.withSecondOfMinute(second);
 		// set field
 		dateTimeView.setText(DateTimeUtils.toDateTimeText(view.getActivity(), dateTimeSelected.toDate()));
+	}
+
+	private class ReloadEntriesTask extends AsyncTask<Void, Void, List<WalletEntry>> {
+
+		private Activity activity;
+		private boolean updateOK = false;
+		private int msgId = R.string.error_db_load;
+
+		public ReloadEntriesTask() {
+			activity = WalletFragment.this.getActivity();
+		}
+
+		@Override
+		protected void onPreExecute() {
+			setRefreshActionButtonState(true);
+		}
+
+		@Override
+		protected List<WalletEntry> doInBackground(Void... params) {
+			Log.v(Defs.LOG_TAG, "Reloading wallet entries..");
+
+			List<WalletEntry> entries = Lists.newArrayList();
+
+			DataSource source = null;
+			try {
+				source = new SQLiteDataSource();
+				source.connect(activity);
+				entries.addAll(source.getWalletEntries());
+
+				currenciesMapped = getCurrenciesMapped(getVisibleCurrencies(getCurrencies(activity, true)));
+
+				updateOK = true;
+			} catch (DataSourceException e) {
+				Log.e(Defs.LOG_TAG, "Could not load wallet entries from database!", e);
+			} finally {
+				IOUtils.closeQuitely(source);
+			}
+
+			return entries;
+		}
+
+		@Override
+		protected void onPostExecute(List<WalletEntry> entries) {
+			setRefreshActionButtonState(false);
+
+			if (updateOK) {
+				final AppSettings appSettings = new AppSettings(activity);
+
+				walletListAdapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
+						currenciesMapped, appSettings.getCurrenciesPrecision());
+				walletListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				walletListView.setAdapter(walletListAdapter);
+
+				if (!entries.isEmpty()) {
+					showSnackbar(R.string.wallet_message_reloaded);
+				}
+			} else {
+				showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
+			}
+		}
+
 	}
 }
