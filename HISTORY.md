@@ -1,11 +1,12 @@
 Currency BG Changes
 ===================
 
-## 2.2.0
+## 3.0.0
 
 ### EN
   * Fixed a problem with currency updates via the background app service.
   * Added 'Wallet' function. You may now get a calculation of profits and losses for all currencies in your possession.
+  * Added SG Expressbank and UniCredit Bulbank currency exchange sources.
   * Added 'Wi-Fi' only background service downloads option. Requires the 'ACCESS_NETWORK_STATE' permission.
   * Added green coloring of the best currency convert rate for each added source.
   * Added short vibration when removing convert or wallet entries. Requires the 'VIBRATE' permission.
@@ -13,6 +14,7 @@ Currency BG Changes
 ### BG
   * Отстранен проблем с автоматично обновяване на валутите в приложението.
   * Добавена функция 'Портфейл'. Сега може да получите реална информация за печалби загуби при даден обменен източник на закупени от вас валути.
+  * Добавени нови източници - SG Експресбанк и УниКредит Булбанк.
   * Добавена функция 'Сваляне на валути само през Wi-Fi'. Изисква 'ACCESS_NETWORK_STATE' разрешение.
   * Най-добрият обменен курсов за всички добавени източници ще бъде оцветен в зелено при екрана за обмяна на валути.
   * Добавена кратка вибрация при премахване на валути за обмяна или валути от портфейла. Изисква 'VIBRATE' разрешение.

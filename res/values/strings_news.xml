@@ -2,21 +2,20 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">220</integer>
+    <integer name="news_last">300</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
 
         <item><![CDATA[
-Version 2.0 brings you currency exchange rates information from various Bulgarian sources.
-The new sources functionality has practical purposes should you want to monitor rates or exchange currencies
-and we\'ll be adding more sources in the upcoming versions of the app.
 <br><br>
-<b><font color="#ffffff">2.2.0</font></b>
+<b><font color="#ffffff">3.0.0</font></b>
 <br><br>
 &emsp; - Fixed a problem with currency updates via the background app service.
 <br>
 &emsp; - Added <b>Wallet</b> function. You may now get a calculation of profits and losses for all currencies in your possession.
+<br>
+&emsp; - Added SG Expressbank and UniCredit Bulbank currency exchange sources.
 <br>
 &emsp; - Added <b>Wi-Fi</b> only background service downloads option. Requires the <b>ACCESS_NETWORK_STATE</b> permission.
 <br>
