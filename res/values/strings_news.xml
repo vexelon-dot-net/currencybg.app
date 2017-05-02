@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">300</integer>
+    <integer name="news_last">301</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
