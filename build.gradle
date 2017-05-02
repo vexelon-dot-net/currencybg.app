@@ -48,8 +48,8 @@ android {
         applicationId 'net.vexelon.currencybg.app'
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 3010
-        versionName "3.0.1"
+        versionCode 3100
+        versionName "3.1.0"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_6
