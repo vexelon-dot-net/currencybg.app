@@ -17,22 +17,19 @@
  */
 package net.vexelon.currencybg.app.ui.components;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 import net.vexelon.currencybg.app.R;
-import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UIFlags;
 import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
+
+import java.util.List;
 
 public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 
