@@ -288,7 +288,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 		final MaterialDialog dialog = new MaterialDialog.Builder(context)
 				.title(getResources().getString(R.string.action_currency_details, row.getCode(),
-						Sources.getFullName(source.getID(), context)))
+						Sources.getFullName(context, source.getID())))
 				.cancelable(true).customView(R.layout.dialog_details, true).build();
 
 		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -450,7 +450,7 @@ public class CurrenciesFragment extends AbstractFragment {
 		int i = 0;
 		for (Sources source : sources) {
 			sourceViews.get(i).setVisibility(View.VISIBLE);
-			sourceViews.get(i).setText(Sources.getName(source.getID(), getActivity()));
+			sourceViews.get(i).setText(Sources.getName(getActivity(), source.getID()));
 			i += 1;
 		}
 	}

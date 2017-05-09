@@ -18,12 +18,7 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +28,10 @@ import android.widget.ListView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 
-import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.ui.components.InfoListAdapter;
+import net.vexelon.currencybg.app.utils.StringUtils;
 
 import java.util.List;
 
@@ -43,8 +39,6 @@ public class ExchangeInfoFragment extends AbstractFragment {
 
 	private static final String URL_VERSION = "intr://verinfo";
 	private static final String URL_3RDPARTY_LIBS = "intr://3rd";
-	private static final String URL_3RDPARTY_ICONS = "intr://3rd_icons";
-	private static final String URL_EMAIL = "mail:";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,60 +59,29 @@ public class ExchangeInfoFragment extends AbstractFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				String url = adapter.getUrl(position);
 
+				// TODO
+
 				if (URL_VERSION.equals(url)) {
 					showNewsAlert(getActivity());
 				} else if (URL_3RDPARTY_LIBS.equals(url)) {
 					new MaterialDialog.Builder(getActivity()).customView(R.layout.fragment_thirdparty_libs, true)
 							.positiveText(R.string.text_ok).build().show();
-				} else if (URL_3RDPARTY_ICONS.equals(url)) {
-					new MaterialDialog.Builder(getActivity()).customView(R.layout.fragment_thirdparty_icons, true)
-							.positiveText(R.string.text_ok).build().show();
-				} else if (url != null && url.startsWith(URL_EMAIL)) {
-					// open email activity
-					Intent emailIntent = new Intent(Intent.ACTION_SEND);
-					emailIntent.setType("message/rfc822");
-					emailIntent.putExtra(Intent.EXTRA_EMAIL, url.replace(url, URL_EMAIL));
-					emailIntent.putExtra(Intent.EXTRA_SUBJECT,
-							getResources().getString(R.string.app_name) + " Feedback");
-					startActivity(
-							Intent.createChooser(emailIntent, getResources().getString(R.string.about_contact_email)));
-				} else if (url != null) {
-					// open browser activity
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-					startActivity(browserIntent);
 				}
 			}
 		});
 	}
 
 	private List<InfoListAdapter.InfoItem> getInfosList() {
+		final Activity activity = getActivity();
 		List<InfoListAdapter.InfoItem> infoList = Lists.newArrayList();
 
-		PackageInfo packageInfo = null;
-		try {
-			packageInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(),
-					PackageManager.GET_GIDS);
-			infoList.add(newInfoRow(getString(R.string.about_changelog),
-					getString(R.string.about_version, packageInfo.versionName), URL_VERSION));
-		} catch (Exception e) {
-			Log.e(Defs.LOG_TAG, "", e);
+		for (Sources source : Sources.values()) {
+			if (source.isEnabled()) {
+				String secondRow = source.getFullName(activity) + " - " + StringUtils.stripUrl(source.getWebAddress
+						(activity));
+				infoList.add(newInfoRow(source.getName(activity), secondRow));
+			}
 		}
-
-		infoList.add(newInfoRow(getString(R.string.about_license), getString(R.string.copyright),
-				"https://org.vexelon.net"));
-		infoList.add(newInfoRow(getString(R.string.about_issue_appdev), getString(R.string.about_issue_appdev_text),
-				"https://github.com/vexelon-dot-net/currencybg.app/issues"));
-		infoList.add(newInfoRow(getString(R.string.about_join_appdev_authors), getString(R.string.about_join_appdev),
-				"https://github.com/vexelon-dot-net/currencybg.app/blob/master/CREDITS"));
-		infoList.add(
-				newInfoRow(getString(R.string.about_twitter), "twitter.com/vexelon", "https://twitter.com/vexelon"));
-		infoList.add(newInfoRow(getString(R.string.about_logo), getString(R.string.about_logo_text),
-				"http://www.stremena.com"));
-		infoList.add(newInfoRow(getString(R.string.about_3rdparty_icons), "", URL_3RDPARTY_ICONS));
-		infoList.add(newInfoRow(getString(R.string.about_3rdparty), "", URL_3RDPARTY_LIBS));
-		// infoList.add(newInfoRow(getString(R.string.about_contact),
-		// getString(R.string.about_contact_email),
-		// URL_EMAIL + ""));
 
 		return infoList;
 	}

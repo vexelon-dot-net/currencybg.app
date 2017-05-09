@@ -32,7 +32,7 @@ public enum Sources {
 	/**
 	 * @deprecated
 	 */
-	BNB(1),
+	BNB(1, false),
 
 	FIB(100),
 	TAVEX(200),
@@ -42,13 +42,35 @@ public enum Sources {
 	SGEB(600);
 
 	private int id;
+	private boolean enabled;
+
+	Sources(int id, boolean enabled) {
+		this.id = id;
+		this.enabled = enabled;
+	}
 
 	Sources(int id) {
-		this.id = id;
+		this(id, true);
 	}
 
 	public int getID() {
 		return id;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public String getName(Context context) {
+		return getName(context, id);
+	}
+
+	public String getFullName(Context context) {
+		return getFullName(context, id);
+	}
+
+	public String getWebAddress(Context context) {
+		return getWebAddress(context, id);
 	}
 
 	/**
@@ -65,14 +87,14 @@ public enum Sources {
 		return null;
 	}
 
-	public static String getName(int id, Context context) {
+	private static String getResource(Context context, int id, int resId) {
 		if (context != null) {
 			int[] sourceIds = context.getResources().getIntArray(R.array.currency_sources_ids);
-			String[] sourceNames = context.getResources().getStringArray(R.array.currency_sources);
+			String[] resources = context.getResources().getStringArray(resId);
 
 			for (int i = 0; i < sourceIds.length; i++) {
 				if (sourceIds[i] == id) {
-					return sourceNames[i];
+					return resources[i];
 				}
 			}
 		}
@@ -80,18 +102,15 @@ public enum Sources {
 		return "";
 	}
 
-	public static String getFullName(int id, Context context) {
-		if (context != null) {
-			int[] sourceIds = context.getResources().getIntArray(R.array.currency_sources_ids);
-			String[] sourceNames = context.getResources().getStringArray(R.array.currency_sources_full);
+	public static String getName(Context context, int id) {
+		return getResource(context, id, R.array.currency_sources);
+	}
 
-			for (int i = 0; i < sourceIds.length; i++) {
-				if (sourceIds[i] == id) {
-					return sourceNames[i];
-				}
-			}
-		}
+	public static String getFullName(Context context, int id) {
+		return getResource(context, id, R.array.currency_sources_full);
+	}
 
-		return "";
+	public static String getWebAddress(Context context, int id) {
+		return getResource(context, id, R.array.currency_sources_web);
 	}
 }

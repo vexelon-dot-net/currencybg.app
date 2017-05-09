@@ -20,6 +20,14 @@
         <item>@string/source_unicredit_full</item>
         <item>@string/source_sgeb_full</item>
     </string-array>
+    <string-array name="currency_sources_web">
+        <item>https://tavex.bg</item>
+        <item>http://factorin.bg</item>
+        <item>http://polana1.com</item>
+        <item>https://www.fibank.bg</item>
+        <item>https://www.unicreditbulbank.bg</item>
+        <item>http://www.sgeb.bg</item>
+    </string-array>
     <integer-array name="currency_sources_ids">
         <item>200</item>
         <item>400</item>

@@ -313,7 +313,7 @@ public class WalletFragment extends AbstractFragment
 
 		// source info
 		output.append("&emsp;").append(getResources().getString(R.string.wallet_text_at_source,
-				Sources.getFullName(investment.getCurrencyData().getSource(), context))).append("<br>");
+				Sources.getFullName(context, investment.getCurrencyData().getSource()))).append("<br>");
 		output.append("&emsp;")
 				.append(getResources().getString(R.string.wallet_text_on_date,
 						DateTimeUtils.toDateTimeText(context,
