@@ -16,6 +16,7 @@
         android:id="@+id/convert_icon"
         android:layout_width="28sp"
         android:layout_height="28sp"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/convert_checked"
         android:scaleType="fitStart"/>
 
@@ -41,6 +42,7 @@
         style="@style/FontListName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/convert_icon"/>
+        android:layout_below="@+id/convert_icon"
+        android:layout_toRightOf="@id/convert_checked"/>
 
 </RelativeLayout>

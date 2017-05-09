@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,7 +47,7 @@ public class ConvertSelectListAdapter extends ArrayAdapter<CurrencyData> {
 		this.selected = Lists.newArrayList();
 	}
 
-	private View _getView(int position, View convertView, ViewGroup parent) {
+	private View _getView(int position, final View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
 
 		View v = convertView;
@@ -57,39 +56,77 @@ public class ConvertSelectListAdapter extends ArrayAdapter<CurrencyData> {
 
 			holder = new ViewHolder();
 			holder.checkBox = (CheckBox) v.findViewById(R.id.convert_checked);
+			holder.checkBox.setChecked(false);
 			holder.icon = (ImageView) v.findViewById(R.id.convert_icon);
 			holder.code = (TextView) v.findViewById(R.id.convert_code);
 			holder.name = (TextView) v.findViewById(R.id.convert_name);
 			holder.source = (TextView) v.findViewById(R.id.convert_source);
 
 			v.setTag(holder);
+
+			/*
+			 * Handles taps that occur on the row itself
+			 */
 			v.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					ViewHolder holder = (ViewHolder) view.getTag();
 					holder.checkBox.toggle();
 
-				}
-			});
+					CurrencyData currencyData = (CurrencyData) holder.checkBox.getTag();
 
-			holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-					if (b) {
-						selected.add((CurrencyData) compoundButton.getTag());
+					if (holder.checkBox.isChecked()) {
+						selected.add(currencyData);
 					} else {
-						selected.remove((CurrencyData) compoundButton.getTag());
+						selected.remove(currencyData);
 					}
+
 				}
 			});
 
+			/*
+			 * Handles taps that occur only on the checkbox. This is a bit
+			 * tricky, because we need to notify the view that something has
+			 * changed, otherwise the checkboxes will not be flagged.
+			 */
+			holder.checkBox.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					CheckBox checkBox = (CheckBox) view;
+					CurrencyData currencyData = (CurrencyData) view.getTag();
+
+					if (checkBox.isChecked()) {
+						selected.add(currencyData);
+					} else {
+						selected.remove(currencyData);
+					}
+
+					notifyDataSetChanged();
+				}
+			});
+
+			// holder.checkBox.setOnCheckedChangeListener(new
+			// CompoundButton.OnCheckedChangeListener() {
+			// @Override
+			// public void onCheckedChanged(CompoundButton compoundButton,
+			// boolean isChecked) {
+			// CurrencyData cd = (CurrencyData) compoundButton.getTag();
+			// Log.d(Defs.LOG_TAG, "CHECKED2: " + cd.getCode());
+			// if (isChecked) {
+			// selected.add(cd);
+			// } else {
+			// selected.remove(cd);
+			// }
+			// notifyDataSetChanged();
+			// }
+			// });
 		} else {
 			holder = (ViewHolder) v.getTag();
 		}
 
 		CurrencyData row = items.get(position);
 
-		holder.checkBox.setChecked(false);
+		holder.checkBox.setChecked(selected.contains(row));
 		holder.checkBox.setTag(row);
 
 		UIUtils.setFlagIcon(holder.icon, row.getCode());
