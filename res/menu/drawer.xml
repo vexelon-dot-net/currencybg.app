@@ -15,6 +15,10 @@
             android:id="@+id/nav_wallet"
             android:icon="@drawable/ic_wallet"
             android:title="@string/tab_title_wallet"/>
+        <item
+            android:id="@+id/nav_exchanges_info"
+            android:icon="@drawable/ic_exchanges"
+            android:title="@string/tab_title_exchanges"/>
     </group>
     <group
         android:id="@+id/group_settings"

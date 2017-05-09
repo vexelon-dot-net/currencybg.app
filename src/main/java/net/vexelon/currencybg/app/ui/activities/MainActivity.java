@@ -51,6 +51,7 @@ import net.vexelon.currencybg.app.ui.fragments.ConvertFragment;
 import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
 import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.PrefsFragment;
+import net.vexelon.currencybg.app.ui.fragments.ExchangeInfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.WalletFragment;
 
 import java.io.IOException;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		drawerToggle.syncState();
+
 		if (savedInstanceState == null) {
 			try {
 				currentFragment = showFragment(CurrenciesFragment.class);
@@ -164,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 			return ConvertFragment.class;
 		case R.id.nav_wallet:
 			return WalletFragment.class;
+		case R.id.nav_exchanges_info:
+			return ExchangeInfoFragment.class;
 		case R.id.nav_info:
 			return InfoFragment.class;
 		case R.id.nav_settings:
