@@ -59,6 +59,7 @@ public class ConvertFragment extends AbstractFragment {
 	private Spinner spinnerSourceCurrency;
 	private TextView sourceValueView;
 	private ListView targetCurrenciesView;
+	private FloatingActionButton actionButton;
 
 	private List<CurrencyData> currencies = Lists.newArrayList();
 
@@ -105,7 +106,10 @@ public class ConvertFragment extends AbstractFragment {
 			appSettings.setLastConvertValue("0");
 			appSettings.setLastConvertCurrencySel("BGN");
 			appSettings.setConvertCurrencies(Sets.<String> newHashSet());
+
 			updateUI(false);
+			actionButton.show(); // bring back select button
+
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -183,10 +187,9 @@ public class ConvertFragment extends AbstractFragment {
 			}
 		});
 
-		// add button
-		FloatingActionButton action = (FloatingActionButton) view.findViewById(R.id.fab_convert);
-		action.attachToListView(targetCurrenciesView);
-		action.setOnClickListener(new OnClickListener() {
+		actionButton = (FloatingActionButton) view.findViewById(R.id.fab_convert);
+		actionButton.attachToListView(targetCurrenciesView);
+		actionButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				newAddTargetCurrencyDialog().show();
