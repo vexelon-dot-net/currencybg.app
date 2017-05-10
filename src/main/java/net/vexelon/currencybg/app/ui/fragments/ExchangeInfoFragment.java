@@ -18,7 +18,8 @@
 package net.vexelon.currencybg.app.ui.fragments;
 
 import android.app.Activity;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +27,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.Sources;
-import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.components.InfoListAdapter;
 import net.vexelon.currencybg.app.utils.StringUtils;
 
@@ -59,22 +58,31 @@ public class ExchangeInfoFragment extends AbstractFragment {
 				int sourceId = Integer.parseInt(adapter.getUrl(position));
 				final Sources source = Sources.valueOf(sourceId);
 
-				final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-						.customView(R.layout.fragment_exchange_source_info, true).positiveText(R.string.text_ok)
-						.build();
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+						Uri.parse(source.getWebAddress(view.getContext())));
+				startActivity(browserIntent);
 
-				dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-					@Override
-					public void onShow(DialogInterface dialogInterface) {
-						final View v = dialog.getCustomView();
-
-						UIUtils.setText(v, R.id.source_name, source.getName(v.getContext()));
-						UIUtils.setText(v, R.id.source_full_name, source.getFullName(v.getContext()));
-
-						// TODO
-					}
-				});
-				dialog.show();
+				// final MaterialDialog dialog = new
+				// MaterialDialog.Builder(getActivity())
+				// .customView(R.layout.fragment_exchange_source_info,
+				// true).positiveText(R.string.text_ok)
+				// .build();
+				//
+				// dialog.setOnShowListener(new DialogInterface.OnShowListener()
+				// {
+				// @Override
+				// public void onShow(DialogInterface dialogInterface) {
+				// final View v = dialog.getCustomView();
+				//
+				// UIUtils.setText(v, R.id.source_name,
+				// source.getName(v.getContext()));
+				// UIUtils.setText(v, R.id.source_full_name,
+				// source.getFullName(v.getContext()));
+				//
+				// // TODO
+				// }
+				// });
+				// dialog.show();
 			}
 		});
 	}
@@ -85,7 +93,7 @@ public class ExchangeInfoFragment extends AbstractFragment {
 
 		for (Sources source : Sources.values()) {
 			if (source.isEnabled()) {
-				String secondRow = source.getFullName(activity) + " - "
+				String secondRow = source.getFullName(activity) + " | "
 						+ StringUtils.stripUrl(source.getWebAddress(activity));
 				infoList.add(newInfoRow(source.getName(activity), secondRow, Integer.toString(source.getID())));
 			}
