@@ -1,6 +1,15 @@
 Currency BG Changes
 ===================
 
+## 3.1.0
+
+### EN
+  * Added multiple currency selection on Convert screen. 
+
+### BG
+  * Добавена функция за избор на повече от една валута за обмяна не екрана - Преобразуване.
+
+
 ## 3.0.0
 
 ### EN

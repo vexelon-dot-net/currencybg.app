@@ -103,16 +103,22 @@ public final class UIUtils {
 	/**
 	 * Sets flag icon by doing a {@link UIFlags} lookup.
 	 * 
-	 * @param view
-	 * @param id
+	 * @param imageView
 	 * @param code
+	 */
+	public static void setFlagIcon(ImageView imageView, String code) {
+		int imageId = UIFlags.getResourceFromCode(code);
+		if (imageId != -1) {
+			imageView.setImageResource(imageId);
+		}
+	}
+
+	/**
+	 * @see #setFlagIcon(ImageView, String)
 	 */
 	public static void setFlagIcon(View view, int id, String code) {
 		ImageView icon = (ImageView) view.findViewById(id);
-		int imageId = UIFlags.getResourceFromCode(code);
-		if (imageId != -1) {
-			icon.setImageResource(imageId);
-		}
+		setFlagIcon(icon, code);
 	}
 
 	/**

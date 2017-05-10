@@ -1,0 +1,48 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="4dp">
+
+    <CheckBox
+        android:id="@+id/convert_checked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:focusable="false"/>
+
+    <ImageView
+        android:id="@+id/convert_icon"
+        android:layout_width="28sp"
+        android:layout_height="28sp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/convert_checked"
+        android:scaleType="fitStart"/>
+
+    <TextView
+        android:id="@+id/convert_code"
+        style="@style/FontListCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/convert_icon"
+        android:paddingLeft="4sp"/>
+
+    <TextView
+        android:id="@+id/convert_source"
+        style="@style/FontListSource"
+        android:layout_width="wrap_content"
+        android:layout_height="20sp"
+        android:layout_marginLeft="4sp"
+        android:layout_toRightOf="@+id/convert_code"
+        android:gravity="bottom"/>
+
+    <TextView
+        android:id="@+id/convert_name"
+        style="@style/FontListName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/convert_icon"
+        android:layout_toRightOf="@id/convert_checked"/>
+
+</RelativeLayout>

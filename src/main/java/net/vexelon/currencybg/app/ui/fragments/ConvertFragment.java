@@ -20,6 +20,7 @@ package net.vexelon.currencybg.app.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +34,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -43,9 +45,11 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
+import net.vexelon.currencybg.app.ui.components.ConvertSelectListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
 import net.vexelon.currencybg.app.utils.NumberUtils;
+import net.vexelon.currencybg.app.utils.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -55,6 +59,7 @@ public class ConvertFragment extends AbstractFragment {
 	private Spinner spinnerSourceCurrency;
 	private TextView sourceValueView;
 	private ListView targetCurrenciesView;
+	private FloatingActionButton actionButton;
 
 	private List<CurrencyData> currencies = Lists.newArrayList();
 
@@ -101,7 +106,10 @@ public class ConvertFragment extends AbstractFragment {
 			appSettings.setLastConvertValue("0");
 			appSettings.setLastConvertCurrencySel("BGN");
 			appSettings.setConvertCurrencies(Sets.<String> newHashSet());
+
 			updateUI(false);
+			actionButton.show(); // bring back select button
+
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -179,10 +187,9 @@ public class ConvertFragment extends AbstractFragment {
 			}
 		});
 
-		// add button
-		FloatingActionButton action = (FloatingActionButton) view.findViewById(R.id.fab_convert);
-		action.attachToListView(targetCurrenciesView);
-		action.setOnClickListener(new OnClickListener() {
+		actionButton = (FloatingActionButton) view.findViewById(R.id.fab_convert);
+		actionButton.attachToListView(targetCurrenciesView);
+		actionButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				newAddTargetCurrencyDialog().show();
@@ -276,24 +283,33 @@ public class ConvertFragment extends AbstractFragment {
 	 */
 	private MaterialDialog newAddTargetCurrencyDialog() {
 		final Context context = getActivity();
-		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context, android.R.layout.simple_spinner_item,
-				currencies);
+		final ConvertSelectListAdapter adapter = new ConvertSelectListAdapter(context,
+				android.R.layout.simple_spinner_item, currencies);
 
 		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
-				.adapter(adapter, new MaterialDialog.ListCallback() {
-					@Override
-					public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-						CurrencyData currencyData = currencies.get(which);
-						if (currencyData != null) {
-							new AppSettings(context).addConvertCurrency(currencyData);
+				.adapter(adapter, null).negativeText(R.string.text_cancel).positiveText(R.string.text_ok)
+				.onPositive(new MaterialDialog.SingleButtonCallback() {
 
-							// notify UI
+					@Override
+					public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+						if (!adapter.getSelected().isEmpty()) {
+							AppSettings appSettings = new AppSettings(context);
+							StringBuilder buffer = new StringBuilder();
+
+							for (CurrencyData currency : adapter.getSelected()) {
+								appSettings.addConvertCurrency(currency);
+								buffer.append(currency.getCode()).append(", ");
+							}
+
+							buffer.setLength(buffer.length() - 2);
+							String added = StringUtils.ellipsize(buffer.toString(), 30, 7);
+
+							// // notify UI
 							updateTargetCurrenciesListView();
 							updateTargetCurrenciesCalculations();
 
-							showSnackbar(context.getString(R.string.action_currency_added, currencyData.getCode()));
+							showSnackbar(context.getString(R.string.action_currency_added, added));
 						}
-						dialog.dismiss();
 					}
 				}).build();
 	}
