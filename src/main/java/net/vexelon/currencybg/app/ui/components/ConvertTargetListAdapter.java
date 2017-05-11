@@ -70,7 +70,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		UIUtils.setFlagIcon(v, R.id.target_icon, row.getCode());
 		UIUtils.setText(v, R.id.target_name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
 		UIUtils.setText(v, R.id.target_code, row.getCode());
-		UIUtils.setText(v, R.id.target_source, Sources.getName(row.getSource(), getContext()));
+		UIUtils.setText(v, R.id.target_source, Sources.getName(getContext(), row.getSource()));
 
 		BigDecimal value = values.get(position);
 		if (value == null) {

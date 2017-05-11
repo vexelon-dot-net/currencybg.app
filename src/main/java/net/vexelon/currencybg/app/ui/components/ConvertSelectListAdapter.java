@@ -132,7 +132,7 @@ public class ConvertSelectListAdapter extends ArrayAdapter<CurrencyData> {
 		UIUtils.setFlagIcon(holder.icon, row.getCode());
 		holder.code.setText(row.getCode());
 		holder.name.setText(UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
-		holder.source.setText(Sources.getName(row.getSource(), getContext()));
+		holder.source.setText(Sources.getName(getContext(), row.getSource()));
 
 		return v;
 	}

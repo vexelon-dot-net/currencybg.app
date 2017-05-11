@@ -6,15 +6,19 @@
             android:id="@+id/nav_currencies"
             android:checked="true"
             android:icon="@drawable/ic_euro_symbol"
-            android:title="@string/tab_title_currencies"/>
+            android:title="@string/drawer_menu_currencies"/>
         <item
             android:id="@+id/nav_convert"
             android:icon="@drawable/ic_swap_vertical_circle"
-            android:title="@string/tab_title_convert"/>
+            android:title="@string/drawer_menu_convert"/>
         <item
             android:id="@+id/nav_wallet"
             android:icon="@drawable/ic_wallet"
-            android:title="@string/tab_title_wallet"/>
+            android:title="@string/drawer_menu_wallet"/>
+        <item
+            android:id="@+id/nav_exchanges_info"
+            android:icon="@drawable/ic_exchanges"
+            android:title="@string/drawer_menu_exchanges"/>
     </group>
     <group
         android:id="@+id/group_settings"

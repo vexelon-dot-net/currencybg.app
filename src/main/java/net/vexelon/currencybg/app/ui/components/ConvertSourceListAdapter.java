@@ -51,7 +51,7 @@ public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 		UIUtils.setFlagIcon(v, R.id.convert_icon, row.getCode());
 		UIUtils.setText(v, R.id.convert_code, row.getCode());
 		UIUtils.setText(v, R.id.convert_name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
-		UIUtils.setText(v, R.id.convert_source, Sources.getName(row.getSource(), getContext()));
+		UIUtils.setText(v, R.id.convert_source, Sources.getName(getContext(), row.getSource()));
 
 		return v;
 	}

@@ -64,6 +64,16 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Removes leading <i>http(s)</i> and/or <i>www</i> prefixes in a url.
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static String stripUrl(String url) {
+		return url.replaceAll("(https?:)//", "").replace("www.", "");
+	}
+
+	/**
 	 * Puts ellipses in input strings that are longer than than maxCharacters.
 	 * Shorter strings or null is returned unchanged.
 	 * 
