@@ -39,7 +39,8 @@ public enum Sources {
 	POLANA1(300),
 	FACTORIN(400),
 	UNICREDIT(500),
-	SGEB(600);
+	SGEB(600),
+	CRYPTO(700);
 
 	private int id;
 	private boolean enabled;
