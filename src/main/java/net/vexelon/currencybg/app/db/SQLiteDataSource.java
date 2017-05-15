@@ -22,25 +22,30 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import net.vexelon.currencybg.app.Defs;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 
 import org.joda.time.DateTime;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class SQLiteDataSource implements DataSource {
 
-	private static final String[] ALL_COLUMNS = {Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY,
-			Defs.COLUMN_SELL, Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE};
+	private static final String[] ALL_COLUMNS = { Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY,
+			Defs.COLUMN_SELL, Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE };
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	// private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mmZ";
@@ -141,7 +146,7 @@ public class SQLiteDataSource implements DataSource {
 					"SELECT DISTINCT code, ratio, buy, sell, curr_date, source FROM currencies WHERE "
 							+ Defs.COLUMN_CODE + " = ? AND " + Defs.COLUMN_SOURCE
 							+ " = ? ORDER BY strftime('%s', curr_date) DESC; ",
-					new String[]{code, Integer.toString(source)});
+					new String[] { code, Integer.toString(source) });
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -169,7 +174,7 @@ public class SQLiteDataSource implements DataSource {
 			cursor = database.rawQuery(
 					"SELECT * FROM currencies WHERE " + Defs.COLUMN_SOURCE
 							+ " = ? ORDER BY strftime('%s', curr_date) DESC; ",
-					new String[]{String.valueOf(source)});
+					new String[] { String.valueOf(source) });
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -197,7 +202,7 @@ public class SQLiteDataSource implements DataSource {
 
 		try {
 			cursor = database.rawQuery("SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE
-					+ " = ? ORDER BY strftime('%s', curr_date) DESC; ", new String[]{code});
+					+ " = ? ORDER BY strftime('%s', curr_date) DESC; ", new String[] { code });
 
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -232,16 +237,58 @@ public class SQLiteDataSource implements DataSource {
 	public Optional<DateTime> getLastRatesDownloadTime() throws DataSourceException {
 		DateTime result = null;
 		Cursor cursor = null;
+		final String COLUMN_DT = "dt";
+
+		String query = "";
+		for (Sources source : Sources.values()) {
+			if (!source.isEnabled())
+				continue;
+
+			if (!query.isEmpty()) {
+				query += " UNION ";
+			}
+
+			query += "SELECT DISTINCT source, max(curr_date) as " + COLUMN_DT + " FROM currencies WHERE SOURCE="
+					+ source.getID();
+		}
+
+		Set<DateTime> dates = Sets.newTreeSet(new Comparator<DateTime>() {
+			@Override
+			public int compare(DateTime t1, DateTime t2) {
+				return t2.compareTo(t1);
+			}
+		});
 
 		try {
-			cursor = database
-					.rawQuery("SELECT curr_date FROM currencies ORDER BY strftime('%s', curr_date) DESC LIMIT 1", null);
+			// cursor = database
+			// .rawQuery("SELECT curr_date FROM currencies ORDER BY
+			// strftime('%s', curr_date) DESC LIMIT 1", null);
+			// if (cursor.getCount() > 0) {
+			// cursor.moveToFirst();
+			// String rawDate =
+			// cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE));
+			// result = DateTime.parse(rawDate);
+			// }
 
-			if (cursor.getCount() > 0) {
-				cursor.moveToFirst();
-				String rawDate = cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE));
-				result = DateTime.parse(rawDate);
+			cursor = database.rawQuery(query, null);
+
+			while (cursor.moveToNext()) {
+				String source = cursor.getString(cursor.getColumnIndex(Defs.COLUMN_SOURCE));
+				if (source != null) {
+					String rawDate = cursor.getString(cursor.getColumnIndex(COLUMN_DT));
+
+					// TODO is it before today?
+					dates.add(DateTime.parse(rawDate));
+				}
 			}
+
+			for (DateTime dt : dates) {
+				Log.d(Defs.LOG_TAG, "SQL date = " + dt);
+			}
+
+			// if (1 == 1)
+			// throw new DataSourceException("Fake stop!", null);
+
 		} catch (Throwable t) {
 			throw new DataSourceException("SQL error: Failed fetching latest currency date!", t);
 		} finally {
@@ -293,7 +340,7 @@ public class SQLiteDataSource implements DataSource {
 			newValues.put(Defs.COLUMN_WALLET_PURCHASE_RATE, walletEntry.getPurchaseRate());
 		}
 
-		database.update(Defs.TABLE_WALLET, newValues, "id=?", new String[]{Integer.toString(id)});
+		database.update(Defs.TABLE_WALLET, newValues, "id=?", new String[] { Integer.toString(id) });
 	}
 
 	@Override
@@ -326,7 +373,8 @@ public class SQLiteDataSource implements DataSource {
 		walletEntry.setId(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_WALLET_ID)));
 		walletEntry.setCode(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_CODE)));
 		walletEntry.setAmount(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_AMOUNT)));
-		walletEntry.setPurchaseTime(DateTimeUtils.parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_PURCHASE_TIME))));
+		walletEntry.setPurchaseTime(DateTimeUtils
+				.parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_PURCHASE_TIME))));
 		walletEntry.setPurchaseRate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_PURCHASE_RATE)));
 
 		return walletEntry;
