@@ -25,6 +25,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -36,11 +37,13 @@ import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 public class SQLiteDataSource implements DataSource {
 
@@ -235,21 +238,19 @@ public class SQLiteDataSource implements DataSource {
 
 	@Override
 	public Optional<DateTime> getLastRatesDownloadTime() throws DataSourceException {
-		DateTime result = null;
-		Cursor cursor = null;
 		final String COLUMN_DT = "dt";
+		DateTime result = null;
 
 		String query = "";
 		for (Sources source : Sources.values()) {
-			if (!source.isEnabled())
-				continue;
+			if (source.isEnabled()) {
+				if (!query.isEmpty()) {
+					query += " UNION ";
+				}
 
-			if (!query.isEmpty()) {
-				query += " UNION ";
+				query += "SELECT DISTINCT source, max(curr_date) as " + COLUMN_DT + " FROM currencies WHERE SOURCE="
+						+ source.getID();
 			}
-
-			query += "SELECT DISTINCT source, max(curr_date) as " + COLUMN_DT + " FROM currencies WHERE SOURCE="
-					+ source.getID();
 		}
 
 		Set<DateTime> dates = Sets.newTreeSet(new Comparator<DateTime>() {
@@ -258,6 +259,10 @@ public class SQLiteDataSource implements DataSource {
 				return t2.compareTo(t1);
 			}
 		});
+		DateTime startOfToday = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)))
+				.withTime(0, 0, 0, 0);
+
+		Cursor cursor = null;
 
 		try {
 			// cursor = database
@@ -276,15 +281,20 @@ public class SQLiteDataSource implements DataSource {
 				String source = cursor.getString(cursor.getColumnIndex(Defs.COLUMN_SOURCE));
 				if (source != null) {
 					String rawDate = cursor.getString(cursor.getColumnIndex(COLUMN_DT));
+					DateTime dateTime = DateTime.parse(rawDate);
 
-					// TODO is it before today?
-					dates.add(DateTime.parse(rawDate));
+					if (dateTime.isAfter(startOfToday)) {
+						dates.add(dateTime);
+					}
 				}
 			}
+
+			result = Iterables.getLast(dates, startOfToday);
 
 			for (DateTime dt : dates) {
 				Log.d(Defs.LOG_TAG, "SQL date = " + dt);
 			}
+			Log.d(Defs.LOG_TAG, "SQL selected = " + result);
 
 			// if (1 == 1)
 			// throw new DataSourceException("Fake stop!", null);
