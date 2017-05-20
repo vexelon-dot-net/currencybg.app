@@ -2,12 +2,19 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">301</integer>
+    <integer name="news_last">310</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
 
         <item><![CDATA[
+<b><font color="#ffffff">3.1.0</font></b>
+<br><br>
+&emsp; - Added Bitcoin currency info using Bitcoin Solutions as source.
+<br>
+&emsp; - Added multiple currency selection on Convert screen.
+<br>
+&emsp; - Added currency exchange info screen.
 <br><br>
 <b><font color="#ffffff">3.0.0</font></b>
 <br><br>
