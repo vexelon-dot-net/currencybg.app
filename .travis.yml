@@ -25,12 +25,12 @@ before_script:
   - echo KSPWD=test >> gradle.properties
   - echo KALIAS=test >> gradle.properties
   - echo KPWD=test >> gradle.properties
-##echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - echo no | android -v create avd --force -n test -b $ANDROID_ABI -k 'system-images;android-15;default;armeabi-v7a'
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+##  - echo no | android -v create avd --force -n test -b $ANDROID_ABI -k 'system-images;android-15;default;armeabi-v7a'
 
 script:
   - ./gradlew assembleDebug assembleDebugAndroidTest
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-  - ./gradlew connectedCheck -PdisablePreDex --stacktrace
+##  - emulator -avd test -no-skin -no-audio -no-window &
+##  - android-wait-for-emulator
+##  - adb shell input keyevent 82 &
+##  - ./gradlew connectedCheck -PdisablePreDex --stacktrace
