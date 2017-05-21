@@ -4,10 +4,14 @@ Currency BG Changes
 ## 3.1.0
 
 ### EN
+  * Added Bitcoin currency info using Bitcoin Solutions as source. 
   * Added multiple currency selection on Convert screen. 
+  * Added currency exchange info screen.
 
 ### BG
-  * Добавена функция за избор на повече от една валута за обмяна не екрана - Преобразуване.
+  * Добавена Биткойн валутна информация от източник - Биткойн Солюшънс.
+  * Добавена функция за избор на повече от една валута за обмяна на екрана - Преобразуване.
+  * Добавена информация/меню за наличните източници, както и връзки към Интернет сайтовете им.
 
 
 ## 3.0.0
