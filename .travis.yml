@@ -10,9 +10,9 @@ env:
 android:
   components:
     - tools
-    - platform-tools
     - build-tools-25.0.2
     - android-25
+    - platform-tools
     - extra-android-m2repository
     - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
 
