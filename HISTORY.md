@@ -1,6 +1,15 @@
 Currency BG Changes
 ===================
 
+## 3.2.0
+
+### EN
+  TODO
+  
+### BG
+  TODO
+
+
 ## 3.1.0
 
 ### EN
