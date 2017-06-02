@@ -105,7 +105,7 @@ public class InfoFragment extends AbstractFragment {
 		}
 
 		infoList.add(newInfoRow(getString(R.string.about_license), getString(R.string.copyright),
-				"https://org.vexelon.net"));
+				"https://raw.githubusercontent.com/vexelon-dot-net/currencybg.app/master/LICENSE"));
 		infoList.add(newInfoRow(getString(R.string.about_issue_appdev), getString(R.string.about_issue_appdev_text),
 				"https://github.com/vexelon-dot-net/currencybg.app/issues"));
 		infoList.add(newInfoRow(getString(R.string.about_join_appdev_authors), getString(R.string.about_join_appdev),
