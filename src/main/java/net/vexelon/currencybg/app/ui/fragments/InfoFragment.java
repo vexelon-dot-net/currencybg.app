@@ -110,6 +110,8 @@ public class InfoFragment extends AbstractFragment {
 				"https://github.com/vexelon-dot-net/currencybg.app/issues"));
 		infoList.add(newInfoRow(getString(R.string.about_join_appdev_authors), getString(R.string.about_join_appdev),
 				"https://github.com/vexelon-dot-net/currencybg.app/blob/master/CREDITS"));
+		infoList.add(newInfoRow(getString(R.string.about_fb), "facebook.com/currencybg",
+				"https://www.facebook.com/currencybg"));
 		infoList.add(
 				newInfoRow(getString(R.string.about_twitter), "twitter.com/vexelon", "https://twitter.com/vexelon"));
 		infoList.add(newInfoRow(getString(R.string.about_logo), getString(R.string.about_logo_text),
