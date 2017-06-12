@@ -40,7 +40,8 @@ public enum Sources {
 	FACTORIN(400),
 	UNICREDIT(500),
 	SGEB(600),
-	CRYPTO(700);
+	CRYPTO(700),
+	CHANGEPARTNER(800);
 
 	private int id;
 	private boolean enabled;
