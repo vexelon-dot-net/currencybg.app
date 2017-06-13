@@ -57,6 +57,7 @@ import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.db.models.WalletEntryInvestment;
 import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.WalletListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
@@ -367,7 +368,7 @@ public class WalletFragment extends AbstractFragment
 					@Override
 					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 						// validate and save new wallet entry
-						EditText amountView = (EditText) dialog.getView().findViewById(R.id.wallet_entry_amount);
+						final TextView amountView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_amount);
 						EditText boughtAtView = (EditText) dialog.getView().findViewById(R.id.wallet_entry_bought_at);
 						TextView boughtOnView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_bought_on);
 
@@ -445,6 +446,22 @@ public class WalletFragment extends AbstractFragment
 						android.R.layout.simple_spinner_item, getVisibleCurrencies(getCurrencies(context, true)));
 				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				spinner.setAdapter(adapter);
+
+				// source amount calculator
+				// TODO show existing amount
+				final TextView amountView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_amount);
+				amountView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						new CalculatorWidget(context).showCalculator("0", new CalculatorWidget.Listener() {
+
+							@Override
+							public void onValue(BigDecimal value) {
+								amountView.setText(value.toPlainString());
+							}
+						});
+					}
+				});
 
 				dateTimeSelected = LocalDateTime.now();
 				dateTimeView = (TextView) v.findViewById(R.id.wallet_entry_bought_on);
