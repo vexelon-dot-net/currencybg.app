@@ -89,5 +89,5 @@ public final class Defs {
 	 * Codes of currencies we don't want to show
 	 */
 	public static final List<String> HIDDEN_CURRENCY_CODES = Arrays
-			.asList(new String[] { "SBP", "QAR", "GEL", "SAR", "MAD", "TWD", "VND", "CSD", "TRL", "RUR" });
+			.asList(new String[] { "SBP", "QAR", "GEL", "SAR", "MAD", "TWD", "VND" });
 }
