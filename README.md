@@ -27,11 +27,11 @@ Use `tools/api.properties.tpl` as template.
 
 To build the project run:
 
-    gradle clean build
+    ./gradlew clean build
 
 To install a debug build run:
 
-    gradle installDebug
+    ./gradlew installDebug
 
 # License
 

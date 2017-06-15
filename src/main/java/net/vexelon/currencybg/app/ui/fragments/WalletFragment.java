@@ -31,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -57,11 +56,13 @@ import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.db.models.WalletEntryInvestment;
 import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.WalletListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
+import net.vexelon.currencybg.app.utils.StringUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -367,8 +368,8 @@ public class WalletFragment extends AbstractFragment
 					@Override
 					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 						// validate and save new wallet entry
-						EditText amountView = (EditText) dialog.getView().findViewById(R.id.wallet_entry_amount);
-						EditText boughtAtView = (EditText) dialog.getView().findViewById(R.id.wallet_entry_bought_at);
+						final TextView amountView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_amount);
+						TextView boughtAtView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_bought_at);
 						TextView boughtOnView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_bought_on);
 
 						String amount = amountView.getText().toString();
@@ -445,6 +446,40 @@ public class WalletFragment extends AbstractFragment
 						android.R.layout.simple_spinner_item, getVisibleCurrencies(getCurrencies(context, true)));
 				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				spinner.setAdapter(adapter);
+
+				// source amount calculator
+				final TextView amountView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_amount);
+				amountView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						new CalculatorWidget(context).showCalculator(
+								StringUtils.defaultIfEmpty(amountView.getText().toString(), "0"),
+								new CalculatorWidget.Listener() {
+
+									@Override
+									public void onValue(BigDecimal value) {
+										amountView.setText(value.toPlainString());
+									}
+								});
+					}
+				});
+
+				// source rate calculator
+				final TextView boughtAtView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_bought_at);
+				boughtAtView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						new CalculatorWidget(context).showCalculator(
+								StringUtils.defaultIfEmpty(boughtAtView.getText().toString(), "0"),
+								new CalculatorWidget.Listener() {
+
+									@Override
+									public void onValue(BigDecimal value) {
+										boughtAtView.setText(value.toPlainString());
+									}
+								});
+					}
+				});
 
 				dateTimeSelected = LocalDateTime.now();
 				dateTimeView = (TextView) v.findViewById(R.id.wallet_entry_bought_on);
