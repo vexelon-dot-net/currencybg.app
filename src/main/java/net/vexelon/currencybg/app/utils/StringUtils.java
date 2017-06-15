@@ -24,6 +24,13 @@ import java.util.Collection;
 
 public final class StringUtils {
 
+	public static String defaultIfEmpty(String value, String defaultValue) {
+		if (value == null || value.isEmpty()) {
+			return defaultValue;
+		}
+		return value;
+	}
+
 	public static String emptyIfNull(String value) {
 		return value == null ? "" : value;
 	}

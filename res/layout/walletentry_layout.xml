@@ -29,15 +29,6 @@
         android:gravity="left"
         android:hint="@string/wallet_amount_hint"/>
 
-    <!--<EditText-->
-    <!--android:id="@+id/wallet_entry_amount"-->
-    <!--style="@style/FontWalletEntryInput"-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="left"-->
-    <!--android:hint="@string/wallet_amount_hint"-->
-    <!--android:inputType="numberDecimal"/>-->
-
     <!-- bought at/rate -->
     <TextView
         style="@style/FontWalletEntryInputText"
@@ -46,14 +37,13 @@
         android:gravity="left"
         android:text="@string/wallet_bought_at"/>
 
-    <EditText
+    <TextView
         android:id="@+id/wallet_entry_bought_at"
         style="@style/FontWalletEntryInput"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:hint="@string/wallet_bought_at_hint"
-        android:inputType="numberDecimal"/>
+        android:hint="@string/wallet_bought_at_hint"/>
 
     <!-- bought on/date -->
     <TextView
