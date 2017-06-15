@@ -42,6 +42,7 @@
     <string name="about_3rdparty_icons">Third-party icons</string>
     <string name="about_3rdparty">Third-party libraries</string>
     <string name="about_twitter">We are on Twitter</string>
+    <string name="about_fb">Facebook page</string>
     <string name="about_contact">Contact</string>
     <string name="about_contact_email">Email us</string>
     <string name="drawer_menu_currencies">Currencies</string>
@@ -83,6 +84,7 @@
     <string name="source_unicredit">UniCredit</string>
     <string name="source_sgeb">SG Expressbank</string>
     <string name="source_cryptobg">crypto.bg</string>
+    <string name="source_changepartner">Change Partner</string>
     <string name="source_tavex_full">Tavex Bulgaria</string>
     <string name="source_polana_full">"POLANA 1" OOD</string>
     <string name="source_fib_full">First Investment Bank</string>
@@ -90,6 +92,7 @@
     <string name="source_unicredit_full">UniCredit Bulbank AD</string>
     <string name="source_sgeb_full">Societe Generale Expressbank</string>
     <string name="source_cryptobg_full">Bitcoin Solutions Ltd</string>
+    <string name="source_changepartner_full">Change Partner - "Georgi Chuchulain" Co.</string>
 
     <string name="action_sources">Sources</string>
     <string name="action_sources_title">Show currency rates for</string>
