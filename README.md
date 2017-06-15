@@ -19,8 +19,6 @@ Please log feature requests or bug reports using the [Issues Board](https://gith
 
 ## Development
 
-[Get Gradle](https://gradle.org/install).
-
 Create a `gradle.properties` file and fill in the signing-certificate properties.
 Use `tools/gradle.properties.tpl` as template.
 
@@ -29,11 +27,11 @@ Use `tools/api.properties.tpl` as template.
 
 To build the project run:
 
-    gradle clean build
+    ./gradlew clean build
 
 To install a debug build run:
 
-    gradle installDebug
+    ./gradlew installDebug
 
 # License
 
