@@ -19,6 +19,8 @@ Please log feature requests or bug reports using the [Issues Board](https://gith
 
 ## Development
 
+[Get Gradle](https://gradle.org/install).
+
 Create a `gradle.properties` file and fill in the signing-certificate properties.
 Use `tools/gradle.properties.tpl` as template.
 
