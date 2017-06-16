@@ -4,7 +4,14 @@
       tools:context="net.vexelon.currencybg.MainActivity">
 
     <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/action_share"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/action_clear"
+        android:orderInCategory="10"
         android:title="@string/action_clear"
         app:showAsAction="never"/>
 

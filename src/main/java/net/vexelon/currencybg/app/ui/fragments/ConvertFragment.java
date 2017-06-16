@@ -111,6 +111,10 @@ public class ConvertFragment extends AbstractFragment {
 			actionButton.show(); // bring back select button
 
 			return true;
+
+		case R.id.action_share:
+			// TODO:
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

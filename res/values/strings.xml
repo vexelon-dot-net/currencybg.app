@@ -74,6 +74,7 @@
         <item>Name</item>
         <item>Code</item>
     </string-array>
+    <string name="action_share">Share</string>
     <string name="text_rates_details"><![CDATA[
     Downloaded <b>%1$s</b> exchange rates for the past 3 days.]]></string>
 

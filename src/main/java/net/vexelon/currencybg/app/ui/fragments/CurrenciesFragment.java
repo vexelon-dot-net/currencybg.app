@@ -116,16 +116,23 @@ public class CurrenciesFragment extends AbstractFragment {
 			lastUpdateView.setText(R.string.last_update_updating_text);
 			setRefreshActionButtonState(true);
 			return true;
+
 		case R.id.action_rate:
 			if (currencyListAdapter != null) {
 				newRateMenu().show();
 			}
 			return true;
+
 		case R.id.action_sort:
 			newSortMenu().show();
 			return true;
+
 		case R.id.action_sources:
 			newSourcesMenu().show();
+			return true;
+
+		case R.id.action_share:
+			// TODO
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
