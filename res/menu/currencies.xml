@@ -9,12 +9,11 @@
         android:title="@string/action_refresh"
         app:showAsAction="ifRoom"/>
 
-    <!--android:icon="@drawable/ic_filter_list_black_48dp"-->
-
     <item
         android:id="@+id/action_sources"
+        android:icon="@drawable/ic_exchanges"
         android:title="@string/action_sources"
-        app:showAsAction="never"/>
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_rate"
