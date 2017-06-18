@@ -4,10 +4,12 @@ Currency BG Changes
 ## 3.2.0
 
 ### EN
-  TODO
+  * Added calculator when entering Wallet asset values.
+  * TODO
   
 ### BG
-  TODO
+  * Добавен калкулатор при залагане на стойности в портфейла.
+  * TODO
 
 
 ## 3.1.0
