@@ -20,9 +20,11 @@ package net.vexelon.currencybg.app.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +37,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -52,6 +55,7 @@ import net.vexelon.currencybg.app.remote.APISource;
 import net.vexelon.currencybg.app.remote.SourceException;
 import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
+import net.vexelon.currencybg.app.ui.components.CurrencySelectListAdapter;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 
@@ -71,6 +75,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	private TextView currenciesRateView;
 	private String lastUpdateLastValue;
 	private CurrencyListAdapter currencyListAdapter;
+	private List<CurrencyData> rates = Lists.newArrayList();
 	private List<TextView> sourceViews = Lists.newArrayList();
 
 	@Override
@@ -132,7 +137,7 @@ public class CurrenciesFragment extends AbstractFragment {
 			return true;
 
 		case R.id.action_share:
-			// TODO
+			newShareCurrenciesDialog().show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -352,6 +357,47 @@ public class CurrenciesFragment extends AbstractFragment {
 	}
 
 	/**
+	 * Displays currencies selection dialog
+	 *
+	 * @return
+	 */
+	private MaterialDialog newShareCurrenciesDialog() {
+		final Context context = getActivity();
+		final CurrencySelectListAdapter adapter = new CurrencySelectListAdapter(context,
+				android.R.layout.simple_spinner_item, rates);
+
+		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
+				.adapter(adapter, null).negativeText(R.string.text_cancel).positiveText(R.string.text_ok)
+				.onPositive(new MaterialDialog.SingleButtonCallback() {
+
+					@Override
+					public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
+						if (!adapter.getSelected().isEmpty()) {
+							final AppSettings appSettings = new AppSettings(context);
+							final String TAB = "   ";
+
+							StringBuilder buffer = new StringBuilder();
+							buffer.append(getString(R.string.wallet_code)).append(TAB).append(getString(R.string.buy))
+									.append(TAB).append(getString(R.string.sell)).append("<br>");
+
+							for (CurrencyData currency : adapter.getSelected()) {
+								buffer.append(currency.getCode()).append(TAB).append(currency.getBuy()).append(TAB)
+										.append(currency.getSell()).append("<br>");
+							}
+							buffer.append("<br><br>").append(getString(R.string.action_share_footer))
+									.append(appSettings.getAppUrl());
+
+							Intent sendIntent = new Intent();
+							sendIntent.setAction(Intent.ACTION_SEND);
+							sendIntent.putExtra(Intent.EXTRA_TEXT, buffer.toString());
+							sendIntent.setType("text/plain");
+							startActivity(sendIntent);
+						}
+					}
+				}).build();
+	}
+
+	/**
 	 * Converts checkbox sources selection to a {@link Sources} set.
 	 *
 	 * @param indices
@@ -506,6 +552,9 @@ public class CurrenciesFragment extends AbstractFragment {
 
 				List<CurrencyData> rates = source.getLastRates();
 
+				// cache loaded currencies
+				this.rates = getSortedCurrencies(getVisibleCurrencies(Lists.newArrayList(rates)));
+
 				if (!rates.isEmpty()) {
 					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
 					updateCurrenciesListView(activity, rates);
@@ -606,6 +655,9 @@ public class CurrenciesFragment extends AbstractFragment {
 			setRefreshActionButtonState(false);
 
 			if (updateOK) {
+				// cache loaded currencies
+				rates = getSortedCurrencies(getVisibleCurrencies(Lists.newArrayList(result)));
+
 				updateCurrenciesListView(activity, result);
 				// bump last update
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));

@@ -36,12 +36,12 @@ import net.vexelon.currencybg.app.ui.UiCodes;
 
 import java.util.List;
 
-public class ConvertSelectListAdapter extends ArrayAdapter<CurrencyData> {
+public class CurrencySelectListAdapter extends ArrayAdapter<CurrencyData> {
 
 	private List<CurrencyData> items;
 	private List<CurrencyData> selected;
 
-	public ConvertSelectListAdapter(Context context, int textViewResId, List<CurrencyData> items) {
+	public CurrencySelectListAdapter(Context context, int textViewResId, List<CurrencyData> items) {
 		super(context, textViewResId, items);
 		this.items = items;
 		this.selected = Lists.newArrayList();

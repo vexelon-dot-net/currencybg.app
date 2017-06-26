@@ -45,7 +45,7 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
-import net.vexelon.currencybg.app.ui.components.ConvertSelectListAdapter;
+import net.vexelon.currencybg.app.ui.components.CurrencySelectListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
 import net.vexelon.currencybg.app.utils.NumberUtils;
@@ -113,6 +113,7 @@ public class ConvertFragment extends AbstractFragment {
 			return true;
 
 		case R.id.action_share:
+
 			// TODO:
 			return true;
 		}
@@ -287,7 +288,7 @@ public class ConvertFragment extends AbstractFragment {
 	 */
 	private MaterialDialog newAddTargetCurrencyDialog() {
 		final Context context = getActivity();
-		final ConvertSelectListAdapter adapter = new ConvertSelectListAdapter(context,
+		final CurrencySelectListAdapter adapter = new CurrencySelectListAdapter(context,
 				android.R.layout.simple_spinner_item, currencies);
 
 		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
