@@ -6,6 +6,8 @@
 
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_not_now">Not Now</string>
     <string name="text_pick_date">Select date</string>
     <string name="text_pick_time">Select time</string>
     <string name="text_enabled">Enabled</string>
@@ -33,6 +35,10 @@
     <string name="error_no_entries">No new currency entries.</string>
     <string name="error_add_wallet_entry">Missing or incorrect field data!</string>
     <string name="error_convert_empty">Missing converted currencies.</string>
+
+    <string name="vote_invite_title">Vote for %1$s</string>
+    <string name="vote_invite_content"><![CDATA[
+    We noticed you are using <b>%1$s</b> quite often and that\'s just awesome!<br><br>Would you like to vote for the app and leave us some feedback at the Play Store?]]></string>
 
     <string name="about_changelog">Changelog</string>
     <string name="about_license">GNU License v3.0</string>

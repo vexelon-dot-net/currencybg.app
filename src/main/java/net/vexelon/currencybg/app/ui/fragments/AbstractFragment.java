@@ -21,7 +21,9 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
@@ -89,6 +91,19 @@ public class AbstractFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		final Context context = getActivity();
+		final AppSettings appSettings = new AppSettings(context);
+		if (appSettings.getUserAppUses() > Defs.VOTING_THRESHOLD && !appSettings.isUserVoted()) {
+			showVotingInvitation(context).show();
+		} else {
+			appSettings.setUserAppUses(appSettings.getUserAppUses() + 1);
+		}
+	}
+
 	/**
 	 * Shows a dialog with "What's New" information
 	 *
@@ -112,6 +127,47 @@ public class AbstractFragment extends Fragment {
 				.setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).setCancelable(false).setView(scrollView).show();
+	}
+
+	public AlertDialog showVotingInvitation(final Context context) {
+		Resources resources = context.getResources();
+
+		final TextView messagesView = new TextView(context);
+		messagesView.setText(Html
+				.fromHtml(resources.getString(R.string.vote_invite_content, resources.getString(R.string.app_name))));
+		messagesView.setMovementMethod(LinkMovementMethod.getInstance());
+		messagesView.setPadding(48, 24, 48, 24);
+
+		ScrollView scrollView = new ScrollView(context);
+		scrollView.setFillViewport(true);
+		scrollView.addView(messagesView);
+
+		return new AlertDialog.Builder(context)
+				.setTitle(getString(R.string.vote_invite_title, getString(R.string.app_name)))
+				.setNegativeButton(R.string.text_not_now, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						new AppSettings(context).setUserAppUses(0);
+					}
+				}).setPositiveButton(R.string.text_yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						final String appPackageName = getActivity().getPackageName();
+						try {
+							startActivity(
+									new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+						} catch (android.content.ActivityNotFoundException e) {
+							startActivity(new Intent(Intent.ACTION_VIEW,
+									Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+						}
+
+						final AppSettings appSettings = new AppSettings(context);
+						appSettings.setUserAppUses(0);
+						appSettings.setUserVoted(true);
+
 						dialog.dismiss();
 					}
 				}).setCancelable(false).setView(scrollView).show();

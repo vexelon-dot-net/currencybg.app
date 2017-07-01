@@ -28,6 +28,8 @@ public final class Defs {
 	public final static int TOAST_ERR_DURATION = 3000;
 	public final static int VIBRATE_DEL_DURATION = 50;
 
+	public final static int VOTING_THRESHOLD = 100;
+
 	public static final String LONG_DASH = "\u2014";
 	public static final String COLOR_NAVY_BLUE = "#00BFFF";
 	public static final String COLOR_DARK_ORANGE = "#FFB400";

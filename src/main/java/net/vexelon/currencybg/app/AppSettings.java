@@ -18,9 +18,7 @@
 package net.vexelon.currencybg.app;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.google.common.base.Splitter;
@@ -319,6 +317,33 @@ public final class AppSettings {
 
 	public void setWiFiOnlyDownloads(boolean value) {
 		generalPrefs.edit().putBoolean("pref_wifi_only_downloads", value).apply();
+	}
+
+	/**
+	 * 
+	 * @param value
+	 *            Number of times the user has used the app so far.
+	 */
+	public void setUserAppUses(int value) {
+		generalPrefs.edit().putInt("pref_user_times_used", value).apply();
+	}
+
+	public int getUserAppUses() {
+		return generalPrefs.getInt("pref_user_times_used", 0);
+	}
+
+	/**
+	 * Sets whether the user has already voted for this app via the invitation
+	 * dialog.
+	 * 
+	 * @param value
+	 */
+	public void setUserVoted(boolean value) {
+		generalPrefs.edit().putBoolean("pref_user_voted", value).apply();
+	}
+
+	public boolean isUserVoted() {
+		return generalPrefs.getBoolean("pref_user_voted", false);
 	}
 
 }
