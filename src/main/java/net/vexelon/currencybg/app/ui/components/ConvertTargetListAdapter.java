@@ -18,10 +18,13 @@
 package net.vexelon.currencybg.app.ui.components;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -52,25 +55,39 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 	public ConvertTargetListAdapter(Context context, int textViewResId, List<CurrencyData> items, int precisionMode) {
 		super(context, textViewResId, items);
 		this.items = items;
+		this.precisionMode = precisionMode;
+
 		this.values = Lists.newArrayListWithCapacity(items.size());
 		for (int i = 0; i < items.size(); i++) {
 			values.add(BigDecimal.ZERO);
 		}
-		this.precisionMode = precisionMode;
 	}
 
 	private View _getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder = null;
+
 		View v = convertView;
 		if (v == null) {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.convert_target_row_layout, parent, false);
+
+			holder = new ViewHolder();
+			holder.icon = (ImageView) v.findViewById(R.id.target_icon);
+			holder.name = (TextView) v.findViewById(R.id.target_name);
+			holder.code = (TextView) v.findViewById(R.id.target_code);
+			holder.source = (TextView) v.findViewById(R.id.target_source);
+			holder.rate = (TextView) v.findViewById(R.id.target_rate);
+
+			v.setTag(holder);
+		} else {
+			holder = (ViewHolder) v.getTag();
 		}
 
 		CurrencyData row = items.get(position);
 
-		UIUtils.setFlagIcon(v, R.id.target_icon, row.getCode());
-		UIUtils.setText(v, R.id.target_name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
-		UIUtils.setText(v, R.id.target_code, row.getCode());
-		UIUtils.setText(v, R.id.target_source, Sources.getName(getContext(), row.getSource()));
+		UIUtils.setFlagIcon(holder.icon, row.getCode());
+		holder.name.setText(UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
+		holder.code.setText(row.getCode());
+		holder.source.setText(Sources.getName(getContext(), row.getSource()));
 
 		BigDecimal value = values.get(position);
 		if (value == null) {
@@ -93,9 +110,9 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		boolean isBest = value.equals(bestValues.get(row.getCode()));
 		if (isBest) {
 			formatted = UIUtils.toHtmlColor(formatted, Defs.COLOR_OK_GREEN);
-			UIUtils.setText(v, R.id.target_rate, formatted, true);
+			holder.rate.setText(Html.fromHtml(formatted));
 		} else {
-			UIUtils.setText(v, R.id.target_rate, formatted);
+			holder.rate.setText(formatted);
 		}
 
 		return v;
@@ -153,4 +170,14 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 
 	}
 
+	/**
+	 * ViewHolder pattern
+	 */
+	private static class ViewHolder {
+		public ImageView icon;
+		public TextView code;
+		public TextView name;
+		public TextView source;
+		public TextView rate;
+	}
 }
