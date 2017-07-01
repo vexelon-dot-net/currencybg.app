@@ -149,6 +149,23 @@ public class AbstractFragment extends Fragment {
 	}
 
 	/**
+	 * 
+	 * @param currencies
+	 * @return
+	 */
+	protected List<CurrencyData> getSortedCurrencies(List<CurrencyData> currencies) {
+		// sort by code
+		Collections.sort(currencies, new Comparator<CurrencyData>() {
+			@Override
+			public int compare(CurrencyData lhs, CurrencyData rhs) {
+				return lhs.getCode().compareToIgnoreCase(rhs.getCode());
+			}
+		});
+
+		return currencies;
+	}
+
+	/**
 	 * Fetches a sorted list of last downloaded currencies from the database
 	 *
 	 * @param context
@@ -178,13 +195,7 @@ public class AbstractFragment extends Fragment {
 		}
 
 		if (sorted) {
-			// sort by code
-			Collections.sort(currencies, new Comparator<CurrencyData>() {
-				@Override
-				public int compare(CurrencyData lhs, CurrencyData rhs) {
-					return lhs.getCode().compareToIgnoreCase(rhs.getCode());
-				}
-			});
+			currencies = getSortedCurrencies(currencies);
 		}
 
 		return currencies;

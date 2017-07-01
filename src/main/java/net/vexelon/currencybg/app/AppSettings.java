@@ -18,7 +18,9 @@
 package net.vexelon.currencybg.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.google.common.base.Splitter;
@@ -55,6 +57,16 @@ public final class AppSettings {
 	public AppSettings(Context context) {
 		this.context = context;
 		this.generalPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+	}
+
+	public String getAppUrl() {
+		final String appPackageName = context.getPackageName();
+		return "https://play.google.com/store/apps/details?id=" + appPackageName;
+	}
+
+	public String getAppLink() {
+		final String appPackageName = context.getPackageName();
+		return "market://details?id=" + appPackageName;
 	}
 
 	/**
