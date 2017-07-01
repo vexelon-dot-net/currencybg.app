@@ -4,12 +4,16 @@ Currency BG Changes
 ## 3.2.0
 
 ### EN
+  * Added Forex House and Changepartner currency exchange sources.
+  * Added rates and conversions sharing feature.
   * Added calculator when entering Wallet asset values.
-  * TODO
+  * Performance improvements.
   
 ### BG
-  * Добавен калкулатор при залагане на стойности в портфейла.
-  * TODO
+  * Добавени нови източници - Forex House и Changepartner.
+  * Добавена възможност за споделяне на валути и преобразувания.
+  * Добавен калкулатор при залагане на стойности в портфейла.  
+  * Оптимизации и подобрения при зареждане на данните.
 
 
 ## 3.1.0
