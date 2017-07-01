@@ -20,6 +20,7 @@ package net.vexelon.currencybg.app.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -78,7 +79,7 @@ public class ConvertFragment extends AbstractFragment {
 		/*
 		 * Back from Settings or another activity, so we reload all currencies.
 		 */
-		updateUI(true);
+		new UpdateRatesTask(true).execute();
 		super.onResume();
 	}
 
@@ -90,7 +91,7 @@ public class ConvertFragment extends AbstractFragment {
 			 * Back from Currencies fragment view, so we reload all currencies.
 			 * The user might have updated them.
 			 */
-			updateUI(true);
+			new UpdateRatesTask(true).execute();
 		}
 	}
 
@@ -110,8 +111,10 @@ public class ConvertFragment extends AbstractFragment {
 			appSettings.setLastConvertCurrencySel("BGN");
 			appSettings.setConvertCurrencies(Sets.<String> newHashSet());
 
-			updateUI(false);
-			actionButton.show(); // bring back select button
+			new UpdateRatesTask(false).execute();
+
+			// bring back select button
+			actionButton.show();
 
 			return true;
 
@@ -202,33 +205,6 @@ public class ConvertFragment extends AbstractFragment {
 				newAddTargetCurrencyDialog().show();
 			}
 		});
-	}
-
-	private void updateUI(boolean reload) {
-		final Activity activity = getActivity();
-
-		if (reload) {
-			currencies.clear();
-			// add dummy BGN for convert purposes
-			currencies.add(getBGNCurrency());
-			// load all currencies from database
-			currencies.addAll(getVisibleCurrencies(getCurrencies(activity, true)));
-		}
-
-		ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity, android.R.layout.simple_spinner_item,
-				currencies);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerSourceCurrency.setAdapter(adapter);
-
-		final AppSettings appSettings = new AppSettings(activity);
-
-		int position = adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel());
-		if (position > 0) {
-			spinnerSourceCurrency.setSelection(position);
-		}
-
-		setSourceCurrencyValue(appSettings.getLastConvertValue(), appSettings.getLastConvertCurrencySel());
-		updateTargetCurrenciesListView();
 	}
 
 	/**
@@ -356,6 +332,50 @@ public class ConvertFragment extends AbstractFragment {
 			startActivity(sendIntent);
 		} else {
 			showSnackbar(R.string.error_convert_empty, Defs.TOAST_INFO_DURATION, false);
+		}
+	}
+
+	private class UpdateRatesTask extends AsyncTask<Void, Void, Void> {
+
+		private Activity activity;
+		private boolean reload;
+
+		public UpdateRatesTask(boolean reload) {
+			this.reload = reload;
+			this.activity = ConvertFragment.this.getActivity();
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			Log.v(Defs.LOG_TAG, "Reloading rates ...");
+
+			if (reload) {
+				currencies.clear();
+				// add dummy BGN for convert purposes
+				currencies.add(getBGNCurrency());
+				// load all currencies from database
+				currencies.addAll(getVisibleCurrencies(getCurrencies(activity, true)));
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void param) {
+			ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity,
+					android.R.layout.simple_spinner_item, currencies);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spinnerSourceCurrency.setAdapter(adapter);
+
+			final AppSettings appSettings = new AppSettings(activity);
+
+			int position = adapter.getSelectedCurrencyPosition(appSettings.getLastConvertCurrencySel());
+			if (position > 0) {
+				spinnerSourceCurrency.setSelection(position);
+			}
+
+			setSourceCurrencyValue(appSettings.getLastConvertValue(), appSettings.getLastConvertCurrencySel());
+			updateTargetCurrenciesListView();
 		}
 	}
 
