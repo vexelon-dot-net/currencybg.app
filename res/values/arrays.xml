@@ -13,6 +13,7 @@
         <item>@string/source_sgeb</item>
         <item>@string/source_cryptobg</item>
         <item>@string/source_changepartner</item>
+        <item>@string/source_forexhouse</item>
     </string-array>
     <string-array name="currency_sources_full">
         <item>@string/source_tavex_full</item>
@@ -23,6 +24,7 @@
         <item>@string/source_sgeb_full</item>
         <item>@string/source_cryptobg_full</item>
         <item>@string/source_changepartner_full</item>
+        <item>@string/source_forexhouse_full</item>
     </string-array>
     <string-array name="currency_sources_web">
         <item>https://tavex.bg</item>
@@ -33,6 +35,7 @@
         <item>http://www.sgeb.bg</item>
         <item>https://crypto.bg</item>
         <item>http://www.changepartner.net</item>
+        <item>http://forexhouse.eu</item>
     </string-array>
     <integer-array name="currency_sources_ids">
         <item>200</item>
@@ -43,6 +46,7 @@
         <item>600</item>
         <item>700</item>
         <item>800</item>
+        <item>900</item>
     </integer-array>
     <string-array name="currency_codes">
         <item>AED</item>
