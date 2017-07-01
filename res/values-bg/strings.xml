@@ -72,6 +72,7 @@
         <item>Код</item>
     </string-array>
     <string name="action_share">Сподели</string>
+    <string name="action_share_footer">Следете последните обменни курсове с Валутни Курсове BG - %1$s</string>
     <string name="text_rates_details"><![CDATA[
     Изтеглени обменни курсове за <b>%1$s</b> през изминалите 3 дни.]]></string>
 

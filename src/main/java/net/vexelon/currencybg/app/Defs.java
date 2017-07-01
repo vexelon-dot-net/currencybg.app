@@ -34,6 +34,10 @@ public final class Defs {
 	public static final String COLOR_DANGER_RED = "#e8392f";
 	public static final String COLOR_OK_GREEN = "#2fe857";
 
+	public static final String TAB = "\t";
+	public static final String TAB_2 = "\t\t";
+	public static final String NEWLINE = "\r\n";
+
 	public final static int SCALE_SHOW_LONG = 4;
 	public final static int SCALE_SHOW_SHORT = 2;
 	public final static int SCALE_CALCULATIONS = 10;

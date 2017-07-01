@@ -33,6 +33,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -374,18 +375,18 @@ public class CurrenciesFragment extends AbstractFragment {
 					public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
 						if (!adapter.getSelected().isEmpty()) {
 							final AppSettings appSettings = new AppSettings(context);
-							final String TAB = "   ";
 
 							StringBuilder buffer = new StringBuilder();
-							buffer.append(getString(R.string.wallet_code)).append(TAB).append(getString(R.string.buy))
-									.append(TAB).append(getString(R.string.sell)).append("<br>");
+							buffer.append(getString(R.string.wallet_code)).append(Defs.TAB_2)
+									.append(getString(R.string.buy)).append(Defs.TAB_2).append(getString(R.string.sell))
+									.append(Defs.NEWLINE);
 
 							for (CurrencyData currency : adapter.getSelected()) {
-								buffer.append(currency.getCode()).append(TAB).append(currency.getBuy()).append(TAB)
-										.append(currency.getSell()).append("<br>");
+								buffer.append(currency.getCode()).append(Defs.TAB_2).append(currency.getBuy())
+										.append(Defs.TAB_2).append(currency.getSell()).append(Defs.NEWLINE);
 							}
-							buffer.append("<br><br>").append(getString(R.string.action_share_footer))
-									.append(appSettings.getAppUrl());
+							buffer.append(Defs.NEWLINE)
+									.append(getString(R.string.action_share_footer, appSettings.getAppUrl()));
 
 							Intent sendIntent = new Intent();
 							sendIntent.setAction(Intent.ACTION_SEND);
