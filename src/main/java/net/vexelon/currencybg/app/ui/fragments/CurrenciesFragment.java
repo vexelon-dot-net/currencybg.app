@@ -105,7 +105,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	@Override
 	public void onResume() {
-		reloadRates(false);
+		new ReloadRatesTask(false).execute();
 		super.onResume();
 	}
 
@@ -120,7 +120,8 @@ public class CurrenciesFragment extends AbstractFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
-			reloadRates(true);
+			new ReloadRatesTask(true).execute();
+
 			lastUpdateLastValue = lastUpdateView.getText().toString();
 			lastUpdateView.setText(R.string.last_update_updating_text);
 			setRefreshActionButtonState(true);
@@ -546,44 +547,72 @@ public class CurrenciesFragment extends AbstractFragment {
 	}
 
 	/**
-	 * Reloads currencies from a remote source.
-	 *
-	 * @param useRemoteSource
+	 * Reloads currencies from database or triggers remote server download, if
+	 * specified.
+	 * 
 	 */
-	public void reloadRates(boolean useRemoteSource) {
-		final Activity activity = getActivity();
+	private class ReloadRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
-		if (!useRemoteSource) {
-			DataSource source = null;
-			try {
-				source = new SQLiteDataSource();
-				source.connect(activity);
+		private Activity activity;
+		private boolean useRemoteSource;
+		private int msgId = -1; // no error
 
-				List<CurrencyData> rates = source.getLastRates();
+		public ReloadRatesTask(boolean useRemoteSource) {
+			this.useRemoteSource = useRemoteSource;
+			this.activity = CurrenciesFragment.this.getActivity();
+		}
 
+		@Override
+		protected List<CurrencyData> doInBackground(Void... params) {
+			Log.v(Defs.LOG_TAG, "Loading rates from database...");
+			List<CurrencyData> result = Lists.newArrayList();
+
+			if (!useRemoteSource) {
+				DataSource source = null;
+				try {
+					source = new SQLiteDataSource();
+					source.connect(activity);
+
+					result.addAll(source.getLastRates());
+				} catch (DataSourceException e) {
+					Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
+					msgId = R.string.error_db_load;
+				} finally {
+					IOUtils.closeQuitely(source);
+				}
+			}
+
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(List<CurrencyData> result) {
+			if (msgId == -1) {
 				// cache loaded currencies
-				this.rates = getSortedCurrencies(getVisibleCurrencies(Lists.newArrayList(rates)));
+				rates = getSortedCurrencies(getVisibleCurrencies(Lists.newArrayList(result)));
 
-				if (!rates.isEmpty()) {
+				if (!result.isEmpty()) {
 					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
-					updateCurrenciesListView(activity, rates);
+					updateCurrenciesListView(activity, result);
 				} else {
 					useRemoteSource = true;
 				}
-			} catch (DataSourceException e) {
-				Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
-				showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
-			} finally {
-				IOUtils.closeQuitely(source);
+			} else {
+				showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
+			}
+
+			if (useRemoteSource) {
+				setRefreshActionButtonState(true);
+				new UpdateRatesTask().execute();
 			}
 		}
 
-		if (useRemoteSource) {
-			setRefreshActionButtonState(true);
-			new UpdateRatesTask().execute();
-		}
 	}
 
+	/**
+	 * Downloads currencies from remote server
+	 * 
+	 */
 	private class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
 		private Activity activity;
