@@ -13,6 +13,7 @@
     <string name="text_n_days">%1$s days</string>
     <string name="text_code">Code</string>
     <string name="text_source">Source</string>
+    <string name="text_converted">Converted</string>
 
     <string name="drawer_open">Open navigation</string>
     <string name="drawer_close">Close navigation</string>
@@ -31,6 +32,7 @@
     <string name="error_maintenance">Server down for maintenance! Try again later.</string>
     <string name="error_no_entries">No new currency entries.</string>
     <string name="error_add_wallet_entry">Missing or incorrect field data!</string>
+    <string name="error_convert_empty">Missing converted currencies.</string>
 
     <string name="about_changelog">Changelog</string>
     <string name="about_license">GNU License v3.0</string>
@@ -78,6 +80,7 @@
     </string-array>
     <string name="action_share">Share</string>
     <string name="action_share_footer">Get the latest Bulgarian Lev rates with Currency BG - %1$s</string>
+    <string name="text_share_convert">Rates for convertion of %1$s.</string>
     <string name="text_rates_details"><![CDATA[
     Downloaded <b>%1$s</b> exchange rates for the past 3 days.]]></string>
 

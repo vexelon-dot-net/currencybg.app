@@ -19,6 +19,7 @@ package net.vexelon.currencybg.app.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -43,6 +44,7 @@ import com.melnykov.fab.FloatingActionButton;
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
+import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.CurrencySelectListAdapter;
@@ -53,6 +55,7 @@ import net.vexelon.currencybg.app.utils.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public class ConvertFragment extends AbstractFragment {
 
@@ -113,8 +116,7 @@ public class ConvertFragment extends AbstractFragment {
 			return true;
 
 		case R.id.action_share:
-
-			// TODO:
+			newShareCurrenciesDialog();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -317,6 +319,44 @@ public class ConvertFragment extends AbstractFragment {
 						}
 					}
 				}).build();
+	}
+
+	/**
+	 * Displays share currencies dialog
+	 *
+	 * @return
+	 */
+	private void newShareCurrenciesDialog() {
+		final Context context = getActivity();
+
+		ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) targetCurrenciesView.getAdapter();
+		if (adapter != null && !adapter.getTargets().isEmpty()) {
+			StringBuilder buffer = new StringBuilder();
+
+			buffer.append(getString(R.string.text_share_convert, sourceValueView.getText())).append(Defs.NEWLINE)
+					.append(Defs.NEWLINE);
+
+			buffer.append(getString(R.string.text_code)).append(Defs.TAB_2).append(getString(R.string.text_converted))
+					.append(Defs.TAB_2).append(getString(R.string.text_source)).append(Defs.TAB_2).append(Defs.NEWLINE);
+
+			for (Map.Entry<CurrencyData, String> next : adapter.getTargets().entrySet()) {
+				buffer.append(next.getKey().getCode()).append(Defs.TAB_2);
+				buffer.append(next.getValue()).append(Defs.TAB_2);
+				buffer.append(Sources.getName(context, next.getKey().getSource())).append(Defs.NEWLINE);
+			}
+
+			// app url footer
+			buffer.append(Defs.NEWLINE)
+					.append(getString(R.string.action_share_footer, new AppSettings(context).getAppUrl()));
+
+			Intent sendIntent = new Intent();
+			sendIntent.setAction(Intent.ACTION_SEND);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, buffer.toString());
+			sendIntent.setType("text/plain");
+			startActivity(sendIntent);
+		} else {
+			showSnackbar(R.string.error_convert_empty, Defs.TOAST_INFO_DURATION, false);
+		}
 	}
 
 }

@@ -10,6 +10,7 @@
     <string name="text_n_days">%1$s дни</string>
     <string name="text_code">Код</string>
     <string name="text_source">Източник</string>
+    <string name="text_converted">Преобразувани</string>
 
     <string name="drawer_open">Отваряне навигация</string>
     <string name="drawer_close">Затваряне навигация</string>
@@ -28,6 +29,7 @@
     <string name="error_maintenance">Сървърът се обновява! Опитай по-късно.</string>
     <string name="error_no_entries">Няма нови курсове.</string>
     <string name="error_add_wallet_entry">Липсващо или грешно поле при попълване.</string>
+    <string name="error_convert_empty">Липсват конвертирани валути.</string>
 
     <string name="about_changelog">Лог на промените</string>
     <string name="about_version">Версия %1$s</string>
@@ -75,6 +77,7 @@
     </string-array>
     <string name="action_share">Сподели</string>
     <string name="action_share_footer">Следете последните обменни курсове с Валутни Курсове BG - %1$s</string>
+    <string name="text_share_convert">Стойности след преобразуване на %1$s.</string>
     <string name="text_rates_details"><![CDATA[
     Изтеглени обменни курсове за <b>%1$s</b> през изминалите 3 дни.]]></string>
 

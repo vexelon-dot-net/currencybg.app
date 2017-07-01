@@ -33,7 +33,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -358,7 +357,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	}
 
 	/**
-	 * Displays currencies selection dialog
+	 * Displays share currencies dialog
 	 *
 	 * @return
 	 */
@@ -388,6 +387,8 @@ public class CurrenciesFragment extends AbstractFragment {
 								buffer.append(currency.getSell()).append(Defs.TAB_2);
 								buffer.append(Sources.getName(context, currency.getSource())).append(Defs.NEWLINE);
 							}
+
+							// app url footer
 							buffer.append(Defs.NEWLINE)
 									.append(getString(R.string.action_share_footer, appSettings.getAppUrl()));
 

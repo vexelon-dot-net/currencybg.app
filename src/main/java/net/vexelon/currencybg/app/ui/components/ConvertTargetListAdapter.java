@@ -48,9 +48,11 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 
 	private List<CurrencyData> items;
 	private List<BigDecimal> values;
-	Map<String, BigDecimal> bestValues = Maps.newHashMap();
 	// private boolean showValues = false;
 	private int precisionMode = AppSettings.PRECISION_SIMPLE;
+
+	private Map<String, BigDecimal> bestValues = Maps.newHashMap();
+	private Map<CurrencyData, String> targets = Maps.newLinkedHashMap();
 
 	public ConvertTargetListAdapter(Context context, int textViewResId, List<CurrencyData> items, int precisionMode) {
 		super(context, textViewResId, items);
@@ -106,6 +108,9 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 			formatted = NumberUtils.getCurrencyFormat(value, row.getCode());
 			break;
 		}
+
+		// share cache
+		targets.put(row, formatted);
 
 		boolean isBest = value.equals(bestValues.get(row.getCode()));
 		if (isBest) {
@@ -168,6 +173,10 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 			}
 		}
 
+	}
+
+	public Map<CurrencyData, String> getTargets() {
+		return targets;
 	}
 
 	/**
