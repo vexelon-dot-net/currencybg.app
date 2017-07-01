@@ -92,8 +92,7 @@ public final class Defs {
 	public static final int MAX_SOURCES_TO_SHOW = 3;
 
 	/**
-	 * Codes of currencies we don't want to show
+	 * Codes of currencies we don't show at the moment
 	 */
-	public static final List<String> HIDDEN_CURRENCY_CODES = Arrays
-			.asList(new String[] { "SBP", "QAR", "GEL", "SAR", "MAD", "TWD", "VND" });
+	public static final List<String> HIDDEN_CURRENCY_CODES = Arrays.asList(new String[] { "SBP", "MAD" });
 }
