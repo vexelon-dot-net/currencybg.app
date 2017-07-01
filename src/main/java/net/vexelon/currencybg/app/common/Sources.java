@@ -41,7 +41,8 @@ public enum Sources {
 	UNICREDIT(500),
 	SGEB(600),
 	CRYPTO(700),
-	CHANGEPARTNER(800);
+	CHANGEPARTNER(800),
+	FOREXHOUSE(900);
 
 	private int id;
 	private boolean enabled;
