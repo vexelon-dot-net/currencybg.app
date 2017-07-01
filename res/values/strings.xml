@@ -11,6 +11,8 @@
     <string name="text_enabled">Enabled</string>
     <string name="text_disabled">Disabled</string>
     <string name="text_n_days">%1$s days</string>
+    <string name="text_code">Code</string>
+    <string name="text_source">Source</string>
 
     <string name="drawer_open">Open navigation</string>
     <string name="drawer_close">Close navigation</string>

@@ -8,6 +8,8 @@
     <string name="text_enabled">Включено</string>
     <string name="text_disabled">Изключено</string>
     <string name="text_n_days">%1$s дни</string>
+    <string name="text_code">Код</string>
+    <string name="text_source">Източник</string>
 
     <string name="drawer_open">Отваряне навигация</string>
     <string name="drawer_close">Затваряне навигация</string>

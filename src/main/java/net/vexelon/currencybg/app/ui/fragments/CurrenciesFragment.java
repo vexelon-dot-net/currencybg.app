@@ -377,13 +377,16 @@ public class CurrenciesFragment extends AbstractFragment {
 							final AppSettings appSettings = new AppSettings(context);
 
 							StringBuilder buffer = new StringBuilder();
-							buffer.append(getString(R.string.wallet_code)).append(Defs.TAB_2)
+							buffer.append(getString(R.string.text_code)).append(Defs.TAB_2)
 									.append(getString(R.string.buy)).append(Defs.TAB_2).append(getString(R.string.sell))
+									.append(Defs.TAB_2).append(getString(R.string.text_source)).append(Defs.TAB_2)
 									.append(Defs.NEWLINE);
 
 							for (CurrencyData currency : adapter.getSelected()) {
-								buffer.append(currency.getCode()).append(Defs.TAB_2).append(currency.getBuy())
-										.append(Defs.TAB_2).append(currency.getSell()).append(Defs.NEWLINE);
+								buffer.append(currency.getCode()).append(Defs.TAB_2);
+								buffer.append(currency.getBuy()).append(Defs.TAB_2);
+								buffer.append(currency.getSell()).append(Defs.TAB_2);
+								buffer.append(Sources.getName(context, currency.getSource())).append(Defs.NEWLINE);
 							}
 							buffer.append(Defs.NEWLINE)
 									.append(getString(R.string.action_share_footer, appSettings.getAppUrl()));
