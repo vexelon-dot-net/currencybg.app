@@ -89,12 +89,16 @@ public class CurrenciesFragment extends AbstractFragment {
 	public void onStart() {
 		super.onStart();
 
-		final AppSettings appSettings = new AppSettings(getActivity());
-		Resources resources = getActivity().getResources();
+		final Context context = getActivity();
+		final AppSettings appSettings = new AppSettings(context);
+		Resources resources = context.getResources();
 
 		// check against latest known version
 		if (appSettings.getLastReadNewsId() != resources.getInteger(R.integer.news_last)) {
-			showNewsAlert(getActivity());
+			// reset voting counter on new version
+			appSettings.setUserAppUses(0);
+
+			showNewsAlert(context);
 			appSettings.setLastReadNewsId(resources.getInteger(R.integer.news_last));
 		}
 	}

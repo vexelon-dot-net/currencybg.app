@@ -3,6 +3,8 @@
 
     <string name="text_ok">OK</string>
     <string name="text_cancel">Отказ</string>
+    <string name="text_yes">Да</string>
+    <string name="text_not_now">Не сега</string>
     <string name="text_pick_date">Изберете дата</string>
     <string name="text_pick_time">Изберете час</string>
     <string name="text_enabled">Включено</string>
@@ -15,7 +17,7 @@
     <string name="drawer_open">Отваряне навигация</string>
     <string name="drawer_close">Затваряне навигация</string>
 
-    <string name="app_name">Currency BG</string>
+    <string name="app_name">Валутни Курсове BG</string>
     <string name="last_update">Последно обновено</string>
     <string name="last_update_updating_text">Сваляне ...</string>
 
@@ -30,6 +32,10 @@
     <string name="error_no_entries">Няма нови курсове.</string>
     <string name="error_add_wallet_entry">Липсващо или грешно поле при попълване.</string>
     <string name="error_convert_empty">Липсват конвертирани валути.</string>
+
+    <string name="vote_invite_title">Гласувай за %1$s</string>
+    <string name="vote_invite_content"><![CDATA[
+    Забелязахме, че често използваш <b>%1$s</b> и това е страхотно!<br><br>Искаш ли да гласуваш за приложението и да ни оставиш коментар в Google Play Store?]]></string>
 
     <string name="about_changelog">Лог на промените</string>
     <string name="about_version">Версия %1$s</string>
