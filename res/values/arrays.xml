@@ -61,6 +61,7 @@
         <item>BYR</item>
         <item>CAD</item>
         <item>CHF</item>
+        <item>CNH</item>
         <item>CNY</item>
         <item>CZK</item>
         <item>DKK</item>
@@ -68,6 +69,7 @@
         <item>EEK</item>
         <item>EGP</item>
         <item>EUR</item>
+        <item>GEL</item>
         <item>GBP</item>
         <item>HKD</item>
         <item>HRK</item>
@@ -81,6 +83,7 @@
         <item>KRW</item>
         <item>LTL</item>
         <item>LVL</item>
+        <item>MDL</item>
         <item>MKD</item>
         <item>MUR</item>
         <item>MXN</item>
@@ -89,13 +92,16 @@
         <item>NZD</item>
         <item>PHP</item>
         <item>PLN</item>
+        <item>QAR</item>
         <item>RON</item>
         <item>RSD</item>
         <item>RUB</item>
+        <item>SAR</item>
         <item>SEK</item>
         <item>SGD</item>
         <item>THB</item>
         <item>TRY</item>
+        <item>TWD</item>
         <item>UAH</item>
         <item>USD</item>
         <item>VND</item>
@@ -114,13 +120,15 @@
         <item>Belarusian Ruble</item>
         <item>Canadian Dollar</item>
         <item>Swiss Franc</item>
-        <item>Chinese Yuan</item>
+        <item>Chinese Yuan Renminbi</item>
+        <item>Chinese Yuan Renminbi (offshore)</item>
         <item>Czech Koruna</item>
         <item>Danish Krone</item>
         <item>Dominican Peso</item>
         <item>Estonian Kroon</item>
         <item>Egyptian Pound</item>
         <item>Euro</item>
+        <item>Georgian Lari</item>
         <item>Pound Sterling</item>
         <item>Hong Kong Dollar</item>
         <item>Croatian Kuna</item>
@@ -134,6 +142,7 @@
         <item>South Korean Won</item>
         <item>Lithuanian Litas</item>
         <item>Latvian Lats</item>
+        <item>Moldovan leu</item>
         <item>Macedonian Denar</item>
         <item>Mauritian Rupee</item>
         <item>Mexican Peso</item>
@@ -142,13 +151,16 @@
         <item>New Zealand Dollar</item>
         <item>Philippine Peso</item>
         <item>Polish Złoty</item>
+        <item>Qatari Riyal</item>
         <item>Romanian Leu</item>
         <item>Serbian Dinar</item>
         <item>Russian Ruble</item>
+        <item>Saudi Riyal</item>
         <item>Swedish Krona/Kronor</item>
         <item>Singapore Dollar</item>
         <item>Thai Baht</item>
         <item>Turkish Lira</item>
+        <item>New Taiwan Dollar</item>
         <item>Ukrainian Hryvnia</item>
         <item>United States Dollar</item>
         <item>Vietnamese Dong</item>

@@ -46,6 +46,7 @@ public final class UIFlags {
 		flagsMap.put("dk", R.drawable.dk);
 		flagsMap.put("eg", R.drawable.eg);
 		flagsMap.put("ee", R.drawable.ee);
+		flagsMap.put("ge", R.drawable.ge);
 		flagsMap.put("gb", R.drawable.gb);
 		flagsMap.put("hk", R.drawable.hk);
 		flagsMap.put("hr", R.drawable.hr);
@@ -58,6 +59,7 @@ public final class UIFlags {
 		flagsMap.put("kr", R.drawable.kr);
 		flagsMap.put("lt", R.drawable.lt);
 		flagsMap.put("lv", R.drawable.lv);
+		flagsMap.put("md", R.drawable.md);
 		flagsMap.put("mk", R.drawable.mk);
 		flagsMap.put("mu", R.drawable.mu);
 		flagsMap.put("mx", R.drawable.mx);
@@ -66,15 +68,19 @@ public final class UIFlags {
 		flagsMap.put("nz", R.drawable.nz);
 		flagsMap.put("ph", R.drawable.ph);
 		flagsMap.put("pl", R.drawable.pl);
+		flagsMap.put("qa", R.drawable.qa);
 		flagsMap.put("ro", R.drawable.ro);
 		flagsMap.put("rs", R.drawable.rs);
 		flagsMap.put("ru", R.drawable.ru);
+		flagsMap.put("sa", R.drawable.sa);
 		flagsMap.put("se", R.drawable.se);
 		flagsMap.put("sg", R.drawable.sg);
 		flagsMap.put("th", R.drawable.th);
 		flagsMap.put("tr", R.drawable.tr);
+		flagsMap.put("tw", R.drawable.tw);
 		flagsMap.put("ua", R.drawable.ua);
 		flagsMap.put("us", R.drawable.us);
+		flagsMap.put("vn", R.drawable.vn);
 		flagsMap.put("xa", R.drawable.xa);
 		flagsMap.put("za", R.drawable.za);
 		flagsMap.put("eu", R.drawable.eu);

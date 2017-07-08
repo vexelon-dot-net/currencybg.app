@@ -5,15 +5,17 @@ Currency BG Changes
 
 ### EN
   * Added Forex House and Changepartner currency exchange sources.
+  * Added rates for Georgian Lari, Moldovan leu, New Taiwan Dollar, Qatari Riyal, Saudi Riyal, Vietnamese Dong.
   * Added rates and conversions sharing feature.
   * Added calculator when entering Wallet asset values.
-  * Performance improvements.
+  * Lots of performance improvements.
   
 ### BG
   * Добавени нови източници - Forex House и Changepartner.
+  * Добавени курсове за Грузинско Лари, Катарски Риал, Молдовска Лея, Нов Тайвански Долар, Саудитски Риал, Виетнамски Донг.
   * Добавена възможност за споделяне на валути и преобразувания.
   * Добавен калкулатор при залагане на стойности в портфейла.  
-  * Оптимизации и подобрения при зареждане на данните.
+  * Много оптимизации и подобрения.
 
 
 ## 3.1.0
