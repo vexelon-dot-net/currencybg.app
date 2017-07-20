@@ -5,7 +5,7 @@ Currency BG Changes
 
 ### EN
   * Added Forex House and Changepartner currency exchange sources.
-  * Added rates for Georgian Lari, Moldovan leu, New Taiwan Dollar, Qatari Riyal, Saudi Riyal, Vietnamese Dong.
+  * Added rates for Georgian Lari, Moldovan leu, New Taiwan Dollar, Qatari Riyal, Saudi Riyal, Vietnamese Dong, Jordanian Dinar.
   * Added rates and conversions sharing feature.
   * Added calculator when entering Wallet asset values.
   * Lots of performance improvements.
