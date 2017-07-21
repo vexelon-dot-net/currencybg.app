@@ -42,7 +42,8 @@ public enum Sources {
 	SGEB(600),
 	CRYPTO(700),
 	CHANGEPARTNER(800),
-	FOREXHOUSE(900);
+	FOREXHOUSE(900),
+	ALLIANZ(1000);
 
 	private int id;
 	private boolean enabled;

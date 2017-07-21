@@ -96,6 +96,7 @@
     <string name="source_cryptobg">crypto.bg</string>
     <string name="source_changepartner">Change Partner</string>
     <string name="source_forexhouse">Forex House</string>
+    <string name="source_allianz">Алианц Банк</string>
     <string name="source_tavex_full">Tavex България</string>
     <string name="source_polana_full">“Полана 1” ООД</string>
     <string name="source_fib_full">Първа Инвестиционна Банка</string>
@@ -105,6 +106,7 @@
     <string name="source_cryptobg_full">Биткойн Солюшънс ЕООД</string>
     <string name="source_changepartner_full">Change Partner - ЕТ "Георги Чучулайн"</string>
     <string name="source_forexhouse_full">Форекс Хаус България</string>
+    <string name="source_allianz_full">Алианц Банк България</string>
 
     <string name="action_sources">Източници</string>
     <string name="action_sources_title">Показване курсове от</string>
