@@ -54,6 +54,7 @@ public final class UIFlags {
 		flagsMap.put("id", R.drawable.id);
 		flagsMap.put("in", R.drawable.in);
 		flagsMap.put("is", R.drawable.is);
+		flagsMap.put("jo", R.drawable.jo);
 		flagsMap.put("jp", R.drawable.jp);
 		flagsMap.put("ke", R.drawable.ke);
 		flagsMap.put("kr", R.drawable.kr);
