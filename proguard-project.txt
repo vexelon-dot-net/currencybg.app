@@ -99,8 +99,14 @@
 -keep class org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement { *; }
 -dontwarn   org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
+-keep class com.wdullaer.materialdatetimepicker.** { *; }
+-keep class com.melnykov.** { *; }
+
 -dontwarn javax.annotation.**
+-dontwarn javax.lang.model.element.Modifier
 -dontwarn sun.misc.**
--dontwarn okio.**
+-dontwarn com.squareup.okhttp.**
 -dontwarn org.joda.convert.**
 -dontwarn com.google.common.collect.MinMaxPriorityQueue
+-dontwarn okhttp3.**
+-dontwarn okio.**
