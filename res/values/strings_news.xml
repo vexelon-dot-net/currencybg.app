@@ -2,12 +2,24 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">310</integer>
+    <integer name="news_last">320</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
 
         <item><![CDATA[
+<b><font color="#ffffff">3.2.0</font></b>
+<br><br>
+&emsp; - Added Forex House, Changepartner and Allianz Bank currency exchange sources.
+<br>
+&emsp; - Added rates for Georgian Lari, Moldovan leu, New Taiwan Dollar, Qatari Riyal, Saudi Riyal, Vietnamese Dong, Jordanian Dinar.
+<br>
+&emsp; - Added rates and conversions sharing feature.
+<br>
+&emsp; - Added calculator when entering Wallet asset values.
+<br>
+&emsp; - Lots of performance improvements.
+<br><br>
 <b><font color="#ffffff">3.1.0</font></b>
 <br><br>
 &emsp; - Added Bitcoin currency info using Bitcoin Solutions as source.
