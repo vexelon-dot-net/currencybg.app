@@ -24,7 +24,7 @@ import java.util.List;
 public class APISource implements Source {
 	private static final int HTTP_CODE_MAINTENANCE = 503;
 
-	private static final String API_JUNCTION = "/currencybg.server/api/currencies/";
+	private static final String API_JUNCTION = "/api/currencies/";
 	private static final String HEADER = "APIKey";
 
 	private final String serverUrl;
