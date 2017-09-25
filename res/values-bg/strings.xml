@@ -127,8 +127,8 @@
     <string name="pref_wifi_only_summary">Принуждава фоновият режим да сваля валутни курсове само при налична Wi-Fi връзка</string>
 
     <string name="wallet_code">Валута</string>
-    <string name="wallet_amount">Сума</string>
-    <string name="wallet_amount_hint">Закупена сума</string>
+    <string name="wallet_amount">Единици</string>
+    <string name="wallet_amount_hint">Закупени единици</string>
     <string name="wallet_bought_on">Дата</string>
     <string name="wallet_bought_on_hint">Дата за актив</string>
     <string name="wallet_bought_at">Курс</string>
