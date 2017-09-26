@@ -61,8 +61,7 @@ public interface DataSource extends Closeable {
 	public List<CurrencyData> getLastRates() throws DataSourceException;
 
 	/**
-	 * Returns all rates for the specified currency {@code code} and
-	 * {@code source}.
+	 * Returns all rates for the specified currency {@code code} and {@code source}.
 	 * 
 	 * @param code
 	 * @param source
@@ -81,8 +80,7 @@ public interface DataSource extends Closeable {
 	public List<CurrencyData> getAllRates(Integer source) throws DataSourceException;
 
 	/**
-	 * Returns all currency rates for the specific code, regardless of the
-	 * source.
+	 * Returns all currency rates for the specific code, regardless of the source.
 	 *
 	 * @param code
 	 * @return
@@ -99,8 +97,8 @@ public interface DataSource extends Closeable {
 	public void deleteRates(int backDays) throws DataSourceException;
 
 	/**
-	 * Finds the latest download time among all currencies that currently exist
-	 * in the database.
+	 * Finds the latest download time among all currencies that currently exist in
+	 * the database.
 	 * 
 	 * @return
 	 */
@@ -116,6 +114,7 @@ public interface DataSource extends Closeable {
 
 	/**
 	 * Delete Wallet Entry based on id
+	 * 
 	 * @param id
 	 * @throws DataSourceException
 	 */
@@ -128,7 +127,7 @@ public interface DataSource extends Closeable {
 	 * @param walletEntry
 	 * @throws DataSourceException
 	 */
-	public void  updateWalletEntry(int id, WalletEntry walletEntry) throws DataSourceException;
+	public void updateWalletEntry(int id, WalletEntry walletEntry) throws DataSourceException;
 
 	/**
 	 * Returns all Wallet Entries
@@ -136,5 +135,5 @@ public interface DataSource extends Closeable {
 	 * @return
 	 * @throws DataSourceException
 	 */
-	public List<WalletEntry> getWalletEntries() throws  DataSourceException;
+	public List<WalletEntry> getWalletEntries() throws DataSourceException;
 }
