@@ -64,8 +64,6 @@ public class BackgroundService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.v(Defs.LOG_TAG, "[Service] SERVICE RUNS!!!");
-
 		if (new AppSettings(this).isWiFiOnlyDownloads()) {
 			if (Connectivity.isWifi(this)) {
 				new DownloadTask().execute();
