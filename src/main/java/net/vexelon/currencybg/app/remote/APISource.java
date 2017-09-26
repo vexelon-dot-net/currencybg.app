@@ -22,8 +22,6 @@ import java.util.List;
  * Created by Tsvetoslav on 27.8.2016 г..
  */
 public class APISource implements Source {
-	private static final int HTTP_CODE_MAINTENANCE = 503;
-
 	private static final String API_JUNCTION = "/api/currencies/";
 	private static final String HEADER = "APIKey";
 
@@ -69,7 +67,6 @@ public class APISource implements Source {
 
 	@Override
 	public List<CurrencyData> getAllRatesByDate(String initialTime) throws SourceException {
-
 		String address = serverUrl + initialTime;
 
 		// TODO - to be set Authentication information
@@ -84,7 +81,6 @@ public class APISource implements Source {
 
 	@Override
 	public List<CurrencyData> getAllRatesByDateSource(String initialTime, Integer sourceId) throws SourceException {
-
 		String address = serverUrl + initialTime + "/" + sourceId;
 
 		// TODO - to be set Authentication information
@@ -99,7 +95,6 @@ public class APISource implements Source {
 
 	@Override
 	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime) throws SourceException {
-
 		String address = serverUrl + "today/" + initialTime;
 
 		// TODO - to be set Authentication information
@@ -114,7 +109,6 @@ public class APISource implements Source {
 
 	@Override
 	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime, Integer sourceId) throws SourceException {
-
 		String address = serverUrl + "today/" + initialTime + "/" + sourceId;
 
 		// TODO - to be set Authentication information
@@ -131,8 +125,8 @@ public class APISource implements Source {
 		try {
 			Request request = new Request.Builder().url(url).header(HEADER, token).build();
 			Response response = client.newCall(request).execute();
-			if (response.code() == HTTP_CODE_MAINTENANCE) {
-				throw new SourceException(true);
+			if (!response.isSuccessful()) {
+				throw new SourceException(response.code());
 			}
 
 			return response.body().string();

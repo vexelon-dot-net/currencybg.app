@@ -20,11 +20,15 @@ package net.vexelon.currencybg.app.remote;
 @SuppressWarnings("serial")
 public class SourceException extends Exception {
 
-	private boolean isMaintenanceError = false;
+	public static final int HTTP_CODE_MAINTENANCE = 503;
 
-	public SourceException(boolean isMaintenanceError) {
+	private boolean isMaintenanceError = false;
+	private int code;
+
+	public SourceException(int code) {
 		super();
-		this.isMaintenanceError = isMaintenanceError;
+		this.code = code;
+		this.isMaintenanceError = HTTP_CODE_MAINTENANCE == code;
 	}
 
 	public SourceException(String message) {
@@ -37,6 +41,10 @@ public class SourceException extends Exception {
 
 	public SourceException(String message, Throwable t) {
 		super(message, t);
+	}
+
+	public int getCode() {
+		return code;
 	}
 
 	public boolean isMaintenanceError() {

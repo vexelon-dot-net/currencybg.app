@@ -674,7 +674,7 @@ public class CurrenciesFragment extends AbstractFragment {
 					msgId = R.string.error_no_entries;
 				}
 			} catch (SourceException e) {
-				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote!", e);
+				Log.e(Defs.LOG_TAG, "Error fetching currencies from remote! Code: " + e.getCode(), e);
 				if (e.isMaintenanceError()) {
 					msgId = R.string.error_maintenance;
 				}
