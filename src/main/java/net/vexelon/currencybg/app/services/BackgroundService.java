@@ -64,6 +64,8 @@ public class BackgroundService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.v(Defs.LOG_TAG, "[Service] SERVICE RUNS!!!");
+
 		if (new AppSettings(this).isWiFiOnlyDownloads()) {
 			if (Connectivity.isWifi(this)) {
 				new DownloadTask().execute();
@@ -112,7 +114,7 @@ public class BackgroundService extends Service {
 
 				Log.d(Defs.LOG_TAG, "[Service] Downloading all rates since " + iso8601Time + " ...");
 
-				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
+				currencies = new APISource(BackgroundService.this).getAllCurrentRatesAfter(iso8601Time);
 				source.addRates(currencies);
 				updateOK = true;
 

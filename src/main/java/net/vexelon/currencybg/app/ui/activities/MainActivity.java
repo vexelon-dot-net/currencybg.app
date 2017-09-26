@@ -40,7 +40,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import net.vexelon.currencybg.app.AppAssets;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.services.BackgroundService;
@@ -49,12 +48,10 @@ import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 import net.vexelon.currencybg.app.ui.fragments.AbstractFragment;
 import net.vexelon.currencybg.app.ui.fragments.ConvertFragment;
 import net.vexelon.currencybg.app.ui.fragments.CurrenciesFragment;
+import net.vexelon.currencybg.app.ui.fragments.ExchangeInfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.InfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.PrefsFragment;
-import net.vexelon.currencybg.app.ui.fragments.ExchangeInfoFragment;
 import net.vexelon.currencybg.app.ui.fragments.WalletFragment;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements NotificationsListener {
 
@@ -79,12 +76,6 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 		drawerToggle = setupDrawerToggle();
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-		try {
-			AppAssets.init(this);
-		} catch (IOException e) {
-			Log.w(Defs.LOG_TAG, "Failed opening assets! Error: " + e.getMessage());
-		}
 
 		startService();
 		startReceivers();
@@ -225,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	 */
 	public void startService() {
 		Intent myIntent = new Intent(MainActivity.this, BackgroundService.class);
-		pendingIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, 0);
+		pendingIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		/*
 		 * First run timeout

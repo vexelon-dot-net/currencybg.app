@@ -1,5 +1,7 @@
 package net.vexelon.currencybg.app.remote;
 
+import android.content.Context;
+
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,23 +27,30 @@ public class APISource implements Source {
 	private static final String API_JUNCTION = "/api/currencies/";
 	private static final String HEADER = "APIKey";
 
-	private final String serverUrl;
-	private final String token;
+	private final AppAssets appAssets;
 	private final Gson gson = new GsonBuilder().setDateFormat(Defs.DATEFORMAT_ISO8601).create();
 	private final Type type = new TypeToken<List<CurrencyData>>() {
 	}.getType();
 	private final OkHttpClient client = new OkHttpClient();
 
-	public APISource() {
-		if ("prod".equals(AppAssets.getDeployType())) {
-			// production server address
-			this.serverUrl = AppAssets.getProdServer() + API_JUNCTION;
-			this.token = AppAssets.getProdServerApiKey();
-		} else {
-			// test server address
-			this.serverUrl = AppAssets.getTestServer() + API_JUNCTION;
-			this.token = AppAssets.getTestServerApiKey();
+	public APISource(Context context) {
+		appAssets = new AppAssets(context);
+	}
+
+	private String getServerUrl() throws IOException {
+		if ("prod".equals(appAssets.getDeployType())) {
+			return appAssets.getProdServer() + API_JUNCTION;
 		}
+
+		return appAssets.getTestServer() + API_JUNCTION;
+	}
+
+	private String getToken() throws IOException {
+		if ("prod".equals(appAssets.getDeployType())) {
+			return appAssets.getProdServerApiKey();
+		}
+
+		return appAssets.getTestServerApiKey();
 	}
 
 	/**
@@ -67,11 +76,9 @@ public class APISource implements Source {
 
 	@Override
 	public List<CurrencyData> getAllRatesByDate(String initialTime) throws SourceException {
-		String address = serverUrl + initialTime;
-
 		// TODO - to be set Authentication information
-
 		try {
+			String address = getServerUrl() + initialTime;
 			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
@@ -81,11 +88,9 @@ public class APISource implements Source {
 
 	@Override
 	public List<CurrencyData> getAllRatesByDateSource(String initialTime, Integer sourceId) throws SourceException {
-		String address = serverUrl + initialTime + "/" + sourceId;
-
 		// TODO - to be set Authentication information
-
 		try {
+			String address = getServerUrl() + initialTime + "/" + sourceId;
 			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
@@ -95,11 +100,9 @@ public class APISource implements Source {
 
 	@Override
 	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime) throws SourceException {
-		String address = serverUrl + "today/" + initialTime;
-
 		// TODO - to be set Authentication information
-
 		try {
+			String address = getServerUrl() + "today/" + initialTime;
 			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
@@ -109,11 +112,9 @@ public class APISource implements Source {
 
 	@Override
 	public List<CurrencyData> getAllCurrentRatesAfter(String initialTime, Integer sourceId) throws SourceException {
-		String address = serverUrl + "today/" + initialTime + "/" + sourceId;
-
 		// TODO - to be set Authentication information
-
 		try {
+			String address = getServerUrl() + "today/" + initialTime + "/" + sourceId;
 			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
@@ -123,7 +124,7 @@ public class APISource implements Source {
 
 	public String downloadRates(String url) throws IOException, SourceException {
 		try {
-			Request request = new Request.Builder().url(url).header(HEADER, token).build();
+			Request request = new Request.Builder().url(url).header(HEADER, getToken()).build();
 			Response response = client.newCall(request).execute();
 			if (!response.isSuccessful()) {
 				throw new SourceException(response.code());
