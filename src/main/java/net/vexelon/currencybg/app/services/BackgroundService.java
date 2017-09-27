@@ -112,7 +112,7 @@ public class BackgroundService extends Service {
 
 				Log.d(Defs.LOG_TAG, "[Service] Downloading all rates since " + iso8601Time + " ...");
 
-				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
+				currencies = new APISource(BackgroundService.this).getAllCurrentRatesAfter(iso8601Time);
 				source.addRates(currencies);
 				updateOK = true;
 

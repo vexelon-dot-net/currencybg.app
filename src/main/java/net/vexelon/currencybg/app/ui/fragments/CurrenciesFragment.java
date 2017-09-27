@@ -664,7 +664,7 @@ public class CurrenciesFragment extends AbstractFragment {
 				String iso8601Time = from.toString();
 				Log.d(Defs.LOG_TAG, "Downloading all rates since " + iso8601Time + " ...");
 
-				currencies = new APISource().getAllCurrentRatesAfter(iso8601Time);
+				currencies = new APISource(activity).getAllCurrentRatesAfter(iso8601Time);
 				if (!currencies.isEmpty()) {
 					source.addRates(currencies);
 					// reload merged currencies

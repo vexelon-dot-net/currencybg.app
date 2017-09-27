@@ -28,31 +28,41 @@ import java.util.Properties;
  */
 public final class AppAssets {
 
-	private static final Properties apiProps = new Properties();
+	private Context context;
+	private Properties apiProps;
 
-	public static void init(Context context) throws IOException {
-		AssetManager assetManager = context.getAssets();
-		apiProps.load(assetManager.open("api.properties"));
+	public AppAssets(Context context) {
+		this.context = context;
 	}
 
-	public static String getDeployType() {
-		return apiProps.getProperty("deploy.type");
+	private Properties getProps() throws IOException {
+		if (apiProps == null) {
+			AssetManager assetManager = context.getAssets();
+			apiProps = new Properties();
+			apiProps.load(assetManager.open("api.properties"));
+		}
+
+		return apiProps;
 	}
 
-	public static String getTestServer() {
-		return apiProps.getProperty("test.server");
+	public String getDeployType() throws IOException {
+		return getProps().getProperty("deploy.type");
 	}
 
-	public static String getTestServerApiKey() {
-		return apiProps.getProperty("test.key");
+	public String getTestServer() throws IOException {
+		return getProps().getProperty("test.server");
 	}
 
-	public static String getProdServer() {
-		return apiProps.getProperty("prod.server");
+	public String getTestServerApiKey() throws IOException {
+		return getProps().getProperty("test.key");
 	}
 
-	public static String getProdServerApiKey() {
-		return apiProps.getProperty("prod.key");
+	public String getProdServer() throws IOException {
+		return getProps().getProperty("prod.server");
+	}
+
+	public String getProdServerApiKey() throws IOException {
+		return getProps().getProperty("prod.key");
 	}
 
 }
