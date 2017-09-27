@@ -1,6 +1,19 @@
 Currency BG Changes
 ===================
 
+## 3.2.1
+
+### EN
+  * We fixed an issue with the currencies not being downloaded by the app's background service.
+  * We removed the refresh button on the Wallet screen. Entries are reloading automatically.
+  * Minor optimizations.
+
+### BG
+  * Отстранихме проблем с неработещо сваляне на валутите във фонов режим на приложението.
+  * Премахнахме ненужният бутон за презареждане на записите в портфейла. Презареждането е автоматично.
+  * Приложението вече ползва нов сървър базиран в Европа. 
+
+
 ## 3.2.0
 
 ### EN
