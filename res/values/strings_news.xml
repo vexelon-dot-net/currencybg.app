@@ -10,7 +10,7 @@
         <item><![CDATA[
 <b><font color="#ffffff">3.2.1</font></b>
 <br><br>
-&emsp; - We fixed an issue with the currencies not being downloaded by the app's background service.
+&emsp; - We fixed an issue with the currencies not being downloaded by the app\'s background service.
 <br>
 &emsp; - We removed the refresh button on the Wallet screen. Entries are reloading automatically.
 <br>
