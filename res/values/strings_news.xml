@@ -2,12 +2,20 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">320</integer>
+    <integer name="news_last">321</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
 
         <item><![CDATA[
+<b><font color="#ffffff">3.2.1</font></b>
+<br><br>
+&emsp; - We fixed an issue with the currencies not being downloaded by the app\'s background service.
+<br>
+&emsp; - We removed the refresh button on the Wallet screen. Entries are reloading automatically.
+<br>
+&emsp; - Minor optimizations.
+<br><br>
 <b><font color="#ffffff">3.2.0</font></b>
 <br><br>
 &emsp; - Added Forex House, Changepartner and Allianz Bank currency exchange sources.
