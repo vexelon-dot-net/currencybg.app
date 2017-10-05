@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -67,7 +68,11 @@ public class APISource implements Source {
 
 	private List<CurrencyData> toList(String json) throws SourceException {
 		if (!StringUtils.isEmpty(json)) {
-			return gson.fromJson(json, type);
+			try {
+				return gson.fromJson(json, type);
+			} catch (JsonSyntaxException e) {
+				throw new SourceException("Error parsing currencies payload!", e);
+			}
 		}
 
 		// can't parse json, return an empty list to prevent NPEs
