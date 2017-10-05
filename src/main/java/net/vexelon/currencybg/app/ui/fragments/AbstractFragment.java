@@ -209,7 +209,7 @@ public class AbstractFragment extends Fragment {
 	 * @param currencies
 	 * @return
 	 */
-	protected List<CurrencyData> getSortedCurrencies(List<CurrencyData> currencies) {
+	protected static List<CurrencyData> getSortedCurrencies(List<CurrencyData> currencies) {
 		// sort by code
 		Collections.sort(currencies, new Comparator<CurrencyData>() {
 			@Override
@@ -222,6 +222,22 @@ public class AbstractFragment extends Fragment {
 	}
 
 	/**
+	 * Generates a fictional BGN currency with 1:1:1 rate
+	 *
+	 * @return CurrencyData
+	 */
+	private static CurrencyData getBGNCurrency() {
+		CurrencyData currency = new CurrencyData();
+		currency.setCode("BGN");
+		currency.setRatio(1);
+		currency.setBuy("1");
+		currency.setSell("1");
+		currency.setSource(0);
+		currency.setDate(LocalDate.now().toString());
+		return currency;
+	}
+
+	/**
 	 * Fetches a sorted list of last downloaded currencies from the database
 	 *
 	 * @param context
@@ -230,8 +246,10 @@ public class AbstractFragment extends Fragment {
 	 *            If {@code true}, adds a fictional <i>BGN</i> currency to the
 	 *            result list.
 	 * @return
+	 * @throws DataSourceException
 	 */
-	protected List<CurrencyData> getCurrencies(final Context context, boolean sorted, boolean addBGN) {
+	public static List<CurrencyData> getCurrencies(final Context context, boolean sorted, boolean addBGN)
+			throws DataSourceException {
 		List<CurrencyData> currencies = Lists.newArrayList();
 
 		DataSource source = null;
@@ -239,9 +257,6 @@ public class AbstractFragment extends Fragment {
 			source = new SQLiteDataSource();
 			source.connect(context);
 			currencies = source.getLastRates();
-		} catch (DataSourceException e) {
-			showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
-			Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
 		} finally {
 			IOUtils.closeQuitely(source);
 		}
@@ -260,24 +275,8 @@ public class AbstractFragment extends Fragment {
 	/**
 	 * @see #getCurrencies(Context, boolean, boolean)
 	 */
-	protected List<CurrencyData> getCurrencies(final Context context, boolean sorted) {
+	protected List<CurrencyData> getCurrencies(final Context context, boolean sorted) throws DataSourceException {
 		return getCurrencies(context, sorted, false);
-	}
-
-	/**
-	 * Generates a fictional BGN currency with 1:1:1 rate
-	 *
-	 * @return CurrencyData
-	 */
-	protected CurrencyData getBGNCurrency() {
-		CurrencyData currency = new CurrencyData();
-		currency.setCode("BGN");
-		currency.setRatio(1);
-		currency.setBuy("1");
-		currency.setSell("1");
-		currency.setSource(0);
-		currency.setDate(LocalDate.now().toString());
-		return currency;
 	}
 
 	/**
@@ -315,7 +314,7 @@ public class AbstractFragment extends Fragment {
 	 * @param currencies
 	 * @return
 	 */
-	protected List<CurrencyData> getVisibleCurrencies(List<CurrencyData> currencies) {
+	public static List<CurrencyData> getVisibleCurrencies(List<CurrencyData> currencies) {
 		Iterator<CurrencyData> iterator = currencies.iterator();
 		while (iterator.hasNext()) {
 			CurrencyData c = iterator.next();

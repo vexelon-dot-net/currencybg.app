@@ -38,6 +38,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.melnykov.fab.FloatingActionButton;
@@ -46,11 +47,13 @@ import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.Sources;
+import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.CurrencySelectListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
+import net.vexelon.currencybg.app.ui.events.LoadListener;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
 
@@ -58,7 +61,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-public class ConvertFragment extends AbstractFragment {
+public class ConvertFragment extends AbstractFragment implements LoadListener<List<CurrencyData>> {
 
 	private Spinner spinnerSourceCurrency;
 	private TextView sourceValueView;
@@ -79,7 +82,7 @@ public class ConvertFragment extends AbstractFragment {
 		/*
 		 * Back from Settings or another activity, so we reload all currencies.
 		 */
-		new UpdateRatesTask(true).execute();
+		new UpdateRatesTask(getActivity(), this, true).execute();
 		super.onResume();
 	}
 
@@ -91,7 +94,7 @@ public class ConvertFragment extends AbstractFragment {
 			 * Back from Currencies fragment view, so we reload all currencies.
 			 * The user might have updated them.
 			 */
-			new UpdateRatesTask(true).execute();
+			new UpdateRatesTask(getActivity(), this, true).execute();
 		}
 	}
 
@@ -111,7 +114,7 @@ public class ConvertFragment extends AbstractFragment {
 			appSettings.setLastConvertCurrencySel("BGN");
 			appSettings.setConvertCurrencies(Sets.<String> newHashSet());
 
-			new UpdateRatesTask(false).execute();
+			new UpdateRatesTask(getActivity(), this, false).execute();
 
 			// bring back select button
 			actionButton.show();
@@ -335,33 +338,15 @@ public class ConvertFragment extends AbstractFragment {
 		}
 	}
 
-	private class UpdateRatesTask extends AsyncTask<Void, Void, Void> {
+	@Override
+	public void onLoadSuccessful(Supplier<List<CurrencyData>> newData) {
+		final Activity activity = getActivity();
+		if (activity != null) {
 
-		private Activity activity;
-		private boolean reload;
-
-		public UpdateRatesTask(boolean reload) {
-			this.reload = reload;
-			this.activity = ConvertFragment.this.getActivity();
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			Log.v(Defs.LOG_TAG, "Reloading rates ...");
-
-			if (reload) {
-				currencies.clear();
-				// add dummy BGN for convert purposes
-				currencies.add(getBGNCurrency());
-				// load all currencies from database
-				currencies.addAll(getVisibleCurrencies(getCurrencies(activity, true)));
+			if (newData.get() != null) {
+				currencies = newData.get();
 			}
 
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void param) {
 			ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity,
 					android.R.layout.simple_spinner_item, currencies);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -377,6 +362,60 @@ public class ConvertFragment extends AbstractFragment {
 			setSourceCurrencyValue(appSettings.getLastConvertValue(), appSettings.getLastConvertCurrencySel());
 			updateTargetCurrenciesListView();
 		}
+	}
+
+	@Override
+	public void onLoadFailed(int msgId) {
+		showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
+	}
+
+	static class UpdateRatesTask extends AsyncTask<Void, Void, Void> {
+
+		private Activity activity;
+		private boolean reload;
+		private LoadListener listener;
+
+		private List<CurrencyData> currencies;
+		private int msgId = -1;;
+
+		public UpdateRatesTask(Activity activity, @NonNull LoadListener listener, boolean reload) {
+			this.activity = activity;
+			this.reload = reload;
+			this.listener = listener;
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			Log.v(Defs.LOG_TAG, "Reloading rates ...");
+
+			if (reload) {
+				try {
+					// load all currencies from database
+					currencies = AbstractFragment
+							.getVisibleCurrencies(AbstractFragment.getCurrencies(activity, true, true));
+				} catch (DataSourceException e) {
+					msgId = R.string.error_db_load;
+					Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
+				}
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void param) {
+			if (msgId != -1) {
+				listener.onLoadFailed(msgId);
+			} else {
+				listener.onLoadSuccessful(new Supplier<List<CurrencyData>>() {
+					@Override
+					public List<CurrencyData> get() {
+						return currencies;
+					}
+				});
+			}
+		}
+
 	}
 
 }

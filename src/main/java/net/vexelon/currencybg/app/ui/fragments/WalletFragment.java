@@ -108,7 +108,8 @@ public class WalletFragment extends AbstractFragment
 						source.deleteWalletEntry(removed.getId());
 
 						showSnackbar(getActivity().getString(R.string.action_wallet_removed,
-								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
+								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode()
+								)));
 
 						vibrate(Defs.VIBRATE_DEL_DURATION);
 					} catch (DataSourceException e) {
@@ -293,7 +294,7 @@ public class WalletFragment extends AbstractFragment
 	}
 
 	private void formatInvestment(Context context, WalletEntryInvestment investment, boolean isTop, int precisionMode,
-			StringBuilder output) {
+	                              StringBuilder output) {
 
 		// profit info
 		output.append("<b>").append(colorfyProfit(investment.getInvestmentMargin(), isTop, precisionMode))
@@ -429,8 +430,16 @@ public class WalletFragment extends AbstractFragment
 					}
 				});
 
+				// TODO
+				List<CurrencyData> visibleCurrencies = Lists.newArrayList();
+				try {
+					visibleCurrencies = getVisibleCurrencies(getCurrencies(context, true));
+				} catch (DataSourceException e) {
+					// TODO
+				}
+
 				ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context,
-						android.R.layout.simple_spinner_item, getVisibleCurrencies(getCurrencies(context, true)));
+						android.R.layout.simple_spinner_item, visibleCurrencies);
 				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				spinner.setAdapter(adapter);
 
@@ -493,7 +502,8 @@ public class WalletFragment extends AbstractFragment
 	public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 		dateTimeSelected = dateTimeSelected.withYear(year).withMonthOfYear(monthOfYear + 1).withDayOfMonth(dayOfMonth);
 		// show time picker
-		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTimeSelected.getHourOfDay(),
+		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTimeSelected
+						.getHourOfDay(),
 				dateTimeSelected.getMinuteOfHour(), true);
 		timePicker.setThemeDark(true);
 		timePicker.show(getFragmentManager(), getResources().getText(R.string.text_pick_time).toString());
