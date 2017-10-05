@@ -275,7 +275,7 @@ public class AbstractFragment extends Fragment {
 	/**
 	 * @see #getCurrencies(Context, boolean, boolean)
 	 */
-	protected List<CurrencyData> getCurrencies(final Context context, boolean sorted) throws DataSourceException {
+	public static List<CurrencyData> getCurrencies(final Context context, boolean sorted) throws DataSourceException {
 		return getCurrencies(context, sorted, false);
 	}
 
@@ -285,7 +285,7 @@ public class AbstractFragment extends Fragment {
 	 * @param currencies
 	 * @return
 	 */
-	protected Multimap<String, CurrencyData> getCurrenciesMapped(List<CurrencyData> currencies) {
+	public static Multimap<String, CurrencyData> getCurrenciesMapped(List<CurrencyData> currencies) {
 		ImmutableListMultimap.Builder<String, CurrencyData> builder = ImmutableListMultimap.builder();
 		for (CurrencyData currencyData : currencies) {
 			builder.put(currencyData.getCode(), currencyData);
@@ -300,7 +300,7 @@ public class AbstractFragment extends Fragment {
 	 * @param currencies
 	 * @return
 	 */
-	protected Table<String, Sources, CurrencyData> getCurrenciesTable(List<CurrencyData> currencies) {
+	public static Table<String, Sources, CurrencyData> getCurrenciesTable(List<CurrencyData> currencies) {
 		ImmutableTable.Builder<String, Sources, CurrencyData> builder = ImmutableTable.builder();
 		for (CurrencyData currencyData : currencies) {
 			builder.put(currencyData.getCode(), Sources.valueOf(currencyData.getSource()), currencyData);

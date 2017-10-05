@@ -4,9 +4,11 @@ import android.support.annotation.NonNull;
 
 import com.google.common.base.Supplier;
 
-public interface LoadListener<T> {
+public interface LoadListener<MODEL> {
 
-	void onLoadSuccessful(@NonNull Supplier<T> newData);
+	void onLoadStart();
+
+	void onLoadSuccessful(@NonNull Supplier<MODEL> newData);
 
 	void onLoadFailed(final int msgId);
 }

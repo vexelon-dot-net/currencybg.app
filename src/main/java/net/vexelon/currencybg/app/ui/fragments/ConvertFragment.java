@@ -339,6 +339,11 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 	}
 
 	@Override
+	public void onLoadStart() {
+		// do nothing
+	}
+
+	@Override
 	public void onLoadSuccessful(Supplier<List<CurrencyData>> newData) {
 		final Activity activity = getActivity();
 		if (activity != null) {
@@ -373,12 +378,12 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 
 		private Activity activity;
 		private boolean reload;
-		private LoadListener listener;
+		private LoadListener<List<CurrencyData>> listener;
 
 		private List<CurrencyData> currencies;
 		private int msgId = -1;;
 
-		public UpdateRatesTask(Activity activity, @NonNull LoadListener listener, boolean reload) {
+		public UpdateRatesTask(Activity activity, @NonNull LoadListener<List<CurrencyData>> listener, boolean reload) {
 			this.activity = activity;
 			this.reload = reload;
 			this.listener = listener;

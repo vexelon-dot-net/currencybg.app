@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
@@ -56,6 +58,7 @@ import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.WalletListAdapter;
+import net.vexelon.currencybg.app.ui.events.LoadListener;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
@@ -73,14 +76,15 @@ import java.util.Comparator;
 import java.util.List;
 
 public class WalletFragment extends AbstractFragment
-		implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+		implements LoadListener<Pair<Multimap<String, CurrencyData>, List<WalletEntry>>>,
+		TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
 	private ListView walletListView;
 	private TextView dateTimeView;
 	private WalletListAdapter walletListAdapter;
 	private LocalDateTime dateTimeSelected;
 	private String codeSelected = "";
-	private Multimap<String, CurrencyData> currenciesMapped;
+	private Multimap<String, CurrencyData> currencyCodeToData;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -108,8 +112,7 @@ public class WalletFragment extends AbstractFragment
 						source.deleteWalletEntry(removed.getId());
 
 						showSnackbar(getActivity().getString(R.string.action_wallet_removed,
-								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode()
-								)));
+								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
 
 						vibrate(Defs.VIBRATE_DEL_DURATION);
 					} catch (DataSourceException e) {
@@ -174,7 +177,7 @@ public class WalletFragment extends AbstractFragment
 	}
 
 	private void updateUI() {
-		new ReloadEntriesTask().execute();
+		new ReloadEntriesTask(getActivity(), this).execute();
 	}
 
 	/**
@@ -206,7 +209,7 @@ public class WalletFragment extends AbstractFragment
 				UIUtils.setText(v, R.id.details_header, getResources().getString(R.string.wallet_text_rates_details,
 						UiCodes.getCurrencyName(context.getResources(), entry.getCode())), true);
 
-				Collection<CurrencyData> currencyDatas = currenciesMapped.get(entry.getCode());
+				Collection<CurrencyData> currencyDatas = currencyCodeToData.get(entry.getCode());
 
 				/**
 				 * Calculate investments for each source found
@@ -294,7 +297,7 @@ public class WalletFragment extends AbstractFragment
 	}
 
 	private void formatInvestment(Context context, WalletEntryInvestment investment, boolean isTop, int precisionMode,
-	                              StringBuilder output) {
+			StringBuilder output) {
 
 		// profit info
 		output.append("<b>").append(colorfyProfit(investment.getInvestmentMargin(), isTop, precisionMode))
@@ -430,16 +433,11 @@ public class WalletFragment extends AbstractFragment
 					}
 				});
 
-				// TODO
-				List<CurrencyData> visibleCurrencies = Lists.newArrayList();
-				try {
-					visibleCurrencies = getVisibleCurrencies(getCurrencies(context, true));
-				} catch (DataSourceException e) {
-					// TODO
-				}
+				// assumes currencies are already loaded!
+				List<CurrencyData> currencies = Lists.newArrayList(currencyCodeToData.values());
 
 				ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context,
-						android.R.layout.simple_spinner_item, visibleCurrencies);
+						android.R.layout.simple_spinner_item, currencies);
 				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				spinner.setAdapter(adapter);
 
@@ -502,8 +500,7 @@ public class WalletFragment extends AbstractFragment
 	public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 		dateTimeSelected = dateTimeSelected.withYear(year).withMonthOfYear(monthOfYear + 1).withDayOfMonth(dayOfMonth);
 		// show time picker
-		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTimeSelected
-						.getHourOfDay(),
+		TimePickerDialog timePicker = TimePickerDialog.newInstance(WalletFragment.this, dateTimeSelected.getHourOfDay(),
 				dateTimeSelected.getMinuteOfHour(), true);
 		timePicker.setThemeDark(true);
 		timePicker.show(getFragmentManager(), getResources().getText(R.string.text_pick_time).toString());
@@ -517,19 +514,54 @@ public class WalletFragment extends AbstractFragment
 		dateTimeView.setText(DateTimeUtils.toDateTimeText(view.getActivity(), dateTimeSelected.toDate()));
 	}
 
-	private class ReloadEntriesTask extends AsyncTask<Void, Void, List<WalletEntry>> {
+	@Override
+	public void onLoadStart() {
+		setRefreshActionButtonState(true);
+	}
+
+	@Override
+	public void onLoadSuccessful(@NonNull Supplier<Pair<Multimap<String, CurrencyData>, List<WalletEntry>>> newData) {
+		setRefreshActionButtonState(false);
+
+		final Activity activity = getActivity();
+		if (activity != null) {
+			final AppSettings appSettings = new AppSettings(activity);
+
+			currencyCodeToData = newData.get().first;
+
+			walletListAdapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item,
+					newData.get().second, currencyCodeToData, appSettings.getCurrenciesPrecision());
+			walletListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			walletListView.setAdapter(walletListAdapter);
+
+			if (!newData.get().second.isEmpty()) {
+				showSnackbar(R.string.wallet_message_reloaded);
+			}
+		}
+	}
+
+	@Override
+	public void onLoadFailed(int msgId) {
+		setRefreshActionButtonState(false);
+		showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
+	}
+
+	private static class ReloadEntriesTask extends AsyncTask<Void, Void, List<WalletEntry>> {
 
 		private Activity activity;
-		private boolean updateOK = false;
-		private int msgId = R.string.error_db_load;
+		private LoadListener<Pair<Multimap<String, CurrencyData>, List<WalletEntry>>> listener;
+		private Multimap<String, CurrencyData> codeToData;
+		private int msgId = -1;
 
-		public ReloadEntriesTask() {
-			activity = WalletFragment.this.getActivity();
+		public ReloadEntriesTask(Activity activity,
+				LoadListener<Pair<Multimap<String, CurrencyData>, List<WalletEntry>>> listener) {
+			this.activity = activity;
+			this.listener = listener;
 		}
 
 		@Override
 		protected void onPreExecute() {
-			setRefreshActionButtonState(true);
+			listener.onLoadStart();
 		}
 
 		@Override
@@ -544,10 +576,11 @@ public class WalletFragment extends AbstractFragment
 				source.connect(activity);
 				entries.addAll(source.getWalletEntries());
 
-				currenciesMapped = getCurrenciesMapped(getVisibleCurrencies(getCurrencies(activity, true)));
+				codeToData = AbstractFragment.getCurrenciesMapped(
+						AbstractFragment.getVisibleCurrencies(AbstractFragment.getCurrencies(activity, true)));
 
-				updateOK = true;
 			} catch (DataSourceException e) {
+				msgId = R.string.error_db_load;
 				Log.e(Defs.LOG_TAG, "Could not load wallet entries from database!", e);
 			} finally {
 				IOUtils.closeQuitely(source);
@@ -557,22 +590,16 @@ public class WalletFragment extends AbstractFragment
 		}
 
 		@Override
-		protected void onPostExecute(List<WalletEntry> entries) {
-			setRefreshActionButtonState(false);
-
-			if (updateOK) {
-				final AppSettings appSettings = new AppSettings(activity);
-
-				walletListAdapter = new WalletListAdapter(activity, android.R.layout.simple_spinner_item, entries,
-						currenciesMapped, appSettings.getCurrenciesPrecision());
-				walletListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				walletListView.setAdapter(walletListAdapter);
-
-				if (!entries.isEmpty()) {
-					showSnackbar(R.string.wallet_message_reloaded);
-				}
+		protected void onPostExecute(final List<WalletEntry> entries) {
+			if (msgId != -1) {
+				listener.onLoadFailed(msgId);
 			} else {
-				showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
+				listener.onLoadSuccessful(new Supplier<Pair<Multimap<String, CurrencyData>, List<WalletEntry>>>() {
+					@Override
+					public Pair<Multimap<String, CurrencyData>, List<WalletEntry>> get() {
+						return Pair.create(codeToData, entries);
+					}
+				});
 			}
 		}
 
