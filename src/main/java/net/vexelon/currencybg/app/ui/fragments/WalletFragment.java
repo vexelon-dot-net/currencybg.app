@@ -434,7 +434,10 @@ public class WalletFragment extends AbstractFragment
 				});
 
 				// assumes currencies are already loaded!
-				List<CurrencyData> currencies = Lists.newArrayList(currencyCodeToData.values());
+				List<CurrencyData> currencies = Lists.newArrayList();
+				if (currencyCodeToData != null) {
+					currencies.addAll(currencyCodeToData.values());
+				}
 
 				ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context,
 						android.R.layout.simple_spinner_item, currencies);
