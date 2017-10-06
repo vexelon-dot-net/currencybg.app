@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Html;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +40,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -56,6 +58,7 @@ import net.vexelon.currencybg.app.remote.SourceException;
 import net.vexelon.currencybg.app.ui.UIUtils;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
 import net.vexelon.currencybg.app.ui.components.CurrencySelectListAdapter;
+import net.vexelon.currencybg.app.ui.events.LoadListener;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 
@@ -66,7 +69,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-public class CurrenciesFragment extends AbstractFragment {
+public class CurrenciesFragment extends AbstractFragment implements LoadListener<Pair<DateTime, List<CurrencyData>>> {
 
 	private static boolean sortByAscending = true;
 
@@ -105,7 +108,7 @@ public class CurrenciesFragment extends AbstractFragment {
 
 	@Override
 	public void onResume() {
-		new ReloadRatesTask(false).execute();
+		new ReloadRatesTask(getActivity(), this, false).execute();
 		super.onResume();
 	}
 
@@ -120,7 +123,7 @@ public class CurrenciesFragment extends AbstractFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
-			new ReloadRatesTask(true).execute();
+			new ReloadRatesTask(getActivity(), this, true).execute();
 
 			lastUpdateLastValue = lastUpdateView.getText().toString();
 			lastUpdateView.setText(R.string.last_update_updating_text);
@@ -546,20 +549,60 @@ public class CurrenciesFragment extends AbstractFragment {
 		// });
 	}
 
+	@Override
+	public void onLoadStart() {
+		setRefreshActionButtonState(true);
+	}
+
+	@Override
+	public void onLoadSuccessful(@NonNull Supplier<Pair<DateTime, List<CurrencyData>>> newData) {
+		final Activity activity = getActivity();
+		if (activity != null) {
+			setRefreshActionButtonState(false);
+
+			// cache loaded currencies
+			rates = newData.get().second;
+			updateCurrenciesListView(getActivity(), rates);
+
+			if (newData.get().first != null) {
+				DateTime lastUpdate = newData.get().first;
+				new AppSettings(activity).setLastUpdateDate(lastUpdate);
+
+				// visualise update date time
+				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
+				lastUpdateView.setText(lastUpdateLastValue);
+			}
+		}
+	}
+
+	@Override
+	public void onLoadFailed(int msgId) {
+		setRefreshActionButtonState(false);
+
+		if (msgId == R.string.error_no_entries) {
+			showSnackbar(msgId, Defs.TOAST_INFO_DURATION, false);
+		} else {
+			showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
+		}
+	}
+
 	/**
 	 * Reloads currencies from database or triggers remote server download, if
 	 * specified.
 	 * 
 	 */
-	private class ReloadRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
+	private static class ReloadRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
 		private Activity activity;
+		private LoadListener<Pair<DateTime, List<CurrencyData>>> listener;
 		private boolean useRemoteSource;
 		private int msgId = -1; // no error
 
-		public ReloadRatesTask(boolean useRemoteSource) {
+		public ReloadRatesTask(Activity activity, LoadListener<Pair<DateTime, List<CurrencyData>>> listener,
+				boolean useRemoteSource) {
+			this.activity = activity;
+			this.listener = listener;
 			this.useRemoteSource = useRemoteSource;
-			this.activity = CurrenciesFragment.this.getActivity();
 		}
 
 		@Override
@@ -586,46 +629,46 @@ public class CurrenciesFragment extends AbstractFragment {
 		}
 
 		@Override
-		protected void onPostExecute(List<CurrencyData> result) {
-			if (msgId == -1) {
-				// cache loaded currencies
-				rates = getSortedCurrencies(getVisibleCurrencies(Lists.newArrayList(result)));
-
-				if (!result.isEmpty()) {
-					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
-					updateCurrenciesListView(activity, result);
-				} else {
-					useRemoteSource = true;
-				}
+		protected void onPostExecute(final List<CurrencyData> result) {
+			if (msgId != -1) {
+				listener.onLoadFailed(msgId);
 			} else {
-				showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
-			}
+				if (result.isEmpty() || useRemoteSource) {
+					new UpdateRatesTask(activity, listener).execute();
+				} else {
+					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
 
-			if (useRemoteSource) {
-				setRefreshActionButtonState(true);
-				new UpdateRatesTask().execute();
+					listener.onLoadSuccessful(new Supplier<Pair<DateTime, List<CurrencyData>>>() {
+						@Override
+						public Pair<DateTime, List<CurrencyData>> get() {
+							return Pair.create(null, result);
+						}
+					});
+				}
 			}
 		}
-
 	}
 
 	/**
 	 * Downloads currencies from remote server
 	 * 
 	 */
-	private class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
+	private static class UpdateRatesTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
 		private Activity activity;
+		private LoadListener<Pair<DateTime, List<CurrencyData>>> listener;
 		private DateTime lastUpdate;
 		private boolean updateOK = false;
 		private int msgId = R.string.error_download_rates;
 
-		public UpdateRatesTask() {
-			activity = CurrenciesFragment.this.getActivity();
+		public UpdateRatesTask(Activity activity, LoadListener<Pair<DateTime, List<CurrencyData>>> listener) {
+			this.activity = activity;
+			this.listener = listener;
 		}
 
 		@Override
 		protected void onPreExecute() {
+			listener.onLoadStart();
 			lastUpdate = new AppSettings(activity).getLastUpdateDate();
 		}
 
@@ -689,27 +732,21 @@ public class CurrenciesFragment extends AbstractFragment {
 		}
 
 		@Override
-		protected void onPostExecute(List<CurrencyData> result) {
-			setRefreshActionButtonState(false);
-
-			if (updateOK) {
-				// cache loaded currencies
-				rates = getSortedCurrencies(getVisibleCurrencies(Lists.newArrayList(result)));
-
-				updateCurrenciesListView(activity, result);
-				// bump last update
+		protected void onPostExecute(final List<CurrencyData> result) {
+			if (!updateOK) {
+				listener.onLoadFailed(msgId);
+			} else {
+				// OK
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
 				Log.d(Defs.LOG_TAG, "Last rate download on " + lastUpdate.toString());
-				new AppSettings(activity).setLastUpdateDate(lastUpdate);
-				// visualise update date time
-				lastUpdateLastValue = DateTimeUtils.toDateText(activity, lastUpdate.toDate());
-			} else if (msgId == R.string.error_no_entries) {
-				showSnackbar(msgId, Defs.TOAST_INFO_DURATION, false);
-			} else {
-				showSnackbar(msgId, Defs.TOAST_ERR_DURATION, true);
-			}
 
-			lastUpdateView.setText(lastUpdateLastValue);
+				listener.onLoadSuccessful(new Supplier<Pair<DateTime, List<CurrencyData>>>() {
+					@Override
+					public Pair<DateTime, List<CurrencyData>> get() {
+						return Pair.create(lastUpdate, result);
+					}
+				});
+			}
 		}
 
 	}
