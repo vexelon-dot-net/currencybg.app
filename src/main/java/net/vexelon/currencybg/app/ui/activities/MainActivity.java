@@ -42,7 +42,7 @@ import android.view.MenuItem;
 
 import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
-import net.vexelon.currencybg.app.services.BackgroundService;
+import net.vexelon.currencybg.app.services.BackgroundUpdateService;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 import net.vexelon.currencybg.app.ui.fragments.AbstractFragment;
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements NotificationsList
 	 * Starts background service
 	 */
 	public void startService() {
-		Intent myIntent = new Intent(MainActivity.this, BackgroundService.class);
+		Intent myIntent = new Intent(MainActivity.this, BackgroundUpdateService.class);
 		pendingIntent = PendingIntent.getService(MainActivity.this, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		/*

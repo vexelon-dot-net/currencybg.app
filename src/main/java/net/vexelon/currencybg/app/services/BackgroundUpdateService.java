@@ -18,6 +18,7 @@
 package net.vexelon.currencybg.app.services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -43,7 +44,7 @@ import org.joda.time.DateTimeZone;
 import java.util.List;
 import java.util.TimeZone;
 
-public class BackgroundService extends Service {
+public class BackgroundUpdateService extends Service {
 
 	@Override
 	public void onCreate() {
@@ -66,12 +67,12 @@ public class BackgroundService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		if (new AppSettings(this).isWiFiOnlyDownloads()) {
 			if (Connectivity.isWifi(this)) {
-				new DownloadTask().execute();
+				new DownloadTask(this).execute();
 			} else {
 				Log.i(Defs.LOG_TAG, "Skipped currency rates update over non-WiFi network!");
 			}
 		} else {
-			new DownloadTask().execute();
+			new DownloadTask(this).execute();
 		}
 
 		// allow service to be killed under high load
@@ -83,14 +84,19 @@ public class BackgroundService extends Service {
 		return super.onUnbind(intent);
 	}
 
-	private class DownloadTask extends AsyncTask<Void, Void, List<CurrencyData>> {
+	private static class DownloadTask extends AsyncTask<Void, Void, List<CurrencyData>> {
 
+		private Context context;
 		private DateTime lastUpdate;
 		private boolean updateOK = false;
 
+		private DownloadTask(Context context) {
+			this.context = context;
+		}
+
 		@Override
 		protected void onPreExecute() {
-			lastUpdate = new AppSettings(BackgroundService.this).getLastUpdateDate();
+			lastUpdate = new AppSettings(context).getLastUpdateDate();
 		}
 
 		@Override
@@ -102,7 +108,7 @@ public class BackgroundService extends Service {
 
 			try {
 				source = new SQLiteDataSource();
-				source.connect(BackgroundService.this);
+				source.connect(context);
 
 				// the service always fetches all currencies for the current day
 				// format, e.g., "2016-11-09T00:00:00+02:00"
@@ -112,7 +118,7 @@ public class BackgroundService extends Service {
 
 				Log.d(Defs.LOG_TAG, "[Service] Downloading all rates since " + iso8601Time + " ...");
 
-				currencies = new APISource(BackgroundService.this).getAllCurrentRatesAfter(iso8601Time);
+				currencies = new APISource(context).getAllCurrentRatesAfter(iso8601Time);
 				source.addRates(currencies);
 				updateOK = true;
 
@@ -136,12 +142,12 @@ public class BackgroundService extends Service {
 				// bump last update
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
 				Log.d(Defs.LOG_TAG, "[Service] Last rate download on " + lastUpdate.toString());
-				new AppSettings(BackgroundService.this).setLastUpdateDate(lastUpdate);
+				new AppSettings(context).setLastUpdateDate(lastUpdate);
 
 				// notify main fragment
 				Intent intent = new Intent(Defs.SERVICE_ACTION_NOTIFY_UPDATE);
-				intent.putExtra("LAST_UPDATE", DateTimeUtils.toDateText(BackgroundService.this, lastUpdate.toDate()));
-				sendBroadcast(intent);
+				intent.putExtra("LAST_UPDATE", DateTimeUtils.toDateText(context, lastUpdate.toDate()));
+				context.sendBroadcast(intent);
 			}
 		}
 	}
