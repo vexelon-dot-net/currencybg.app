@@ -43,7 +43,8 @@ public enum Sources {
 	CRYPTO(700),
 	CHANGEPARTNER(800),
 	FOREXHOUSE(900),
-	ALLIANZ(1000);
+	ALLIANZ(1000),
+	CRYPTOBANK(1100);
 
 	private int id;
 	private boolean enabled;

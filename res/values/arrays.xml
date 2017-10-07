@@ -15,6 +15,7 @@
         <item>@string/source_changepartner</item>
         <item>@string/source_forexhouse</item>
         <item>@string/source_allianz</item>
+        <item>@string/source_cryptobank</item>
     </string-array>
     <string-array name="currency_sources_full">
         <item>@string/source_tavex_full</item>
@@ -27,6 +28,7 @@
         <item>@string/source_changepartner_full</item>
         <item>@string/source_forexhouse_full</item>
         <item>@string/source_allianz_full</item>
+        <item>@string/source_cryptobank_full</item>
     </string-array>
     <string-array name="currency_sources_web">
         <item>https://tavex.bg</item>
@@ -39,6 +41,7 @@
         <item>http://www.changepartner.net</item>
         <item>http://forexhouse.eu</item>
         <item>https://www.allianz.bg</item>
+        <item>https://cryptobank.bg/</item>
     </string-array>
     <integer-array name="currency_sources_ids">
         <item>200</item>
@@ -51,6 +54,7 @@
         <item>800</item>
         <item>900</item>
         <item>1000</item>
+        <item>1100</item>
     </integer-array>
     <string-array name="currency_codes">
         <item>AED</item>
@@ -58,6 +62,7 @@
         <item>ARS</item>
         <item>AUD</item>
         <item>BAM</item>
+        <item>BCH</item>
         <item>BGN</item>
         <item>BRL</item>
         <item>BTC</item>
@@ -68,10 +73,13 @@
         <item>CNH</item>
         <item>CNY</item>
         <item>CZK</item>
+        <item>DASH</item>
         <item>DKK</item>
+        <item>DOGE</item>
         <item>DOP</item>
         <item>EEK</item>
         <item>EGP</item>
+        <item>ETH</item>
         <item>EUR</item>
         <item>GEL</item>
         <item>GBP</item>
@@ -86,6 +94,7 @@
         <item>JPY</item>
         <item>KES</item>
         <item>KRW</item>
+        <item>LTC</item>
         <item>LTL</item>
         <item>LVL</item>
         <item>MDL</item>
@@ -110,7 +119,9 @@
         <item>UAH</item>
         <item>USD</item>
         <item>VND</item>
+        <item>XRP</item>
         <item>ZAR</item>
+        <item>ZEC</item>
     </string-array>
     <string-array name="currency_names">
         <item>United Arab Emirates Dirham</item>
@@ -118,6 +129,7 @@
         <item>Argentine Peso</item>
         <item>Australian Dollar</item>
         <item>Bosnia and Herzegovina Convertible Mark</item>
+        <item>Bitcoin Cash</item>
         <item>Bulgarian Lev</item>
         <item>Brazilian Real</item>
         <item>Bitcoin</item>
@@ -128,10 +140,13 @@
         <item>Chinese Yuan Renminbi</item>
         <item>Chinese Yuan Renminbi (offshore)</item>
         <item>Czech Koruna</item>
+        <item>Dash</item>
         <item>Danish Krone</item>
+        <item>Dogecoin</item>
         <item>Dominican Peso</item>
         <item>Estonian Kroon</item>
         <item>Egyptian Pound</item>
+        <item>Ethereum</item>
         <item>Euro</item>
         <item>Georgian Lari</item>
         <item>Pound Sterling</item>
@@ -146,6 +161,7 @@
         <item>Japanese Yen</item>
         <item>Kenyan Shilling</item>
         <item>South Korean Won</item>
+        <item>Litecoin</item>
         <item>Lithuanian Litas</item>
         <item>Latvian Lats</item>
         <item>Moldovan leu</item>
@@ -170,6 +186,8 @@
         <item>Ukrainian Hryvnia</item>
         <item>United States Dollar</item>
         <item>Vietnamese Dong</item>
+        <item>Ripple</item>
         <item>South African Rand</item>
+        <item>Zcash</item>
     </string-array>
 </resources>
