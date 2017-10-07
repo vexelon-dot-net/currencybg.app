@@ -579,6 +579,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 	@Override
 	public void onLoadFailed(int msgId) {
 		setRefreshActionButtonState(false);
+		lastUpdateView.setText(lastUpdateLastValue);
 
 		if (msgId == R.string.error_no_entries) {
 			showSnackbar(msgId, Defs.TOAST_INFO_DURATION, false);
