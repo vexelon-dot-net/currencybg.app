@@ -36,7 +36,7 @@ public final class UiCodes {
 	/**
 	 * Fetch currency name by code
 	 *
-	 * @param activity
+	 * @param res
 	 * @param code
 	 * @return
 	 */

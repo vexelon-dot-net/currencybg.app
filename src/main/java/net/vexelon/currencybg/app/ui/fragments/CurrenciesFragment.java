@@ -65,6 +65,7 @@ import net.vexelon.currencybg.app.utils.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -676,11 +677,9 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 		protected List<CurrencyData> doInBackground(Void... params) {
 			Log.v(Defs.LOG_TAG, "Downloading rates from remote source...");
 
-			DataSource source = null;
 			List<CurrencyData> currencies = Lists.newArrayList();
 
-			try {
-				source = new SQLiteDataSource();
+			try (DataSource source = new SQLiteDataSource()) {
 				source.connect(activity);
 
 				// latest currency update regardless of the source
@@ -688,16 +687,14 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 				DateTime from = source.getLastRatesDownloadTime().or(lastUpdate);
 
 				/**
-				 * Manual updates only fetch the currencies since the
-				 * last/latest currency update date time found in the database
-				 * (regardless of the source). This might introduce a bug should
-				 * users try to manually update on the next day after the last
-				 * fetch, because the server fetches currencies from a given
-				 * date at that specific day only. It does not fetch currencies
-				 * for the next day of the given date. To counter this we force
-				 * an update from the beginning of the day (00:00), if the last
-				 * update was one day ago (we count from midnight on and not a
-				 * 24h period).
+				 * Manual updates only fetch the currencies since the last/latest currency
+				 * update date time found in the database (regardless of the source). This might
+				 * introduce a bug should users try to manually update on the next day after the
+				 * last fetch, because the server fetches currencies from a given date at that
+				 * specific day only. It does not fetch currencies for the next day of the given
+				 * date. To counter this we force an update from the beginning of the day
+				 * (00:00), if the last update was one day ago (we count from midnight on and
+				 * not a 24h period).
 				 */
 				DateTime today = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
 				if (today.toLocalDate().isAfter(from.toLocalDate())) {
@@ -721,11 +718,9 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 				if (e.isMaintenanceError()) {
 					msgId = R.string.error_maintenance;
 				}
-			} catch (DataSourceException e) {
+			} catch (DataSourceException | IOException e) {
 				Log.e(Defs.LOG_TAG, "Could not save currencies to database!", e);
 				msgId = R.string.error_db_save;
-			} finally {
-				IOUtils.closeQuitely(source);
 			}
 
 			return currencies;
