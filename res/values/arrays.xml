@@ -41,7 +41,7 @@
         <item>http://www.changepartner.net</item>
         <item>http://forexhouse.eu</item>
         <item>https://www.allianz.bg</item>
-        <item>https://cryptobank.bg/</item>
+        <item>https://cryptobank.bg</item>
     </string-array>
     <integer-array name="currency_sources_ids">
         <item>200</item>

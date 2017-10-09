@@ -19,7 +19,12 @@ package net.vexelon.currencybg.app.common;
 
 import android.content.Context;
 
+import com.google.common.collect.Queues;
+
 import net.vexelon.currencybg.app.R;
+
+import java.util.Collection;
+import java.util.Deque;
 
 /**
  * Available currency sources
@@ -29,9 +34,7 @@ import net.vexelon.currencybg.app.R;
  */
 public enum Sources {
 
-	/**
-	 * @deprecated
-	 */
+	// unused
 	BNB(1, false),
 
 	FIB(100),
@@ -90,6 +93,21 @@ public enum Sources {
 			}
 		}
 		return null;
+	}
+
+	public static Collection<Sources> getSorted() {
+		Deque<Sources> list = Queues.newArrayDeque();
+		for (Sources source : Sources.values()) {
+			switch (source) {
+			case CRYPTO:
+			case CRYPTOBANK:
+				list.push(source);
+				break;
+			default:
+				list.add(source);
+			}
+		}
+		return list;
 	}
 
 	private static String getResource(Context context, int id, int resId) {

@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.common.collect.Lists;
@@ -52,38 +51,12 @@ public class ExchangeInfoFragment extends AbstractFragment {
 		final InfoListAdapter adapter = new InfoListAdapter(getActivity(), R.layout.info_row, getInfosList());
 		lvInfo.setAdapter(adapter);
 
-		lvInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				int sourceId = Integer.parseInt(adapter.getUrl(position));
-				final Sources source = Sources.valueOf(sourceId);
+		lvInfo.setOnItemClickListener((adapterView, view1, i, l) -> {
+			int sourceId = Integer.parseInt(adapter.getUrl(i));
+			final Sources source = Sources.valueOf(sourceId);
 
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-						Uri.parse(source.getWebAddress(view.getContext())));
-				startActivity(browserIntent);
-
-				// final MaterialDialog dialog = new
-				// MaterialDialog.Builder(getActivity())
-				// .customView(R.layout.fragment_exchange_source_info,
-				// true).positiveText(R.string.text_ok)
-				// .build();
-				//
-				// dialog.setOnShowListener(new DialogInterface.OnShowListener()
-				// {
-				// @Override
-				// public void onShow(DialogInterface dialogInterface) {
-				// final View v = dialog.getCustomView();
-				//
-				// UIUtils.setText(v, R.id.source_name,
-				// source.getName(v.getContext()));
-				// UIUtils.setText(v, R.id.source_full_name,
-				// source.getFullName(v.getContext()));
-				//
-				// // TODO
-				// }
-				// });
-				// dialog.show();
-			}
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(source.getWebAddress(view.getContext())));
+			startActivity(browserIntent);
 		});
 	}
 
@@ -91,7 +64,7 @@ public class ExchangeInfoFragment extends AbstractFragment {
 		final Activity activity = getActivity();
 		List<InfoListAdapter.InfoItem> infoList = Lists.newArrayList();
 
-		for (Sources source : Sources.values()) {
+		for (Sources source : Sources.getSorted()) {
 			if (source.isEnabled()) {
 				String secondRow = source.getFullName(activity) + " | "
 						+ StringUtils.stripUrl(source.getWebAddress(activity));
