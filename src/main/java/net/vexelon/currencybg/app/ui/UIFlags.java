@@ -93,7 +93,7 @@ public final class UIFlags {
 		flagsMap.put("dog", R.drawable.dog);
 		flagsMap.put("ltc", R.drawable.ltc);
 		flagsMap.put("rip", R.drawable.rip);
-		flagsMap.put("zch", R.drawable.zch);
+		flagsMap.put("zec", R.drawable.zec);
 	}
 
 	public static int getResourceFromCode(String code) {

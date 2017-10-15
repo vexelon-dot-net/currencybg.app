@@ -98,6 +98,7 @@
     <string name="source_forexhouse">Forex House</string>
     <string name="source_allianz">Алианц Банк</string>
     <string name="source_cryptobank">Криптобанк</string>
+    <string name="source_bitcoinshouse">BitcoinsHouse</string>
     <string name="source_tavex_full">Tavex България</string>
     <string name="source_polana_full">“Полана 1” ООД</string>
     <string name="source_fib_full">Първа Инвестиционна Банка</string>
@@ -109,6 +110,7 @@
     <string name="source_forexhouse_full">Форекс Хаус България</string>
     <string name="source_allianz_full">Алианц Банк България</string>
     <string name="source_cryptobank_full">Криптобанк България</string>
+    <string name="source_bitcoinshouse_full">BitcoinsHouse България</string>
 
     <string name="action_sources">Източници</string>
     <string name="action_sources_title">Показване курсове от</string>
