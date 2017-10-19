@@ -137,6 +137,10 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 			}
 			return true;
 
+		case R.id.action_filter:
+			newFilterMenu().show();
+			return true;
+
 		case R.id.action_sort:
 			newSortMenu().show();
 			return true;
@@ -231,31 +235,41 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 				.build();
 	}
 
+	private MaterialDialog newFilterMenu() {
+		final AppSettings appSettings = new AppSettings(getActivity());
+		return new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
+				.items(R.array.action_filter_values).itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
+						(MaterialDialog dialog, View view, int which, CharSequence text) -> {
+
+							// TODO
+
+							return true;
+						})
+				.build();
+	}
+
 	private MaterialDialog newSortMenu() {
 		final AppSettings appSettings = new AppSettings(getActivity());
 		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sort_title)
 				.items(R.array.action_sort_values).itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
-						new MaterialDialog.ListCallbackSingleChoice() {
-							@Override
-							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-								sortByAscending = appSettings.getCurrenciesSortSelection() != which ? true
-										: !sortByAscending;
-								appSettings.setCurrenciesSortSelection(which);
-								setCurrenciesSort(which);
-								// notify user
-								switch (appSettings.getCurrenciesSortSelection()) {
-								case AppSettings.SORTBY_CODE:
-									showSnackbar(sortByAscending ? R.string.action_sort_code_asc
-											: R.string.action_sort_code_desc);
-									break;
-								case AppSettings.SORTBY_NAME:
-								default:
-									showSnackbar(sortByAscending ? R.string.action_sort_name_asc
-											: R.string.action_sort_name_desc);
-									break;
-								}
-								return true;
+						(MaterialDialog dialog, View view, int which, CharSequence text) -> {
+							sortByAscending = appSettings.getCurrenciesSortSelection() != which ? true
+									: !sortByAscending;
+							appSettings.setCurrenciesSortSelection(which);
+							setCurrenciesSort(which);
+							// notify user
+							switch (appSettings.getCurrenciesSortSelection()) {
+							case AppSettings.SORTBY_CODE:
+								showSnackbar(sortByAscending ? R.string.action_sort_code_asc
+										: R.string.action_sort_code_desc);
+								break;
+							case AppSettings.SORTBY_NAME:
+							default:
+								showSnackbar(sortByAscending ? R.string.action_sort_name_asc
+										: R.string.action_sort_name_desc);
+								break;
 							}
+							return true;
 						})
 				.build();
 	}
@@ -265,33 +279,30 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sources_title)
 				.items(R.array.currency_sources_full)
 				.itemsCallbackMultiChoice(toSourcesFilterIndices(appSettings.getCurrenciesFilter()),
-						new MaterialDialog.ListCallbackMultiChoice() {
-							@Override
-							public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-								if (which.length == 0) {
-									showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_DURATION, true);
-									return false;
-								} else if (which.length > 3) {
-									showSnackbar(R.string.error_sources_selection_max, Defs.TOAST_ERR_DURATION, true);
-									return false;
-								}
-
-								Set<Sources> sources = getSourcesFilterIndices(which);
-								appSettings.setCurrenciesFilter(sources);
-								setCurrenciesSourcesFilter(sources);
-
-								// notify user
-								String selected = "";
-								for (int i : which) {
-									if (!selected.isEmpty()) {
-										selected += ", ";
-									}
-									selected += getResources().getStringArray(R.array.currency_sources)[i];
-								}
-								showSnackbar(getResources().getString(R.string.action_sources_desc, selected));
-
-								return true;
+						(MaterialDialog dialog, Integer[] which, CharSequence[] text) -> {
+							if (which.length == 0) {
+								showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_DURATION, true);
+								return false;
+							} else if (which.length > 3) {
+								showSnackbar(R.string.error_sources_selection_max, Defs.TOAST_ERR_DURATION, true);
+								return false;
 							}
+
+							Set<Sources> sources = getSourcesFilterIndices(which);
+							appSettings.setCurrenciesFilter(sources);
+							setCurrenciesSourcesFilter(sources);
+
+							// notify user
+							String selected = "";
+							for (int i : which) {
+								if (!selected.isEmpty()) {
+									selected += ", ";
+								}
+								selected += getResources().getStringArray(R.array.currency_sources)[i];
+							}
+							showSnackbar(getResources().getString(R.string.action_sources_desc, selected));
+
+							return true;
 						})
 				.positiveText(R.string.text_ok).build();
 	}
@@ -312,53 +323,49 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 						Sources.getFullName(context, source.getID())))
 				.cancelable(true).customView(R.layout.dialog_details, true).build();
 
-		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialogInterface) {
-				View v = dialog.getCustomView();
-				UIUtils.setText(v, R.id.details_header,
-						getResources().getString(R.string.text_rates_details, row.getName()), true);
+		dialog.setOnShowListener((DialogInterface dialogInterface) -> {
+			View v = dialog.getCustomView();
+			UIUtils.setText(v, R.id.details_header,
+					getResources().getString(R.string.text_rates_details, row.getName()), true);
 
-				if (row.getColumn(source).isPresent()) {
-					DataSource dataSource = null;
-					try {
-						dataSource = new SQLiteDataSource();
-						dataSource.connect(context);
+			if (row.getColumn(source).isPresent()) {
+				DataSource dataSource = null;
+				try {
+					dataSource = new SQLiteDataSource();
+					dataSource.connect(context);
 
-						String buyText = UIUtils.toHtmlColor(getResources().getString(R.string.buy),
-								Defs.COLOR_NAVY_BLUE);
-						String sellText = UIUtils.toHtmlColor(getResources().getString(R.string.sell),
-								Defs.COLOR_DARK_ORANGE);
+					String buyText = UIUtils.toHtmlColor(getResources().getString(R.string.buy), Defs.COLOR_NAVY_BLUE);
+					String sellText = UIUtils.toHtmlColor(getResources().getString(R.string.sell),
+							Defs.COLOR_DARK_ORANGE);
 
-						StringBuilder buffer = new StringBuilder();
+					StringBuilder buffer = new StringBuilder();
 
-						List<CurrencyData> rates = dataSource.getAllRates(row.getCode(), source.getID());
-						for (CurrencyData next : rates) {
-							buffer.append(DateTimeUtils.toDateTimeText(context,
-									DateTimeUtils.parseStringToDate(next.getDate())));
-							buffer.append("<br>");
+					List<CurrencyData> rates = dataSource.getAllRates(row.getCode(), source.getID());
+					for (CurrencyData next : rates) {
+						buffer.append(
+								DateTimeUtils.toDateTimeText(context, DateTimeUtils.parseStringToDate(next.getDate())));
+						buffer.append("<br>");
 
-							buffer.append("&emsp;").append(buyText).append(" - ");
-							buffer.append(CurrencyListAdapter.getColumnValue(next, AppSettings.RATE_BUY,
-									appSettings.getCurrenciesPrecision()));
-							buffer.append("<br>");
+						buffer.append("&emsp;").append(buyText).append(" - ");
+						buffer.append(CurrencyListAdapter.getColumnValue(next, AppSettings.RATE_BUY,
+								appSettings.getCurrenciesPrecision()));
+						buffer.append("<br>");
 
-							buffer.append("&emsp;").append(sellText).append(" - ");
-							buffer.append(CurrencyListAdapter.getColumnValue(next, AppSettings.RATE_SELL,
-									appSettings.getCurrenciesPrecision()));
-							buffer.append("<br>");
-						}
-
-						UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
-					} catch (DataSourceException e) {
-						Log.e(Defs.LOG_TAG, "Error fetching currencies from database!", e);
-						showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
-					} finally {
-						IOUtils.closeQuitely(dataSource);
+						buffer.append("&emsp;").append(sellText).append(" - ");
+						buffer.append(CurrencyListAdapter.getColumnValue(next, AppSettings.RATE_SELL,
+								appSettings.getCurrenciesPrecision()));
+						buffer.append("<br>");
 					}
-				} else {
-					UIUtils.setText(v, R.id.details_content, Defs.LONG_DASH);
+
+					UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
+				} catch (DataSourceException e) {
+					Log.e(Defs.LOG_TAG, "Error fetching currencies from database!", e);
+					showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
+				} finally {
+					IOUtils.closeQuitely(dataSource);
 				}
+			} else {
+				UIUtils.setText(v, R.id.details_content, Defs.LONG_DASH);
 			}
 		});
 
@@ -377,36 +384,31 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 
 		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
 				.adapter(adapter, null).negativeText(R.string.text_cancel).positiveText(R.string.text_ok)
-				.onPositive(new MaterialDialog.SingleButtonCallback() {
+				.onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+					if (!adapter.getSelected().isEmpty()) {
+						final AppSettings appSettings = new AppSettings(context);
 
-					@Override
-					public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-						if (!adapter.getSelected().isEmpty()) {
-							final AppSettings appSettings = new AppSettings(context);
+						StringBuilder buffer = new StringBuilder();
+						buffer.append(getString(R.string.text_code)).append(Defs.TAB_2).append(getString(R.string.buy))
+								.append(Defs.TAB_2).append(getString(R.string.sell)).append(Defs.TAB_2)
+								.append(getString(R.string.text_source)).append(Defs.TAB_2).append(Defs.NEWLINE);
 
-							StringBuilder buffer = new StringBuilder();
-							buffer.append(getString(R.string.text_code)).append(Defs.TAB_2)
-									.append(getString(R.string.buy)).append(Defs.TAB_2).append(getString(R.string.sell))
-									.append(Defs.TAB_2).append(getString(R.string.text_source)).append(Defs.TAB_2)
-									.append(Defs.NEWLINE);
-
-							for (CurrencyData currency : adapter.getSelected()) {
-								buffer.append(currency.getCode()).append(Defs.TAB_2);
-								buffer.append(currency.getBuy()).append(Defs.TAB_2);
-								buffer.append(currency.getSell()).append(Defs.TAB_2);
-								buffer.append(Sources.getName(context, currency.getSource())).append(Defs.NEWLINE);
-							}
-
-							// app url footer
-							buffer.append(Defs.NEWLINE)
-									.append(getString(R.string.action_share_footer, appSettings.getAppUrl()));
-
-							Intent sendIntent = new Intent();
-							sendIntent.setAction(Intent.ACTION_SEND);
-							sendIntent.putExtra(Intent.EXTRA_TEXT, buffer.toString());
-							sendIntent.setType("text/plain");
-							startActivity(sendIntent);
+						for (CurrencyData currency : adapter.getSelected()) {
+							buffer.append(currency.getCode()).append(Defs.TAB_2);
+							buffer.append(currency.getBuy()).append(Defs.TAB_2);
+							buffer.append(currency.getSell()).append(Defs.TAB_2);
+							buffer.append(Sources.getName(context, currency.getSource())).append(Defs.NEWLINE);
 						}
+
+						// app url footer
+						buffer.append(Defs.NEWLINE)
+								.append(getString(R.string.action_share_footer, appSettings.getAppUrl()));
+
+						Intent sendIntent = new Intent();
+						sendIntent.setAction(Intent.ACTION_SEND);
+						sendIntent.putExtra(Intent.EXTRA_TEXT, buffer.toString());
+						sendIntent.setType("text/plain");
+						startActivity(sendIntent);
 					}
 				}).build();
 	}

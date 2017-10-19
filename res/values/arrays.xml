@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="action_filter_values">
+        <item>@string/action_filter_crypto</item>
+        <item>@string/action_filter_top6</item>
+        <item>@string/action_filter_top8</item>
+        <item>@string/action_filter_custom</item>
+    </string-array>
+    <string-array name="action_sort_values">
+        <item>@string/action_sortby_name</item>
+        <item>@string/action_sortby_code</item>
+    </string-array>
     <string-array name="action_rate_values">
         <item>@string/buy</item>
         <item>@string/sell</item>
+    </string-array>
+    <string-array name="pref_precision_names">
+        <item>@string/pref_precision_name_simple</item>
+        <item>@string/pref_precision_name_advanced</item>
+    </string-array>
+    <string-array name="pref_precision_values">
+        <item>simple</item>
+        <item>advanced</item>
     </string-array>
     <string-array name="currency_sources">
         <item>@string/source_tavex</item>

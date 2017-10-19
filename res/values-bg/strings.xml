@@ -67,6 +67,7 @@
     <string name="action_wallet_removed">Премахване на %1$s</string>
     <string name="action_addwalletentry">Добавяне на ресурс</string>
     <string name="action_currency_details">%1$s при %2$s</string>
+    <string name="action_filter">Филтър</string>
     <string name="action_rate">Курсове</string>
     <string name="action_rate_title">Покажи курс</string>
     <string name="action_rate_buy_desc">Курс купува</string>
@@ -77,10 +78,13 @@
     <string name="action_sort_name_desc">По име от Я-А</string>
     <string name="action_sort_code_asc">По код от А-Я</string>
     <string name="action_sort_code_desc">По код от Я-А</string>
-    <string-array name="action_sort_values">
-        <item>Наименование</item>
-        <item>Код</item>
-    </string-array>
+    <string name="action_sortby_name">Наименование</string>
+    <string name="action_sortby_code">Код</string>
+    <string name="action_filter_title">Избор на филтър</string>
+    <string name="action_filter_crypto">Крипто валути</string>
+    <string name="action_filter_top6">Форекс Топ 6</string>
+    <string name="action_filter_top8">Топ 8 най-търгувани</string>
+    <string name="action_filter_custom">Персонализиран</string>
     <string name="action_share">Сподели</string>
     <string name="action_share_footer">Следете последните обменни курсове с Валутни Курсове BG - %1$s</string>
     <string name="text_share_convert">Стойности след преобразуване на %1$s.</string>
@@ -119,10 +123,8 @@
     <string name="action_settings">Настройки</string>
     <string name="prefs_title">Currency BG Настройки</string>
     <string name="pref_value_update">Сменено на %1$s</string>
-    <string-array name="pref_precision_names">
-        <item>Обикновена</item>
-        <item>Разширена</item>
-    </string-array>
+    <string name="pref_precision_name_simple">Обикновена</string>
+    <string name="pref_precision_name_advanced">Разширена</string>
     <string name="pref_precision_title">Точност на валутните стойности</string>
     <string name="pref_precision_summary">Точност, която да се използва при изобразяване на валутните стойности</string>
     <string name="pref_rateus_title">Гласувайте за Currency BG</string>
