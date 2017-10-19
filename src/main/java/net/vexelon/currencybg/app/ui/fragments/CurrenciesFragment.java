@@ -641,13 +641,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 					new UpdateRatesTask(activity, listener).execute();
 				} else {
 					Log.v(Defs.LOG_TAG, "Displaying rates from database...");
-
-					listener.onLoadSuccessful(new Supplier<Pair<DateTime, List<CurrencyData>>>() {
-						@Override
-						public Pair<DateTime, List<CurrencyData>> get() {
-							return Pair.create(null, result);
-						}
-					});
+					listener.onLoadSuccessful(() -> Pair.create(null, result));
 				}
 			}
 		}
@@ -738,12 +732,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 				lastUpdate = DateTime.now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(Defs.DATE_TIMEZONE_SOFIA)));
 				Log.d(Defs.LOG_TAG, "Last rate download on " + lastUpdate.toString());
 
-				listener.onLoadSuccessful(new Supplier<Pair<DateTime, List<CurrencyData>>>() {
-					@Override
-					public Pair<DateTime, List<CurrencyData>> get() {
-						return Pair.create(lastUpdate, result);
-					}
-				});
+				listener.onLoadSuccessful(() -> Pair.create(lastUpdate, result));
 			}
 		}
 

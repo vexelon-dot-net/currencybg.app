@@ -68,7 +68,6 @@ import org.joda.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -124,11 +123,9 @@ public class AbstractFragment extends Fragment {
 		scrollView.addView(messagesView);
 
 		return new AlertDialog.Builder(context).setTitle(R.string.news_title)
-				.setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
+				.setPositiveButton(R.string.text_ok, (DialogInterface dialog, int which) -> {
+					dialog.dismiss();
+
 				}).setCancelable(false).setView(scrollView).show();
 	}
 
@@ -147,29 +144,25 @@ public class AbstractFragment extends Fragment {
 
 		return new AlertDialog.Builder(context)
 				.setTitle(getString(R.string.vote_invite_title, getString(R.string.app_name)))
-				.setNegativeButton(R.string.text_not_now, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						new AppSettings(context).setUserAppUses(0);
-					}
-				}).setPositiveButton(R.string.text_yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						final String appPackageName = getActivity().getPackageName();
-						try {
-							startActivity(
-									new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-						} catch (android.content.ActivityNotFoundException e) {
-							startActivity(new Intent(Intent.ACTION_VIEW,
-									Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
-						}
+				.setNegativeButton(R.string.text_not_now, (DialogInterface dialogInterface, int i) -> {
+					new AppSettings(context).setUserAppUses(0);
 
-						final AppSettings appSettings = new AppSettings(context);
-						appSettings.setUserAppUses(0);
-						appSettings.setUserVoted(true);
+				}).setPositiveButton(R.string.text_yes, (DialogInterface dialog, int which) -> {
+					final String appPackageName = getActivity().getPackageName();
 
-						dialog.dismiss();
+					try {
+						startActivity(
+								new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+					} catch (android.content.ActivityNotFoundException e) {
+						startActivity(new Intent(Intent.ACTION_VIEW,
+								Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
 					}
+
+					final AppSettings appSettings = new AppSettings(context);
+					appSettings.setUserAppUses(0);
+					appSettings.setUserVoted(true);
+
+					dialog.dismiss();
 				}).setCancelable(false).setView(scrollView).show();
 	}
 
@@ -191,11 +184,13 @@ public class AbstractFragment extends Fragment {
 		if (mMenu != null) {
 			MenuItem menuItem = mMenu.findItem(R.id.action_refresh);
 			if (menuItem != null) {
+
 				if (isRefreshing) {
 					menuItem.setActionView(isRefreshing ? R.layout.actionbar_indeterminate_progress : null);
 				} else {
 					menuItem.setActionView(null);
 				}
+
 			}
 		}
 	}
@@ -211,11 +206,8 @@ public class AbstractFragment extends Fragment {
 	 */
 	protected static List<CurrencyData> getSortedCurrencies(List<CurrencyData> currencies) {
 		// sort by code
-		Collections.sort(currencies, new Comparator<CurrencyData>() {
-			@Override
-			public int compare(CurrencyData lhs, CurrencyData rhs) {
-				return lhs.getCode().compareToIgnoreCase(rhs.getCode());
-			}
+		Collections.sort(currencies, (CurrencyData lhs, CurrencyData rhs) -> {
+			return lhs.getCode().compareToIgnoreCase(rhs.getCode());
 		});
 
 		return currencies;
