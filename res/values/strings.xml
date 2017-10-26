@@ -84,6 +84,7 @@
     <string name="action_sortby_name">Name</string>
     <string name="action_sortby_code">Code</string>
     <string name="action_filter_title">Select filter</string>
+    <string name="action_filter_none">None</string>
     <string name="action_filter_crypto">Crypto currencies</string>
     <string name="action_filter_top6">Forex Top 6</string>
     <string name="action_filter_top8">Top 8 traded</string>

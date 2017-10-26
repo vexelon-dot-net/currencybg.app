@@ -49,6 +49,12 @@ public final class AppSettings {
 	public static final int PRECISION_SIMPLE = 0;
 	public static final int PRECISION_ADVANCED = 1;
 
+	public static final int CURRENCY_FILTER_NONE = 0;
+	public static final int CURRENCY_FILTER_CRYPTO = 1;
+	public static final int CURRENCY_FILTER_TOP6 = 2;
+	public static final int CURRENCY_FILTER_TOP8 = 3;
+	public static final int CURRENCY_FILTER_CUSTOM = 99;
+
 	private SharedPreferences generalPrefs = null;
 	private Context context = null;
 
@@ -69,8 +75,8 @@ public final class AppSettings {
 
 	/**
 	 * 
-	 * @return Date and time of the last update in the Europe/Sofia time zone.
-	 *         If this is not available, it returns the date time from 00:00:00
+	 * @return Date and time of the last update in the Europe/Sofia time zone. If
+	 *         this is not available, it returns the date time from 00:00:00
 	 *         (beginning of the current day) in Europe/Sofia.
 	 */
 	public DateTime getLastUpdateDate() {
@@ -123,11 +129,9 @@ public final class AppSettings {
 	}
 
 	/**
-	 * Gets currencies filtering by sources
-	 *
-	 * @return Sources
+	 * Fetches user desired sources to show.
 	 */
-	public Set<Sources> getCurrenciesFilter() {
+	public Set<Sources> getSourcesFilter() {
 		Set<String> values = Sets.newHashSet();
 
 		values = generalPrefs.getStringSet("pref_currencies_filter_sources", values);
@@ -143,7 +147,7 @@ public final class AppSettings {
 		return result;
 	}
 
-	public void setCurrenciesFilter(Set<Sources> sources) {
+	public void setSourcesFilter(Set<Sources> sources) {
 		Set<String> values = Sets.newHashSet();
 		for (Sources source : sources) {
 			values.add(Integer.toString(source.getID()));
@@ -308,8 +312,8 @@ public final class AppSettings {
 
 	/**
 	 * 
-	 * @return {@code true}, if background service should download rates only
-	 *         via WiFi.
+	 * @return {@code true}, if background service should download rates only via
+	 *         WiFi.
 	 */
 	public boolean isWiFiOnlyDownloads() {
 		return generalPrefs.getBoolean("pref_wifi_only_downloads", true);
@@ -346,4 +350,26 @@ public final class AppSettings {
 		return generalPrefs.getBoolean("pref_user_voted", false);
 	}
 
+	public int getCurrenciesFilter() {
+		return generalPrefs.getInt("pref_currencies_filter", CURRENCY_FILTER_NONE);
+	}
+
+	/**
+	 * @param filter
+	 *            Pre-set or custom filter.
+	 */
+	public void setCurrenciesFilter(int filter) {
+		generalPrefs.edit().putInt("pref_currencies_filter", filter);
+	}
+
+	public Set<String> getCurrenciesFilterCustom() {
+		return generalPrefs.getStringSet("pref_currencies_filter_codes", Sets.newHashSet());
+	}
+
+	/**
+	 * Sets a number of custom currency codes to be displayed.
+	 */
+	public void setCurrenciesFilterCustom(Set<String> codes) {
+		generalPrefs.edit().putStringSet("pref_currencies_filter_codes", codes).apply();
+	}
 }

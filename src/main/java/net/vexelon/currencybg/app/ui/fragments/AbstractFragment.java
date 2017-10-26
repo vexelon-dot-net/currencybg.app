@@ -44,6 +44,7 @@ import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import net.vexelon.currencybg.app.AppSettings;
@@ -71,6 +72,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AbstractFragment extends Fragment {
 
@@ -289,8 +291,6 @@ public class AbstractFragment extends Fragment {
 	 * Fetches a table-alike mapping of currency codes and currencies for every
 	 * source found
 	 * 
-	 * @param currencies
-	 * @return
 	 */
 	public static Table<String, Sources, CurrencyData> getCurrenciesTable(List<CurrencyData> currencies) {
 		ImmutableTable.Builder<String, Sources, CurrencyData> builder = ImmutableTable.builder();
@@ -298,6 +298,26 @@ public class AbstractFragment extends Fragment {
 			builder.put(currencyData.getCode(), Sources.valueOf(currencyData.getSource()), currencyData);
 		}
 		return builder.build();
+	}
+
+	/**
+	 * Fetches a list of distinct by code {@link CurrencyData} objects.
+	 * 
+	 * @param sorted
+	 *            If {@code true}, sorts results by code name.
+	 */
+	public static List<CurrencyData> getCurrenciesDistinct(List<CurrencyData> currencies, boolean sorted) {
+		List<CurrencyData> result = Lists.newArrayList();
+		Set<String> codes = Sets.newHashSet();
+
+		for (CurrencyData currency : currencies) {
+			if (!codes.contains(currency.getCode())) {
+				result.add(currency);
+				codes.add(currency.getCode());
+			}
+		}
+
+		return sorted ? getSortedCurrencies(result) : result;
 	}
 
 	/**

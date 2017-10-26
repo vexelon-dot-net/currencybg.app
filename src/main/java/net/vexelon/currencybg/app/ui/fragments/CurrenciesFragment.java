@@ -66,6 +66,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -237,22 +238,71 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 
 	private MaterialDialog newFilterMenu() {
 		final AppSettings appSettings = new AppSettings(getActivity());
-		return new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
+
+		// custom must always be last
+		final int CUSTOM_INDEX = 4; // getResources().getStringArray(R.array.action_filter_values).length;
+
+		MaterialDialog newDialog = new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
 				.items(R.array.action_filter_values).itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
 						(MaterialDialog dialog, View view, int which, CharSequence text) -> {
 
-							// TODO
+							switch (which) {
+							case AppSettings.CURRENCY_FILTER_NONE:
+							case AppSettings.CURRENCY_FILTER_CRYPTO:
+							case AppSettings.CURRENCY_FILTER_TOP6:
+							case AppSettings.CURRENCY_FILTER_TOP8:
+								appSettings.setCurrenciesFilter(which);
+								return true;
 
-							return true;
+							case CUSTOM_INDEX: // AppSettings.CURRENCY_FILTER_CUSTOM
+								getActivity().runOnUiThread(() -> {
+									newCustomFilterDialog().show();
+								});
+								return true;
+							}
+
+							return false;
 						})
 				.build();
+
+		// default selection
+		newDialog
+				.setSelectedIndex(appSettings.getCurrenciesFilter() == AppSettings.CURRENCY_FILTER_CUSTOM ? CUSTOM_INDEX
+						: appSettings.getCurrenciesFilter());
+		return newDialog;
+	}
+
+	private MaterialDialog newCustomFilterDialog() {
+		final Context context = getActivity();
+		final CurrencySelectListAdapter adapter = new CurrencySelectListAdapter(context,
+				android.R.layout.simple_spinner_item, getCurrenciesDistinct(rates, true), false);
+
+		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
+				.adapter(adapter, null).negativeText(R.string.text_cancel).positiveText(R.string.text_ok)
+				.onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+					List<CurrencyData> selected = adapter.getSelected();
+
+					if (!materialDialog.isCancelled() && !selected.isEmpty()) {
+						final AppSettings appSettings = new AppSettings(context);
+
+						Set<String> codes = new HashSet<>(selected.size());
+						for (CurrencyData currency : selected) {
+							codes.add(currency.getCode());
+						}
+
+						appSettings.setCurrenciesFilterCustom(codes);
+						appSettings.setCurrenciesFilter(AppSettings.CURRENCY_FILTER_CUSTOM);
+					}
+				}).build();
 	}
 
 	private MaterialDialog newSortMenu() {
 		final AppSettings appSettings = new AppSettings(getActivity());
+
 		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sort_title)
 				.items(R.array.action_sort_values).itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
 						(MaterialDialog dialog, View view, int which, CharSequence text) -> {
+
 							sortByAscending = appSettings.getCurrenciesSortSelection() != which ? true
 									: !sortByAscending;
 							appSettings.setCurrenciesSortSelection(which);
@@ -278,8 +328,9 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 		final AppSettings appSettings = new AppSettings(getActivity());
 		return new MaterialDialog.Builder(getActivity()).title(R.string.action_sources_title)
 				.items(R.array.currency_sources_full)
-				.itemsCallbackMultiChoice(toSourcesFilterIndices(appSettings.getCurrenciesFilter()),
+				.itemsCallbackMultiChoice(toSourcesFilterIndices(appSettings.getSourcesFilter()),
 						(MaterialDialog dialog, Integer[] which, CharSequence[] text) -> {
+
 							if (which.length == 0) {
 								showSnackbar(R.string.error_sources_selection, Defs.TOAST_ERR_DURATION, true);
 								return false;
@@ -289,7 +340,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 							}
 
 							Set<Sources> sources = getSourcesFilterIndices(which);
-							appSettings.setCurrenciesFilter(sources);
+							appSettings.setSourcesFilter(sources);
 							setCurrenciesSourcesFilter(sources);
 
 							// notify user
@@ -329,9 +380,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 					getResources().getString(R.string.text_rates_details, row.getName()), true);
 
 			if (row.getColumn(source).isPresent()) {
-				DataSource dataSource = null;
-				try {
-					dataSource = new SQLiteDataSource();
+				try (DataSource dataSource = new SQLiteDataSource()) {
 					dataSource.connect(context);
 
 					String buyText = UIUtils.toHtmlColor(getResources().getString(R.string.buy), Defs.COLOR_NAVY_BLUE);
@@ -358,11 +407,9 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 					}
 
 					UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
-				} catch (DataSourceException e) {
+				} catch (DataSourceException | IOException e) {
 					Log.e(Defs.LOG_TAG, "Error fetching currencies from database!", e);
 					showSnackbar(R.string.error_db_load, Defs.TOAST_ERR_DURATION, true);
-				} finally {
-					IOUtils.closeQuitely(dataSource);
 				}
 			} else {
 				UIUtils.setText(v, R.id.details_content, Defs.LONG_DASH);
@@ -385,7 +432,10 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
 				.adapter(adapter, null).negativeText(R.string.text_cancel).positiveText(R.string.text_ok)
 				.onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
-					if (!adapter.getSelected().isEmpty()) {
+
+					List<CurrencyData> selected = adapter.getSelected();
+
+					if (!materialDialog.isCancelled() && !selected.isEmpty()) {
 						final AppSettings appSettings = new AppSettings(context);
 
 						StringBuilder buffer = new StringBuilder();
@@ -393,7 +443,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 								.append(Defs.TAB_2).append(getString(R.string.sell)).append(Defs.TAB_2)
 								.append(getString(R.string.text_source)).append(Defs.TAB_2).append(Defs.NEWLINE);
 
-						for (CurrencyData currency : adapter.getSelected()) {
+						for (CurrencyData currency : selected) {
 							buffer.append(currency.getCode()).append(Defs.TAB_2);
 							buffer.append(currency.getBuy()).append(Defs.TAB_2);
 							buffer.append(currency.getSell()).append(Defs.TAB_2);
@@ -458,11 +508,11 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 
 		currencyListAdapter = new CurrencyListAdapter(activity, R.layout.currency_row_layout,
 				toCurrencyRows(activity, getVisibleCurrencies(currencies)), appSettings.getCurrenciesPrecision(),
-				appSettings.getCurrenciesRateSelection(), appSettings.getCurrenciesFilter());
+				appSettings.getCurrenciesRateSelection(), appSettings.getSourcesFilter());
 		currenciesView.setAdapter(currencyListAdapter);
 
 		updateCurrenciesRateTitle(activity, appSettings.getCurrenciesRateSelection());
-		updateCurrenciesSourcesTitles(appSettings.getCurrenciesFilter());
+		updateCurrenciesSourcesTitles(appSettings.getSourcesFilter());
 		setCurrenciesSort(appSettings.getCurrenciesSortSelection());
 
 		lastUpdateView.setText(DateTimeUtils.toDateText(activity, appSettings.getLastUpdateDate().toDate()));

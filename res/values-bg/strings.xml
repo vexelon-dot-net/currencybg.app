@@ -81,6 +81,7 @@
     <string name="action_sortby_name">Наименование</string>
     <string name="action_sortby_code">Код</string>
     <string name="action_filter_title">Избор на филтър</string>
+    <string name="action_filter_none">Без филтър</string>
     <string name="action_filter_crypto">Крипто валути</string>
     <string name="action_filter_top6">Форекс Топ 6</string>
     <string name="action_filter_top8">Топ 8 най-търгувани</string>

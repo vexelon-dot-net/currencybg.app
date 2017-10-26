@@ -40,11 +40,18 @@ public class CurrencySelectListAdapter extends ArrayAdapter<CurrencyData> {
 
 	private List<CurrencyData> items;
 	private List<CurrencyData> selected;
+	private boolean displaySource;
 
-	public CurrencySelectListAdapter(Context context, int textViewResId, List<CurrencyData> items) {
+	public CurrencySelectListAdapter(Context context, int textViewResId, List<CurrencyData> items,
+			boolean displaySource) {
 		super(context, textViewResId, items);
 		this.items = items;
 		this.selected = Lists.newArrayList();
+		this.displaySource = displaySource;
+	}
+
+	public CurrencySelectListAdapter(Context context, int textViewResId, List<CurrencyData> items) {
+		this(context, textViewResId, items, true);
 	}
 
 	private View _getView(int position, final View convertView, ViewGroup parent) {
@@ -127,7 +134,10 @@ public class CurrencySelectListAdapter extends ArrayAdapter<CurrencyData> {
 		UIUtils.setFlagIcon(holder.icon, row.getCode());
 		holder.code.setText(row.getCode());
 		holder.name.setText(UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
-		holder.source.setText(Sources.getName(getContext(), row.getSource()));
+
+		if (displaySource) {
+			holder.source.setText(Sources.getName(getContext(), row.getSource()));
+		}
 
 		return v;
 	}
