@@ -55,54 +55,47 @@ public class CurrencySelectListAdapter extends ArrayAdapter<CurrencyData> {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.convert_select_row_layout, parent, false);
 
 			holder = new ViewHolder();
-			holder.checkBox = (CheckBox) v.findViewById(R.id.convert_checked);
+			holder.checkBox = v.findViewById(R.id.convert_checked);
 			holder.checkBox.setChecked(false);
-			holder.icon = (ImageView) v.findViewById(R.id.convert_icon);
-			holder.code = (TextView) v.findViewById(R.id.convert_code);
-			holder.name = (TextView) v.findViewById(R.id.convert_name);
-			holder.source = (TextView) v.findViewById(R.id.convert_source);
+			holder.icon = v.findViewById(R.id.convert_icon);
+			holder.code = v.findViewById(R.id.convert_code);
+			holder.name = v.findViewById(R.id.convert_name);
+			holder.source = v.findViewById(R.id.convert_source);
 
 			v.setTag(holder);
 
 			/*
 			 * Handles taps that occur on the row itself
 			 */
-			v.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					ViewHolder holder = (ViewHolder) view.getTag();
-					holder.checkBox.toggle();
+			v.setOnClickListener((View view) -> {
+				ViewHolder vHolder = (ViewHolder) view.getTag();
+				vHolder.checkBox.toggle();
 
-					CurrencyData currencyData = (CurrencyData) holder.checkBox.getTag();
+				CurrencyData currencyData = (CurrencyData) vHolder.checkBox.getTag();
 
-					if (holder.checkBox.isChecked()) {
-						selected.add(currencyData);
-					} else {
-						selected.remove(currencyData);
-					}
-
+				if (vHolder.checkBox.isChecked()) {
+					selected.add(currencyData);
+				} else {
+					selected.remove(currencyData);
 				}
 			});
 
 			/*
-			 * Handles taps that occur only on the checkbox. This is a bit
-			 * tricky, because we need to notify the view that something has
-			 * changed, otherwise the checkboxes will not be flagged.
+			 * Handles taps that occur only on the checkbox. This is a bit tricky, because
+			 * we need to notify the view that something has changed, otherwise the
+			 * checkboxes will not be flagged.
 			 */
-			holder.checkBox.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					CheckBox checkBox = (CheckBox) view;
-					CurrencyData currencyData = (CurrencyData) view.getTag();
+			holder.checkBox.setOnClickListener((View view) -> {
+				CheckBox checkBox = (CheckBox) view;
+				CurrencyData currencyData = (CurrencyData) view.getTag();
 
-					if (checkBox.isChecked()) {
-						selected.add(currencyData);
-					} else {
-						selected.remove(currencyData);
-					}
-
-					notifyDataSetChanged();
+				if (checkBox.isChecked()) {
+					selected.add(currencyData);
+				} else {
+					selected.remove(currencyData);
 				}
+
+				notifyDataSetChanged();
 			});
 
 			// holder.checkBox.setOnCheckedChangeListener(new
@@ -120,7 +113,9 @@ public class CurrencySelectListAdapter extends ArrayAdapter<CurrencyData> {
 			// notifyDataSetChanged();
 			// }
 			// });
-		} else {
+		} else
+
+		{
 			holder = (ViewHolder) v.getTag();
 		}
 

@@ -64,6 +64,7 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 	public WalletListAdapter(Context context, int textViewResId, List<WalletEntry> items,
 			Multimap<String, CurrencyData> currencies, int precisionMode) {
 		super(context, textViewResId, items);
+
 		this.itemsImmutable = Lists.newArrayList(items.iterator());
 		this.items = items;
 		this.currencies = currencies;
@@ -88,25 +89,20 @@ public class WalletListAdapter extends ArrayAdapter<WalletEntry> {
 		UIUtils.setText(v, R.id.wallet_row_current_value, getProfit(entry), true);
 
 		// propagte icon and code view taps
-		v.findViewById(R.id.wallet_row_icon).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				((ListView) parent).performItemClick(v, position, R.id.wallet_row_icon);
-			}
+		v.findViewById(R.id.wallet_row_icon).setOnClickListener((View view) -> {
+			((ListView) parent).performItemClick(view, position, R.id.wallet_row_icon);
 		});
-		v.findViewById(R.id.wallet_row_code).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				((ListView) parent).performItemClick(v, position, R.id.wallet_row_code);
-			}
+
+		v.findViewById(R.id.wallet_row_code).setOnClickListener((View view) -> {
+			((ListView) parent).performItemClick(view, position, R.id.wallet_row_code);
 		});
 
 		return v;
 	}
 
 	/**
-	 * Calculates profit for given wallet {@code entry} based on the latest
-	 * known currency rates and sources.
+	 * Calculates profit for given wallet {@code entry} based on the latest known
+	 * currency rates and sources.
 	 *
 	 * @param entry
 	 * @return

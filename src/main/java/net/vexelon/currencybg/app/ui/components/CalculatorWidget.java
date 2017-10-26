@@ -243,24 +243,18 @@ public class CalculatorWidget implements View.OnClickListener {
 
 		final MaterialDialog dialog = new MaterialDialog.Builder(context).customView(R.layout.calculator_layout, false)
 				.positiveText(R.string.text_ok).negativeText(R.string.text_cancel)
-				.onPositive(new MaterialDialog.SingleButtonCallback() {
-					@Override
-					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-						// notify
-						if (display.getText().length() > 0 && !"E".equals(display.getText())) {
-							listener.onValue(new BigDecimal(display.getText().toString()));
-						}
+				.onPositive((@NonNull MaterialDialog dlg, @NonNull DialogAction which) -> {
+					// notify
+					if (display.getText().length() > 0 && !"E".equals(display.getText())) {
+						listener.onValue(new BigDecimal(display.getText().toString()));
 					}
 				}).build();
 
-		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dlg) {
-				// bind calculator events
-				CalculatorWidget.this.init(dialog.getCustomView());
-				if (!StringUtils.isEmpty(value)) {
-					display.setText(value);
-				}
+		dialog.setOnShowListener((DialogInterface dlg) -> {
+			// bind calculator events
+			CalculatorWidget.this.init(dialog.getCustomView());
+			if (!StringUtils.isEmpty(value)) {
+				display.setText(value);
 			}
 		});
 

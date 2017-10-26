@@ -72,6 +72,7 @@ public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 				return i;
 			}
 		}
+
 		return -1;
 	}
 
