@@ -69,6 +69,7 @@ import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -322,12 +323,26 @@ public class AbstractFragment extends Fragment {
 
 	/**
 	 * Removes currencies that should not be shown to users
-	 *
-	 * @param currencies
-	 * @return
 	 */
-	public static List<CurrencyData> getVisibleCurrencies(List<CurrencyData> currencies) {
-		return new ArrayList<>(CurrenciesFilter.removeHidden(currencies));
+	public static List<CurrencyData> getVisibleCurrencies(final Context context, List<CurrencyData> currencies) {
+		Collection<CurrencyData> visible = CurrenciesFilter.removeHidden(currencies);
+
+		final AppSettings appSettings = new AppSettings(context);
+
+		switch (appSettings.getCurrenciesFilter()) {
+		case AppSettings.CURRENCY_FILTER_CRYPTO:
+			return new ArrayList<>(CurrenciesFilter.crypto(visible));
+
+		case AppSettings.CURRENCY_FILTER_TOP6:
+			return new ArrayList<>(CurrenciesFilter.top6(visible));
+
+		case AppSettings.CURRENCY_FILTER_TOP8:
+			return new ArrayList<>(CurrenciesFilter.top8(visible));
+
+		case AppSettings.CURRENCY_FILTER_NONE:
+		default:
+			return new ArrayList<>(visible);
+		}
 	}
 
 	/**

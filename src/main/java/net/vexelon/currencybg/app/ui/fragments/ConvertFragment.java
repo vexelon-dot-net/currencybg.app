@@ -375,8 +375,8 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 			if (reload) {
 				try {
 					// load all currencies from database
-					currencies = AbstractFragment
-							.getVisibleCurrencies(AbstractFragment.getCurrencies(activity, true, true));
+					currencies = AbstractFragment.getVisibleCurrencies(activity,
+							AbstractFragment.getCurrencies(activity, true, true));
 				} catch (DataSourceException e) {
 					msgId = R.string.error_db_load;
 					Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);

@@ -522,8 +522,8 @@ public class WalletFragment extends AbstractFragment
 				source.connect(activity);
 				entries.addAll(source.getWalletEntries());
 
-				codeToData = AbstractFragment.getCurrenciesMapped(
-						AbstractFragment.getVisibleCurrencies(AbstractFragment.getCurrencies(activity, true)));
+				codeToData = AbstractFragment.getCurrenciesMapped(AbstractFragment.getVisibleCurrencies(activity,
+						AbstractFragment.getCurrencies(activity, true)));
 
 			} catch (DataSourceException e) {
 				msgId = R.string.error_db_load;

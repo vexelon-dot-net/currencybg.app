@@ -359,7 +359,7 @@ public final class AppSettings {
 	 *            Pre-set or custom filter.
 	 */
 	public void setCurrenciesFilter(int filter) {
-		generalPrefs.edit().putInt("pref_currencies_filter", filter);
+		generalPrefs.edit().putInt("pref_currencies_filter", filter).apply();
 	}
 
 	public Set<String> getCurrenciesFilterCustom() {
