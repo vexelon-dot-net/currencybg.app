@@ -53,8 +53,8 @@ import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.db.models.WalletEntryInvestment;
-import net.vexelon.currencybg.app.ui.UIUtils;
-import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.WalletListAdapter;
@@ -190,7 +190,7 @@ public class WalletFragment extends AbstractFragment
 		dialog.setOnShowListener((DialogInterface dialogInterface) -> {
 			View v = dialog.getCustomView();
 			UIUtils.setText(v, R.id.details_header, getResources().getString(R.string.wallet_text_rates_details,
-					UiCodes.getCurrencyName(context.getResources(), entry.getCode())), true);
+					CurrencyCodes.getCurrencyName(context.getResources(), entry.getCode())), true);
 
 			Collection<CurrencyData> currencyDatas = currencyCodeToData.get(entry.getCode());
 

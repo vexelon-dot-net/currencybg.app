@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.vexelon.currencybg.app.ui;
+package net.vexelon.currencybg.app.ui.utils;
 
 import com.google.common.collect.Maps;
 
@@ -23,7 +23,7 @@ import net.vexelon.currencybg.app.R;
 
 import java.util.Map;
 
-public final class UIFlags {
+public final class Flags {
 
 	private static final Map<String, Integer> flagsMap = Maps.newHashMap();
 
@@ -101,11 +101,11 @@ public final class UIFlags {
 
 		if (!code.isEmpty()) {
 			code = code.substring(0, Math.min(code.length(), 3)).toLowerCase();
+
 			resId = flagsMap.get(code);
 			if (resId == null) {
 				resId = flagsMap.get(code.substring(0, 2));
 			}
-
 		}
 
 		return resId == null ? R.drawable.unknown : resId;

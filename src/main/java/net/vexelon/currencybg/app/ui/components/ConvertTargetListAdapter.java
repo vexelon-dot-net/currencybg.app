@@ -34,8 +34,8 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UIUtils;
-import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
 import java.math.BigDecimal;
@@ -88,7 +88,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		CurrencyData row = items.get(position);
 
 		UIUtils.setFlagIcon(holder.icon, row.getCode());
-		holder.name.setText(UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
+		holder.name.setText(CurrencyCodes.getCurrencyName(getContext().getResources(), row.getCode()));
 		holder.code.setText(row.getCode());
 		holder.source.setText(Sources.getName(getContext(), row.getSource()));
 

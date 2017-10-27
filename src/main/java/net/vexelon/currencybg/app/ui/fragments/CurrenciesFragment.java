@@ -55,7 +55,7 @@ import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.remote.APISource;
 import net.vexelon.currencybg.app.remote.SourceException;
-import net.vexelon.currencybg.app.ui.UIUtils;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
 import net.vexelon.currencybg.app.ui.components.CurrencyListAdapter;
 import net.vexelon.currencybg.app.ui.components.CurrencySelectListAdapter;
 import net.vexelon.currencybg.app.ui.events.LoadListener;
@@ -245,6 +245,8 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 		MaterialDialog newDialog = new MaterialDialog.Builder(getActivity()).title(R.string.action_filter_title)
 				.items(R.array.action_filter_values).itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
 						(MaterialDialog dialog, View view, int which, CharSequence text) -> {
+
+							// TODO display filter top-right
 
 							switch (which) {
 							case AppSettings.CURRENCY_FILTER_NONE:

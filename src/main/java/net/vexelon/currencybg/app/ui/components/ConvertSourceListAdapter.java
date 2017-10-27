@@ -26,8 +26,8 @@ import android.widget.ArrayAdapter;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UIUtils;
-import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class ConvertSourceListAdapter extends ArrayAdapter<CurrencyData> {
 
 		UIUtils.setFlagIcon(v, R.id.convert_icon, row.getCode());
 		UIUtils.setText(v, R.id.convert_code, row.getCode());
-		UIUtils.setText(v, R.id.convert_name, UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
+		UIUtils.setText(v, R.id.convert_name, CurrencyCodes.getCurrencyName(getContext().getResources(), row.getCode()));
 		UIUtils.setText(v, R.id.convert_source, Sources.getName(getContext(), row.getSource()));
 
 		return v;

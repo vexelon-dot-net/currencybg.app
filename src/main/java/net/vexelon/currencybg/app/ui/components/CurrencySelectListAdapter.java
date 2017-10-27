@@ -31,8 +31,8 @@ import com.google.common.collect.Lists;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UIUtils;
-import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 
 import java.util.List;
 
@@ -133,7 +133,7 @@ public class CurrencySelectListAdapter extends ArrayAdapter<CurrencyData> {
 
 		UIUtils.setFlagIcon(holder.icon, row.getCode());
 		holder.code.setText(row.getCode());
-		holder.name.setText(UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
+		holder.name.setText(CurrencyCodes.getCurrencyName(getContext().getResources(), row.getCode()));
 
 		if (displaySource) {
 			holder.source.setText(Sources.getName(getContext(), row.getSource()));

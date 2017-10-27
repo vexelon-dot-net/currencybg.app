@@ -36,7 +36,7 @@ import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UIUtils;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
 

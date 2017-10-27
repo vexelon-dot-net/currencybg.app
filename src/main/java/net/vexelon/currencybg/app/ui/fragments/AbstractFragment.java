@@ -57,7 +57,7 @@ import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
 import net.vexelon.currencybg.app.utils.IOUtils;
@@ -352,7 +352,7 @@ public class AbstractFragment extends Fragment {
 		for (CurrencyData c : currencies) {
 			CurrencyListRow row = map.get(c.getCode());
 			if (row == null) {
-				row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(context.getResources(), c.getCode()));
+				row = new CurrencyListRow(c.getCode(), CurrencyCodes.getCurrencyName(context.getResources(), c.getCode()));
 				map.put(c.getCode(), row);
 			}
 			row.addColumn(Sources.valueOf(c.getSource()), c);
