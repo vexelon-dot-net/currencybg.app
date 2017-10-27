@@ -154,54 +154,40 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 			newShareCurrenciesDialog().show();
 			return true;
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
 	private void init(View view, LayoutInflater inflater) {
-		currenciesView = (ListView) view.findViewById(R.id.list_currencies);
-		currenciesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Sources source = Sources.valueOf((int) id);
-				if (source != null) {
-					newDetailsDialog(currencyListAdapter.getItem(position), source).show();
-				}
+		currenciesView = view.findViewById(R.id.list_currencies);
+		currenciesView.setOnItemClickListener((AdapterView<?> parent, View v, int position, long id) -> {
+			Sources source = Sources.valueOf((int) id);
+			if (source != null) {
+				newDetailsDialog(currencyListAdapter.getItem(position), source).show();
 			}
 		});
 
-		lastUpdateView = (TextView) view.findViewById(R.id.text_last_update);
+		lastUpdateView = view.findViewById(R.id.text_last_update);
 
-		sourceViews.add((TextView) view.findViewById(R.id.header_src_1));
-		sourceViews.add((TextView) view.findViewById(R.id.header_src_2));
-		sourceViews.add((TextView) view.findViewById(R.id.header_src_3));
+		sourceViews.add(view.findViewById(R.id.header_src_1));
+		sourceViews.add(view.findViewById(R.id.header_src_2));
+		sourceViews.add(view.findViewById(R.id.header_src_3));
 
-		currenciesRateView = (TextView) view.findViewById(R.id.header_currencies_rate);
-		currenciesRateView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (currencyListAdapter != null) {
-					newRateMenu().show();
-				}
+		currenciesRateView = view.findViewById(R.id.header_currencies_rate);
+		currenciesRateView.setOnClickListener((View v) -> {
+			if (currencyListAdapter != null) {
+				newRateMenu().show();
 			}
 		});
 
-		view.findViewById(R.id.header_src_1).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				newSourcesMenu().show();
-			}
+		view.findViewById(R.id.header_src_1).setOnClickListener((View v) -> {
+			newSourcesMenu().show();
 		});
-		view.findViewById(R.id.header_src_2).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				newSourcesMenu().show();
-			}
+		view.findViewById(R.id.header_src_2).setOnClickListener((View v) -> {
+			newSourcesMenu().show();
 		});
-		view.findViewById(R.id.header_src_3).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				newSourcesMenu().show();
-			}
+		view.findViewById(R.id.header_src_3).setOnClickListener((View v) -> {
+			newSourcesMenu().show();
 		});
 	}
 
@@ -215,23 +201,22 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 
 		return new MaterialDialog.Builder(getActivity()).title(R.string.action_rate_title)
 				.items(R.array.action_rate_values).itemsCallbackSingleChoice(appSettings.getCurrenciesRateSelection(),
-						new MaterialDialog.ListCallbackSingleChoice() {
-							@Override
-							public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-								appSettings.setCurrenciesRateSelection(which);
-								setCurrenciesRate(activity, which);
-								// notify user
-								switch (appSettings.getCurrenciesRateSelection()) {
-								case AppSettings.RATE_SELL:
-									showSnackbar(R.string.action_rate_sell_desc);
-									break;
-								case AppSettings.RATE_BUY:
-								default:
-									showSnackbar(R.string.action_rate_buy_desc);
-									break;
-								}
-								return true;
+						(MaterialDialog dialog, View view, int which, CharSequence text) -> {
+
+							appSettings.setCurrenciesRateSelection(which);
+							setCurrenciesRate(activity, which);
+
+							// notify user
+							switch (appSettings.getCurrenciesRateSelection()) {
+							case AppSettings.RATE_SELL:
+								showSnackbar(R.string.action_rate_sell_desc);
+								break;
+							case AppSettings.RATE_BUY:
+							default:
+								showSnackbar(R.string.action_rate_buy_desc);
+								break;
 							}
+							return true;
 						})
 				.build();
 	}

@@ -53,12 +53,12 @@ import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.db.models.WalletEntryInvestment;
-import net.vexelon.currencybg.app.ui.utils.UIUtils;
-import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.WalletListAdapter;
 import net.vexelon.currencybg.app.ui.events.LoadListener;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
@@ -68,11 +68,11 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.LocalDateTime;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class WalletFragment extends AbstractFragment
@@ -103,9 +103,7 @@ public class WalletFragment extends AbstractFragment
 			if (removed != null) {
 				adapter.notifyDataSetChanged();
 
-				DataSource source = null;
-				try {
-					source = new SQLiteDataSource();
+				try (DataSource source = new SQLiteDataSource()) {
 					source.connect(getActivity());
 					source.deleteWalletEntry(removed.getId());
 
@@ -113,11 +111,9 @@ public class WalletFragment extends AbstractFragment
 							NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
 
 					vibrate(Defs.VIBRATE_DEL_DURATION);
-				} catch (DataSourceException e) {
+				} catch (DataSourceException | IOException e) {
 					Log.e(Defs.LOG_TAG, "Could not remove wallet entries from database!", e);
 					showSnackbar(R.string.error_db_remove, Defs.TOAST_ERR_DURATION, true);
-				} finally {
-					IOUtils.closeQuitely(source);
 				}
 			}
 
@@ -205,14 +201,10 @@ public class WalletFragment extends AbstractFragment
 			/**
 			 * Sort investments by profit
 			 */
-			Collections.sort(investments, new Comparator<WalletEntryInvestment>() {
-
-				@Override
-				public int compare(WalletEntryInvestment i1, WalletEntryInvestment i2) {
-					BigDecimal p1 = i1.getInvestmentMargin();
-					BigDecimal p2 = i2.getInvestmentMargin();
-					return p1.subtract(p2).compareTo(BigDecimal.ZERO) > 0 ? -1 : 1;
-				}
+			Collections.sort(investments, (WalletEntryInvestment i1, WalletEntryInvestment i2) -> {
+				BigDecimal p1 = i1.getInvestmentMargin();
+				BigDecimal p2 = i2.getInvestmentMargin();
+				return p1.subtract(p2).compareTo(BigDecimal.ZERO) > 0 ? -1 : 1;
 			});
 
 			/*
@@ -316,6 +308,7 @@ public class WalletFragment extends AbstractFragment
 
 	private String colorfyProfit(BigDecimal amount, boolean isTop, int precisionMode) {
 		int result = amount.compareTo(BigDecimal.ZERO);
+
 		if (result > 0 && isTop) {
 			return UIUtils.toHtmlColor(formatCurrency(amount, Defs.CURRENCY_CODE_BGN, precisionMode),
 					Defs.COLOR_OK_GREEN);
@@ -341,9 +334,9 @@ public class WalletFragment extends AbstractFragment
 				.onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
 
 					// validate and save new wallet entry
-					final TextView amountView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_amount);
-					TextView boughtAtView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_bought_at);
-					TextView boughtOnView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_bought_on);
+					final TextView amountView = dialog.getView().findViewById(R.id.wallet_entry_amount);
+					TextView boughtAtView = dialog.getView().findViewById(R.id.wallet_entry_bought_at);
+					TextView boughtOnView = dialog.getView().findViewById(R.id.wallet_entry_bought_on);
 
 					String amount = amountView.getText().toString();
 					String boughtAt = boughtAtView.getText().toString();
@@ -371,16 +364,12 @@ public class WalletFragment extends AbstractFragment
 					// all ok
 					dialog.dismiss();
 
-					DataSource source = null;
-					try {
-						source = new SQLiteDataSource();
+					try (DataSource source = new SQLiteDataSource()) {
 						source.connect(dialog.getContext());
 						source.addWalletEntry(entry);
-					} catch (DataSourceException e) {
+					} catch (DataSourceException | IOException e) {
 						Log.e(Defs.LOG_TAG, "Could not save wallet entry to database!", e);
 						showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_DURATION, true);
-					} finally {
-						IOUtils.closeQuitely(source);
 					}
 
 					// reload currencies
@@ -439,7 +428,7 @@ public class WalletFragment extends AbstractFragment
 			});
 
 			dateTimeSelected = LocalDateTime.now();
-			dateTimeView = (TextView) v.findViewById(R.id.wallet_entry_bought_on);
+			dateTimeView = v.findViewById(R.id.wallet_entry_bought_on);
 			dateTimeView.setText(DateTimeUtils.toDateTimeText(v.getContext(), dateTimeSelected.toDate()));
 
 			v.findViewById(R.id.wallet_entry_bought_on).setOnClickListener((View view) -> {
