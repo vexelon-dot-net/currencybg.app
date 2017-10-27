@@ -57,9 +57,10 @@ import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
+import net.vexelon.currencybg.app.ui.filters.CurrenciesFilter;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
@@ -69,7 +70,6 @@ import org.joda.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -327,15 +327,7 @@ public class AbstractFragment extends Fragment {
 	 * @return
 	 */
 	public static List<CurrencyData> getVisibleCurrencies(List<CurrencyData> currencies) {
-		Iterator<CurrencyData> iterator = currencies.iterator();
-		while (iterator.hasNext()) {
-			CurrencyData c = iterator.next();
-			if (Defs.HIDDEN_CURRENCY_CODES.contains(c.getCode())) {
-				iterator.remove();
-			}
-		}
-
-		return currencies;
+		return new ArrayList<>(CurrenciesFilter.removeHidden(currencies));
 	}
 
 	/**
@@ -352,7 +344,8 @@ public class AbstractFragment extends Fragment {
 		for (CurrencyData c : currencies) {
 			CurrencyListRow row = map.get(c.getCode());
 			if (row == null) {
-				row = new CurrencyListRow(c.getCode(), CurrencyCodes.getCurrencyName(context.getResources(), c.getCode()));
+				row = new CurrencyListRow(c.getCode(),
+						CurrencyCodes.getCurrencyName(context.getResources(), c.getCode()));
 				map.put(c.getCode(), row);
 			}
 			row.addColumn(Sources.valueOf(c.getSource()), c);
