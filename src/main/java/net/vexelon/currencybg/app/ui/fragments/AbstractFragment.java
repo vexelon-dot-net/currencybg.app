@@ -313,7 +313,7 @@ public class AbstractFragment extends Fragment {
 	 * Removes currencies that should not be shown to users
 	 */
 	public static List<CurrencyData> getVisibleCurrencies(final Context context, List<CurrencyData> currencies) {
-		CurrenciesFilter filter = new CurrenciesFilter(currencies);
+		CurrenciesFilter filter = new CurrenciesFilter(Lists.newArrayList(currencies));
 
 		final AppSettings appSettings = new AppSettings(context);
 
@@ -328,6 +328,10 @@ public class AbstractFragment extends Fragment {
 
 		case AppSettings.CURRENCY_FILTER_TOP8:
 			filter.removeHidden().top8();
+			break;
+
+		case AppSettings.CURRENCY_FILTER_CUSTOM:
+			filter.removeHidden().custom(appSettings.getCurrenciesFilterCustom());
 			break;
 
 		case AppSettings.CURRENCY_FILTER_NONE:
