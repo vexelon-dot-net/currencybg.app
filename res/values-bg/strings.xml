@@ -20,6 +20,7 @@
     <string name="app_name">Валутни Курсове BG</string>
     <string name="last_update">Последно обновено</string>
     <string name="last_update_updating_text">Сваляне ...</string>
+    <string name="last_update_reloading_text">Презареждане ...</string>
 
     <string name="error_download_rates">Грешка при сваляне на валути.</string>
     <string name="error_parse_rates">Грешка при четене на файла с обменните курсове!</string>

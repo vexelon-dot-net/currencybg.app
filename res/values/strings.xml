@@ -23,6 +23,7 @@
     <string name="app_name">Currency BG</string>
     <string name="last_update">Last update</string>
     <string name="last_update_updating_text">Downloading ...</string>
+    <string name="last_update_reloading_text">Reloading ...</string>
 
     <string name="error_download_rates">Failed downloading rates.</string>
     <string name="error_parse_rates">Failed parsing rates!</string>

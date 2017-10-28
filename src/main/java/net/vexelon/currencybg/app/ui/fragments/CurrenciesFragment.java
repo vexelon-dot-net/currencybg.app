@@ -555,7 +555,8 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 		new ReloadRatesTask(activity, this, useRemote).execute();
 		if (showAnimation) {
 			lastUpdateLastValue = lastUpdateView.getText().toString();
-			lastUpdateView.setText(R.string.last_update_updating_text);
+			lastUpdateView
+					.setText(useRemote ? R.string.last_update_updating_text : R.string.last_update_reloading_text);
 			setRefreshActionButtonState(true);
 		}
 	}
