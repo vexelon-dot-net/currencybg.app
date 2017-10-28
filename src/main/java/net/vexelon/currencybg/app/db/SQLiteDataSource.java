@@ -28,7 +28,6 @@ import com.google.common.base.Optional;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import net.vexelon.currencybg.app.Defs;
@@ -42,7 +41,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class SQLiteDataSource implements DataSource {
 
@@ -103,11 +101,20 @@ public class SQLiteDataSource implements DataSource {
 
 	@Override
 	public List<CurrencyData> getLastRates() throws DataSourceException {
-		Table<String, Integer, CurrencyData> table = HashBasedTable.create();
+		Table<Integer, String, CurrencyData> table = HashBasedTable.create();
 
-		try (Cursor cursor = database.rawQuery(
-				"SELECT " + getCurrenciesSelectCols() + " FROM currencies ORDER BY strftime('%s', curr_date) DESC",
-				null)) {
+		/**
+		 * XXX This needs a further optimization! A 3 days SQLite database may contain
+		 * up to 20K rows, so fetching and wrapping all of them into objects takes a lot
+		 * of time. The current, very basic, solution is to limit the rows fetched to
+		 * 5K. This is not a good solution and may lead to some rates, those that were
+		 * not recently updated, to not being shown in the CurrenciesFragment. / Why 5K?
+		 * There would be an average of 50K rows collected in 3 days in the remote
+		 * database, or about 4,2K per day.
+		 */
+
+		try (Cursor cursor = database.rawQuery("SELECT " + getCurrenciesSelectCols()
+				+ " FROM currencies ORDER BY strftime('%s', curr_date) DESC LIMIT 5000", null)) {
 
 			Map<String, Integer> cache = newCache();
 
@@ -115,8 +122,8 @@ public class SQLiteDataSource implements DataSource {
 				String code = cursor.getString(getIndex(cursor, Defs.COLUMN_CODE, cache));
 				int source = cursor.getInt(getIndex(cursor, Defs.COLUMN_SOURCE, cache));
 
-				if (!table.contains(code, source)) {
-					table.put(code, source, cursorToCurrency(cursor, code, source, cache));
+				if (!table.contains(source, code)) {
+					table.put(source, code, cursorToCurrency(cursor, code, source, cache));
 				}
 			}
 		} catch (Throwable t) {
@@ -131,7 +138,7 @@ public class SQLiteDataSource implements DataSource {
 		List<CurrencyData> result = Lists.newArrayList();
 
 		try (Cursor cursor = database.rawQuery(
-				"SELECT DISTINCT code, ratio, buy, sell, curr_date, source FROM currencies WHERE " + Defs.COLUMN_CODE
+				"SELECT DISTINCT " + getCurrenciesSelectCols() + " FROM currencies WHERE " + Defs.COLUMN_CODE
 						+ " = ? AND " + Defs.COLUMN_SOURCE + " = ? ORDER BY strftime('%s', curr_date) DESC; ",
 				new String[] { code, Integer.toString(source) });) {
 
@@ -152,9 +159,11 @@ public class SQLiteDataSource implements DataSource {
 	public List<CurrencyData> getAllRates(Integer source) throws DataSourceException {
 		Map<String, CurrencyData> result = Maps.newHashMap();
 
-		try (Cursor cursor = database.rawQuery(
-				"SELECT * FROM currencies WHERE " + Defs.COLUMN_SOURCE + " = ? ORDER BY strftime('%s', curr_date) DESC",
-				new String[] { String.valueOf(source) })) {
+		try (Cursor cursor = database
+				.rawQuery(
+						"SELECT " + getCurrenciesSelectCols() + " FROM currencies WHERE " + Defs.COLUMN_SOURCE
+								+ " = ? ORDER BY strftime('%s', curr_date) DESC",
+						new String[] { String.valueOf(source) })) {
 
 			Map<String, Integer> cache = newCache();
 
@@ -176,9 +185,8 @@ public class SQLiteDataSource implements DataSource {
 	public List<CurrencyData> getAllRates(String code) throws DataSourceException {
 		List<CurrencyData> result = Lists.newArrayList();
 
-		try (Cursor cursor = database.rawQuery(
-				"SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE + " = ? ORDER BY strftime('%s', curr_date) DESC",
-				new String[] { code })) {
+		try (Cursor cursor = database.rawQuery("SELECT " + getCurrenciesSelectCols() + " FROM currencies WHERE "
+				+ Defs.COLUMN_CODE + " = ? ORDER BY strftime('%s', curr_date) DESC", new String[] { code })) {
 
 			Map<String, Integer> cache = newCache();
 
