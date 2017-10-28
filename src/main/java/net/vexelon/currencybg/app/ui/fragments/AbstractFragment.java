@@ -44,7 +44,6 @@ import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import net.vexelon.currencybg.app.AppSettings;
@@ -69,11 +68,9 @@ import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class AbstractFragment extends Fragment {
 
@@ -308,16 +305,7 @@ public class AbstractFragment extends Fragment {
 	 *            If {@code true}, sorts results by code name.
 	 */
 	public static List<CurrencyData> getCurrenciesDistinct(List<CurrencyData> currencies, boolean sorted) {
-		List<CurrencyData> result = Lists.newArrayList();
-		Set<String> codes = Sets.newHashSet();
-
-		for (CurrencyData currency : currencies) {
-			if (!codes.contains(currency.getCode())) {
-				result.add(currency);
-				codes.add(currency.getCode());
-			}
-		}
-
+		List<CurrencyData> result = new ArrayList<>(new CurrenciesFilter(currencies).distinct().get());
 		return sorted ? getSortedCurrencies(result) : result;
 	}
 
@@ -325,24 +313,30 @@ public class AbstractFragment extends Fragment {
 	 * Removes currencies that should not be shown to users
 	 */
 	public static List<CurrencyData> getVisibleCurrencies(final Context context, List<CurrencyData> currencies) {
-		Collection<CurrencyData> visible = CurrenciesFilter.removeHidden(currencies);
+		CurrenciesFilter filter = new CurrenciesFilter(currencies);
 
 		final AppSettings appSettings = new AppSettings(context);
 
 		switch (appSettings.getCurrenciesFilter()) {
 		case AppSettings.CURRENCY_FILTER_CRYPTO:
-			return new ArrayList<>(CurrenciesFilter.crypto(visible));
+			filter.removeHidden().crypto();
+			break;
 
 		case AppSettings.CURRENCY_FILTER_TOP6:
-			return new ArrayList<>(CurrenciesFilter.top6(visible));
+			filter.removeHidden().top6();
+			break;
 
 		case AppSettings.CURRENCY_FILTER_TOP8:
-			return new ArrayList<>(CurrenciesFilter.top8(visible));
+			filter.removeHidden().top8();
+			break;
 
 		case AppSettings.CURRENCY_FILTER_NONE:
 		default:
-			return new ArrayList<>(visible);
+			filter.removeHidden();
+			break;
 		}
+
+		return new ArrayList<>(filter.get());
 	}
 
 	/**
