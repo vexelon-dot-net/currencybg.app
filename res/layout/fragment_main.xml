@@ -4,23 +4,49 @@
                 android:layout_height="match_parent"
                 tools:context="net.vexelon.currencybg.MainActivity$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/text_last_update"
+    <LinearLayout
+        android:id="@+id/main_topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:background="@color/background_updates"
-        android:gravity="right"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceSmall"/>
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/text_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:background="@color/background_updates"
+            android:gravity="left"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text=""
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/mdtp_white"/>
+
+        <TextView
+            android:id="@+id/text_last_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:background="@color/background_updates"
+            android:gravity="right"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:text=""
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/text_last_update"
+        android:layout_below="@id/main_topbar"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin">
 

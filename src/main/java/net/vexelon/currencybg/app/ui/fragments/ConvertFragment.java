@@ -332,7 +332,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 			}
 
 			ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity,
-					android.R.layout.simple_spinner_item, currencies);
+					android.R.layout.simple_spinner_item, AbstractFragment.getVisibleCurrencies(activity, currencies));
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerSourceCurrency.setAdapter(adapter);
 
@@ -374,9 +374,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 
 			if (reload) {
 				try {
-					// load all currencies from database
-					currencies = AbstractFragment.getVisibleCurrencies(activity,
-							AbstractFragment.getCurrencies(activity, true, true));
+					currencies = AbstractFragment.getCurrencies(activity, true, true);
 				} catch (DataSourceException e) {
 					msgId = R.string.error_db_load;
 					Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);

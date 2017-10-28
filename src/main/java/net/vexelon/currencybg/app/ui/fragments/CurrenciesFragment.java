@@ -77,6 +77,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 
 	private ListView currenciesView;
 	private TextView lastUpdateView;
+	private TextView filterView;
 	private TextView currenciesRateView;
 	private String lastUpdateLastValue;
 	private CurrencyListAdapter currencyListAdapter;
@@ -164,6 +165,12 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 		});
 
 		lastUpdateView = view.findViewById(R.id.text_last_update);
+		filterView = view.findViewById(R.id.text_filter);
+		filterView.setOnClickListener((View v) -> {
+			if (currencyListAdapter != null) {
+				newFilterMenu().show();
+			}
+		});
 
 		sourceViews.add(view.findViewById(R.id.header_src_1));
 		sourceViews.add(view.findViewById(R.id.header_src_2));
@@ -228,15 +235,15 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 				.items(R.array.action_filter_values).itemsCallbackSingleChoice(appSettings.getCurrenciesSortSelection(),
 						(MaterialDialog dialog, View view, int which, CharSequence text) -> {
 
-							// TODO display filter top-right
-							// TODO show snackbar for selection
-
 							switch (which) {
 							case AppSettings.CURRENCY_FILTER_NONE:
 							case AppSettings.CURRENCY_FILTER_CRYPTO:
 							case AppSettings.CURRENCY_FILTER_TOP6:
 							case AppSettings.CURRENCY_FILTER_TOP8:
 								appSettings.setCurrenciesFilter(which);
+
+								showSnackbar(getResources().getString(R.string.action_filter_desc, text));
+
 								reloadCurrencies(activity, false, true);
 								return true;
 
@@ -278,6 +285,9 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 
 						appSettings.setCurrenciesFilterCustom(codes);
 						appSettings.setCurrenciesFilter(AppSettings.CURRENCY_FILTER_CUSTOM);
+
+						showSnackbar(getResources().getString(R.string.action_filter_desc,
+								getResources().getString(R.string.action_filter_custom)));
 
 						reloadCurrencies(activity, false, true);
 					}
@@ -505,6 +515,16 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 		setCurrenciesSort(appSettings.getCurrenciesSortSelection());
 
 		lastUpdateView.setText(DateTimeUtils.toDateText(activity, appSettings.getLastUpdateDate().toDate()));
+
+		// show filter, if selected
+		if (appSettings.getCurrenciesFilter() == AppSettings.CURRENCY_FILTER_CUSTOM) {
+			filterView.setText(getResources().getString(R.string.action_filter_custom));
+		} else if (appSettings.getCurrenciesFilter() > 0) {
+			filterView.setText(
+					getResources().getStringArray(R.array.action_filter_values)[appSettings.getCurrenciesFilter()]);
+		} else {
+			filterView.setText("");
+		}
 	}
 
 	/**

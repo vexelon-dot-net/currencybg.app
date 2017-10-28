@@ -85,10 +85,11 @@
     <string name="action_sortby_code">Code</string>
     <string name="action_filter_title">Select filter</string>
     <string name="action_filter_none">None</string>
-    <string name="action_filter_crypto">Crypto currencies</string>
+    <string name="action_filter_crypto">Cryptocurrencies</string>
     <string name="action_filter_top6">Forex Top 6</string>
     <string name="action_filter_top8">Top 8 traded</string>
     <string name="action_filter_custom">Custom</string>
+    <string name="action_filter_desc">%1$s selected</string>
     <string name="action_share">Share</string>
     <string name="action_share_footer">Get the latest Bulgarian Lev rates with Currency BG - %1$s</string>
     <string name="text_share_convert">Rates for convertion of %1$s.</string>
