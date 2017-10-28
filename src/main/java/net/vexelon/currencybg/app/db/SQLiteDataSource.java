@@ -22,40 +22,37 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.util.ArrayMap;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Table;
 
 import net.vexelon.currencybg.app.Defs;
-import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import java.io.IOException;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 public class SQLiteDataSource implements DataSource {
 
-	private static final String[] ALL_COLUMNS = { Defs.COLUMN_ID, Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY,
-			Defs.COLUMN_SELL, Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE };
-
-	private static final String DATE_FORMAT = "yyyy-MM-dd";
-	// private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mmZ";
-
 	private SQLiteDatabase database;
 	private CurrenciesSQLiteDB dbHelper;
+
+	private String getCurrenciesSelectCols() {
+		return String.format("%s, %s, %s, %s, %s, %s", Defs.COLUMN_CODE, Defs.COLUMN_RATIO, Defs.COLUMN_BUY,
+				Defs.COLUMN_SELL, Defs.COLUMN_CURR_DATE, Defs.COLUMN_SOURCE);
+	}
 
 	@Override
 	public void connect(Context context) throws DataSourceException {
@@ -63,7 +60,7 @@ public class SQLiteDataSource implements DataSource {
 			dbHelper = new CurrenciesSQLiteDB(context);
 			database = dbHelper.getWritableDatabase();
 		} catch (SQLException e) {
-			throw new DataSourceException("Could not open SQLite database!", e);
+			throw new DataSourceException("Cannot open database!", e);
 		}
 	}
 
@@ -74,17 +71,11 @@ public class SQLiteDataSource implements DataSource {
 		}
 	}
 
-	private void closeCursor(Cursor cursor) {
-		if (cursor != null) {
-			cursor.close();
-		}
-	}
-
 	@Override
 	public void addRates(List<CurrencyData> rates) throws DataSourceException {
-		ContentValues values = new ContentValues();
-
 		for (CurrencyData rate : rates) {
+			ContentValues values = new ContentValues();
+
 			values.put(Defs.COLUMN_CODE, rate.getCode());
 			values.put(Defs.COLUMN_RATIO, rate.getRatio());
 			values.put(Defs.COLUMN_BUY, rate.getBuy());
@@ -96,8 +87,6 @@ public class SQLiteDataSource implements DataSource {
 			values.put(Defs.COLUMN_SOURCE, rate.getSource());
 
 			database.insert(Defs.TABLE_CURRENCY, null, values);
-
-			values = new ContentValues();
 		}
 	}
 
@@ -108,62 +97,52 @@ public class SQLiteDataSource implements DataSource {
 			database.execSQL("DELETE FROM currencies WHERE strftime('%s', curr_date) < strftime('%s', '"
 					+ DateTimeUtils.getOldDate(backDays) + "' )");
 		} catch (SQLException e) {
-			throw new DataSourceException("SQL statement error!", e);
+			throw new DataSourceException("SQL error: Failed deleting rates!", e);
 		}
 	}
 
 	@Override
 	public List<CurrencyData> getLastRates() throws DataSourceException {
-		Map<String, CurrencyData> result = Maps.newHashMap();
-		Cursor cursor = null;
+		Table<String, Integer, CurrencyData> table = HashBasedTable.create();
 
-		try {
-			cursor = database.rawQuery("SELECT * FROM currencies ORDER BY strftime('%s', curr_date) DESC; ", null);
+		try (Cursor cursor = database.rawQuery(
+				"SELECT " + getCurrenciesSelectCols() + " FROM currencies ORDER BY strftime('%s', curr_date) DESC",
+				null)) {
 
-			cursor.moveToFirst();
-			while (!cursor.isAfterLast()) {
-				CurrencyData currency = cursorToCurrency(cursor);
+			Map<String, Integer> cache = newCache();
 
-				String id = currency.getCode() + currency.getSource();
-				if (!result.containsKey(id)) {
-					result.put(id, currency);
+			while (cursor.moveToNext()) {
+				String code = cursor.getString(getIndex(cursor, Defs.COLUMN_CODE, cache));
+				int source = cursor.getInt(getIndex(cursor, Defs.COLUMN_SOURCE, cache));
+
+				if (!table.contains(code, source)) {
+					table.put(code, source, cursorToCurrency(cursor, code, source, cache));
 				}
-
-				cursor.moveToNext();
 			}
 		} catch (Throwable t) {
 			throw new DataSourceException("SQL error: Failed fetching last rates!", t);
-		} finally {
-			closeCursor(cursor);
 		}
 
-		return Lists.newArrayList(result.values());
+		return new ArrayList<>(table.values());
 	}
 
 	@Override
 	public List<CurrencyData> getAllRates(String code, Integer source) throws DataSourceException {
 		List<CurrencyData> result = Lists.newArrayList();
-		Cursor cursor = null;
 
-		try {
-			cursor = database.rawQuery(
-					"SELECT DISTINCT code, ratio, buy, sell, curr_date, source FROM currencies WHERE "
-							+ Defs.COLUMN_CODE + " = ? AND " + Defs.COLUMN_SOURCE
-							+ " = ? ORDER BY strftime('%s', curr_date) DESC; ",
-					new String[] { code, Integer.toString(source) });
+		try (Cursor cursor = database.rawQuery(
+				"SELECT DISTINCT code, ratio, buy, sell, curr_date, source FROM currencies WHERE " + Defs.COLUMN_CODE
+						+ " = ? AND " + Defs.COLUMN_SOURCE + " = ? ORDER BY strftime('%s', curr_date) DESC; ",
+				new String[] { code, Integer.toString(source) });) {
 
-			cursor.moveToFirst();
-			while (!cursor.isAfterLast()) {
-				CurrencyData currency = cursorToCurrency(cursor);
-				result.add(currency);
+			Map<String, Integer> cache = newCache();
 
-				cursor.moveToNext();
+			while (cursor.moveToNext()) {
+				result.add(cursorToCurrency(cursor, cache));
 			}
 		} catch (Throwable t) {
 			throw new DataSourceException("SQL error: Failed fetching all source - " + source + " rates for - " + code,
 					t);
-		} finally {
-			closeCursor(cursor);
 		}
 
 		return result;
@@ -172,28 +151,22 @@ public class SQLiteDataSource implements DataSource {
 	@Override
 	public List<CurrencyData> getAllRates(Integer source) throws DataSourceException {
 		Map<String, CurrencyData> result = Maps.newHashMap();
-		Cursor cursor = null;
 
-		try {
-			cursor = database.rawQuery(
-					"SELECT * FROM currencies WHERE " + Defs.COLUMN_SOURCE
-							+ " = ? ORDER BY strftime('%s', curr_date) DESC; ",
-					new String[] { String.valueOf(source) });
+		try (Cursor cursor = database.rawQuery(
+				"SELECT * FROM currencies WHERE " + Defs.COLUMN_SOURCE + " = ? ORDER BY strftime('%s', curr_date) DESC",
+				new String[] { String.valueOf(source) })) {
 
-			cursor.moveToFirst();
-			while (!cursor.isAfterLast()) {
-				CurrencyData currency = cursorToCurrency(cursor);
+			Map<String, Integer> cache = newCache();
+
+			while (cursor.moveToNext()) {
+				CurrencyData currency = cursorToCurrency(cursor, cache);
 
 				if (!result.containsKey(currency.getCode())) {
 					result.put(currency.getCode(), currency);
 				}
-
-				cursor.moveToNext();
 			}
 		} catch (Throwable t) {
 			throw new DataSourceException("SQL error: Failed fetching all currencies for source " + source, t);
-		} finally {
-			closeCursor(cursor);
 		}
 
 		return Lists.newArrayList(result.values());
@@ -202,39 +175,21 @@ public class SQLiteDataSource implements DataSource {
 	@Override
 	public List<CurrencyData> getAllRates(String code) throws DataSourceException {
 		List<CurrencyData> result = Lists.newArrayList();
-		Cursor cursor = null;
 
-		try {
-			cursor = database.rawQuery("SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE
-					+ " = ? ORDER BY strftime('%s', curr_date) DESC; ", new String[] { code });
+		try (Cursor cursor = database.rawQuery(
+				"SELECT * FROM currencies WHERE " + Defs.COLUMN_CODE + " = ? ORDER BY strftime('%s', curr_date) DESC",
+				new String[] { code })) {
 
-			cursor.moveToFirst();
-			while (!cursor.isAfterLast()) {
-				CurrencyData currency = cursorToCurrency(cursor);
-				result.add(currency);
+			Map<String, Integer> cache = newCache();
 
-				cursor.moveToNext();
+			while (cursor.moveToNext()) {
+				result.add(cursorToCurrency(cursor, cache));
 			}
 		} catch (Throwable t) {
 			throw new DataSourceException("SQL error: Failed fetching all rates for - " + code, t);
-		} finally {
-			closeCursor(cursor);
 		}
 
 		return result;
-	}
-
-	private CurrencyData cursorToCurrency(Cursor cursor) {
-		CurrencyData currency = new CurrencyData();
-
-		currency.setCode(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CODE)));
-		currency.setRatio(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_RATIO)));
-		currency.setBuy(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_BUY)));
-		currency.setSell(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_SELL)));
-		currency.setDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE)));
-		currency.setSource(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_SOURCE)));
-
-		return currency;
 	}
 
 	@Override
@@ -265,13 +220,11 @@ public class SQLiteDataSource implements DataSource {
 		// .withTime(0, 0, 0, 0);
 
 		DateTime result = null;
-		Cursor cursor = null;
 
-		try {
-			cursor = database
-					.rawQuery("SELECT curr_date FROM currencies ORDER BY strftime('%s', curr_date) DESC LIMIT 1", null);
-			if (cursor.getCount() > 0) {
-				cursor.moveToFirst();
+		try (Cursor cursor = database
+				.rawQuery("SELECT curr_date FROM currencies ORDER BY strftime('%s', curr_date) DESC LIMIT 1", null)) {
+
+			if (cursor.getCount() > 0 && cursor.moveToFirst()) {
 				String rawDate = cursor.getString(cursor.getColumnIndex(Defs.COLUMN_CURR_DATE));
 				result = DateTime.parse(rawDate);
 			}
@@ -299,8 +252,6 @@ public class SQLiteDataSource implements DataSource {
 
 		} catch (Throwable t) {
 			throw new DataSourceException("SQL error: Failed fetching latest currency date!", t);
-		} finally {
-			closeCursor(cursor);
 		}
 
 		return Optional.fromNullable(result);
@@ -354,38 +305,64 @@ public class SQLiteDataSource implements DataSource {
 	@Override
 	public List<WalletEntry> getWalletEntries() throws DataSourceException {
 		List<WalletEntry> result = Lists.newArrayList();
-		Cursor cursor = null;
 
-		try {
-			cursor = database.rawQuery("SELECT * FROM wallet;", null);
+		try (Cursor cursor = database.rawQuery("SELECT * FROM wallet", null)) {
+			Map<String, Integer> cache = newCache();
 
-			cursor.moveToFirst();
-			while (!cursor.isAfterLast()) {
-				WalletEntry walletEntry = cursorToWallet(cursor);
-				result.add(walletEntry);
-
-				cursor.moveToNext();
+			while (cursor.moveToNext()) {
+				result.add(cursorToWallet(cursor, cache));
 			}
 		} catch (Throwable t) {
 			throw new DataSourceException("SQL error: Failed fetching wallet entries", t);
-		} finally {
-			closeCursor(cursor);
 		}
 
 		return result;
 	}
 
-	private WalletEntry cursorToWallet(Cursor cursor) {
+	private Map<String, Integer> newCache() {
+		return new ArrayMap<>();
+	}
+
+	private int getIndex(Cursor cursor, String column, Map<String, Integer> cache) {
+		Integer idx = cache.get(column);
+
+		if (idx == null) {
+			idx = cursor.getColumnIndex(column);
+			cache.put(column, idx);
+		}
+
+		return idx;
+	}
+
+	private WalletEntry cursorToWallet(Cursor cursor, Map<String, Integer> cache) {
 		WalletEntry walletEntry = new WalletEntry();
 
-		walletEntry.setId(cursor.getInt(cursor.getColumnIndex(Defs.COLUMN_WALLET_ID)));
-		walletEntry.setCode(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_CODE)));
-		walletEntry.setAmount(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_AMOUNT)));
+		walletEntry.setId(cursor.getInt(getIndex(cursor, Defs.COLUMN_WALLET_ID, cache)));
+		walletEntry.setCode(cursor.getString(getIndex(cursor, Defs.COLUMN_WALLET_CODE, cache)));
+		walletEntry.setAmount(cursor.getString(getIndex(cursor, Defs.COLUMN_WALLET_AMOUNT, cache)));
 		walletEntry.setPurchaseTime(DateTimeUtils
-				.parseStringToDate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_PURCHASE_TIME))));
-		walletEntry.setPurchaseRate(cursor.getString(cursor.getColumnIndex(Defs.COLUMN_WALLET_PURCHASE_RATE)));
+				.parseStringToDate(cursor.getString(getIndex(cursor, Defs.COLUMN_WALLET_PURCHASE_TIME, cache))));
+		walletEntry.setPurchaseRate(cursor.getString(getIndex(cursor, Defs.COLUMN_WALLET_PURCHASE_RATE, cache)));
 
 		return walletEntry;
+	}
+
+	private CurrencyData cursorToCurrency(Cursor cursor, String code, int source, Map<String, Integer> cache) {
+		CurrencyData currency = new CurrencyData();
+
+		currency.setCode(code);
+		currency.setRatio(cursor.getInt(getIndex(cursor, Defs.COLUMN_RATIO, cache)));
+		currency.setBuy(cursor.getString(getIndex(cursor, Defs.COLUMN_BUY, cache)));
+		currency.setSell(cursor.getString(getIndex(cursor, Defs.COLUMN_SELL, cache)));
+		currency.setDate(cursor.getString(getIndex(cursor, Defs.COLUMN_CURR_DATE, cache)));
+		currency.setSource(source);
+
+		return currency;
+	}
+
+	private CurrencyData cursorToCurrency(Cursor cursor, Map<String, Integer> cache) {
+		return cursorToCurrency(cursor, cursor.getString(getIndex(cursor, Defs.COLUMN_CODE, cache)),
+				cursor.getInt(getIndex(cursor, Defs.COLUMN_SOURCE, cache)), cache);
 	}
 
 }
