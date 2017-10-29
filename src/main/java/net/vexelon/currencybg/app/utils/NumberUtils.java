@@ -99,7 +99,9 @@ public final class NumberUtils {
 				format.setCurrency(currency);
 				return new BigDecimal(format.parse(formattedCurrency).toString());
 			} catch (IllegalArgumentException e) {
-				Log.wtf(Defs.LOG_TAG, "Died at currency to bign - " + formattedCurrency, e);
+				// Log.wtf(Defs.LOG_TAG, "Died at currency to bign - " + formattedCurrency, e);
+				Log.d(Defs.LOG_TAG, "Error formatting currency! Unknown currency code - " + code);
+				return new BigDecimal(formattedCurrency);
 			} catch (ParseException e) {
 				Log.wtf(Defs.LOG_TAG, "Died at currency to bign parse - " + formattedCurrency, e);
 			}
