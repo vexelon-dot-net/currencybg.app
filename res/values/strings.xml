@@ -100,6 +100,8 @@
     <string name="source_changepartner">Change Partner</string>
     <string name="source_forexhouse">Forex House</string>
     <string name="source_allianz">Allianz Bank</string>
+    <string name="source_cryptobank">CryptoBank</string>
+    <string name="source_bitcoinshouse">BitcoinsHouse</string>
     <string name="source_tavex_full">Tavex Bulgaria</string>
     <string name="source_polana_full">"POLANA 1" OOD</string>
     <string name="source_fib_full">First Investment Bank</string>
@@ -110,6 +112,8 @@
     <string name="source_changepartner_full">Change Partner - "Georgi Chuchulain" Co.</string>
     <string name="source_forexhouse_full">Forex House Bulgaria</string>
     <string name="source_allianz_full">Allianz Bank Bulgaria</string>
+    <string name="source_cryptobank_full">CryptoBank Bulgaria</string>
+    <string name="source_bitcoinshouse_full">BitcoinsHouse Bulgaria</string>
 
     <string name="action_sources">Sources</string>
     <string name="action_sources_title">Show currency rates for</string>
@@ -168,6 +172,8 @@
  - Icons by Icons8 LLC. Copyright (CC BY-ND 3.0) Icons8 LLC (https://icons8.com)
 \n\n
  - Icons made by Freepik (http://www.freepik.com) from Flaticon (http://www.flaticon.com). Copyright (CC-3.0-BY).
+\n\n
+ - Cryptocoins by ALLIENWORKS (https://labs.allienworks.net/icons/cryptocoins)
     </string>
 
     <string name="license_lib01">

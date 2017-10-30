@@ -86,16 +86,28 @@ public final class UIFlags {
 		flagsMap.put("za", R.drawable.za);
 		flagsMap.put("eu", R.drawable.eu);
 		flagsMap.put("il", R.drawable.ils);
+		// crypto currencies
+		flagsMap.put("bch", R.drawable.bch);
+		flagsMap.put("eth", R.drawable.eth);
+		flagsMap.put("das", R.drawable.das);
+		flagsMap.put("dog", R.drawable.dog);
+		flagsMap.put("ltc", R.drawable.ltc);
+		flagsMap.put("rip", R.drawable.rip);
+		flagsMap.put("zec", R.drawable.zec);
 	}
 
 	public static int getResourceFromCode(String code) {
+		Integer resId = null;
+
 		if (!code.isEmpty()) {
-			String lower = code.substring(0, 2).toLowerCase();
-			Integer resId = flagsMap.get(lower);
-			if (resId != null) {
-				return resId;
+			code = code.substring(0, Math.min(code.length(), 3)).toLowerCase();
+			resId = flagsMap.get(code);
+			if (resId == null) {
+				resId = flagsMap.get(code.substring(0, 2));
 			}
+
 		}
-		return R.drawable.unknown;
+
+		return resId == null ? R.drawable.unknown : resId;
 	}
 }

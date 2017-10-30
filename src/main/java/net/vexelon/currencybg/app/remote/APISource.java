@@ -87,7 +87,7 @@ public class APISource implements Source {
 			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
-					"Failed in method getAllRatesByDate(String initialTime) to loading currencies from OpenShift!", io);
+					"Failed in method getAllRatesByDate(String initialTime) to load currencies from remote!!", io);
 		}
 	}
 
@@ -99,7 +99,7 @@ public class APISource implements Source {
 			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
-					"Failed in method getAllRatesByDate(String initialTime) to loading currencies from OpenShift!", io);
+					"Failed in method getAllRatesByDate(String initialTime) to load currencies from remote!!", io);
 		}
 	}
 
@@ -111,7 +111,7 @@ public class APISource implements Source {
 			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
-					"Failed in method getAllRatesByDate(String initialTime) to loading currencies from OpenShift!", io);
+					"Failed in method getAllRatesByDate(String initialTime) to load currencies from remote!!", io);
 		}
 	}
 
@@ -123,7 +123,7 @@ public class APISource implements Source {
 			return toList(downloadRates(address));
 		} catch (IOException io) {
 			throw new SourceException(
-					"Failed in method getAllRatesByDate(String initialTime) to loading currencies from OpenShift!", io);
+					"Failed in method getAllRatesByDate(String initialTime) to load currencies from remote!!", io);
 		}
 	}
 
