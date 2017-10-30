@@ -23,6 +23,7 @@
     <string name="app_name">Currency BG</string>
     <string name="last_update">Last update</string>
     <string name="last_update_updating_text">Downloading ...</string>
+    <string name="last_update_reloading_text">Reloading ...</string>
 
     <string name="error_download_rates">Failed downloading rates.</string>
     <string name="error_parse_rates">Failed parsing rates!</string>
@@ -70,6 +71,7 @@
     <string name="action_wallet_removed">Removed: %1$s</string>
     <string name="action_addwalletentry">Add wallet entry</string>
     <string name="action_currency_details">%1$s at %2$s</string>
+    <string name="action_filter">Filter</string>
     <string name="action_rate">Rates</string>
     <string name="action_rate_title">Show rates for</string>
     <string name="action_rate_buy_desc">Buy rates</string>
@@ -80,10 +82,15 @@
     <string name="action_sort_name_desc">Name Z-A</string>
     <string name="action_sort_code_asc">Code A-Z</string>
     <string name="action_sort_code_desc">Code Z-A</string>
-    <string-array name="action_sort_values">
-        <item>Name</item>
-        <item>Code</item>
-    </string-array>
+    <string name="action_sortby_name">Name</string>
+    <string name="action_sortby_code">Code</string>
+    <string name="action_filter_title">Select filter</string>
+    <string name="action_filter_none">None</string>
+    <string name="action_filter_crypto">Cryptocurrencies</string>
+    <string name="action_filter_top6">Forex Top 6</string>
+    <string name="action_filter_top8">Top 8 traded</string>
+    <string name="action_filter_custom">Custom</string>
+    <string name="action_filter_desc">%1$s selected</string>
     <string name="action_share">Share</string>
     <string name="action_share_footer">Get the latest Bulgarian Lev rates with Currency BG - %1$s</string>
     <string name="text_share_convert">Rates for convertion of %1$s.</string>
@@ -123,14 +130,8 @@
     <string name="prefs_title">Currency BG Settings</string>
     <string name="prefs_key_appprefs">app_prefs</string>
     <string name="pref_value_update">Changed to %1$s</string>
-    <string-array name="pref_precision_names">
-        <item>Simple</item>
-        <item>Advanced</item>
-    </string-array>
-    <string-array name="pref_precision_values">
-        <item>simple</item>
-        <item>advanced</item>
-    </string-array>
+    <string name="pref_precision_name_simple">Simple</string>
+    <string name="pref_precision_name_advanced">Advanced</string>
     <string name="pref_precision_default">advanced</string>
     <string name="pref_precision_title">Currencies precision</string>
     <string name="pref_precision_summary">Precision to use when displaying currency rates</string>

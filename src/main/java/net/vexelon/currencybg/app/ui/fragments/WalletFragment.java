@@ -53,12 +53,12 @@ import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.db.models.WalletEntry;
 import net.vexelon.currencybg.app.db.models.WalletEntryInvestment;
-import net.vexelon.currencybg.app.ui.UIUtils;
-import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.WalletListAdapter;
 import net.vexelon.currencybg.app.ui.events.LoadListener;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
 import net.vexelon.currencybg.app.utils.DateTimeUtils;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
@@ -68,11 +68,11 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.LocalDateTime;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class WalletFragment extends AbstractFragment
@@ -94,58 +94,44 @@ public class WalletFragment extends AbstractFragment
 	}
 
 	private void init(View view, LayoutInflater inflater) {
-		walletListView = (ListView) view.findViewById(R.id.list_wallet_entries);
+		walletListView = view.findViewById(R.id.list_wallet_entries);
 
-		walletListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				WalletListAdapter adapter = (WalletListAdapter) walletListView.getAdapter();
+		walletListView.setOnItemLongClickListener((AdapterView<?> parent, View v, int position, long id) -> {
+			WalletListAdapter adapter = (WalletListAdapter) walletListView.getAdapter();
 
-				WalletEntry removed = adapter.remove(position);
-				if (removed != null) {
-					adapter.notifyDataSetChanged();
+			WalletEntry removed = adapter.remove(position);
+			if (removed != null) {
+				adapter.notifyDataSetChanged();
 
-					DataSource source = null;
-					try {
-						source = new SQLiteDataSource();
-						source.connect(getActivity());
-						source.deleteWalletEntry(removed.getId());
+				try (DataSource source = new SQLiteDataSource()) {
+					source.connect(getActivity());
+					source.deleteWalletEntry(removed.getId());
 
-						showSnackbar(getActivity().getString(R.string.action_wallet_removed,
-								NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
+					showSnackbar(getActivity().getString(R.string.action_wallet_removed,
+							NumberUtils.getCurrencyFormat(new BigDecimal(removed.getAmount()), removed.getCode())));
 
-						vibrate(Defs.VIBRATE_DEL_DURATION);
-					} catch (DataSourceException e) {
-						Log.e(Defs.LOG_TAG, "Could not remove wallet entries from database!", e);
-						showSnackbar(R.string.error_db_remove, Defs.TOAST_ERR_DURATION, true);
-					} finally {
-						IOUtils.closeQuitely(source);
-					}
+					vibrate(Defs.VIBRATE_DEL_DURATION);
+				} catch (DataSourceException | IOException e) {
+					Log.e(Defs.LOG_TAG, "Could not remove wallet entries from database!", e);
+					showSnackbar(R.string.error_db_remove, Defs.TOAST_ERR_DURATION, true);
 				}
-
-				return false;
 			}
+
+			return false;
 		});
-		walletListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (R.id.wallet_row_icon == id || R.id.wallet_row_code == id) {
-					showSnackbar(getActivity().getString(R.string.hint_currency_remove));
-				} else {
-					newInvestmentInfoDialog(walletListAdapter.getItem(position)).show();
-				}
+		walletListView.setOnItemClickListener((AdapterView<?> parent, View v, int position, long id) -> {
+			if (R.id.wallet_row_icon == id || R.id.wallet_row_code == id) {
+				showSnackbar(getActivity().getString(R.string.hint_currency_remove));
+			} else {
+				newInvestmentInfoDialog(walletListAdapter.getItem(position)).show();
 			}
 		});
 
 		// add button
-		FloatingActionButton action = (FloatingActionButton) view.findViewById(R.id.fab_wallet_entry);
+		FloatingActionButton action = view.findViewById(R.id.fab_wallet_entry);
 		action.attachToListView(walletListView);
-		action.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				newAddWalletEntryDialog().show();
-			}
+		action.setOnClickListener((View v) -> {
+			newAddWalletEntryDialog().show();
 		});
 	}
 
@@ -169,8 +155,8 @@ public class WalletFragment extends AbstractFragment
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser) {
 			/*
-			 * Back from Currencies fragment view, so we reload all currencies.
-			 * The user might have updated them.
+			 * Back from Currencies fragment view, so we reload all currencies. The user
+			 * might have updated them.
 			 */
 			updateUI();
 		}
@@ -193,65 +179,53 @@ public class WalletFragment extends AbstractFragment
 		final MaterialDialog dialog = new MaterialDialog.Builder(context)
 				.title(getResources().getString(R.string.wallet_profit_details, entry.getCode())).cancelable(true)
 				.autoDismiss(false).positiveText(R.string.text_ok)
-				.onPositive(new MaterialDialog.SingleButtonCallback() {
-
-					@Override
-					public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-						materialDialog.dismiss();
-					}
+				.onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+					materialDialog.dismiss();
 				}).customView(R.layout.dialog_details, true).build();
 
-		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+		dialog.setOnShowListener((DialogInterface dialogInterface) -> {
+			View v = dialog.getCustomView();
+			UIUtils.setText(v, R.id.details_header, getResources().getString(R.string.wallet_text_rates_details,
+					CurrencyCodes.getCurrencyName(context.getResources(), entry.getCode())), true);
 
-			@Override
-			public void onShow(DialogInterface dialogInterface) {
-				View v = dialog.getCustomView();
-				UIUtils.setText(v, R.id.details_header, getResources().getString(R.string.wallet_text_rates_details,
-						UiCodes.getCurrencyName(context.getResources(), entry.getCode())), true);
+			Collection<CurrencyData> currencyDatas = currencyCodeToData.get(entry.getCode());
 
-				Collection<CurrencyData> currencyDatas = currencyCodeToData.get(entry.getCode());
+			/**
+			 * Calculate investments for each source found
+			 */
+			List<WalletEntryInvestment> investments = Lists.newArrayListWithCapacity(currencyDatas.size());
+			for (CurrencyData currencyData : currencyDatas) {
+				investments.add(getInvestment(entry, currencyData));
+			}
 
-				/**
-				 * Calculate investments for each source found
-				 */
-				List<WalletEntryInvestment> investments = Lists.newArrayListWithCapacity(currencyDatas.size());
-				for (CurrencyData currencyData : currencyDatas) {
-					investments.add(getInvestment(entry, currencyData));
+			/**
+			 * Sort investments by profit
+			 */
+			Collections.sort(investments, (WalletEntryInvestment i1, WalletEntryInvestment i2) -> {
+				BigDecimal p1 = i1.getInvestmentMargin();
+				BigDecimal p2 = i2.getInvestmentMargin();
+				return p1.subtract(p2).compareTo(BigDecimal.ZERO) > 0 ? -1 : 1;
+			});
+
+			/*
+			 * Prepare display results
+			 */
+			if (!investments.isEmpty()) {
+				int precisionMode = appSettings.getCurrenciesPrecision();
+
+				StringBuilder buffer = new StringBuilder();
+
+				// paint the first in either green or red depending on
+				// profit margin
+				WalletEntryInvestment top = Iterables.getFirst(investments, null);
+				formatInvestment(context, top, true, precisionMode, buffer);
+				investments.remove(top);
+
+				for (WalletEntryInvestment next : investments) {
+					formatInvestment(context, next, false, precisionMode, buffer);
 				}
 
-				/**
-				 * Sort investments by profit
-				 */
-				Collections.sort(investments, new Comparator<WalletEntryInvestment>() {
-
-					@Override
-					public int compare(WalletEntryInvestment i1, WalletEntryInvestment i2) {
-						BigDecimal p1 = i1.getInvestmentMargin();
-						BigDecimal p2 = i2.getInvestmentMargin();
-						return p1.subtract(p2).compareTo(BigDecimal.ZERO) > 0 ? -1 : 1;
-					}
-				});
-
-				/*
-				 * Prepare display results
-				 */
-				if (!investments.isEmpty()) {
-					int precisionMode = appSettings.getCurrenciesPrecision();
-
-					StringBuilder buffer = new StringBuilder();
-
-					// paint the first in either green or red depending on
-					// profit margin
-					WalletEntryInvestment top = Iterables.getFirst(investments, null);
-					formatInvestment(context, top, true, precisionMode, buffer);
-					investments.remove(top);
-
-					for (WalletEntryInvestment next : investments) {
-						formatInvestment(context, next, false, precisionMode, buffer);
-					}
-
-					UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
-				}
+				UIUtils.setText(v, R.id.details_content, buffer.toString(), true);
 			}
 		});
 
@@ -259,8 +233,8 @@ public class WalletFragment extends AbstractFragment
 	}
 
 	/**
-	 * Calculates investment margins and all kind of investment infos for a
-	 * given wallet entry and source rate
+	 * Calculates investment margins and all kind of investment infos for a given
+	 * wallet entry and source rate
 	 *
 	 * @param walletEntry
 	 * @param currencyData
@@ -334,6 +308,7 @@ public class WalletFragment extends AbstractFragment
 
 	private String colorfyProfit(BigDecimal amount, boolean isTop, int precisionMode) {
 		int result = amount.compareTo(BigDecimal.ZERO);
+
 		if (result > 0 && isTop) {
 			return UIUtils.toHtmlColor(formatCurrency(amount, Defs.CURRENCY_CODE_BGN, precisionMode),
 					Defs.COLOR_OK_GREEN);
@@ -352,151 +327,120 @@ public class WalletFragment extends AbstractFragment
 	 */
 	private MaterialDialog newAddWalletEntryDialog() {
 		final Context context = getActivity();
-		final MaterialDialog dialog = new MaterialDialog.Builder(context).title(R.string.action_addwalletentry)
+
+		final MaterialDialog dlg = new MaterialDialog.Builder(context).title(R.string.action_addwalletentry)
 				.cancelable(false).customView(R.layout.walletentry_layout, true).autoDismiss(false)
-				.positiveText(R.string.text_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+				.positiveText(R.string.text_ok)
+				.onPositive((@NonNull MaterialDialog dialog, @NonNull DialogAction which) -> {
 
-					@Override
-					public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-						// validate and save new wallet entry
-						final TextView amountView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_amount);
-						TextView boughtAtView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_bought_at);
-						TextView boughtOnView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_bought_on);
+					// validate and save new wallet entry
+					final TextView amountView = dialog.getView().findViewById(R.id.wallet_entry_amount);
+					TextView boughtAtView = dialog.getView().findViewById(R.id.wallet_entry_bought_at);
+					TextView boughtOnView = dialog.getView().findViewById(R.id.wallet_entry_bought_on);
 
-						String amount = amountView.getText().toString();
-						String boughtAt = boughtAtView.getText().toString();
-						String boughtOn = boughtOnView.getText().toString();
+					String amount = amountView.getText().toString();
+					String boughtAt = boughtAtView.getText().toString();
+					String boughtOn = boughtOnView.getText().toString();
 
-						// validation
-						if (amount.isEmpty() || boughtAt.isEmpty() || boughtOn.isEmpty()) {
-							showSnackbar(dialog.getView(), R.string.error_add_wallet_entry, Defs.TOAST_ERR_DURATION,
-									true);
-							return;
-						}
-
-						WalletEntry entry = new WalletEntry();
-						try {
-							entry.setCode(codeSelected);
-							entry.setAmount(new BigDecimal(amount).toPlainString());
-							entry.setPurchaseRate(new BigDecimal(boughtAt).toPlainString());
-							entry.setPurchaseRatio(1);
-							entry.setPurchaseTime(dateTimeSelected.toDate());
-						} catch (NumberFormatException e) {
-							Log.w(Defs.LOG_TAG, "Error reading amount of rate!", e);
-							showSnackbar(dialog.getView(), R.string.error_add_wallet_entry, Defs.TOAST_ERR_DURATION,
-									true);
-							return;
-						}
-
-						// all ok
-						dialog.dismiss();
-
-						DataSource source = null;
-						try {
-							source = new SQLiteDataSource();
-							source.connect(dialog.getContext());
-							source.addWalletEntry(entry);
-						} catch (DataSourceException e) {
-							Log.e(Defs.LOG_TAG, "Could not save wallet entry to database!", e);
-							showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_DURATION, true);
-						} finally {
-							IOUtils.closeQuitely(source);
-						}
-
-						// reload currencies
-						updateUI();
+					// validation
+					if (amount.isEmpty() || boughtAt.isEmpty() || boughtOn.isEmpty()) {
+						showSnackbar(dialog.getView(), R.string.error_add_wallet_entry, Defs.TOAST_ERR_DURATION, true);
+						return;
 					}
-				}).negativeText(R.string.text_cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
-					@Override
-					public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-						materialDialog.dismiss();
+
+					WalletEntry entry = new WalletEntry();
+					try {
+						entry.setCode(codeSelected);
+						entry.setAmount(new BigDecimal(amount).toPlainString());
+						entry.setPurchaseRate(new BigDecimal(boughtAt).toPlainString());
+						entry.setPurchaseRatio(1);
+						entry.setPurchaseTime(dateTimeSelected.toDate());
+					} catch (NumberFormatException e) {
+						Log.w(Defs.LOG_TAG, "Error reading amount of rate!", e);
+						showSnackbar(dialog.getView(), R.string.error_add_wallet_entry, Defs.TOAST_ERR_DURATION, true);
+						return;
 					}
+
+					// all ok
+					dialog.dismiss();
+
+					try (DataSource source = new SQLiteDataSource()) {
+						source.connect(dialog.getContext());
+						source.addWalletEntry(entry);
+					} catch (DataSourceException | IOException e) {
+						Log.e(Defs.LOG_TAG, "Could not save wallet entry to database!", e);
+						showSnackbar(R.string.error_db_save, Defs.TOAST_ERR_DURATION, true);
+					}
+
+					// reload currencies
+					updateUI();
+
+				}).negativeText(R.string.text_cancel)
+				.onNegative((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
+					materialDialog.dismiss();
 				}).build();
 
-		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialogInterface) {
-				final View v = dialog.getCustomView();
+		dlg.setOnShowListener((DialogInterface dialogInterface) -> {
+			final View v = dlg.getCustomView();
 
-				// setup source currencies
-				final Spinner spinner = (Spinner) v.findViewById(R.id.wallet_entry_currency);
-				spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-					@Override
-					public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-						CurrencyData currency = (CurrencyData) parent.getSelectedItem();
-						codeSelected = currency.getCode();
-						UIUtils.setText(v, R.id.wallet_entry_bought_at, currency.getSell());
-					}
-
-					public void onNothingSelected(android.widget.AdapterView<?> parent) {
-						// do nothing
-					}
-				});
-
-				// assumes currencies are already loaded!
-				List<CurrencyData> currencies = Lists.newArrayList();
-				if (currencyCodeToData != null) {
-					currencies.addAll(currencyCodeToData.values());
+			// setup source currencies
+			final Spinner spinner = (Spinner) v.findViewById(R.id.wallet_entry_currency);
+			spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+				@Override
+				public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+					CurrencyData currency = (CurrencyData) parent.getSelectedItem();
+					codeSelected = currency.getCode();
+					UIUtils.setText(v, R.id.wallet_entry_bought_at, currency.getSell());
 				}
 
-				ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context,
-						android.R.layout.simple_spinner_item, currencies);
-				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				spinner.setAdapter(adapter);
+				public void onNothingSelected(android.widget.AdapterView<?> parent) {
+					// do nothing
+				}
+			});
 
-				// source amount calculator
-				final TextView amountView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_amount);
-				amountView.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						new CalculatorWidget(context).showCalculator(
-								StringUtils.defaultIfEmpty(amountView.getText().toString(), "0"),
-								new CalculatorWidget.Listener() {
-
-									@Override
-									public void onValue(BigDecimal value) {
-										amountView.setText(value.toPlainString());
-									}
-								});
-					}
-				});
-
-				// source rate calculator
-				final TextView boughtAtView = (TextView) dialog.getView().findViewById(R.id.wallet_entry_bought_at);
-				boughtAtView.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						new CalculatorWidget(context).showCalculator(
-								StringUtils.defaultIfEmpty(boughtAtView.getText().toString(), "0"),
-								new CalculatorWidget.Listener() {
-
-									@Override
-									public void onValue(BigDecimal value) {
-										boughtAtView.setText(value.toPlainString());
-									}
-								});
-					}
-				});
-
-				dateTimeSelected = LocalDateTime.now();
-				dateTimeView = (TextView) v.findViewById(R.id.wallet_entry_bought_on);
-				dateTimeView.setText(DateTimeUtils.toDateTimeText(v.getContext(), dateTimeSelected.toDate()));
-
-				v.findViewById(R.id.wallet_entry_bought_on).setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						LocalDateTime dateTime = LocalDateTime.now();
-						DatePickerDialog datePicker = DatePickerDialog.newInstance(WalletFragment.this,
-								dateTime.getYear(), dateTime.getMonthOfYear() - 1, dateTime.getDayOfMonth());
-						datePicker.setThemeDark(true);
-						datePicker.show(getFragmentManager(),
-								getResources().getText(R.string.text_pick_date).toString());
-					}
-				});
+			// assumes currencies are already loaded!
+			List<CurrencyData> currencies = Lists.newArrayList();
+			if (currencyCodeToData != null) {
+				currencies.addAll(currencyCodeToData.values());
 			}
+
+			ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(context,
+					android.R.layout.simple_spinner_item, currencies);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spinner.setAdapter(adapter);
+
+			// source amount calculator
+			final TextView amountView = dlg.getView().findViewById(R.id.wallet_entry_amount);
+			amountView.setOnClickListener((View view) -> {
+				new CalculatorWidget(context).showCalculator(
+						StringUtils.defaultIfEmpty(amountView.getText().toString(), "0"), (BigDecimal value) -> {
+							amountView.setText(value.toPlainString());
+						});
+			});
+
+			// source rate calculator
+			final TextView boughtAtView = dlg.getView().findViewById(R.id.wallet_entry_bought_at);
+			boughtAtView.setOnClickListener((View view) -> {
+				new CalculatorWidget(context).showCalculator(
+						StringUtils.defaultIfEmpty(boughtAtView.getText().toString(), "0"), (BigDecimal value) -> {
+							boughtAtView.setText(value.toPlainString());
+						});
+			});
+
+			dateTimeSelected = LocalDateTime.now();
+			dateTimeView = v.findViewById(R.id.wallet_entry_bought_on);
+			dateTimeView.setText(DateTimeUtils.toDateTimeText(v.getContext(), dateTimeSelected.toDate()));
+
+			v.findViewById(R.id.wallet_entry_bought_on).setOnClickListener((View view) -> {
+				LocalDateTime dateTime = LocalDateTime.now();
+				DatePickerDialog datePicker = DatePickerDialog.newInstance(WalletFragment.this, dateTime.getYear(),
+						dateTime.getMonthOfYear() - 1, dateTime.getDayOfMonth());
+				datePicker.setThemeDark(true);
+				datePicker.show(getFragmentManager(), getResources().getText(R.string.text_pick_date).toString());
+			});
 		});
 
-		return dialog;
+		return dlg;
 	}
 
 	@Override
@@ -513,7 +457,6 @@ public class WalletFragment extends AbstractFragment
 	public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
 		dateTimeSelected = dateTimeSelected.withHourOfDay(hourOfDay).withMinuteOfHour(minute)
 				.withSecondOfMinute(second);
-		// set field
 		dateTimeView.setText(DateTimeUtils.toDateTimeText(view.getActivity(), dateTimeSelected.toDate()));
 	}
 
@@ -579,8 +522,8 @@ public class WalletFragment extends AbstractFragment
 				source.connect(activity);
 				entries.addAll(source.getWalletEntries());
 
-				codeToData = AbstractFragment.getCurrenciesMapped(
-						AbstractFragment.getVisibleCurrencies(AbstractFragment.getCurrencies(activity, true)));
+				codeToData = AbstractFragment.getCurrenciesMapped(AbstractFragment.getVisibleCurrencies(activity,
+						AbstractFragment.getCurrencies(activity, true)));
 
 			} catch (DataSourceException e) {
 				msgId = R.string.error_db_load;
@@ -597,12 +540,7 @@ public class WalletFragment extends AbstractFragment
 			if (msgId != -1) {
 				listener.onLoadFailed(msgId);
 			} else {
-				listener.onLoadSuccessful(new Supplier<Pair<Multimap<String, CurrencyData>, List<WalletEntry>>>() {
-					@Override
-					public Pair<Multimap<String, CurrencyData>, List<WalletEntry>> get() {
-						return Pair.create(codeToData, entries);
-					}
-				});
+				listener.onLoadSuccessful(() -> Pair.create(codeToData, entries));
 			}
 		}
 

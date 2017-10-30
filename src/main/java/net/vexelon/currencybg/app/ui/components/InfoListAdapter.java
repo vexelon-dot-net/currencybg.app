@@ -57,10 +57,11 @@ public class InfoListAdapter extends ArrayAdapter<InfoListAdapter.InfoItem> {
 	}
 
 	private void setResText(View v, int id, CharSequence text) {
-		TextView tx = (TextView) v.findViewById(id);
+		TextView tx = v.findViewById(id);
 		if (tx != null) {
 			// XXX an ugly "special" case for entities
 			String toString = text.toString();
+
 			if (toString.indexOf("&") > -1 && toString.indexOf(";") > -1) {
 				tx.setText(Html.fromHtml(toString));
 			} else {

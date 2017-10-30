@@ -17,9 +17,6 @@
  */
 package net.vexelon.currencybg.app;
 
-import java.util.Arrays;
-import java.util.List;
-
 public final class Defs {
 
 	public final static String LOG_TAG = "net.vexelon.currencybg";
@@ -90,9 +87,4 @@ public final class Defs {
 	 * Max amount of currency sources to show/select on the main fragment
 	 */
 	public static final int MAX_SOURCES_TO_SHOW = 3;
-
-	/**
-	 * Codes of currencies we don't show at the moment
-	 */
-	public static final List<String> HIDDEN_CURRENCY_CODES = Arrays.asList(new String[] { "SBP", "MAD" });
 }

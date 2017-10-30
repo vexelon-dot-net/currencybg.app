@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.vexelon.currencybg.app.ui;
+package net.vexelon.currencybg.app.ui.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -101,13 +101,13 @@ public final class UIUtils {
 	}
 
 	/**
-	 * Sets flag icon by doing a {@link UIFlags} lookup.
+	 * Sets flag icon by doing a {@link Flags} lookup.
 	 * 
 	 * @param imageView
 	 * @param code
 	 */
 	public static void setFlagIcon(ImageView imageView, String code) {
-		int imageId = UIFlags.getResourceFromCode(code);
+		int imageId = Flags.getResourceFromCode(code);
 		if (imageId != -1) {
 			imageView.setImageResource(imageId);
 		}

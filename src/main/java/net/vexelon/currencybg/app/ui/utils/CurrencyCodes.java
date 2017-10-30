@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.vexelon.currencybg.app.ui;
+package net.vexelon.currencybg.app.ui.utils;
 
 import android.content.res.Resources;
 
@@ -29,7 +29,7 @@ import java.util.Map;
  * Operations based on currency codes
  * 
  */
-public final class UiCodes {
+public final class CurrencyCodes {
 
 	private static Map<String, String> mapping;
 

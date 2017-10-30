@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -50,9 +49,9 @@ import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
 import net.vexelon.currencybg.app.ui.components.CalculatorWidget;
-import net.vexelon.currencybg.app.ui.components.CurrencySelectListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertSourceListAdapter;
 import net.vexelon.currencybg.app.ui.components.ConvertTargetListAdapter;
+import net.vexelon.currencybg.app.ui.components.CurrencySelectListAdapter;
 import net.vexelon.currencybg.app.ui.events.LoadListener;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
@@ -91,8 +90,8 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 		super.setUserVisibleHint(isVisibleToUser);
 		if (isVisibleToUser) {
 			/*
-			 * Back from Currencies fragment view, so we reload all currencies.
-			 * The user might have updated them.
+			 * Back from Currencies fragment view, so we reload all currencies. The user
+			 * might have updated them.
 			 */
 			new UpdateRatesTask(getActivity(), this, true).execute();
 		}
@@ -112,7 +111,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 			final AppSettings appSettings = new AppSettings(getActivity());
 			appSettings.setLastConvertValue("0");
 			appSettings.setLastConvertCurrencySel("BGN");
-			appSettings.setConvertCurrencies(Sets.<String> newHashSet());
+			appSettings.setConvertCurrencies(Sets.newHashSet());
 
 			new UpdateRatesTask(getActivity(), this, false).execute();
 
@@ -125,6 +124,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 			newShareCurrenciesDialog();
 			return true;
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -132,7 +132,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 		final AppSettings appSettings = new AppSettings(getActivity());
 
 		// setup source currencies
-		spinnerSourceCurrency = (Spinner) view.findViewById(R.id.source_currency);
+		spinnerSourceCurrency = view.findViewById(R.id.source_currency);
 		spinnerSourceCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 			@Override
@@ -143,7 +143,6 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 					appSettings.setLastConvertCurrencySel(sourceCurrency.getCode());
 					setSourceCurrencyValue(appSettings.getLastConvertValue(), sourceCurrency.getCode());
 				}
-
 			}
 
 			public void onNothingSelected(android.widget.AdapterView<?> parent) {
@@ -152,61 +151,44 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 		});
 
 		// source value
-		sourceValueView = (TextView) view.findViewById(R.id.text_source_value2);
-		sourceValueView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				new CalculatorWidget(getActivity()).showCalculator(appSettings.getLastConvertValue(),
-						new CalculatorWidget.Listener() {
+		sourceValueView = view.findViewById(R.id.text_source_value2);
+		sourceValueView.setOnClickListener((View v) -> {
+			new CalculatorWidget(getActivity()).showCalculator(appSettings.getLastConvertValue(),
+					(BigDecimal value) -> {
+						setSourceCurrencyValue(value.toPlainString(), appSettings.getLastConvertCurrencySel());
 
-							@Override
-							public void onValue(BigDecimal value) {
-								setSourceCurrencyValue(value.toPlainString(), appSettings.getLastConvertCurrencySel());
-
-								if (updateTargetCurrenciesCalculations()) {
-									// save if value is valid
-									appSettings.setLastConvertValue(value.toPlainString());
-								}
-
-							}
-						});
-			}
+						if (updateTargetCurrenciesCalculations()) {
+							// save if value is valid
+							appSettings.setLastConvertValue(value.toPlainString());
+						}
+					});
 		});
 
 		// setup target currencies list
-		targetCurrenciesView = (ListView) view.findViewById(R.id.list_target_currencies);
-		targetCurrenciesView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) targetCurrenciesView.getAdapter();
+		targetCurrenciesView = view.findViewById(R.id.list_target_currencies);
+		targetCurrenciesView.setOnItemLongClickListener((AdapterView<?> parent, View v, int position, long id) -> {
+			ConvertTargetListAdapter adapter = (ConvertTargetListAdapter) targetCurrenciesView.getAdapter();
 
-				CurrencyData removed = adapter.remove(position);
-				if (removed != null) {
-					adapter.notifyDataSetChanged();
+			CurrencyData removed = adapter.remove(position);
+			if (removed != null) {
+				adapter.notifyDataSetChanged();
 
-					appSettings.removeConvertCurrency(removed);
-					showSnackbar(getActivity().getString(R.string.action_currency_removed, removed.getCode()));
+				appSettings.removeConvertCurrency(removed);
+				showSnackbar(getActivity().getString(R.string.action_currency_removed, removed.getCode()));
 
-					vibrate(Defs.VIBRATE_DEL_DURATION);
-				}
-
-				return false;
+				vibrate(Defs.VIBRATE_DEL_DURATION);
 			}
+
+			return false;
 		});
-		targetCurrenciesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				showSnackbar(getActivity().getString(R.string.hint_currency_remove));
-			}
+		targetCurrenciesView.setOnItemClickListener((AdapterView<?> parent, View v, int position, long id) -> {
+			showSnackbar(getActivity().getString(R.string.hint_currency_remove));
 		});
 
-		actionButton = (FloatingActionButton) view.findViewById(R.id.fab_convert);
+		actionButton = view.findViewById(R.id.fab_convert);
 		actionButton.attachToListView(targetCurrenciesView);
-		actionButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				newAddTargetCurrencyDialog().show();
-			}
+		actionButton.setOnClickListener((View v) -> {
+			newAddTargetCurrencyDialog().show();
 		});
 	}
 
@@ -274,28 +256,25 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 
 		return new MaterialDialog.Builder(context).title(R.string.action_addcurrency).cancelable(true)
 				.adapter(adapter, null).negativeText(R.string.text_cancel).positiveText(R.string.text_ok)
-				.onPositive(new MaterialDialog.SingleButtonCallback() {
+				.onPositive((@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) -> {
 
-					@Override
-					public void onClick(@NonNull MaterialDialog materialDialog, @NonNull DialogAction dialogAction) {
-						if (!adapter.getSelected().isEmpty()) {
-							AppSettings appSettings = new AppSettings(context);
-							StringBuilder buffer = new StringBuilder();
+					if (!adapter.getSelected().isEmpty()) {
+						AppSettings appSettings = new AppSettings(context);
+						StringBuilder buffer = new StringBuilder();
 
-							for (CurrencyData currency : adapter.getSelected()) {
-								appSettings.addConvertCurrency(currency);
-								buffer.append(currency.getCode()).append(", ");
-							}
-
-							buffer.setLength(buffer.length() - 2);
-							String added = StringUtils.ellipsize(buffer.toString(), 30, 7);
-
-							// // notify UI
-							updateTargetCurrenciesListView();
-							updateTargetCurrenciesCalculations();
-
-							showSnackbar(context.getString(R.string.action_currency_added, added));
+						for (CurrencyData currency : adapter.getSelected()) {
+							appSettings.addConvertCurrency(currency);
+							buffer.append(currency.getCode()).append(", ");
 						}
+
+						buffer.setLength(buffer.length() - 2);
+						String added = StringUtils.ellipsize(buffer.toString(), 30, 7);
+
+						// // notify UI
+						updateTargetCurrenciesListView();
+						updateTargetCurrenciesCalculations();
+
+						showSnackbar(context.getString(R.string.action_currency_added, added));
 					}
 				}).build();
 	}
@@ -353,7 +332,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 			}
 
 			ConvertSourceListAdapter adapter = new ConvertSourceListAdapter(activity,
-					android.R.layout.simple_spinner_item, currencies);
+					android.R.layout.simple_spinner_item, AbstractFragment.getVisibleCurrencies(activity, currencies));
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerSourceCurrency.setAdapter(adapter);
 
@@ -395,9 +374,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 
 			if (reload) {
 				try {
-					// load all currencies from database
-					currencies = AbstractFragment
-							.getVisibleCurrencies(AbstractFragment.getCurrencies(activity, true, true));
+					currencies = AbstractFragment.getCurrencies(activity, true, true);
 				} catch (DataSourceException e) {
 					msgId = R.string.error_db_load;
 					Log.e(Defs.LOG_TAG, "Could not load currencies from database!", e);
@@ -412,12 +389,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 			if (msgId != -1) {
 				listener.onLoadFailed(msgId);
 			} else {
-				listener.onLoadSuccessful(new Supplier<List<CurrencyData>>() {
-					@Override
-					public List<CurrencyData> get() {
-						return currencies;
-					}
-				});
+				listener.onLoadSuccessful(() -> currencies);
 			}
 		}
 

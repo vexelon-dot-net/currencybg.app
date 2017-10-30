@@ -50,43 +50,40 @@ public class InfoFragment extends AbstractFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		this.rootView = inflater.inflate(R.layout.fragment_info, container, false);
 		init(rootView);
+
 		return rootView;
 	}
 
 	private void init(View view) {
 		final Activity activity = getActivity();
-		ListView lvInfo = (ListView) view.findViewById(R.id.list_info);
+		ListView lvInfo = view.findViewById(R.id.list_info);
 
-		final InfoListAdapter adapter = new InfoListAdapter(getActivity(), R.layout.info_row, getInfosList());
+		final InfoListAdapter adapter = new InfoListAdapter(activity, R.layout.info_row, getInfosList());
 		lvInfo.setAdapter(adapter);
 
-		lvInfo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String url = adapter.getUrl(position);
+		lvInfo.setOnItemClickListener((AdapterView<?> parent, View v, int position, long id) -> {
+			String url = adapter.getUrl(position);
 
-				if (URL_VERSION.equals(url)) {
-					showNewsAlert(getActivity());
-				} else if (URL_3RDPARTY_LIBS.equals(url)) {
-					new MaterialDialog.Builder(getActivity()).customView(R.layout.fragment_thirdparty_libs, true)
-							.positiveText(R.string.text_ok).build().show();
-				} else if (URL_3RDPARTY_ICONS.equals(url)) {
-					new MaterialDialog.Builder(getActivity()).customView(R.layout.fragment_thirdparty_icons, true)
-							.positiveText(R.string.text_ok).build().show();
-				} else if (url != null && url.startsWith(URL_EMAIL)) {
-					// open email activity
-					Intent emailIntent = new Intent(Intent.ACTION_SEND);
-					emailIntent.setType("message/rfc822");
-					emailIntent.putExtra(Intent.EXTRA_EMAIL, url.replace(url, URL_EMAIL));
-					emailIntent.putExtra(Intent.EXTRA_SUBJECT,
-							getResources().getString(R.string.app_name) + " Feedback");
-					startActivity(
-							Intent.createChooser(emailIntent, getResources().getString(R.string.about_contact_email)));
-				} else if (url != null) {
-					// open browser activity
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-					startActivity(browserIntent);
-				}
+			if (URL_VERSION.equals(url)) {
+				showNewsAlert(activity);
+			} else if (URL_3RDPARTY_LIBS.equals(url)) {
+				new MaterialDialog.Builder(activity).customView(R.layout.fragment_thirdparty_libs, true)
+						.positiveText(R.string.text_ok).build().show();
+			} else if (URL_3RDPARTY_ICONS.equals(url)) {
+				new MaterialDialog.Builder(activity).customView(R.layout.fragment_thirdparty_icons, true)
+						.positiveText(R.string.text_ok).build().show();
+			} else if (url != null && url.startsWith(URL_EMAIL)) {
+				// open email activity
+				Intent emailIntent = new Intent(Intent.ACTION_SEND);
+				emailIntent.setType("message/rfc822");
+				emailIntent.putExtra(Intent.EXTRA_EMAIL, url.replace(url, URL_EMAIL));
+				emailIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name) + " Feedback");
+				startActivity(
+						Intent.createChooser(emailIntent, getResources().getString(R.string.about_contact_email)));
+			} else if (url != null) {
+				// open browser activity
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				startActivity(browserIntent);
 			}
 		});
 	}

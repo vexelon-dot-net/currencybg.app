@@ -56,9 +56,10 @@ import net.vexelon.currencybg.app.db.DataSource;
 import net.vexelon.currencybg.app.db.DataSourceException;
 import net.vexelon.currencybg.app.db.SQLiteDataSource;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UiCodes;
 import net.vexelon.currencybg.app.ui.events.Notifications;
 import net.vexelon.currencybg.app.ui.events.NotificationsListener;
+import net.vexelon.currencybg.app.ui.filters.CurrenciesFilter;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 import net.vexelon.currencybg.app.utils.IOUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
@@ -68,8 +69,6 @@ import org.joda.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -124,11 +123,9 @@ public class AbstractFragment extends Fragment {
 		scrollView.addView(messagesView);
 
 		return new AlertDialog.Builder(context).setTitle(R.string.news_title)
-				.setPositiveButton(R.string.text_ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
+				.setPositiveButton(R.string.text_ok, (DialogInterface dialog, int which) -> {
+					dialog.dismiss();
+
 				}).setCancelable(false).setView(scrollView).show();
 	}
 
@@ -147,29 +144,25 @@ public class AbstractFragment extends Fragment {
 
 		return new AlertDialog.Builder(context)
 				.setTitle(getString(R.string.vote_invite_title, getString(R.string.app_name)))
-				.setNegativeButton(R.string.text_not_now, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						new AppSettings(context).setUserAppUses(0);
-					}
-				}).setPositiveButton(R.string.text_yes, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						final String appPackageName = getActivity().getPackageName();
-						try {
-							startActivity(
-									new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-						} catch (android.content.ActivityNotFoundException e) {
-							startActivity(new Intent(Intent.ACTION_VIEW,
-									Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
-						}
+				.setNegativeButton(R.string.text_not_now, (DialogInterface dialogInterface, int i) -> {
+					new AppSettings(context).setUserAppUses(0);
 
-						final AppSettings appSettings = new AppSettings(context);
-						appSettings.setUserAppUses(0);
-						appSettings.setUserVoted(true);
+				}).setPositiveButton(R.string.text_yes, (DialogInterface dialog, int which) -> {
+					final String appPackageName = getActivity().getPackageName();
 
-						dialog.dismiss();
+					try {
+						startActivity(
+								new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+					} catch (android.content.ActivityNotFoundException e) {
+						startActivity(new Intent(Intent.ACTION_VIEW,
+								Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
 					}
+
+					final AppSettings appSettings = new AppSettings(context);
+					appSettings.setUserAppUses(0);
+					appSettings.setUserVoted(true);
+
+					dialog.dismiss();
 				}).setCancelable(false).setView(scrollView).show();
 	}
 
@@ -191,11 +184,13 @@ public class AbstractFragment extends Fragment {
 		if (mMenu != null) {
 			MenuItem menuItem = mMenu.findItem(R.id.action_refresh);
 			if (menuItem != null) {
+
 				if (isRefreshing) {
 					menuItem.setActionView(isRefreshing ? R.layout.actionbar_indeterminate_progress : null);
 				} else {
 					menuItem.setActionView(null);
 				}
+
 			}
 		}
 	}
@@ -211,11 +206,8 @@ public class AbstractFragment extends Fragment {
 	 */
 	protected static List<CurrencyData> getSortedCurrencies(List<CurrencyData> currencies) {
 		// sort by code
-		Collections.sort(currencies, new Comparator<CurrencyData>() {
-			@Override
-			public int compare(CurrencyData lhs, CurrencyData rhs) {
-				return lhs.getCode().compareToIgnoreCase(rhs.getCode());
-			}
+		Collections.sort(currencies, (CurrencyData lhs, CurrencyData rhs) -> {
+			return lhs.getCode().compareToIgnoreCase(rhs.getCode());
 		});
 
 		return currencies;
@@ -297,8 +289,6 @@ public class AbstractFragment extends Fragment {
 	 * Fetches a table-alike mapping of currency codes and currencies for every
 	 * source found
 	 * 
-	 * @param currencies
-	 * @return
 	 */
 	public static Table<String, Sources, CurrencyData> getCurrenciesTable(List<CurrencyData> currencies) {
 		ImmutableTable.Builder<String, Sources, CurrencyData> builder = ImmutableTable.builder();
@@ -309,21 +299,48 @@ public class AbstractFragment extends Fragment {
 	}
 
 	/**
-	 * Removes currencies that should not be shown to users
-	 *
-	 * @param currencies
-	 * @return
+	 * Fetches a list of distinct by code {@link CurrencyData} objects.
+	 * 
+	 * @param sorted
+	 *            If {@code true}, sorts results by code name.
 	 */
-	public static List<CurrencyData> getVisibleCurrencies(List<CurrencyData> currencies) {
-		Iterator<CurrencyData> iterator = currencies.iterator();
-		while (iterator.hasNext()) {
-			CurrencyData c = iterator.next();
-			if (Defs.HIDDEN_CURRENCY_CODES.contains(c.getCode())) {
-				iterator.remove();
-			}
+	public static List<CurrencyData> getCurrenciesDistinct(List<CurrencyData> currencies, boolean sorted) {
+		List<CurrencyData> result = new ArrayList<>(new CurrenciesFilter(currencies).distinct().get());
+		return sorted ? getSortedCurrencies(result) : result;
+	}
+
+	/**
+	 * Removes currencies that should not be shown to users
+	 */
+	public static List<CurrencyData> getVisibleCurrencies(final Context context, List<CurrencyData> currencies) {
+		CurrenciesFilter filter = new CurrenciesFilter(Lists.newArrayList(currencies));
+
+		final AppSettings appSettings = new AppSettings(context);
+
+		switch (appSettings.getCurrenciesFilter()) {
+		case AppSettings.CURRENCY_FILTER_CRYPTO:
+			filter.removeHidden().crypto();
+			break;
+
+		case AppSettings.CURRENCY_FILTER_TOP6:
+			filter.removeHidden().top6();
+			break;
+
+		case AppSettings.CURRENCY_FILTER_TOP8:
+			filter.removeHidden().top8();
+			break;
+
+		case AppSettings.CURRENCY_FILTER_CUSTOM:
+			filter.removeHidden().custom(appSettings.getCurrenciesFilterCustom());
+			break;
+
+		case AppSettings.CURRENCY_FILTER_NONE:
+		default:
+			filter.removeHidden();
+			break;
 		}
 
-		return currencies;
+		return new ArrayList<>(filter.get());
 	}
 
 	/**
@@ -340,7 +357,8 @@ public class AbstractFragment extends Fragment {
 		for (CurrencyData c : currencies) {
 			CurrencyListRow row = map.get(c.getCode());
 			if (row == null) {
-				row = new CurrencyListRow(c.getCode(), UiCodes.getCurrencyName(context.getResources(), c.getCode()));
+				row = new CurrencyListRow(c.getCode(),
+						CurrencyCodes.getCurrencyName(context.getResources(), c.getCode()));
 				map.put(c.getCode(), row);
 			}
 			row.addColumn(Sources.valueOf(c.getSource()), c);

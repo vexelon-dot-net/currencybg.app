@@ -34,8 +34,8 @@ import net.vexelon.currencybg.app.Defs;
 import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UIUtils;
-import net.vexelon.currencybg.app.ui.UiCodes;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
+import net.vexelon.currencybg.app.ui.utils.CurrencyCodes;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 
 import java.math.BigDecimal;
@@ -56,6 +56,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 
 	public ConvertTargetListAdapter(Context context, int textViewResId, List<CurrencyData> items, int precisionMode) {
 		super(context, textViewResId, items);
+
 		this.items = items;
 		this.precisionMode = precisionMode;
 
@@ -73,11 +74,11 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.convert_target_row_layout, parent, false);
 
 			holder = new ViewHolder();
-			holder.icon = (ImageView) v.findViewById(R.id.target_icon);
-			holder.name = (TextView) v.findViewById(R.id.target_name);
-			holder.code = (TextView) v.findViewById(R.id.target_code);
-			holder.source = (TextView) v.findViewById(R.id.target_source);
-			holder.rate = (TextView) v.findViewById(R.id.target_rate);
+			holder.icon = v.findViewById(R.id.target_icon);
+			holder.name = v.findViewById(R.id.target_name);
+			holder.code = v.findViewById(R.id.target_code);
+			holder.source = v.findViewById(R.id.target_source);
+			holder.rate = v.findViewById(R.id.target_rate);
 
 			v.setTag(holder);
 		} else {
@@ -87,7 +88,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		CurrencyData row = items.get(position);
 
 		UIUtils.setFlagIcon(holder.icon, row.getCode());
-		holder.name.setText(UiCodes.getCurrencyName(getContext().getResources(), row.getCode()));
+		holder.name.setText(CurrencyCodes.getCurrencyName(getContext().getResources(), row.getCode()));
 		holder.code.setText(row.getCode());
 		holder.source.setText(Sources.getName(getContext(), row.getSource()));
 
@@ -153,8 +154,7 @@ public class ConvertTargetListAdapter extends ArrayAdapter<CurrencyData> {
 		BigDecimal amountOfBGN = NumberUtils.buyCurrency(amount, source.getBuy(), source.getRatio());
 
 		/*
-		 * Convert each destination currency from BGN (Sell Lev for target
-		 * currency)
+		 * Convert each destination currency from BGN (Sell Lev for target currency)
 		 */
 		bestValues.clear();
 

@@ -1,7 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:padding="4dp">
+              android:paddingBottom="8dp"
+              android:paddingLeft="4dp"
+              android:paddingRight="4dp"
+              android:paddingTop="8dp">
 
     <TextView
         android:id="@+id/wallet_header_code"
@@ -10,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="left"
-        android:text="@string/wallet_code"/>
+        android:text="@string/wallet_code"
+        android:textAllCaps="true"/>
 
     <TextView
         android:id="@+id/wallet_header_amount"
@@ -19,7 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.85"
         android:gravity="right"
-        android:text="@string/wallet_amount"/>
+        android:text="@string/wallet_amount"
+        android:textAllCaps="true"/>
 
     <TextView
         android:id="@+id/wallet_header_bought_at"
@@ -29,7 +34,8 @@
         android:layout_toRightOf="@+id/wallet_header_bought_on"
         android:layout_weight="0.65"
         android:gravity="right"
-        android:text="@string/wallet_bought_at"/>
+        android:text="@string/wallet_bought_at"
+        android:textAllCaps="true"/>
 
     <TextView
         android:id="@+id/wallet_header_bought_on"
@@ -40,7 +46,8 @@
         android:layout_toRightOf="@+id/wallet_header_amount"
         android:layout_weight="0.8"
         android:gravity="right"
-        android:text="@string/wallet_bought_on"/>
+        android:text="@string/wallet_bought_on"
+        android:textAllCaps="true"/>
 
     <TextView
         android:id="@+id/wallet_header_profit"
@@ -51,6 +58,7 @@
         android:layout_weight="1"
         android:gravity="right"
         android:paddingRight="2sp"
-        android:text="@string/wallet_profit"/>
+        android:text="@string/wallet_profit"
+        android:textAllCaps="true"/>
 
 </LinearLayout>

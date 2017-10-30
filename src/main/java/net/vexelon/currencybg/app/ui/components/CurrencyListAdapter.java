@@ -36,7 +36,7 @@ import net.vexelon.currencybg.app.R;
 import net.vexelon.currencybg.app.common.CurrencyListRow;
 import net.vexelon.currencybg.app.common.Sources;
 import net.vexelon.currencybg.app.db.models.CurrencyData;
-import net.vexelon.currencybg.app.ui.UIUtils;
+import net.vexelon.currencybg.app.ui.utils.UIUtils;
 import net.vexelon.currencybg.app.utils.NumberUtils;
 import net.vexelon.currencybg.app.utils.StringUtils;
 
@@ -58,13 +58,16 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 	/**
 	 * @param context
 	 * @param textViewResId
-	 * @param items         Currency rows
+	 * @param items
+	 *            Currency rows
 	 * @param precisionMode
-	 * @param rateBy        Show buy or sell values
-	 * @param sources       Sources to show currencies for
+	 * @param rateBy
+	 *            Show buy or sell values
+	 * @param sources
+	 *            Sources to show currencies for
 	 */
 	public CurrencyListAdapter(Context context, int textViewResId, List<CurrencyListRow> items, int precisionMode,
-	                           int rateBy, Set<Sources> sources) {
+			int rateBy, Set<Sources> sources) {
 		super(context, textViewResId, items);
 
 		this.itemsImmutable = Lists.newArrayList(items.iterator());
@@ -77,19 +80,19 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 	@Override
 	public View getView(final int position, View convertView, final ViewGroup parent) {
 		ViewHolder holder = null;
-		final int[] ids = {R.id.rate_src_1, R.id.rate_src_2, R.id.rate_src_3};
+		final int[] ids = { R.id.rate_src_1, R.id.rate_src_2, R.id.rate_src_3 };
 
 		View v = convertView;
 		if (v == null) {
 			v = LayoutInflater.from(getContext()).inflate(R.layout.currency_row_layout, parent, false);
 
 			holder = new ViewHolder();
-			holder.icon = (ImageView) v.findViewById(R.id.icon);
-			holder.name = (TextView) v.findViewById(R.id.name);
-			holder.code = (TextView) v.findViewById(R.id.code);
+			holder.icon = v.findViewById(R.id.icon);
+			holder.name = v.findViewById(R.id.name);
+			holder.code = v.findViewById(R.id.code);
 			holder.rates = new TextView[ids.length];
 			for (int i = 0; i < ids.length; i++) {
-				holder.rates[i] = (TextView) v.findViewById(ids[i]);
+				holder.rates[i] = v.findViewById(ids[i]);
 			}
 
 			v.setTag(holder);
@@ -111,11 +114,8 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			 *
 			 * @see http://stackoverflow.com/a/27595251
 			 */
-			v.findViewById(ids[i]).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					((ListView) parent).performItemClick(v, position, source.getID());
-				}
+			v.findViewById(ids[i]).setOnClickListener((View view) -> {
+				((ListView) parent).performItemClick(view, position, source.getID());
 			});
 
 			i += 1;
@@ -145,20 +145,19 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			BigDecimal rate = NumberUtils.divCurrency(new BigDecimal(value), new BigDecimal(currencyData.getRatio()));
 
 			switch (precisionMode) {
-				case AppSettings.PRECISION_ADVANCED:
-					String v = NumberUtils.getCurrencyFormat(rate, Defs.SCALE_SHOW_LONG, null);
-					return UIUtils.toHtmlColor(v, color);
-				// String first = v.substring(0, Math.min(v.length() - 3,
-				// v.length()));
-				// String second = v.substring(Math.min(v.length() - 3, v.length()),
-				// v.length());
-				// return UIUtils.toHtmlColor(first, color) + "<small>" + second +
-				// "</small>";
+			case AppSettings.PRECISION_ADVANCED:
+				String v = NumberUtils.getCurrencyFormat(rate, Defs.SCALE_SHOW_LONG, null);
+				return UIUtils.toHtmlColor(v, color);
+			// String first = v.substring(0, Math.min(v.length() - 3,
+			// v.length()));
+			// String second = v.substring(Math.min(v.length() - 3, v.length()),
+			// v.length());
+			// return UIUtils.toHtmlColor(first, color) + "<small>" + second +
+			// "</small>";
 
-				case AppSettings.PRECISION_SIMPLE:
-				default:
-					return UIUtils.toHtmlColor(NumberUtils.getCurrencyFormat(rate, Defs.SCALE_SHOW_SHORT, null),
-							color);
+			case AppSettings.PRECISION_SIMPLE:
+			default:
+				return UIUtils.toHtmlColor(NumberUtils.getCurrencyFormat(rate, Defs.SCALE_SHOW_SHORT, null), color);
 			}
 		}
 
@@ -200,20 +199,20 @@ public class CurrencyListAdapter extends ArrayAdapter<CurrencyListRow> {
 			@Override
 			public int compare(CurrencyListRow lhs, CurrencyListRow rhs) {
 				switch (sortBy) {
-					case AppSettings.SORTBY_CODE:
-						if (sortByAscending) {
-							return lhs.getCode().compareToIgnoreCase(rhs.getCode());
-						}
-						return rhs.getCode().compareToIgnoreCase(lhs.getCode());
+				case AppSettings.SORTBY_CODE:
+					if (sortByAscending) {
+						return lhs.getCode().compareToIgnoreCase(rhs.getCode());
+					}
+					return rhs.getCode().compareToIgnoreCase(lhs.getCode());
 
-					case AppSettings.SORTBY_NAME:
-					default:
-						if (sortByAscending) {
-							return StringUtils.emptyIfNull(lhs.getName())
-									.compareToIgnoreCase(StringUtils.emptyIfNull(rhs.getName()));
-						}
-						return StringUtils.emptyIfNull(rhs.getName())
-								.compareToIgnoreCase(StringUtils.emptyIfNull(lhs.getName()));
+				case AppSettings.SORTBY_NAME:
+				default:
+					if (sortByAscending) {
+						return StringUtils.emptyIfNull(lhs.getName())
+								.compareToIgnoreCase(StringUtils.emptyIfNull(rhs.getName()));
+					}
+					return StringUtils.emptyIfNull(rhs.getName())
+							.compareToIgnoreCase(StringUtils.emptyIfNull(lhs.getName()));
 				}
 			}
 		});
