@@ -49,8 +49,8 @@ android {
         applicationId 'net.vexelon.currencybg.app'
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 3201
-        versionName "3.2.1"
+        versionCode 4000
+        versionName "4.0.0"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -81,6 +81,9 @@ android {
         }
     }
     buildTypes {
+        debug {
+            dexOptions.preDexLibraries = false
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-project.txt'
