@@ -111,7 +111,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 
 	@Override
 	public void onResume() {
-		new ReloadRatesTask(getActivity(), this, false).execute();
+		reloadCurrencies(getActivity(), false, true);
 		super.onResume();
 	}
 
@@ -244,7 +244,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 
 								showSnackbar(getResources().getString(R.string.action_filter_desc, text));
 
-								reloadCurrencies(activity, false, true);
+								updateCurrenciesListView(activity, rates);
 								return true;
 
 							case CUSTOM_INDEX: // AppSettings.CURRENCY_FILTER_CUSTOM
@@ -289,7 +289,7 @@ public class CurrenciesFragment extends AbstractFragment implements LoadListener
 						showSnackbar(getResources().getString(R.string.action_filter_desc,
 								getResources().getString(R.string.action_filter_custom)));
 
-						reloadCurrencies(activity, false, true);
+						updateCurrenciesListView(activity, rates);
 					}
 				}).build();
 	}
