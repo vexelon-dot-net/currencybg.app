@@ -2,12 +2,20 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">321</integer>
+    <integer name="news_last">400</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
 
         <item><![CDATA[
+<b><font color="#ffffff">4.0.0</font></b>
+<br><br>
+&emsp; - We added currency filters. Go to the Currencies view and select only the currencies you are interested in.
+<br>
+&emsp; - We added new crypto currency sources - Cryptobank, Bitcoinhouse and xChange.bg.
+<br>
+&emsp; - Small but cool user interface improvements, as well as internal optimizations and improvements.
+<br><br>
 <b><font color="#ffffff">3.2.1</font></b>
 <br><br>
 &emsp; - We fixed an issue with the currencies not being downloaded by the app\'s background service.
