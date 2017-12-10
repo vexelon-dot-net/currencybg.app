@@ -5,12 +5,12 @@ Currency BG Changes
 
 ### EN
   * We added currency filters. You may now select and see only the currencies you are interested in.
-  * We added new crypto currency sources - Cryptobank, Bitcoinhouse and xChange.bg.
+  * We added new crypto currency sources - Cryptobank, BitcoinsHouse and xChange.bg.
   * Small but cool user interface improvements, as well as internal optimizations and improvements.
 
 ### BG
   * Добавихме филтър на валути. Вече можете да избирате да се показват само валутите, от които се интересувате.
-  * Добавихме следните нови източници на криптовалути - Cryptobank, Bitcoinhouse и xChange.bg.
+  * Добавихме следните нови източници на криптовалути - Cryptobank, BitcoinsHouse и xChange.bg.
   * Направихме малки подобрения в интерфейса на приложението, както и още много вътрешни оптимизации и подобрения.
 
 
