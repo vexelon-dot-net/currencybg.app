@@ -48,7 +48,8 @@ public enum Sources {
 	FOREXHOUSE(900),
 	ALLIANZ(1000),
 	CRYPTOBANK(1100),
-	BITCOINSHOUSE(1200);
+	BITCOINSHOUSE(1200),
+	XCHANGE(1300);
 
 	private int id;
 	private boolean enabled;
@@ -103,6 +104,7 @@ public enum Sources {
 			case CRYPTO:
 			case CRYPTOBANK:
 			case BITCOINSHOUSE:
+			case XCHANGE:
 				list.push(source);
 				break;
 			default:
