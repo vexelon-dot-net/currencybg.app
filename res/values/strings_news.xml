@@ -2,12 +2,18 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">400</integer>
+    <integer name="news_last">401</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
 
         <item><![CDATA[
+<b><font color="#ffffff">4.0.1</font></b>
+<br><br>
+&emsp; - Add missing currency tokens to crypto currencies filter.
+<br>
+&emsp; - Add BGN selection to the convert fragment when a filter was already set.
+<br><br>
 <b><font color="#ffffff">4.0.0</font></b>
 <br><br>
 &emsp; - We added currency filters. Go to the Currencies view and select only the currencies you are interested in.
