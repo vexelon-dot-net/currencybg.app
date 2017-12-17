@@ -15,10 +15,11 @@ public class CurrenciesFilter implements Filter<CurrencyData> {
 	// Codes of currencies we don't show at the moment
 	private static final List<String> HIDDEN = Lists.newArrayList("SBP", "MAD");
 
-	private static final List<String> CRYPTO = Lists.newArrayList("BTC", "BCH", "ETH", "DASH", "DOGE", "LTC", "RIP",
-			"ZEC");
-	private static final List<String> TOP6 = Lists.newArrayList("USD", "EUR", "JPY", "GBP", "CHF", "CAD");
-	private static final List<String> TOP8 = Lists.newArrayList("USD", "EUR", "JPY", "GBP", "CHF", "CAD", "AUD", "ZAR");
+	private static final List<String> CRYPTO = Lists.newArrayList("BGN", "BTC", "BCH", "ETH", "DASH", "DOGE", "LTC",
+			"RIP", "ZEC");
+	private static final List<String> TOP6 = Lists.newArrayList("BGN", "USD", "EUR", "JPY", "GBP", "CHF", "CAD");
+	private static final List<String> TOP8 = Lists.newArrayList("BGN", "USD", "EUR", "JPY", "GBP", "CHF", "CAD", "AUD",
+			"ZAR");
 
 	private Collection<CurrencyData> currencies;
 
