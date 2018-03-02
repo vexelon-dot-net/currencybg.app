@@ -2,12 +2,16 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">401</integer>
+    <integer name="news_last">410</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
 
         <item><![CDATA[
+<b><font color="#ffffff">4.1.0</font></b>
+<br><br>
+&emsp; - Added Altcoins currency exchange source.
+<br><br>
 <b><font color="#ffffff">4.0.1</font></b>
 <br><br>
 &emsp; - Add missing currency tokens to crypto currencies filter.
