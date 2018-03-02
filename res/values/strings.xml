@@ -110,6 +110,7 @@
     <string name="source_cryptobank">CryptoBank</string>
     <string name="source_bitcoinshouse">BitcoinsHouse</string>
     <string name="source_xchangebg">xChange.bg</string>
+    <string name="source_altcoins">Altcoins</string>
     <string name="source_tavex_full">Tavex Bulgaria</string>
     <string name="source_polana_full">"POLANA 1" OOD</string>
     <string name="source_fib_full">First Investment Bank</string>
@@ -123,6 +124,7 @@
     <string name="source_cryptobank_full">Cryptobank Bulgaria</string>
     <string name="source_bitcoinshouse_full">BitcoinsHouse Bulgaria</string>
     <string name="source_xchangebg_full">GLOBAL EXCHANGE OOD</string>
+    <string name="source_altcoins_full">Altcoins.bg</string>
 
     <string name="action_sources">Sources</string>
     <string name="action_sources_title">Show currency rates for</string>

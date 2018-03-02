@@ -19,10 +19,9 @@ package net.vexelon.currencybg.app.common;
 
 import android.content.Context;
 
-import com.google.common.collect.Queues;
-
 import net.vexelon.currencybg.app.R;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
 
@@ -49,7 +48,8 @@ public enum Sources {
 	ALLIANZ(1000),
 	CRYPTOBANK(1100),
 	BITCOINSHOUSE(1200),
-	XCHANGE(1300);
+	XCHANGE(1300),
+	ALTCOINS(1400);
 
 	private int id;
 	private boolean enabled;
@@ -98,20 +98,21 @@ public enum Sources {
 	}
 
 	public static Collection<Sources> getSorted() {
-		Deque<Sources> list = Queues.newArrayDeque();
+		Deque<Sources> result = new ArrayDeque<>();
 		for (Sources source : Sources.values()) {
 			switch (source) {
 			case CRYPTO:
 			case CRYPTOBANK:
 			case BITCOINSHOUSE:
 			case XCHANGE:
-				list.push(source);
+			case ALTCOINS:
+				result.push(source);
 				break;
 			default:
-				list.add(source);
+				result.add(source);
 			}
 		}
-		return list;
+		return result;
 	}
 
 	private static String getResource(Context context, int id, int resId) {
