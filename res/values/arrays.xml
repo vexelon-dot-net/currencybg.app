@@ -37,6 +37,7 @@
         <item>@string/source_cryptobank</item>
         <item>@string/source_bitcoinshouse</item>
         <item>@string/source_xchangebg</item>
+        <item>@string/source_altcoins</item>
     </string-array>
     <string-array name="currency_sources_full">
         <item>@string/source_tavex_full</item>
@@ -52,6 +53,7 @@
         <item>@string/source_cryptobank_full</item>
         <item>@string/source_bitcoinshouse_full</item>
         <item>@string/source_xchangebg_full</item>
+        <item>@string/source_altcoins_full</item>
     </string-array>
     <string-array name="currency_sources_web">
         <item>https://tavex.bg</item>
@@ -67,6 +69,7 @@
         <item>https://cryptobank.bg</item>
         <item>http://www.bitcoinshouse.com</item>
         <item>https://www.xchange.bg</item>
+        <item>https://www.altcoins.bg</item>
     </string-array>
     <integer-array name="currency_sources_ids">
         <item>200</item>
@@ -82,6 +85,7 @@
         <item>1100</item>
         <item>1200</item>
         <item>1300</item>
+        <item>1400</item>
     </integer-array>
     <string-array name="currency_codes">
         <item>AED</item>
@@ -106,6 +110,7 @@
         <item>DOP</item>
         <item>EEK</item>
         <item>EGP</item>
+        <item>ETC</item>
         <item>ETH</item>
         <item>EUR</item>
         <item>GEL</item>
@@ -146,6 +151,8 @@
         <item>UAH</item>
         <item>USD</item>
         <item>VND</item>
+        <item>XLM</item>
+        <item>XMR</item>
         <item>XRP</item>
         <item>ZAR</item>
         <item>ZEC</item>
@@ -173,6 +180,7 @@
         <item>Dominican Peso</item>
         <item>Estonian Kroon</item>
         <item>Egyptian Pound</item>
+        <item>Ethereum Classic</item>
         <item>Ethereum</item>
         <item>Euro</item>
         <item>Georgian Lari</item>
@@ -213,6 +221,8 @@
         <item>Ukrainian Hryvnia</item>
         <item>United States Dollar</item>
         <item>Vietnamese Dong</item>
+        <item>Stellar</item>
+        <item>Monero</item>
         <item>Ripple</item>
         <item>South African Rand</item>
         <item>Zcash</item>

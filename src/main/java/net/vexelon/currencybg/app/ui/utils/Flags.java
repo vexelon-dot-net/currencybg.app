@@ -88,11 +88,14 @@ public final class Flags {
 		flagsMap.put("il", R.drawable.ils);
 		// crypto currencies
 		flagsMap.put("bch", R.drawable.bch);
+		flagsMap.put("etc", R.drawable.etc);
 		flagsMap.put("eth", R.drawable.eth);
 		flagsMap.put("das", R.drawable.das);
 		flagsMap.put("dog", R.drawable.dog);
 		flagsMap.put("ltc", R.drawable.ltc);
 		flagsMap.put("rip", R.drawable.rip);
+		flagsMap.put("xlm", R.drawable.xlm);
+		flagsMap.put("xmr", R.drawable.xmr);
 		flagsMap.put("zec", R.drawable.zec);
 	}
 

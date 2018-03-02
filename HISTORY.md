@@ -1,6 +1,19 @@
 Currency BG Changes
 ===================
 
+## 4.1.0
+
+### EN
+  * Added Altcoins currency exchange source.
+  * Add missing currency tokens to crypto currencies filter.
+  * Add BGN selection to the convert fragment when a filter was already set.
+
+### BG
+  * Добавени нови източници - Altcoins.
+  * Добавени липсващи крипто валути към крипто филтъра.
+  * Отстранен проблем с избор на BGN при конвертиране, когато вече е заложен филтър.
+
+
 ## 4.0.0
 
 ### EN
