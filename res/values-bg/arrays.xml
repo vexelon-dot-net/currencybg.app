@@ -6,7 +6,7 @@
         <item>Аржентинско Песо</item>
         <item>Австралийски Долар</item>
         <item>Конвертабилна Марка на Босна и Херцеговина</item>
-        <item>Bitcoin Cash</item>
+        <item>Биткойн Кеш</item>
         <item>Български Лев</item>
         <item>Бразилски Реал</item>
         <item>Биткойн</item>
@@ -17,12 +17,13 @@
         <item>Китайски Юан (офшорен)</item>
         <item>Китайски Юан</item>
         <item>Чешка Крона</item>
-        <item>Dash</item>
+        <item>Даш</item>
         <item>Датска Крона</item>
         <item>Dogecoin</item>
         <item>Доминиканско Песо</item>
         <item>Естонска Крона</item>
         <item>Египетска Лира</item>
+        <item>Етериум Класик</item>
         <item>Етериум</item>
         <item>Евро</item>
         <item>Грузинско Лари</item>
@@ -38,7 +39,7 @@
         <item>Японска Йена</item>
         <item>Кенийски Шилинг</item>
         <item>Южнокорейски Вон</item>
-        <item>Litecoin</item>
+        <item>Лайткоин</item>
         <item>Литовски Литас</item>
         <item>Латвийски Лат</item>
         <item>Молдовска Лея</item>
@@ -63,8 +64,10 @@
         <item>Украинска Гривна</item>
         <item>Щатски Долар</item>
         <item>Виетнамски Донг</item>
-        <item>Ripple</item>
+        <item>Стелар</item>
+        <item>Монеро</item>
+        <item>Рипъл</item>
         <item>Южноафрикански Ранд</item>
-        <item>Zcash</item>
+        <item>Зи Кеш</item>
     </string-array>
 </resources>
