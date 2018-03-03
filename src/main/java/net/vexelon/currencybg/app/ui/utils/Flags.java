@@ -93,7 +93,7 @@ public final class Flags {
 		flagsMap.put("das", R.drawable.das);
 		flagsMap.put("dog", R.drawable.dog);
 		flagsMap.put("ltc", R.drawable.ltc);
-		flagsMap.put("rip", R.drawable.rip);
+		flagsMap.put("xrp", R.drawable.xrp);
 		flagsMap.put("xlm", R.drawable.xlm);
 		flagsMap.put("xmr", R.drawable.xmr);
 		flagsMap.put("zec", R.drawable.zec);

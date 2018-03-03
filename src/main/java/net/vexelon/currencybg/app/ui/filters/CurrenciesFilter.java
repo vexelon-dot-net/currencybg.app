@@ -16,7 +16,7 @@ public class CurrenciesFilter implements Filter<CurrencyData> {
 	private static final List<String> HIDDEN = Lists.newArrayList("SBP", "MAD");
 
 	private static final List<String> CRYPTO = Lists.newArrayList("BGN", "BTC", "BCH", "ETC", "ETH", "DASH", "DOGE",
-			"LTC", "RIP", "XLM", "XMR", "ZEC");
+			"LTC", "XRP", "XLM", "XMR", "ZEC");
 	private static final List<String> TOP6 = Lists.newArrayList("BGN", "USD", "EUR", "JPY", "GBP", "CHF", "CAD");
 	private static final List<String> TOP8 = Lists.newArrayList("BGN", "USD", "EUR", "JPY", "GBP", "CHF", "CAD", "AUD",
 			"ZAR");

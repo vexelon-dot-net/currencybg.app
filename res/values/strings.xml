@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <string name="copyright"><![CDATA[
-    Copyright &copy; 2017 Vexelon Microservices]]></string>
+    Copyright &copy; 2018 Vexelon Microservices]]></string>
 
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
