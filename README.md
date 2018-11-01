@@ -9,19 +9,21 @@ Currency BG
 
 **Currency BG** is an Android application that delivers up-to-date currency exchange rates for Bulgarian Lev (BGN).
 
+**Currency BG** ist eine Android-App, die aktuelle Wechselkurse für den Bulgarischen Lew (BGN) liefert.
+
   * Runs on Android `4.4` or later
 
 # Contributing
 
-Докладвайте бъгове или добавете своите предложения и идеи на дъската с [Issues](https://github.com/vexelon-dot-net/currencybg.app/issues). Ако сте кодер, просто направете fork на репото и отворете [pull requests](https://github.com/vexelon-dot-net/currencybg.app/pulls).
+Докладвайте бъгове или добавете своите предложения и идеи на [Issues](https://github.com/vexelon-dot-net/currencybg.app/issues) дъската.
 
-Please log feature requests or bug reports using the [Issues Board](https://github.com/vexelon-dot-net/currencybg.app/issues) or fork this repository and contribute back by sending [pull requests](https://github.com/vexelon-dot-net/currencybg.app/pulls).
+Use the [Issues](https://github.com/vexelon-dot-net/currencybg.app/issues) board to report bugs or open feature requests.
 
 ## Development
 
 Get [Android Studio](https://developer.android.com/studio).
 
-Install SDK `API 26` to be able to build the project.
+Install SDK `API 28` to be able to build the project.
 
 Create a `gradle.properties` file and fill in the signing-certificate properties.
 Use `tools/gradle.properties.tpl` as template.
