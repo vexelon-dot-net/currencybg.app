@@ -5,6 +5,14 @@
     <string name="news_messages">
 
         <item><![CDATA[
+<b><font color="#ffffff">4.2.0</font></b>
+<br><br>
+&emsp; - Добавен превод на приложението на немски език.
+<br>
+&emsp; - Премахнат източник Криптобанк. Криптобанк биват закупени от Altcoins.
+<br>
+&emsp; - Малки оптимизации в посока стабилност.
+<br><br>
 <b><font color="#ffffff">4.1.0</font></b>
 <br><br>
 &emsp; - Добавени нови източници - Altcoins.
