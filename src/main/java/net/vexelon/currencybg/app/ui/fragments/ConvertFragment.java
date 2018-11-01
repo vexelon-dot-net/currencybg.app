@@ -21,8 +21,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,6 +32,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -65,6 +68,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 	private Spinner spinnerSourceCurrency;
 	private TextView sourceValueView;
 	private ListView targetCurrenciesView;
+	private int prevTargetViewItem;
 	private FloatingActionButton actionButton;
 
 	private List<CurrencyData> currencies = Lists.newArrayList();
@@ -186,9 +190,30 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 		});
 
 		actionButton = view.findViewById(R.id.fab_convert);
-		// actionButton.attachToListView(targetCurrenciesView);
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			setActionButtonOnScroll();
+		}
 		actionButton.setOnClickListener((View v) -> {
 			newAddTargetCurrencyDialog().show();
+		});
+	}
+
+	@RequiresApi(Build.VERSION_CODES.M)
+	private void setActionButtonOnScroll() {
+		targetCurrenciesView.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if (firstVisibleItem > prevTargetViewItem) {
+					actionButton.hide(true);
+				} else if (firstVisibleItem < prevTargetViewItem) {
+					actionButton.show(true);
+				}
+				prevTargetViewItem = firstVisibleItem;
+			}
 		});
 	}
 
