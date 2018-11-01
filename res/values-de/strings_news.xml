@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Increment when releasing a new version -->
-    <integer name="news_last">420</integer>
-
-    <string name="news_title">What\'s new?</string>
+    <string name="news_title">Änderungen &amp; Neuerungen</string>
     <string name="news_messages">
 
         <item><![CDATA[
 <b><font color="#ffffff">4.2.0</font></b>
 <br><br>
-&emsp; - App is now available in german language.
+&emsp; - Deutsche Sprachübersetzungen hinzugefügt.
 <br>
-&emsp; - Removed Cryptobank. It was bought by Altcoins.
+&emsp; - Cryptobank entfernt. Es wurde von Altcoins gekauft.
 <br>
-&emsp; - Minor stability fixes.
+&emsp; - Kleine Stabilitätskorrekturen.
 <br><br>
 <b><font color="#ffffff">4.1.0</font></b>
 <br><br>
