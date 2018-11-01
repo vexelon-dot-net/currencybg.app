@@ -1,6 +1,19 @@
 Currency BG Changes
 ===================
 
+## 4.2.0
+
+### EN
+  * App is now available in german language.
+  * Removed Cryptobank. It was bought by Altcoins.
+  * Minor stability fixes.
+
+### BG
+   * Добавен превод на приложението на немски език.
+   * Премахнат източник Криптобанк. Криптобанк биват закупени от Altcoins.
+   * Малки оптимизации в посока стабилност.
+
+
 ## 4.1.0
 
 ### EN
