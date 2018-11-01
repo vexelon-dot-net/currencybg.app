@@ -46,7 +46,7 @@ public enum Sources {
 	CHANGEPARTNER(800),
 	FOREXHOUSE(900),
 	ALLIANZ(1000),
-	CRYPTOBANK(1100),
+	// CRYPTOBANK(1100), // deprecated
 	BITCOINSHOUSE(1200),
 	XCHANGE(1300),
 	ALTCOINS(1400);
@@ -102,7 +102,7 @@ public enum Sources {
 		for (Sources source : Sources.values()) {
 			switch (source) {
 			case CRYPTO:
-			case CRYPTOBANK:
+				// case CRYPTOBANK:
 			case BITCOINSHOUSE:
 			case XCHANGE:
 			case ALTCOINS:
