@@ -35,11 +35,11 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.melnykov.fab.FloatingActionButton;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -129,7 +129,7 @@ public class WalletFragment extends AbstractFragment
 
 		// add button
 		FloatingActionButton action = view.findViewById(R.id.fab_wallet_entry);
-		action.attachToListView(walletListView);
+		// action.attachToListView(walletListView);
 		action.setOnClickListener((View v) -> {
 			newAddWalletEntryDialog().show();
 		});

@@ -37,10 +37,10 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.melnykov.fab.FloatingActionButton;
 
 import net.vexelon.currencybg.app.AppSettings;
 import net.vexelon.currencybg.app.Defs;
@@ -116,7 +116,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 			new UpdateRatesTask(getActivity(), this, false).execute();
 
 			// bring back select button
-			actionButton.show();
+			actionButton.show(true);
 
 			return true;
 
@@ -186,7 +186,7 @@ public class ConvertFragment extends AbstractFragment implements LoadListener<Li
 		});
 
 		actionButton = view.findViewById(R.id.fab_convert);
-		actionButton.attachToListView(targetCurrenciesView);
+		// actionButton.attachToListView(targetCurrenciesView);
 		actionButton.setOnClickListener((View v) -> {
 			newAddTargetCurrencyDialog().show();
 		});

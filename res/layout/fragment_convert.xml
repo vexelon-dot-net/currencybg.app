@@ -32,8 +32,8 @@
             android:gravity="right"
             android:lines="1"
             android:padding="4sp"
-            android:paddingBottom="10sp"
             android:paddingTop="10sp"
+            android:paddingBottom="10sp"
             android:text="0.00"/>
 
         <!--<EditText-->
@@ -73,7 +73,7 @@
             android:layout_height="match_parent"
             android:headerDividersEnabled="false"/>
 
-        <com.melnykov.fab.FloatingActionButton
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_convert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -83,8 +83,8 @@
             fab:fab_colorNormal="@color/float_accent"
             fab:fab_colorPressed="@color/float_accent_pressed"
             fab:fab_colorRipple="@color/float_ripple"
-            fab:fab_shadow="true"
-            fab:fab_type="normal"/>
+            fab:fab_showShadow="true"
+            fab:fab_size="normal"/>
 
     </FrameLayout>
 
