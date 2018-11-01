@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="currency_names">
+        <item>VAE Dirham</item>
+        <item>Albanien Lek</item>
+        <item>Argentinischer Peso</item>
+        <item>Australischer Dollar</item>
+        <item>Bosnien und Herzegowina Konvertible Mark</item>
+        <item>Bitcoin Cash</item>
+        <item>Bulgarien	Lew</item>
+        <item>Brasilianischer Real</item>
+        <item>Bitcoin</item>
+        <item>Weißrussischer Rubel</item>
+        <item>Weißrussischer Rubel</item>
+        <item>Kanadischer Dollar</item>
+        <item>Schweizer Franken</item>
+        <item>China Renminbi Yuan</item>
+        <item>China Renminbi Yuan (offshore)</item>
+        <item>Tschechische Krone</item>
+        <item>Dash</item>
+        <item>Dänische Krone</item>
+        <item>Dogecoin</item>
+        <item>Dominikanischer Peso</item>
+        <item>Estnische Krone</item>
+        <item>Ägyptisches Pfund</item>
+        <item>Ethereum Classic</item>
+        <item>Ethereum</item>
+        <item>Euro</item>
+        <item>Georgien Lari</item>
+        <item>Pfund Sterling</item>
+        <item>Hongkong-Dollar</item>
+        <item>Kroatische Kuna</item>
+        <item>Ungarischer Forint</item>
+        <item>Indonesische Rupiah</item>
+        <item>Indische Rupie</item>
+        <item>Israelischer Neuer Schekel</item>
+        <item>Isländische Krone</item>
+        <item>Jordanischer Dinar</item>
+        <item>Yen</item>
+        <item>Kenia-Schilling</item>
+        <item>Südkoreanischer Won</item>
+        <item>Litecoin</item>
+        <item>Litauische Litas</item>
+        <item>Lettische Lats</item>
+        <item>Moldawischer Leu</item>
+        <item>Mazedonischer Denar</item>
+        <item>Mauritius-Rupie</item>
+        <item>Mexikanischer Peso</item>
+        <item>Malaysia Ringgit</item>
+        <item>Norwegische Krone</item>
+        <item>Neuseeland-Dollar</item>
+        <item>Philippinischer Peso</item>
+        <item>Polnische Zloty</item>
+        <item>Katar-Riyal</item>
+        <item>Rumänischer Leu</item>
+        <item>Serbischer Dinar</item>
+        <item>Russischer Rubel</item>
+        <item>Saudi-Rial</item>
+        <item>Schwedische Krone</item>
+        <item>Singapur-Dollar</item>
+        <item>Thailändischer Baht</item>
+        <item>Türkische Neue Lira</item>
+        <item>Taiwan-Dollar</item>
+        <item>Ukrainische Hrywna</item>
+        <item>US-Dollar</item>
+        <item>Vietnamesischer Dong</item>
+        <item>Stellar</item>
+        <item>Monero</item>
+        <item>Ripple</item>
+        <item>Südafrikanischer Rand</item>
+        <item>Zcash</item>
+    </string-array>
+</resources>
