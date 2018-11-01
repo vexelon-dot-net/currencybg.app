@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="text_ok">OK</string>
+    <string name="text_cancel">Abbrechen</string>
+    <string name="text_yes">Ja</string>
+    <string name="text_not_now">Noch nicht</string>
+    <string name="text_pick_date">Datum auswählen</string>
+    <string name="text_pick_time">Zeit auswählen</string>
+    <string name="text_enabled">Aktiviert</string>
+    <string name="text_disabled">Deaktiviert</string>
+    <string name="text_n_days">%1$s Tage</string>
+    <string name="text_code">Code</string>
+    <string name="text_source">Quelle</string>
+    <string name="text_converted">Umgerechnet</string>
+
+    <string name="drawer_open">Navigation öffnen</string>
+    <string name="drawer_close">Navigation schließen</string>
+
+    <string name="app_name">Currency BG</string>
+    <string name="last_update">Zuletzt aktualisiert</string>
+    <string name="last_update_updating_text">Wird herunterladen ...</string>
+    <string name="last_update_reloading_text">Nachladen ...</string>
+
+    <string name="error_download_rates">Fehlgeschlagene Download-Quoten.</string>
+    <string name="error_parse_rates">Fehlgeschlagene Parsing-Wechselkurse!</string>
+    <string name="error_db_load">Fehlgeschlagenes Lesen von db!</string>
+    <string name="error_db_save">Speichern in db fehlgeschlagen!</string>
+    <string name="error_db_remove">Fehler beim Entfernen von db!</string>
+    <string name="error_sources_selection">Es ist mindestens eine Quellenauswahl erforderlich!</string>
+    <string name="error_sources_selection_max">Es können nur 3 Quellen gleichzeitig ausgewählt werden!</string>
+    <string name="error_maintenance">Server heruntergefahren für Wartungsarbeiten! Versuche es später noch einmal.</string>
+    <string name="error_no_entries">Keine neuen Währungseinträge.</string>
+    <string name="error_add_wallet_entry">Fehlende oder falsche Felddaten!</string>
+    <string name="error_convert_empty">Fehlende umgerechnete Währungen.</string>
+
+    <string name="vote_invite_title">%1$s bewerten</string>
+    <string name="vote_invite_content"><![CDATA[
+    Wir haben bemerkt, dass Du <b>%1$s</b> ziemlich oft benutzt und das ist einfach fantastisch!<br><br>Würdest Du gerne für die App stimmen und uns etwas Feedback im Play Store hinterlassen?]]></string>
+
+    <string name="about_changelog">Letzte Änderungen</string>
+    <string name="about_license">GNU Lizenz v3.0</string>
+    <string name="about_issue_appdev">Einen Fehler melden</string>
+    <string name="about_issue_appdev_text">Hast Du einen Fehler gefunden oder Du hast eine Feature-Anfrage? Melde sie hier</string>
+    <string name="about_join_appdev_authors">Entwickler</string>
+    <string name="about_join_appdev">Schreibst Du Code? Sende uns Deine Pull-Anfragen!</string>
+    <string name="about_logo">Logo-Symbol</string>
+    <string name="about_3rdparty_icons">Drittanbieter Icons</string>
+    <string name="about_3rdparty">Drittanbieter Bibliotheken</string>
+    <string name="about_fb">Folge uns auf Facebook</string>
+    <string name="about_twitter">Folge uns auf Twitter</string>
+    <string name="about_contact">Kontakt</string>
+    <string name="about_contact_email">Sende uns eine E-Mail</string>
+    <string name="drawer_menu_currencies">Wechselkurse</string>
+    <string name="drawer_menu_convert">Währungsumrechnung</string>
+    <string name="drawer_menu_wallet">Wallet</string>
+    <string name="drawer_menu_exchanges">Währungsumtausch Büros</string>
+    <string name="hint_currency_remove">Tippen und halten diese Taste, um sie zu entfernen.</string>
+    <string name="buy">Kaufen</string>
+    <string name="sell">Verkaufen</string>
+    <string name="action_clear">Löschen</string>
+    <string name="action_refresh">Neuladen</string>
+    <string name="action_addcurrency">Währung hinzufügen</string>
+    <string name="action_currency_added">%1$s hinzufügt</string>
+    <string name="action_currency_removed">%1$s entfernt</string>
+    <string name="action_wallet_removed">%1$s entfernt</string>
+    <string name="action_addwalletentry">Wallet Eintrag hinzufügen</string>
+    <string name="action_currency_details">%1$s für %2$s</string>
+    <string name="action_rate">Kursen</string>
+    <string name="action_rate_title">Kursen anzeigen für</string>
+    <string name="action_rate_buy_desc">Kurse Kaufen</string>
+    <string name="action_rate_sell_desc">Kurse Verkaufen</string>
+    <string name="action_sort">Sortieren</string>
+    <string name="action_sort_title">Sortierungsrichtung</string>
+    <string name="action_filter_title">Filter auswählen</string>
+    <string name="action_filter_none">Kein Filter</string>
+    <string name="action_filter_crypto">Kryptowährungen</string>
+    <string name="action_filter_top8">Топ 8 gehandelten</string>
+    <string name="action_filter_custom">Personalisiert</string>
+    <string name="action_filter_desc">%1$s selektiert</string>
+    <string name="action_share">Teilen</string>
+    <string name="action_share_footer">Erhalte die neuesten bulgarischen Lew-Kurse mit Currency BG - %1$s</string>
+    <string name="text_share_convert">Preise für die Umrechnung von %1$s.</string>
+    <string name="text_rates_details"><![CDATA[
+    Heruntergeladene <b>%1$s</b> Wechselkurse der letzten 3 Tage.]]></string>
+
+    <string name="action_sources">Quellen</string>
+    <string name="action_sources_title">Währungskurse anzeigen für</string>
+    <string name="action_sources_desc">Währungskurse anzeigen für %1$s</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="prefs_title">Currency BG Einstellungen</string>
+    <string name="pref_value_update">Aktualisiert: %1$s</string>
+    <string name="pref_precision_name_simple">Einfache</string>
+    <string name="pref_precision_name_advanced">Erweiterte</string>
+    <string name="pref_precision_title">Präzision der Währungen</string>
+    <string name="pref_precision_summary">Präzision bei der Anzeige von Wechselkursen</string>
+    <string name="pref_rateus_title">Diese App bewerten</string>
+    <string name="pref_rateus_summary">Unterstütze uns, indem Du diese App bewertest</string>
+    <string name="pref_wifi_only_title">Nur Wi-Fi Downloads im Hintergrund</string>
+    <string name="pref_wifi_only_summary">Downloads in Hintergrundwährung werden nur über Wi-Fi-Verbindungen möglich</string>
+
+    <string name="wallet_code">Währung</string>
+    <string name="wallet_amount">Betrag</string>
+    <string name="wallet_amount_hint">Geldbetrag der gekauften Währung</string>
+    <string name="wallet_bought_on">Datum</string>
+    <string name="wallet_bought_on_hint">Datum des Asset</string>
+    <string name="wallet_bought_at">Kurs</string>
+    <string name="wallet_bought_at_hint">Einkaufskurs pro 1, z.B., 1, 10, 100, т.н.</string>
+    <string name="wallet_profit">Gewinn</string>
+    <string name="wallet_profit_details">Eintrag - %1$s</string>
+    <string name="wallet_text_rates_details"><![CDATA[
+    Gewinnannäherungen für <b>%1$s</b> Vermögenswert in den letzten 3 Tagen.]]></string>
+    <string name="wallet_message_reloaded">Gewinnnachkalkulationen abgeschlossen.</string>
+    <string name="wallet_text_at_source"><![CDATA[
+    bei <b>%1$s</b>]]></string>
+    <string name="wallet_text_on_date"><![CDATA[
+    am %1$s]]></string>
+    <string name="wallet_text_initial_price"><![CDATA[
+    Gekauft zum: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_current_price"><![CDATA[
+    Aktueller Preis: <b>%1$s</b> ]]></string>
+    <string name="wallet_text_profit_margin"><![CDATA[
+    Gewinn (&#37;): <b>%1$s</b> ]]></string>
+    <string name="wallet_text_duration"><![CDATA[
+    Dauer: <b>%1$s Tage</b> ]]></string>
+    <string name="wallet_text_daily_change"><![CDATA[
+    Täglicher Wechsel: <b>%1$s</b>]]></string>
+    <string name="wallet_text_daily_change_perc"><![CDATA[
+    Täglicher Wechsel (&#37;): <b>%1$s</b>]]></string>
+
+</resources>
