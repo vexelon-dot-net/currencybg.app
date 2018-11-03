@@ -32,10 +32,7 @@ import java.util.Deque;
  * {@code currency_sources_ids} array in {@code arrays.xml}.
  */
 public enum Sources {
-
-	// unused
-	BNB(1, false),
-
+	BNB(1, false), // unused
 	FIB(100),
 	TAVEX(200),
 	POLANA1(300),
@@ -46,7 +43,7 @@ public enum Sources {
 	CHANGEPARTNER(800),
 	FOREXHOUSE(900),
 	ALLIANZ(1000),
-	// CRYPTOBANK(1100), // deprecated
+	CRYPTOBANK(1100, false), // deprecated
 	BITCOINSHOUSE(1200),
 	XCHANGE(1300),
 	ALTCOINS(1400);
@@ -102,7 +99,7 @@ public enum Sources {
 		for (Sources source : Sources.values()) {
 			switch (source) {
 			case CRYPTO:
-				// case CRYPTOBANK:
+			case CRYPTOBANK:
 			case BITCOINSHOUSE:
 			case XCHANGE:
 			case ALTCOINS:
