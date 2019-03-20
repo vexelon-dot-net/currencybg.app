@@ -1,6 +1,17 @@
 Currency BG Changes
 ===================
 
+## 4.2.2
+
+### EN
+  * Added missing currency flags.
+
+### BG
+  * Добавени липсващи валути.
+
+### DE
+  * Fehlende Währungskennzeichen hinzugefügt.
+
 ## 4.2.0
 
 ### EN
