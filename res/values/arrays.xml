@@ -92,6 +92,7 @@
         <item>ALL</item>
         <item>ARS</item>
         <item>AUD</item>
+        <item>AZN</item>
         <item>BAM</item>
         <item>BCH</item>
         <item>BGN</item>
@@ -146,6 +147,7 @@
         <item>SEK</item>
         <item>SGD</item>
         <item>THB</item>
+        <item>TND</item>
         <item>TRY</item>
         <item>TWD</item>
         <item>UAH</item>
@@ -162,6 +164,7 @@
         <item>Albanian Lek</item>
         <item>Argentine Peso</item>
         <item>Australian Dollar</item>
+        <item>Azerbaijani Manat</item>
         <item>Bosnia and Herzegovina Convertible Mark</item>
         <item>Bitcoin Cash</item>
         <item>Bulgarian Lev</item>
@@ -216,6 +219,7 @@
         <item>Swedish Krona/Kronor</item>
         <item>Singapore Dollar</item>
         <item>Thai Baht</item>
+        <item>Tunisian Dinar</item>
         <item>Turkish Lira</item>
         <item>New Taiwan Dollar</item>
         <item>Ukrainian Hryvnia</item>
