@@ -2,12 +2,16 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">422</integer>
+    <integer name="news_last">423</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
 
         <item><![CDATA[
+<b><font color="#ffffff">4.2.3</font></b>
+<br><br>
+&emsp; - Added missing EOS crypto flag.
+<br><br>
 <b><font color="#ffffff">4.2.2</font></b>
 <br><br>
 &emsp; - Added missing currency flags.
