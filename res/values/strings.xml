@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <string name="copyright"><![CDATA[
-    Copyright &copy; 2018 Vexelon Microservices]]></string>
+    Copyright &copy; 2020 Vexelon Microservices]]></string>
 
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
@@ -49,7 +49,7 @@
     <string name="about_join_appdev_authors">Developers</string>
     <string name="about_join_appdev">Are you a coder? Send us your pull requests</string>
     <string name="about_logo">Logo icon</string>
-    <string name="about_logo_text">Stremena Tuzsuzova - http://stremena.com</string>
+    <string name="about_logo_text">StremArt - https://stremena.com</string>
     <string name="about_3rdparty_icons">Third-party icons</string>
     <string name="about_3rdparty">Third-party libraries</string>
     <string name="about_twitter">We are on Twitter</string>

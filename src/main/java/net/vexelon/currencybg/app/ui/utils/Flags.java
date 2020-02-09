@@ -99,6 +99,7 @@ public final class Flags {
 		flagsMap.put("xlm", R.drawable.xlm);
 		flagsMap.put("xmr", R.drawable.xmr);
 		flagsMap.put("zec", R.drawable.zec);
+		flagsMap.put("eos", R.drawable.eos);
 	}
 
 	public static int getResourceFromCode(String code) {
