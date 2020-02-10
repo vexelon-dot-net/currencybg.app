@@ -15,8 +15,8 @@ public class CurrenciesFilter implements Filter<CurrencyData> {
 	// Codes of currencies we don't show at the moment
 	private static final List<String> HIDDEN = Lists.newArrayList("SBP", "MAD");
 
-	private static final List<String> CRYPTO = Lists.newArrayList("BGN", "BTC", "BCH", "ETC", "ETH", "DASH", "DOGE",
-			"LTC", "XRP", "XLM", "XMR", "ZEC");
+	private static final List<String> CRYPTO = Lists.newArrayList("BGN", "BTC", "BCH", "ETC", "ETH", "EOS", "DASH",
+			"DOGE", "LTC", "XRP", "XLM", "XMR", "ZEC");
 	private static final List<String> TOP6 = Lists.newArrayList("BGN", "USD", "EUR", "JPY", "GBP", "CHF", "CAD");
 	private static final List<String> TOP8 = Lists.newArrayList("BGN", "USD", "EUR", "JPY", "GBP", "CHF", "CAD", "AUD",
 			"ZAR");
@@ -33,7 +33,8 @@ public class CurrenciesFilter implements Filter<CurrencyData> {
 	}
 
 	/**
-	 * Removes all entries for which duplicate {@link CurrencyData#code} exists.
+	 * Removes all entries for which duplicate {@link CurrencyData#getCode()}
+	 * exists.
 	 */
 	public CurrenciesFilter distinct() {
 		Collection<CurrencyData> result = Lists.newArrayList();
