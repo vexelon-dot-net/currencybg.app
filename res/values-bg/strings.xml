@@ -52,6 +52,8 @@
     <string name="about_twitter">Последвай ни в Twitter</string>
     <string name="about_contact">Контакт</string>
     <string name="about_contact_email">Изпращане на Email</string>
+    <string name="about_more_apps">Още приложения!</string>
+    <string name="about_more_apps_text">Виж и другите ни приложения</string>
     <string name="drawer_menu_currencies">Обменни курсове</string>
     <string name="drawer_menu_convert">Преобразуване</string>
     <string name="drawer_menu_wallet">Портфейл</string>

@@ -51,6 +51,8 @@
     <string name="about_twitter">Folge uns auf Twitter</string>
     <string name="about_contact">Kontakt</string>
     <string name="about_contact_email">Sende uns eine E-Mail</string>
+    <string name="about_more_apps">Mehr Apps!</string>
+    <string name="about_more_apps_text">Einige unserer anderen Apps herausfinden</string>
     <string name="drawer_menu_currencies">Wechselkurse</string>
     <string name="drawer_menu_convert">Währungsumrechnung</string>
     <string name="drawer_menu_wallet">Wallet</string>
