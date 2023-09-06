@@ -109,7 +109,7 @@ public final class Flags {
     }
 
     public static int getResourceFromCode(String code) {
-        Integer resId = flagsMap.get(code);<<
+        Integer resId = flagsMap.get(code);
         if (resId == null) {
             code = code.substring(0, Math.min(code.length(), 3)).toLowerCase();
 
