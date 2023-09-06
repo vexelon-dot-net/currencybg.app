@@ -41,7 +41,6 @@ public final class Flags {
         flagsMap.put("by", R.drawable.by);
         flagsMap.put("ca", R.drawable.ca);
         flagsMap.put("ch", R.drawable.ch);
-        flagsMap.put("ca", R.drawable.ca);
         flagsMap.put("cn", R.drawable.cn);
         flagsMap.put("cz", R.drawable.cz);
         flagsMap.put("do", R.drawable.dop);
@@ -109,7 +108,7 @@ public final class Flags {
     }
 
     public static int getResourceFromCode(String code) {
-        Integer resId = flagsMap.get(code);
+        Integer resId = flagsMap.get(code.toLowerCase());
         if (resId == null) {
             code = code.substring(0, Math.min(code.length(), 3)).toLowerCase();
 
