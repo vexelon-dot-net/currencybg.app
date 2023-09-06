@@ -31,6 +31,7 @@ public final class Flags {
         flagsMap.put("ae", R.drawable.ae);
         flagsMap.put("al", R.drawable.al);
         flagsMap.put("ar", R.drawable.ar);
+        flagsMap.put("amd", R.drawable.arm);
         flagsMap.put("au", R.drawable.au);
         flagsMap.put("az", R.drawable.az);
         flagsMap.put("ba", R.drawable.ba);
@@ -69,6 +70,7 @@ public final class Flags {
         flagsMap.put("no", R.drawable.no);
         flagsMap.put("nz", R.drawable.nz);
         flagsMap.put("ph", R.drawable.ph);
+        flagsMap.put("pkr", R.drawable.pk);
         flagsMap.put("pl", R.drawable.pl);
         flagsMap.put("qa", R.drawable.qa);
         flagsMap.put("ro", R.drawable.ro);
