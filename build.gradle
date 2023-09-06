@@ -2,18 +2,10 @@
  * CurrencyBG Build Script
  */
 
-buildscript {
-    repositories {
-        google()
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
-    }
+plugins {
+    id 'com.android.application' version '8.1.0' apply false
+    id 'com.android.library' version '8.1.0' apply false
 }
-
-apply plugin: 'com.android.application'
 
 afterEvaluate {
     android.applicationVariants.all { variant ->

@@ -3,8 +3,17 @@ name: Android CI
 on:
   push:
     branches: [ "master" ]
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
   pull_request:
     branches: [ "master" ]
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 
 jobs:
   build:
@@ -13,7 +22,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     - name: set up JDK 11
+=======
+    - name: set up JDK 17
+>>>>>>> Stashed changes
+=======
+    - name: set up JDK 17
+>>>>>>> Stashed changes
+=======
+    - name: set up JDK 17
+>>>>>>> Stashed changes
       uses: actions/setup-java@v3
       with:
         java-version: '17'

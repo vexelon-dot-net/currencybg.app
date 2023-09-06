@@ -1,5 +1,13 @@
 /**
  * CurrencyBG Build Script
  */
- 
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
 rootProject.name = 'currencybg.app'
+include ':'
