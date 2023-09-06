@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="net.vexelon.currencybg.app"
-          android:installLocation="auto">
+    package="net.vexelon.currencybg.app"
+    android:installLocation="auto">
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +9,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activities.MainActivity"
+            android:exported="false"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"></action>
@@ -17,14 +18,15 @@
         </activity>
         <activity
             android:name=".ui.activities.PrefsActivity"
+            android:exported="false"
             android:label="@string/prefs_title"></activity>
 
         <!--Service declared in manifest -->
-        <service android:name="net.vexelon.currencybg.app.services.BackgroundUpdateService"/>
+        <service android:name="net.vexelon.currencybg.app.services.BackgroundUpdateService" />
 
     </application>
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 
