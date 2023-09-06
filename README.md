@@ -1,7 +1,7 @@
 Currency BG
 =========================
 
-[![Android CI](https://github.com/vexelon-dot-net/currencybg.app/actions/workflows/android.yml/badge.svg?branch=master)](https://github.com/vexelon-dot-net/currencybg.app/actions/workflows/android.yml)
+[![Build](https://github.com/vexelon-dot-net/currencybg.app/actions/workflows/android.yml/badge.svg?branch=master)](https://github.com/vexelon-dot-net/currencybg.app/actions/workflows/android.yml)
 
 <a href='https://play.google.com/store/apps/details?id=net.vexelon.currencybg.app&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='undefined' src='https://play.google.com/intl/en_us/badges/images/generic/bg_badge_web_generic.png' width="180px"/></a>
 
