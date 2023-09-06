@@ -9,6 +9,7 @@
         <item>Конвертабилна Марка на Босна и Херцеговина</item>
         <item>Биткойн Кеш</item>
         <item>Български Лев</item>
+        <item>Бинанскойн</item>
         <item>Бразилски Реал</item>
         <item>Биткойн</item>
         <item>Беларуски Рубли</item>
@@ -24,7 +25,7 @@
         <item>Доминиканско Песо</item>
         <item>Естонска Крона</item>
         <item>Египетска Лира</item>
-        <item>EOS.IO</item>
+        <item>EOSIO</item>
         <item>Етериум Класик</item>
         <item>Етериум</item>
         <item>Евро</item>
@@ -41,6 +42,7 @@
         <item>Японска Йена</item>
         <item>Кенийски Шилинг</item>
         <item>Южнокорейски Вон</item>
+        <item>Чейнкойн</item>
         <item>Лайткоин</item>
         <item>Литовски Литас</item>
         <item>Латвийски Лат</item>
@@ -66,6 +68,8 @@
         <item>Нов Тайвански Долар</item>
         <item>Украинска Гривна</item>
         <item>Щатски Долар</item>
+        <item>USD Coin</item>
+        <item>Tether</item>
         <item>Виетнамски Донг</item>
         <item>Стелар</item>
         <item>Монеро</item>

@@ -96,6 +96,7 @@
         <item>BAM</item>
         <item>BCH</item>
         <item>BGN</item>
+        <item>BNB</item>
         <item>BRL</item>
         <item>BTC</item>
         <item>BYN</item>
@@ -128,6 +129,7 @@
         <item>JPY</item>
         <item>KES</item>
         <item>KRW</item>
+        <item>LINK</item>
         <item>LTC</item>
         <item>LTL</item>
         <item>LVL</item>
@@ -153,6 +155,8 @@
         <item>TWD</item>
         <item>UAH</item>
         <item>USD</item>
+        <item>USDC</item>
+        <item>USDT</item>
         <item>VND</item>
         <item>XLM</item>
         <item>XMR</item>
@@ -169,6 +173,7 @@
         <item>Bosnia and Herzegovina Convertible Mark</item>
         <item>Bitcoin Cash</item>
         <item>Bulgarian Lev</item>
+        <item>Binance Coin</item>
         <item>Brazilian Real</item>
         <item>Bitcoin</item>
         <item>Belarusian Ruble</item>
@@ -184,7 +189,7 @@
         <item>Dominican Peso</item>
         <item>Estonian Kroon</item>
         <item>Egyptian Pound</item>
-        <item>EOS.IO</item>
+        <item>EOSIO</item>
         <item>Ethereum Classic</item>
         <item>Ethereum</item>
         <item>Euro</item>
@@ -201,6 +206,7 @@
         <item>Japanese Yen</item>
         <item>Kenyan Shilling</item>
         <item>South Korean Won</item>
+        <item>Chainlink</item>
         <item>Litecoin</item>
         <item>Lithuanian Litas</item>
         <item>Latvian Lats</item>
@@ -226,6 +232,8 @@
         <item>New Taiwan Dollar</item>
         <item>Ukrainian Hryvnia</item>
         <item>United States Dollar</item>
+        <item>USD Coin</item>
+        <item>Tether</item>
         <item>Vietnamese Dong</item>
         <item>Stellar</item>
         <item>Monero</item>
