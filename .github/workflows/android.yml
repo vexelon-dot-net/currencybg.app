@@ -21,11 +21,10 @@ jobs:
 
       - name: Create fake gradle.properties
         run: |
-          touch "${GITHUB_WORKSPACE}\gradle.properties"
-          echo KS=test >> "${GITHUB_WORKSPACE}\gradle.properties"
-          echo KSPWD=test >> "${GITHUB_WORKSPACE}\gradle.properties"
-          echo KALIAS=test >> "${GITHUB_WORKSPACE}\gradle.properties"
-          echo KPWD=test >> "${GITHUB_WORKSPACE}\gradle.properties"
+          echo KS=test > ./gradle.properties
+          echo KSPWD=test >> ./gradle.properties
+          echo KALIAS=test >> ./gradle.properties
+          echo KPWD=test >> ./gradle.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
