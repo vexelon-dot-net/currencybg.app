@@ -2,12 +2,28 @@
 <resources>
 
     <!-- Increment when releasing a new version -->
-    <integer name="news_last">423</integer>
+    <integer name="news_last">440</integer>
 
     <string name="news_title">What\'s new?</string>
     <string name="news_messages">
 
         <item><![CDATA[
+<b><font color="#ffffff">4.4.0</font></b>
+<br><br>
+&emsp; - General fixes in currency updates
+<br>
+&emsp; - Added Tether, USD Coin, Chainlink and Binance Coin crypto
+<br>
+&emsp; - Added rates for Armenian Dram and Pakistani Rupee
+<br><br>
+<b><font color="#ffffff">4.2.2</font></b>
+<br><br>
+&emsp; - Added missing currency flags.
+<br><br>
+<b><font color="#ffffff">4.2.0</font></b>
+<br><br>
+&emsp; - App is now available in german language.
+<br>
 <b><font color="#ffffff">4.2.3</font></b>
 <br><br>
 &emsp; - Added missing EOS crypto flag.
