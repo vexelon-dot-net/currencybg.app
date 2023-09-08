@@ -2,10 +2,18 @@
  * CurrencyBG Build Script
  */
 
-plugins {
-    id 'com.android.application' version '8.1.0'
-    //id 'com.android.library' version '8.1.0'
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.3'
+    }
 }
+
+apply plugin: 'com.android.application'
 
 afterEvaluate {
     android.applicationVariants.all { variant ->
@@ -14,18 +22,34 @@ afterEvaluate {
 }
 
 android {
-    namespace 'net.vexelon.currencybg.app'
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+    dependencies {
+        implementation 'com.android.support:design:28.0.0',
+                'com.android.support:preference-v14:28.0.0',
+                'com.github.clans:fab:1.6.4',
+                'com.wdullaer:materialdatetimepicker:3.6.4',
+                'com.afollestad.material-dialogs:core:0.8.6.2'
 
-    compileSdk 31
+        implementation 'com.google.guava:guava:22.0-android',
+                'com.google.code.gson:gson:2.8.1',
+                'org.jsoup:jsoup:1.10.3',
+                'com.squareup.okhttp:okhttp:2.7.2',
+                'joda-time:joda-time:2.9.9'
 
+        testImplementation 'junit:junit:4.+'
+    }
 
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId 'net.vexelon.currencybg.app'
-        minSdk 19
-        targetSdk 31
+        minSdkVersion 19
+        targetSdkVersion 33
         versionCode 4231
         versionName "4.2.3"
     }
@@ -58,31 +82,15 @@ android {
         }
     }
     buildTypes {
-//        debug {
-//            dexOptions.preDexLibraries = false
-//        }
+        debug {
+            dexOptions.preDexLibraries = false
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-project.txt'
             signingConfig signingConfigs.release
         }
     }
-}
-
-dependencies {
-    implementation 'com.android.support:design:28.0.0',
-            'com.android.support:preference-v14:28.0.0',
-            'com.github.clans:fab:1.6.4',
-            'com.wdullaer:materialdatetimepicker:3.6.4',
-            'com.afollestad.material-dialogs:core:0.8.6.2'
-
-    implementation 'com.google.guava:guava:22.0-android',
-            'com.google.code.gson:gson:2.8.1',
-            'org.jsoup:jsoup:1.10.3',
-            'com.squareup.okhttp:okhttp:2.7.2',
-            'joda-time:joda-time:2.9.9'
-
-    testImplementation 'junit:junit:4.+'
 }
 
 task copyAssets {
@@ -97,6 +105,4 @@ task copyAssets {
 
 repositories {
     google()
-    mavenCentral()
 }
-
