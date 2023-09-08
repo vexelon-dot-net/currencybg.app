@@ -29,13 +29,13 @@
         <item>@string/source_polana</item>
         <item>@string/source_fib</item>
         <item>@string/source_unicredit</item>
-        <item>@string/source_sgeb</item>
+        <!--        <item>@string/source_sgeb</item>-->
         <item>@string/source_cryptobg</item>
         <item>@string/source_changepartner</item>
-        <item>@string/source_forexhouse</item>
+        <!--        <item>@string/source_forexhouse</item>-->
         <item>@string/source_allianz</item>
         <!--<item>@string/source_cryptobank</item>-->
-        <item>@string/source_bitcoinshouse</item>
+        <!--        <item>@string/source_bitcoinshouse</item>-->
         <item>@string/source_xchangebg</item>
         <item>@string/source_altcoins</item>
     </string-array>
@@ -45,13 +45,13 @@
         <item>@string/source_polana_full</item>
         <item>@string/source_fib_full</item>
         <item>@string/source_unicredit_full</item>
-        <item>@string/source_sgeb_full</item>
+        <!--        <item>@string/source_sgeb_full</item>-->
         <item>@string/source_cryptobg_full</item>
         <item>@string/source_changepartner_full</item>
-        <item>@string/source_forexhouse_full</item>
+        <!--        <item>@string/source_forexhouse_full</item>-->
         <item>@string/source_allianz_full</item>
         <!--<item>@string/source_cryptobank_full</item>-->
-        <item>@string/source_bitcoinshouse_full</item>
+        <!--        <item>@string/source_bitcoinshouse_full</item>-->
         <item>@string/source_xchangebg_full</item>
         <item>@string/source_altcoins_full</item>
     </string-array>
@@ -61,13 +61,13 @@
         <item>http://polana1.com</item>
         <item>https://www.fibank.bg</item>
         <item>https://www.unicreditbulbank.bg</item>
-        <item>http://www.sgeb.bg</item>
+        <!--        <item>http://www.sgeb.bg</item>-->
         <item>https://crypto.bg</item>
         <item>http://www.changepartner.net</item>
-        <item>http://forexhouse.eu</item>
+        <!--        <item>http://forexhouse.eu</item>-->
         <item>https://www.allianz.bg</item>
         <!--<item>https://cryptobank.bg</item>-->
-        <item>http://www.bitcoinshouse.com</item>
+        <!--        <item>http://www.bitcoinshouse.com</item>-->
         <item>https://www.xchange.bg</item>
         <item>https://www.altcoins.bg</item>
     </string-array>
@@ -77,13 +77,13 @@
         <item>300</item>
         <item>100</item>
         <item>500</item>
-        <item>600</item>
+        <!--        <item>600</item>-->
         <item>700</item>
         <item>800</item>
-        <item>900</item>
+        <!--        <item>900</item>-->
         <item>1000</item>
         <!--<item>1100</item>-->
-        <item>1200</item>
+        <!--        <item>1200</item>-->
         <item>1300</item>
         <item>1400</item>
     </integer-array>
