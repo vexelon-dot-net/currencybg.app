@@ -3,6 +3,7 @@
     <string-array name="currency_names">
         <item>VAE Dirham</item>
         <item>Albanien Lek</item>
+        <item>Armenischer Dram</item>
         <item>Argentinischer Peso</item>
         <item>Australischer Dollar</item>
         <item>Aserbaidschan-Manat</item>
@@ -54,6 +55,7 @@
         <item>Norwegische Krone</item>
         <item>Neuseeland-Dollar</item>
         <item>Philippinischer Peso</item>
+        <item>Pakistanische Rupie</item>
         <item>Polnische Zloty</item>
         <item>Katar-Riyal</item>
         <item>Rumänischer Leu</item>
@@ -71,6 +73,7 @@
         <item>USD-Coin</item>
         <item>Tether</item>
         <item>Vietnamesischer Dong</item>
+        <item>Gold</item>
         <item>Stellar</item>
         <item>Monero</item>
         <item>Ripple</item>

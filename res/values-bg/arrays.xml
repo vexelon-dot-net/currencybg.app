@@ -3,6 +3,7 @@
     <string-array name="currency_names">
         <item>Дирхам на ОАЕ (Арабски Дирхам)</item>
         <item>Албански Лек</item>
+        <item>Арменски драм</item>
         <item>Аржентинско Песо</item>
         <item>Австралийски Долар</item>
         <item>Азербайджански манат</item>
@@ -54,6 +55,7 @@
         <item>Норвежка Крона</item>
         <item>Новозеландски Долар</item>
         <item>Филипинско Песо</item>
+        <item>Пакистанска рупия</item>
         <item>Полска Злота</item>
         <item>Катарски Риал</item>
         <item>Румънска Лея</item>
@@ -71,6 +73,7 @@
         <item>USD Coin</item>
         <item>Tether</item>
         <item>Виетнамски Донг</item>
+        <item>Злато</item>
         <item>Стелар</item>
         <item>Монеро</item>
         <item>Рипъл</item>

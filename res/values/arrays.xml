@@ -90,6 +90,7 @@
     <string-array name="currency_codes">
         <item>AED</item>
         <item>ALL</item>
+        <item>AMD</item>
         <item>ARS</item>
         <item>AUD</item>
         <item>AZN</item>
@@ -141,6 +142,7 @@
         <item>NOK</item>
         <item>NZD</item>
         <item>PHP</item>
+        <item>PKR</item>
         <item>PLN</item>
         <item>QAR</item>
         <item>RON</item>
@@ -158,6 +160,7 @@
         <item>USDC</item>
         <item>USDT</item>
         <item>VND</item>
+        <item>XAU</item>
         <item>XLM</item>
         <item>XMR</item>
         <item>XRP</item>
@@ -167,6 +170,7 @@
     <string-array name="currency_names">
         <item>United Arab Emirates Dirham</item>
         <item>Albanian Lek</item>
+        <item>Armenian Dram</item>
         <item>Argentine Peso</item>
         <item>Australian Dollar</item>
         <item>Azerbaijani Manat</item>
@@ -218,6 +222,7 @@
         <item>Norwegian Krone</item>
         <item>New Zealand Dollar</item>
         <item>Philippine Peso</item>
+        <item>Pakistani Rupee</item>
         <item>Polish Złoty</item>
         <item>Qatari Riyal</item>
         <item>Romanian Leu</item>
@@ -230,6 +235,7 @@
         <item>Tunisian Dinar</item>
         <item>Turkish Lira</item>
         <item>New Taiwan Dollar</item>
+        <item>Gold</item>
         <item>Ukrainian Hryvnia</item>
         <item>United States Dollar</item>
         <item>USD Coin</item>
